@@ -24,4 +24,16 @@
     <style name="QualioFont">
         <item name="android:fontFamily">@font/qualio_font_family</item>
     </style>
+
+    <style name="ThemeSpinner">
+        <item name="android:colorAccent">@color/colorGrayText</item>
+        <item name="android:colorControlNormal">@color/colorGrayText</item>
+        <item name="android:textColor">@color/colorPrimary1</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItemStyle</item>
+    </style>
+
+    <style name="SpinnerItemStyle">
+        <item name="android:textSize">14dp</item>
+    </style>
+
 </resources>

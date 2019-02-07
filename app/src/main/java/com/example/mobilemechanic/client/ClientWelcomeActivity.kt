@@ -38,7 +38,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setUpToolBar() {
-        setSupportActionBar(id_toolbar as Toolbar)
+        setSupportActionBar(id_service_form_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Welcome"

@@ -5,19 +5,22 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".client.ClientWelcomeActivity"
         android:id="@+id/client_drawer_layout">
 
-    <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent">
+    <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
         <include layout="@layout/client_content_frame"></include>
         <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/id_welcome_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="78dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:minHeight="@dimen/toolbar_height"
                 app:titleTextAppearance="@style/ToolbarTitleAppearance"
                 app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-                android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
+                android:background="@drawable/toolbar_bottom_border">
 
 
         </android.support.v7.widget.Toolbar>
@@ -25,7 +28,7 @@
     </FrameLayout>
 
     <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/id_client_nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"

@@ -6,14 +6,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <!--<TextView-->
-            <!--android:text="&#xf0c9;"-->
-            <!--android:layout_width="77dp"-->
-            <!--android:layout_height="51dp"-->
-            <!--android:id="@+id/bars"-->
-            <!--android:layout_marginTop="72dp"-->
-            <!--app:layout_constraintTop_toTopOf="parent"-->
-            <!--app:layout_constraintStart_toStartOf="parent"-->
-            <!--android:layout_marginStart="60dp"-->
-            <!--android:textSize="24sp" android:textColor="@color/colorHeaderDark"/>-->
+    <TextView
+            android:text="TextView"
+            android:layout_width="298dp"
+            android:layout_height="222dp"
+            android:id="@+id/textView" android:layout_marginTop="212dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="56dp" android:fontFamily="@font/qualio"/>
 </android.support.constraint.ConstraintLayout>

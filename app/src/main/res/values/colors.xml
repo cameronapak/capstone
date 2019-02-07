@@ -4,16 +4,17 @@
     <color name="colorPrimaryDark"> </color>
     <color name="colorAccent">#252344</color>
 
+    <color name="colorPrimaryLight2">#8C2C9C</color>
+    <color name="colorPrimaryLight">#9E28AE</color>
+    <color name="colorPrimary1">#684CBA</color>
+    <color name="colorPrimary2">#5E36B0</color>
+    <color name="colorPrimary3">#502CA8</color>
+    <color name="colorPrimary4">#462B90</color>
+    <color name="colorHeaderDark">#372F9D</color>
 
-    <color name="colorLightGray">#DBDBDB</color>
-    <color name="colorGray">#A0A5AE</color>
-    <color name="colorGray1">#7B83A9</color>
-    <color name="colorGray2">#252344</color>
-
-    <color name="colorLightPurple">#5A53AB</color>
-    <color name="colorLightPurple2">#4842BB</color>
-    <color name="colorLightPurple3">#4842BB</color>
-    <color name="colorLightPurple4">#3222A0</color>
-    <color name="colorLightPurple6">#201566</color>
+    <color name="colorGrayText">#A0A5AE</color>
+    <color name="colorGrayTextDark">#7B83A9</color>
+    <color name="colorWarning">#EB8356</color>
+    <color name="colorFocus">#BC4343</color>
 
 </resources>

@@ -5,16 +5,16 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         tools:context=".client.ClientWelcomeActivity"
         android:id="@+id/client_drawer_layout">
 
     <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
         <include layout="@layout/client_content_frame"></include>
         <android.support.v7.widget.Toolbar
-                android:id="@+id/id_service_form_toolbar"
+                android:id="@+id/id_welcome_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:minHeight="@dimen/toolbar_height"

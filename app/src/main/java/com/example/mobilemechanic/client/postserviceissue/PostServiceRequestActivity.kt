@@ -18,17 +18,7 @@ class PostServiceRequestActivity : AppCompatActivity() {
         setUpToolBar()
 
 
-        val vehicles =
-            arrayOf("Select your Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
-            .asList()
-        val services =
-            arrayOf("Select a service", "Oil Change", "Change tire", "Air tire", "Check Engine Light").
-            asList()
-
-        id_vehicle_spinner.adapter =
-            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, vehicles)
-        id_service_spinner.adapter =
-            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, services)
+        setUpFormFields()
 
     }
 
@@ -40,13 +30,44 @@ class PostServiceRequestActivity : AppCompatActivity() {
         }
     }
 
+    private fun setUpFormFields() {
+        setUpVehicleSpinner()
+        setUpServiceSpinner()
+    }
+
+    private fun setUpVehicleSpinner() {
+        val vehicles =
+            arrayOf("Select your Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+                .asList()
+
+        id_vehicle_spinner.adapter =
+            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, vehicles)
+    }
+
+    private fun setUpServiceSpinner() {
+        val services =
+            arrayOf("Select a service", "Oil Change", "Change tire", "Air tire", "Check Engine Light").
+                asList()
+
+        id_service_spinner.adapter =
+            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, services)
+    }
+
     override fun onResume() {
         super.onResume()
+        hideStatusBar()
+        hideBottomNavigationBar()
+    }
+
+    private fun hideStatusBar() {
         if (Build.VERSION.SDK_INT < 16) {
             window.setFlags(
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
         }
+    }
+
+    private fun hideBottomNavigationBar() {
         window.decorView.apply {
             systemUiVisibility =
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE or

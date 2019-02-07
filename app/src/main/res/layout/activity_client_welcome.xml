@@ -18,19 +18,7 @@
                 app:titleTextAppearance="@style/ToolbarTitleAppearance"
                 app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
                 android:theme="@style/ThemeOverlay.AppCompat.ActionBar">
-            <RelativeLayout
-            android:id="@+id/toolbar_content"
-            android:layout_width="50dp"
-            android:layout_height="match_parent"
-            android:clickable="true"
-            android:gravity="center">
-                <!--<ImageView-->
-                        <!--android:layout_width="wrap_content"-->
-                        <!--android:layout_height="wrap_content"-->
-                        <!--app:srcCompat="@drawable/ic_menu"-->
-                        <!--android:id="@+id/id_menu"/>-->
 
-            </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
 
@@ -44,7 +32,4 @@
             android:fitsSystemWindows="true"
             app:menu="@menu/client_drawer_items"
             app:headerLayout="@layout/client_drawer_header"/>
-
-
-
 </android.support.v4.widget.DrawerLayout>

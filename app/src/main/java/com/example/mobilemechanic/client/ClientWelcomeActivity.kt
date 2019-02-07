@@ -5,8 +5,10 @@ import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.view.MenuItem
 import com.example.mobilemechanic.R
+import kotlinx.android.synthetic.main.activity_client_welcome.*
 
 
 class ClientWelcomeActivity : AppCompatActivity() {
@@ -17,7 +19,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_client_welcome)
 
-        setUpClientNavigationDrawer()
+        setUpClientWelcomeActivity()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -30,7 +32,17 @@ class ClientWelcomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpClientNavigationDrawer() {
+    private fun setUpClientWelcomeActivity() {
+        setUpToolBar()
+        setUpNavDrawerButton()
+        mDrawerLayout = findViewById(R.id.client_drawer_layout)
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_toolbar as Toolbar)
+    }
+
+    private fun setUpNavDrawerButton() {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Welcome"
@@ -38,6 +50,5 @@ class ClientWelcomeActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
-        mDrawerLayout = findViewById(R.id.client_drawer_layout)
     }
 }

@@ -10,6 +10,7 @@
     <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
                                                  android:background="@drawable/round_corner_bottom"
                                                  android:elevation="5dp"
+                                                 android:fitsSystemWindows="true"
                                                  android:layout_height="630dp" android:layout_gravity="top">
 
         <android.support.v7.widget.Toolbar

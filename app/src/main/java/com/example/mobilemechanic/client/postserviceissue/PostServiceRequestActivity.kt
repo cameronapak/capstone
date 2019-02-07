@@ -1,6 +1,5 @@
 package com.example.mobilemechanic.client.postserviceissue
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -60,11 +59,9 @@ class PostServiceRequestActivity : AppCompatActivity() {
     }
 
     private fun hideStatusBar() {
-        if (Build.VERSION.SDK_INT < 16) {
-            window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN)
-        }
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
     }
 
     private fun hideBottomNavigationBar() {

@@ -16,7 +16,8 @@
         <android.support.v7.widget.Toolbar
                 android:id="@+id/id_toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="78dp"
+                android:layout_height="@dimen/toolbar_height"
+                android:minHeight="@dimen/toolbar_height"
                 app:titleTextAppearance="@style/ToolbarTitleAppearance"
                 app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
                 android:background="@drawable/toolbar_bottom_border">

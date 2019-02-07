@@ -34,15 +34,11 @@ class ClientWelcomeActivity : AppCompatActivity() {
 
     private fun setUpClientWelcomeActivity() {
         setUpToolBar()
-        setUpNavDrawerButton()
         mDrawerLayout = findViewById(R.id.client_drawer_layout)
     }
 
     private fun setUpToolBar() {
         setSupportActionBar(id_toolbar as Toolbar)
-    }
-
-    private fun setUpNavDrawerButton() {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Welcome"

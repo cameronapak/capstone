@@ -1,13 +1,17 @@
 package com.example.mobilemechanic.client
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.postserviceissue.PostServiceRequestActivity
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
 
@@ -18,7 +22,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_client_welcome)
-
         setUpClientWelcomeActivity()
     }
 
@@ -34,7 +37,8 @@ class ClientWelcomeActivity : AppCompatActivity() {
 
     private fun setUpClientWelcomeActivity() {
         setUpToolBar()
-        mDrawerLayout = findViewById(R.id.client_drawer_layout)
+        setUpDrawerLayout()
+        setUpNavigationListener()
     }
 
     private fun setUpToolBar() {
@@ -45,6 +49,35 @@ class ClientWelcomeActivity : AppCompatActivity() {
             subtitle = "Jackie Chan"
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+    }
+
+    private fun setUpDrawerLayout() {
+        mDrawerLayout = findViewById(R.id.client_drawer_layout)
+        val clientNavigationView = findViewById<NavigationView>(R.id.id_client_nav_view)
+        clientNavigationView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            mDrawerLayout.closeDrawers()
+            true
+        }
+    }
+
+    private fun setUpNavigationListener() {
+        id_client_nav_view.setNavigationItemSelectedListener { item ->
+            when(item.itemId) {
+                R.id.id_service_request -> {
+                    startActivity(Intent(this, PostServiceRequestActivity::class.java))
+                    Log.d("WELCOME", "Post service request selected")
+                    true
+                }
+                R.id.id_history-> {
+                    true
+                }
+                else -> {
+                    mDrawerLayout.closeDrawers()
+                    true
+                }
+            }
         }
     }
 }

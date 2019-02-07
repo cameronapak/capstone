@@ -14,11 +14,12 @@ class PostServiceRequestActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
+        setUpPostServiceRequestActivity()
+    }
+
+    private fun setUpPostServiceRequestActivity() {
         setUpToolBar()
-
-
-        setUpFormFields()
-
+        setUpFormSpinners()
     }
 
     private fun setUpToolBar() {
@@ -29,7 +30,7 @@ class PostServiceRequestActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpFormFields() {
+    private fun setUpFormSpinners() {
         setUpVehicleSpinner()
         setUpServiceSpinner()
     }
@@ -75,5 +76,10 @@ class PostServiceRequestActivity : AppCompatActivity() {
                         View.SYSTEM_UI_FLAG_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

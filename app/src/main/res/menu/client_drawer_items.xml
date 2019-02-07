@@ -10,11 +10,11 @@
               android:layout_centerVertical="true"
               android:title="@string/garage"/>
 
-        <item android:id="@+id/service_form"
+        <item android:id="@+id/id_service_request"
               android:layout_centerVertical="true"
-              android:title="@string/service_form"/>
+              android:title="@string/service_request" android:icon="@drawable/ic_car_service"/>
 
-        <item android:id="@+id/history"
+        <item android:id="@+id/id_history"
               android:layout_centerVertical="true"
               android:title="@string/history"/>
 

@@ -18,6 +18,7 @@
     <string name="specify_your_issue">Specify your issue</string>
     <string name="availability">Availability</string>
     <string name="submit">Submit</string>
+    <string name="previous">Previous</string>
 
 
     <string-array name="vehicles_array">

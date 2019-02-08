@@ -21,16 +21,16 @@
     <string name="previous">Previous</string>
 
     <string name="text_registration_subtitle">Create a new account</string>
-    <string name="hint_registration_email">E-mail</string>
+    <string name="hint_registration_email">Email Address</string>
     <string name="hint_registration_password">Password</string>
     <string name="hint_registration_passwordConfirmation">Password Confirmation</string>
     <string name="hint_registration_firstName">First Name</string>
     <string name="hint_registration_lastName">Last Name</string>
     <string name="hint_registration_phoneNumber">Phone Number</string>
-    <string name="hint_registration_address">Address</string>
+    <string name="hint_registration_address">Street Address</string>
     <string name="hint_registration_city">City</string>
     <string name="hint_registration_state">State</string>
-    <string name="hint_registration_zipcode">Zipcode</string>
+    <string name="hint_registration_zipcode">Zip</string>
     <string name="hint_register_button">Register</string>
     <string name="hint_signIn">Sign In</string>
 

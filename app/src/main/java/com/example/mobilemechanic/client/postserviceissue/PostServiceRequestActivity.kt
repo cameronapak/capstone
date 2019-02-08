@@ -32,38 +32,27 @@ class PostServiceRequestActivity : AppCompatActivity() {
 
     private fun setUpFormSpinners() {
         setUpVehicleSpinner()
-        setUpServiceSpinner()
     }
 
     private fun setUpVehicleSpinner() {
         val vehicles =
-            arrayOf("Select your Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+            arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
                 .asList()
 
-
-        checkIfClientGarageEmpty()
-        id_vehicle_spinner.adapter =
-            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, vehicles)
-    }
-
-    private fun setUpServiceSpinner() {
-        val services =
-            arrayOf("Select a service", "Oil Change", "Change tire", "Air tire", "Check Engine Light").
-                asList()
-
-        id_service_spinner.adapter =
-            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, services)
-    }
-
-    private fun checkIfClientGarageEmpty() {
-
+        if (isGarageEmpty(vehicles)) {
+            showWarningIconAndMessage()
+            id_submit.isEnabled = false
+        } else {
+            hideWarningIconAndMessage()
+            id_vehicle_spinner.adapter =
+                HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, vehicles)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         hideStatusBar()
         hideBottomNavigationBar()
-        hideWarningIconAndMessage()
     }
 
     private fun hideStatusBar() {
@@ -91,6 +80,20 @@ class PostServiceRequestActivity : AppCompatActivity() {
 
     private fun hideWarningIconAndMessage() {
         id_warning_icon.visibility = View.GONE
-        id_warning_message.visibility = View.GONE
+        id_warningMessage.visibility = View.GONE
+        id_warningMessageAddVehicle.visibility = View.GONE
+    }
+
+    private fun showWarningIconAndMessage() {
+        id_warning_icon.visibility = View.VISIBLE
+        id_warningMessage.visibility = View.VISIBLE
+        id_warningMessageAddVehicle.visibility = View.VISIBLE
+    }
+
+    private fun isGarageEmpty(vehicles: List<String>): Boolean {
+        if (vehicles.size <= 1) {
+            return true
+        }
+        return false
     }
 }

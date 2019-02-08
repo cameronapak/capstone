@@ -53,13 +53,4 @@ class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String
         }
         return v
     }
-
-//    private fun initView(position: Int): View {
-//        val state = getItem(position)
-//        val inflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//        val v = inflater.inflate(R.layout.state_list, null)
-//        val textView = v.findViewById(R.id.spinnerText)
-//        textView.setText(state!!.getStateName())
-//        return v
-//    }
 }

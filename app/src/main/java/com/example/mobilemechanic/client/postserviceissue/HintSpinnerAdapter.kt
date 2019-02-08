@@ -13,7 +13,6 @@ import com.example.mobilemechanic.R
 
 class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String>) :
     ArrayAdapter<String>(context, resource, stateList) {
-    private val stateList = ArrayList<String>()
 
     override fun isEnabled(position: Int): Boolean {
        if (position == 0) {

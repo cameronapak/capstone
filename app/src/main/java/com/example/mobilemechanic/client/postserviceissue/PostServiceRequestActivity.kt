@@ -40,6 +40,8 @@ class PostServiceRequestActivity : AppCompatActivity() {
             arrayOf("Select your Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
                 .asList()
 
+
+        checkIfClientGarageEmpty()
         id_vehicle_spinner.adapter =
             HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, vehicles)
     }
@@ -53,10 +55,15 @@ class PostServiceRequestActivity : AppCompatActivity() {
             HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, services)
     }
 
+    private fun checkIfClientGarageEmpty() {
+
+    }
+
     override fun onResume() {
         super.onResume()
         hideStatusBar()
         hideBottomNavigationBar()
+        hideWarningIconAndMessage()
     }
 
     private fun hideStatusBar() {
@@ -80,5 +87,10 @@ class PostServiceRequestActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    private fun hideWarningIconAndMessage() {
+        id_warning_icon.visibility = View.GONE
+        id_warning_message.visibility = View.GONE
     }
 }

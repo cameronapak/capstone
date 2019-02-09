@@ -8,9 +8,9 @@ enum class UserType
     CLIENT, MECHANIC
 }
 
-data class UserInfo(var uid: String, var email: String, var password: String, var userType: UserType, var firstName: String,
-                    var lastName: String, var phoneNumber: String, var address: String, var city: String, var state: String,
-                    var zipCode: String, var photoUrl: String) : Parcelable
+data class User(var uid: String, var email: String, var password: String, var userType: UserType, var firstName: String,
+                var lastName: String, var phoneNumber: String, var address: String, var city: String, var state: String,
+                var zipCode: String, var photoUrl: String) : Parcelable
 {
     constructor() : this("", "", "", UserType.CLIENT, "", "", "", "",
         "", "", "", "")
@@ -66,12 +66,12 @@ data class UserInfo(var uid: String, var email: String, var password: String, va
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<UserInfo> {
-        override fun createFromParcel(parcel: Parcel): UserInfo {
-            return UserInfo(parcel)
+    companion object CREATOR : Parcelable.Creator<User> {
+        override fun createFromParcel(parcel: Parcel): User {
+            return User(parcel)
         }
 
-        override fun newArray(size: Int): Array<UserInfo?> {
+        override fun newArray(size: Int): Array<User?> {
             return arrayOfNulls(size)
         }
     }

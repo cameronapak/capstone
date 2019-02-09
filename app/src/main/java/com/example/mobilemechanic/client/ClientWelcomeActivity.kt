@@ -13,6 +13,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.WindowManager
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.History.HistoryActivity
 import com.example.mobilemechanic.client.postserviceissue.PostServiceRequestActivity
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -73,6 +74,8 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.id_history-> {
+                    startActivity(Intent(this, HistoryActivity::class.java))
+                    Log.d("Historty", "History activity selected")
                     true
                 }
                 else -> {

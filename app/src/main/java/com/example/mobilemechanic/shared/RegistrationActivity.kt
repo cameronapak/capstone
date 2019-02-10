@@ -10,6 +10,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
+import com.example.mobilemechanic.model.UserType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -17,8 +18,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 
-const val ACCOUNT_DOC_PATH = "account/accountDoc"
-const val USER_INFO = "user_info"
+const val ACCOUNT_DOC_PATH = "Accounts"
 
 class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
@@ -57,11 +57,12 @@ class RegistrationActivity : AppCompatActivity() {
         if(validateInformation(email, password, passwordConfirmation,
                 firstName, lastName, phoneNumber, address, city, state, zip)) {
 
-            val userInfo = User(userType, email, password, passwordConfirmation, firstName,
-                lastName, phoneNumber, address, city, state, zip)
+            val userInfo = User("", email, password, userType, firstName,
+                lastName, phoneNumber, address, city, state, zip, "")
 
             mAuth?.createUserWithEmailAndPassword(userInfo.email, userInfo.password)
                 ?.addOnCompleteListener {
+                    userInfo.uid = mAuth!!.uid.toString()
                     handleAccountCreationSuccess(it, userInfo)
             }
         }
@@ -77,8 +78,8 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun saveUserInfo(userInfo: User) {
-        mFireStore?.collection("$ACCOUNT_DOC_PATH/${userInfo.email}")
-            ?.document(USER_INFO)
+        mFireStore?.collection(ACCOUNT_DOC_PATH)
+            ?.document(userInfo.uid)
             ?.set(userInfo)
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()
@@ -89,15 +90,15 @@ class RegistrationActivity : AppCompatActivity() {
             }
     }
 
-    private fun goToMainActivity(userType: String) {
+    private fun goToMainActivity(userType: UserType) {
         var intent = Intent()
 
-        if(userType.equals("client")) {
+        if(userType == UserType.CLIENT) {
             intent = Intent(this, ClientWelcomeActivity::class.java)
         }
 
         //for mechanic activity
-        /*else if(userType.equals("mechanic")) {
+        /*else if(userType == UserType.MECHANIC) {
             intent = Intent(this, MechanicWelcomeActivity::class.java)
         }*/
 
@@ -106,9 +107,9 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
 
-    private fun getUserType(isClient: Boolean): String {
-        if(isClient) return "client"
-        else return "mechanic"
+    private fun getUserType(isClient: Boolean): UserType {
+        if(isClient) return UserType.CLIENT
+        else return UserType.MECHANIC
     }
 
     private fun setUpStateSpinner() {

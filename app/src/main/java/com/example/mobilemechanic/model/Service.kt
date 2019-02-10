@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.models
+package com.example.mobilemechanic.model
 
 import android.os.Parcel
 import android.os.Parcelable

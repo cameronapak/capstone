@@ -1,20 +1,22 @@
-package com.example.mobilemechanic.models
+package com.example.mobilemechanic.model
 
 import android.os.Parcel
 import android.os.Parcelable
 
 data class Request(var clientId: String, var mechanicId: String, var description: String, var vehicle: Vehicle,
-              var service: Service, var isComplete: Boolean, var timePosted: Long, var timeCompleted: Long) : Parcelable
+                   var service: Service, var isComplete: Boolean, var timePosted: Long, var timeCompleted: Long) : Parcelable
 {
-    constructor() : this("", "", "", Vehicle(), Service(), false, 0L,
+    constructor() : this("", "", "",
+        Vehicle(),
+        Service(), false, 0L,
         0L)
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readTypedObject(Vehicle.CREATOR),
-        parcel.readTypedObject(Service.CREATOR),
+        parcel.readTypedObject(Vehicle),
+        parcel.readTypedObject(Service),
         parcel.readByte() != 0.toByte(),
         parcel.readLong(),
         parcel.readLong()

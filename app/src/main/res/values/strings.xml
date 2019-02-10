@@ -49,6 +49,7 @@
         <item>Air Tire</item>
         <item>Check Engine Light</item>
     </string-array>
+
     <string name="title_activity_mechanic_welcome">MechanicWelcomeActivity</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -62,4 +63,19 @@
     <string name="label_comment_add_serivce">Comment</string>
     <string name="label_cancel_add_service">Cancel</string>
     <string name="label_add_service">Add</string>
+
+    <!--request_card_view-->
+    <string name="place_holder_client_name">Jackie Chan</string>
+    <string name="request_on">Request on %s</string>
+    <string name="request_status_request">Request</string>
+    <string name="request_status_active">Active</string>
+    <string name="request_status_complete">Complete</string>
+    <string name="request_desc">%s for %s</string>
+    <string name="place_holder_request_desc">Oil Change for 2011 Toyota Venza.</string>
+    <string name="place_holder_distance">3.14 mi</string>
+    <string name="label_button_info_more">More</string>
+    <string name="label_button_info_manage">Manage</string>
+    <string name="label_button_choice_accept">Accept</string>
+    <string name="label_button_choice_complete">Complete</string>
+
 </resources>

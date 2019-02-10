@@ -59,4 +59,12 @@ object DataProviderManager {
            "WV",
            "WY")
     }
+
+    fun getAllServices(): ArrayList<String> {
+        return arrayListOf("Services",
+            "Oil Change",
+            "Tire Change",
+            "Check Engine Light"
+            )
+    }
 }

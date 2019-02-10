@@ -11,7 +11,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".mechanic.addservice.AddService">
+        <activity android:name=".mechanic.addservice.AddService"
+                  android:label="Add Service"
+        android:theme="@style/AddService"
+        >
         </activity>
         <activity
                 android:name=".mechanic.MechanicServices"

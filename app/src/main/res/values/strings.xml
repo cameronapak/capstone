@@ -58,4 +58,8 @@
     <string name="action_settings">Settings</string>
     <string name="action_add">Add</string>
     <string name="title_activity_mechanic_services">MechanicServices</string>
+    <string name="label_Price">Price</string>
+    <string name="label_comment_add_serivce">Comment</string>
+    <string name="label_cancel_add_service">Cancel</string>
+    <string name="label_add_service">Add</string>
 </resources>

@@ -12,6 +12,7 @@
     <string name="history">History</string>
     <string name="settings">Settings</string>
     <string name="sign_out">Sign out</string>
+    <string name="my_service">My Service</string>
 
 
     <string name="solid_bars">&#xf0c9;</string>
@@ -48,4 +49,13 @@
         <item>Air Tire</item>
         <item>Check Engine Light</item>
     </string-array>
+    <string name="title_activity_mechanic_welcome">MechanicWelcomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">Add</string>
+    <string name="title_activity_mechanic_services">MechanicServices</string>
 </resources>

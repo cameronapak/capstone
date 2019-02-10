@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.client.History
+package com.example.mobilemechanic.client.history
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

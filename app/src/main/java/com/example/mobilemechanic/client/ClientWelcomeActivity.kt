@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.History.HistoryActivity
-import com.example.mobilemechanic.client.postserviceissue.PostServiceRequestActivity
+import com.example.mobilemechanic.client.history.HistoryActivity
+import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -23,7 +23,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.mobilemechanic.R.layout.activity_client_welcome)
+        setContentView(R.layout.activity_client_welcome)
         setUpClientWelcomeActivity()
     }
 
@@ -36,6 +36,8 @@ class ClientWelcomeActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
 
     private fun setUpClientWelcomeActivity() {
         setUpToolBar()

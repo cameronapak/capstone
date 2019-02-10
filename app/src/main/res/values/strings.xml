@@ -35,6 +35,7 @@
     <string name="hint_signIn">Sign In</string>
     <string name="service">Service</string>
     <string name="form">Form</string>
+    <string name="find_mechanic">Find Mechanic</string>
 
 
     <string-array name="vehicles_array">

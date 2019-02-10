@@ -8,6 +8,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
@@ -96,11 +97,9 @@ class RegistrationActivity : AppCompatActivity() {
         if(userType == UserType.CLIENT) {
             intent = Intent(this, ClientWelcomeActivity::class.java)
         }
-
-        //for mechanic activity
-        /*else if(userType == UserType.MECHANIC) {
+        else if(userType == UserType.MECHANIC) {
             intent = Intent(this, MechanicWelcomeActivity::class.java)
-        }*/
+        }
 
         startActivity(intent)
         finish()

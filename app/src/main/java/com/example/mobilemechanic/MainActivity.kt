@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
+import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -53,6 +54,11 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 
 }

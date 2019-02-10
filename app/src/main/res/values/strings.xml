@@ -33,6 +33,8 @@
     <string name="hint_registration_zipcode">Zip</string>
     <string name="hint_register_button">Register</string>
     <string name="hint_signIn">Sign In</string>
+    <string name="service">Service</string>
+    <string name="form">Form</string>
 
 
     <string-array name="vehicles_array">

@@ -11,8 +11,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.history.HistoryActivity
-import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -70,13 +70,13 @@ class ClientWelcomeActivity : AppCompatActivity() {
         id_client_nav_view.setNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.id_service_request -> {
-                    startActivity(Intent(this, PostServiceRequestActivity::class.java))
+                    startActivity(Intent(this, FindServiceActivity::class.java))
                     Log.d("WELCOME", "Post service request selected")
                     true
                 }
                 R.id.id_history-> {
                     startActivity(Intent(this, HistoryActivity::class.java))
-                    Log.d("Historty", "History activity selected")
+                    Log.d("History", "History activity selected")
                     true
                 }
                 else -> {

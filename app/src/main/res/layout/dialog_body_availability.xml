@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:orientation="vertical"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="190dp"
+                                             android:id="@+id/id_availability_view">
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.494" android:orientation="horizontal" android:gravity="center">
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_monday">
+            <TextView
+                    android:text="Mon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_mon"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/id_mon_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:paddingHorizontal="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_tuesday">
+            <TextView
+                    android:text="Tues"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_tues"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_tues_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_wednesday">
+            <TextView
+                    android:text="Wed"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_wed"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_wed_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_thursday">
+            <TextView
+                    android:text="Thur"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_thur"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_thur_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_friday">
+            <TextView
+                    android:text="Fri"
+                    android:gravity="center"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_fri"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_fri_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_saturday">
+            <TextView
+                    android:text="Sat"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_sat"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_sat_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:orientation="vertical"
+                android:paddingHorizontal="5dp"
+                android:gravity="center_horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_sunday">
+            <TextView
+                    android:text="Sun"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_sun"/>
+            <CheckBox
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" android:id="@+id/id_sunday_checkbox"
+                    android:theme="@style/CheckBoxStyle"/>
+        </LinearLayout>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

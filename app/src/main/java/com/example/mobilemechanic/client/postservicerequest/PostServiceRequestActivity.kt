@@ -1,17 +1,22 @@
 package com.example.mobilemechanic.client.postservicerequest
 
-import android.R
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
+import com.example.mobilemechanic.R
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
+import kotlinx.android.synthetic.main.basic_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 
 
 class PostServiceRequestActivity : AppCompatActivity() {
+
+    val availableDays = ArrayList<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +27,7 @@ class PostServiceRequestActivity : AppCompatActivity() {
     private fun setUpPostServiceRequestActivity() {
         setUpToolBar()
         setUpFormSpinners()
+        setUpAvailabilityDialog()
     }
 
     private fun setUpToolBar() {
@@ -34,6 +40,16 @@ class PostServiceRequestActivity : AppCompatActivity() {
 
     private fun setUpFormSpinners() {
         setUpVehicleSpinner()
+    }
+
+    private fun setUpAvailabilityDialog() {
+        id_calendar_icon.setOnClickListener {
+            displayAvailabilityDialog()
+        }
+
+        id_availability.setOnClickListener {
+            displayAvailabilityDialog()
+        }
     }
 
     private fun setUpVehicleSpinner() {
@@ -49,10 +65,37 @@ class PostServiceRequestActivity : AppCompatActivity() {
             id_vehicle_spinner.adapter =
                 HintSpinnerAdapter(
                     this,
-                    R.layout.simple_spinner_dropdown_item,
+                    com.example.mobilemechanic.R.layout.support_simple_spinner_dropdown_item,
                     vehicles
                 )
         }
+    }
+
+    private fun displayAvailabilityDialog() {
+        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+        val availabilityBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
+
+        dialogContainer.apply {
+            id_title.text = "Availability"
+            id_negative.text = "Cancel"
+            id_positive.text = "Save"
+        }
+
+        dialogContainer.id_positive.setOnClickListener {
+            availableDays.clear()
+            if (availabilityBody.id_mon_checkbox.isChecked) {
+                availableDays.add("mon")
+            }
+
+            if (availabilityBody.id_tues_checkbox.isChecked) {
+                availableDays.add("tues")
+            }
+
+            Log.d("TEST", availableDays.toString())
+        }
+
+        val dialog = BasicDialog(this, dialogContainer, availabilityBody)
+        dialog.show()
     }
 
     override fun onResume() {
@@ -67,14 +110,14 @@ class PostServiceRequestActivity : AppCompatActivity() {
 
     private fun hideWarningIconAndMessage() {
         id_warning_icon.visibility = View.GONE
-        id_warningMessage.visibility = View.GONE
-        id_warningMessageAddVehicle.visibility = View.GONE
+        id_warning_message.visibility = View.GONE
+        id_warning_message_add.visibility = View.GONE
     }
 
     private fun showWarningIconAndMessage() {
         id_warning_icon.visibility = View.VISIBLE
-        id_warningMessage.visibility = View.VISIBLE
-        id_warningMessageAddVehicle.visibility = View.VISIBLE
+        id_warning_message.visibility = View.VISIBLE
+        id_warning_message_add.visibility = View.VISIBLE
     }
 
     private fun isGarageEmpty(vehicles: List<String>): Boolean {

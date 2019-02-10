@@ -34,7 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="72dp" app:layout_constraintVertical_bias="0.263"
                 android:fontFamily="@font/qualio_bold" android:textSize="28sp"
-                android:textColor="@color/colorHeaderDark" android:text="@string/history"/>
+                android:textColor="@color/colorHeaderDark" android:text="@string/text_history"/>
         <TextView
                 android:text="@string/previous"
                 android:layout_width="wrap_content"

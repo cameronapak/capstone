@@ -8,14 +8,16 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.basic_dialog.*
 
 
-class BasicDialog(val activity: Activity, val container: View, val bodyContent: View)  {
+class BasicDialog(activity: Activity, val container: View, private val bodyContent: View)  {
+
+    private var dialog: Dialog = Dialog(activity)
+
     fun show() {
-        val dialog = Dialog(activity)
+//        val dialog = Dialog(activity)
         dialog.apply {
             setContentView(container)
         }
 
-        val positive = dialog.id_positive as TextView
         val negative = dialog.id_negative as TextView
         val body = dialog.id_main_content as ConstraintLayout
         body.addView(bodyContent)
@@ -23,5 +25,9 @@ class BasicDialog(val activity: Activity, val container: View, val bodyContent: 
             dialog.dismiss()
         }
         dialog.show()
+    }
+
+    fun dismiss() {
+        dialog.dismiss()
     }
 }

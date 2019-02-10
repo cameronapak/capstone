@@ -74,12 +74,14 @@ class PostServiceRequestActivity : AppCompatActivity() {
     private fun displayAvailabilityDialog() {
         val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
         val availabilityBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
-
         dialogContainer.apply {
             id_title.text = "Availability"
             id_negative.text = "Cancel"
             id_positive.text = "Save"
         }
+
+        val availabilityDialog = BasicDialog(this, dialogContainer, availabilityBody)
+        availabilityDialog.show()
 
         dialogContainer.id_positive.setOnClickListener {
             availableDays.clear()
@@ -92,10 +94,9 @@ class PostServiceRequestActivity : AppCompatActivity() {
             }
 
             Log.d("TEST", availableDays.toString())
-        }
 
-        val dialog = BasicDialog(this, dialogContainer, availabilityBody)
-        dialog.show()
+            availabilityDialog.dismiss()
+        }
     }
 
     override fun onResume() {

@@ -7,7 +7,7 @@
                                              android:layout_height="190dp"
                                              android:id="@+id/id_availability_view">
     <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="304dp"
             android:layout_height="40dp"
             android:layout_marginTop="40dp"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
@@ -23,7 +23,7 @@
             <TextView
                     android:text="Mon"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_mon"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_mon" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -40,7 +40,7 @@
             <TextView
                     android:text="Tues"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_tues"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_tues" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/id_tues_checkbox"
@@ -56,7 +56,7 @@
             <TextView
                     android:text="Wed"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_wed"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_wed" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/id_wed_checkbox"
@@ -73,7 +73,7 @@
                     android:text="Thur"
                     android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_thur"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_thur" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/id_thur_checkbox"
@@ -90,7 +90,7 @@
                     android:text="Fri"
                     android:gravity="center"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_fri"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_fri" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/id_fri_checkbox"
@@ -106,7 +106,7 @@
             <TextView
                     android:text="Sat"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_sat"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_sat" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/id_sat_checkbox"
@@ -122,7 +122,7 @@
             <TextView
                     android:text="Sun"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" android:id="@+id/id_sun"/>
+                    android:layout_height="wrap_content" android:id="@+id/id_sun" android:textAlignment="center"/>
             <CheckBox
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" android:id="@+id/id_sunday_checkbox"

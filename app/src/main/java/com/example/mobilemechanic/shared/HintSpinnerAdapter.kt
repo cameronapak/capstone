@@ -10,15 +10,14 @@ import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.mobilemechanic.R
 
-class StatesSpinnerAdapter(context: Context, resource: Int, stateList: List<String>) :
+
+class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String>) :
     ArrayAdapter<String>(context, resource, stateList) {
 
-    private val stateList = ArrayList<String>()
-
     override fun isEnabled(position: Int): Boolean {
-        if (position == 0) {
-            return false
-        }
+       if (position == 0) {
+           return false
+       }
         return true
     }
 

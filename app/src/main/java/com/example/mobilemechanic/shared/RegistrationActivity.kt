@@ -2,8 +2,8 @@ package com.example.mobilemechanic.shared
 
 import android.content.Intent
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
@@ -116,7 +116,11 @@ class RegistrationActivity : AppCompatActivity() {
         val states = DataProviderManager.getAllStates()
 
         id_registration_state.adapter =
-            StatesSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, states)
+            HintSpinnerAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                states
+            )
     }
 
     private fun validateInformation(email: String,

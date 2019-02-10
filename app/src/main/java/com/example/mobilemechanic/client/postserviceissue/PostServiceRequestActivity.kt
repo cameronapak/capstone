@@ -1,11 +1,13 @@
 package com.example.mobilemechanic.client.postserviceissue
 
+import android.R
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.WindowManager
+import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 
 
@@ -45,7 +47,11 @@ class PostServiceRequestActivity : AppCompatActivity() {
         } else {
             hideWarningIconAndMessage()
             id_vehicle_spinner.adapter =
-                HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, vehicles)
+                HintSpinnerAdapter(
+                    this,
+                    R.layout.simple_spinner_dropdown_item,
+                    vehicles
+                )
         }
     }
 

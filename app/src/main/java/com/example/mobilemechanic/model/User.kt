@@ -3,24 +3,27 @@ package com.example.mobilemechanic.model
 import android.os.Parcel
 import android.os.Parcelable
 
-class User(var userType: String,
-           var email: String,
-           var password: String,
-           var passwordConfirmation: String,
-           var firstName: String,
-           var lastName: String,
-           var phoneNumber: String,
-           var address: String,
-           var city: String,
-           var state: String,
-           var zip: String) : Parcelable {
+enum class UserType
+{
+    CLIENT, MECHANIC
+}
 
-    constructor() : this("", "", "", "", "", "", "", "", "", "", "")
+data class User(var uid: String, var email: String, var password: String, var userType: UserType, var firstName: String,
+                var lastName: String, var phoneNumber: String, var address: String, var city: String, var state: String,
+                var zipCode: String, var photoUrl: String) : Parcelable
+{
+    constructor() : this("", "", "", UserType.CLIENT, "", "", "", "",
+        "", "", "", "")
+
+    var vehicles: ArrayList<Vehicle>? = null
+    var services: ArrayList<Service>? = null
+    var rating: Float = 0f
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        UserType.values()[parcel.readInt()],
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -30,19 +33,33 @@ class User(var userType: String,
         parcel.readString(),
         parcel.readString()
     )
+    {
+        arrayListOf<Vehicle>().apply{
+            parcel.readList(this, Vehicle::class.java.classLoader)
+        }
+        arrayListOf<Service>().apply{
+            parcel.readList(this, Service::class.java.classLoader)
+        }
+        rating = parcel.readFloat()
+    }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(userType)
+    override fun writeToParcel(parcel: Parcel, flags: Int)
+    {
+        parcel.writeString(uid)
         parcel.writeString(email)
         parcel.writeString(password)
-        parcel.writeString(passwordConfirmation)
+        parcel.writeInt(userType.ordinal)
         parcel.writeString(firstName)
         parcel.writeString(lastName)
         parcel.writeString(phoneNumber)
         parcel.writeString(address)
         parcel.writeString(city)
         parcel.writeString(state)
-        parcel.writeString(zip)
+        parcel.writeString(zipCode)
+        parcel.writeString(photoUrl)
+        parcel.writeList(vehicles)
+        parcel.writeList(services)
+        parcel.writeFloat(rating)
     }
 
     override fun describeContents(): Int {

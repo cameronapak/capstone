@@ -17,29 +17,32 @@
 
                 <android.support.v7.widget.Toolbar
                         android:layout_width="match_parent"
-                        android:layout_height="70dp"
-                        android:background="?attr/colorPrimary"
+                        android:layout_height="@dimen/toolbar_height"
+                        android:background="@drawable/toolbar_bottom_border"
                         android:theme="?attr/actionBarTheme"
-                        android:minHeight="?attr/actionBarSize" android:id="@+id/id_registration_toolbar"
+                        android:minHeight="@dimen/toolbar_height"
+                        android:id="@+id/id_registration_toolbar"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"/>
+                        app:layout_constraintTop_toTopOf="parent"/>
                 <TextView
                         android:text="Registration"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/text_registration" android:layout_marginTop="13dp"
+                        android:id="@+id/text_registration"
                         app:layout_constraintTop_toTopOf="@+id/id_registration_toolbar"
                         app:layout_constraintStart_toStartOf="@+id/id_registration_toolbar"
                         android:layout_marginStart="72dp"
-                        android:fontFamily="@font/qualio_bold" android:textSize="28sp"
-                        android:textColor="@color/colorHeaderDark"/>
+                        android:fontFamily="@font/qualio_bold"
+                        android:textSize="28sp"
+                        android:textColor="@color/colorHeaderDark"
+                        app:layout_constraintBottom_toBottomOf="@+id/id_registration_toolbar"
+                        android:layout_marginTop="8dp" app:layout_constraintVertical_bias="0.263"/>
                 <TextView
                         android:text="Form"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:id="@+id/text_form" android:layout_marginTop="13dp"
-                        app:layout_constraintTop_toTopOf="@+id/id_registration_toolbar"
+                        android:id="@+id/text_form"
+                        app:layout_constraintTop_toTopOf="@+id/text_registration"
                         app:layout_constraintStart_toEndOf="@+id/text_registration"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0" android:textSize="28sp"
@@ -76,25 +79,13 @@
                 <EditText
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:id="@+id/id_registration_passwordConfirmation"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_password"
-                        android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:inputType="textPassword" android:hint="@string/hint_registration_passwordConfirmation"
-                        android:textSize="14sp"/>
-                <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
                         android:inputType="textPersonName"
                         android:ems="10"
                         android:id="@+id/id_registration_firstName" android:hint="@string/hint_registration_firstName"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_passwordConfirmation"
                         android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
                         android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:textSize="14sp"/>
+                        android:textSize="14sp" android:layout_marginTop="8dp"
+                        app:layout_constraintTop_toBottomOf="@+id/id_registration_password"/>
                 <EditText
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
@@ -111,7 +102,7 @@
                         android:layout_height="wrap_content"
                         android:inputType="phone"
                         android:ems="10"
-                        android:id="@+id/id_registation_phoneNumber"
+                        android:id="@+id/id_registration_phoneNumber"
                         android:hint="@string/hint_registration_phoneNumber"
                         android:layout_marginTop="8dp"
                         app:layout_constraintTop_toBottomOf="@+id/id_registration_lastName"
@@ -125,7 +116,7 @@
                         android:ems="10"
                         android:id="@+id/id_registration_address" android:hint="@string/hint_registration_address"
                         android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registation_phoneNumber"
+                        app:layout_constraintTop_toBottomOf="@+id/id_registration_phoneNumber"
                         app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
                         android:textSize="14sp"/>
                 <EditText
@@ -164,7 +155,8 @@
                         app:layout_constraintTop_toBottomOf="@+id/id_registration_zipcode"
                         app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
                         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                        android:background="@drawable/round_corner_button"/>
+                        android:background="@drawable/round_corner_button" android:textSize="18sp"
+                        android:fontFamily="@font/timeburnerbold" android:textColor="@color/colorPrimary"/>
                 <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" android:id="@+id/id_register_signIn"

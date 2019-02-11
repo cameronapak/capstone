@@ -8,18 +8,32 @@ import android.support.v4.view.GravityCompat
 import android.support.v7.app.ActionBar
 import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.adapter.RequestListAdapter
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.app_bar_mechanic_welcome.*
+import kotlinx.android.synthetic.main.content_mechanic_welcome.*
 
-class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener
+{
+    private var mAuth: FirebaseAuth? = null
+    private var db: FirebaseFirestore? = null
+
+    private var requests = ArrayList<Request>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_welcome)
         setSupportActionBar(toolbar)
+
+        mAuth = FirebaseAuth.getInstance()
+        db = FirebaseFirestore.getInstance()
 
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -33,6 +47,17 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        //Add placeholder data to recycler view for now...
+        for(i in 0..10)
+        {
+            requests.add(Request())
+        }
+
+        //Recycler View
+        id_mechanic_welcome_recyclerview.layoutManager = LinearLayoutManager(this)
+        id_mechanic_welcome_recyclerview.adapter = RequestListAdapter(this, requests)
+        id_mechanic_welcome_recyclerview.adapter?.notifyDataSetChanged()
     }
 
     override fun onBackPressed() {

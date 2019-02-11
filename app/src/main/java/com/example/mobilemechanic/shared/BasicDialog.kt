@@ -16,7 +16,7 @@ class BasicDialog {
             var negative = "No"
 
             fun build(context: Context, container: View, bodyView: View): Dialog {
-                var dialog: Dialog = Dialog(context)
+                var dialog = Dialog(context)
                 dialog.setContentView(container)
                 val body = container.id_main_content as ConstraintLayout
                 container.apply {

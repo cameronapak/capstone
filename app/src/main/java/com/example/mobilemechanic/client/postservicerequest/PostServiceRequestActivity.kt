@@ -46,13 +46,14 @@ class PostServiceRequestActivity : AppCompatActivity() {
 
     private fun setUpAvailabilityDialog() {
         val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
-        val bodyView = layoutInflater.inflate(R.layout.dialog_body_availability, null)
+        val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
             title = "My Title"
             positive = "Confirm"
             negative = "Cancel"
-        }.build(this, dialogContainer, bodyView)
+        }.build(this, dialogContainer, dialogBody)
 
+        // Show the dialog
         id_calendar_icon.setOnClickListener {
             basicDialog.show()
         }
@@ -61,13 +62,17 @@ class PostServiceRequestActivity : AppCompatActivity() {
             basicDialog.show()
         }
 
+
+        // Handle/Retrieve data from the dialog body
         dialogContainer.id_positive.setOnClickListener {
+
             availableDays.clear()
-            if (bodyView.id_mon_checkbox.isChecked) {
+            if (dialogBody.id_mon_checkbox.isChecked) {
                 availableDays.add("mon")
-                basicDialog.dismiss()
             }
+
             Log.d("TEST", availableDays.toString())
+            basicDialog.dismiss()
         }
 
         dialogContainer.id_negative.setOnClickListener {

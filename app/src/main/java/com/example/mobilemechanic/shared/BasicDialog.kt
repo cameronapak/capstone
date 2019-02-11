@@ -18,7 +18,7 @@ class BasicDialog {
             fun build(context: Context, container: View, bodyView: View): Dialog {
                 var dialog = Dialog(context)
                 dialog.setContentView(container)
-                val body = container.id_main_content as ConstraintLayout
+                val body = container.id_body as ConstraintLayout
                 container.apply {
                     id_title.text = title
                     id_positive.text = positive

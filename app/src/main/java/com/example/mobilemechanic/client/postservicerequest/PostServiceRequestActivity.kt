@@ -1,5 +1,6 @@
 package com.example.mobilemechanic.client.postservicerequest
 
+import android.app.Dialog
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -53,31 +54,8 @@ class PostServiceRequestActivity : AppCompatActivity() {
             negative = "Cancel"
         }.build(this, dialogContainer, dialogBody)
 
-        // Show the dialog
-        id_calendar_icon.setOnClickListener {
-            basicDialog.show()
-        }
-
-        id_availability.setOnClickListener {
-            basicDialog.show()
-        }
-
-
-        // Handle/Retrieve data from the dialog body
-        dialogContainer.id_positive.setOnClickListener {
-
-            availableDays.clear()
-            if (dialogBody.id_mon_checkbox.isChecked) {
-                availableDays.add("mon")
-            }
-
-            Log.d("TEST", availableDays.toString())
-            basicDialog.dismiss()
-        }
-
-        dialogContainer.id_negative.setOnClickListener {
-            basicDialog.dismiss()
-        }
+        handleDialogPopup(basicDialog)
+        handleDialogClicked(basicDialog, dialogContainer, dialogBody)
     }
 
     private fun setUpVehicleSpinner() {
@@ -96,6 +74,33 @@ class PostServiceRequestActivity : AppCompatActivity() {
                     com.example.mobilemechanic.R.layout.support_simple_spinner_dropdown_item,
                     vehicles
                 )
+        }
+    }
+
+    private fun handleDialogPopup(basicDialog: Dialog) {
+        id_calendar_icon.setOnClickListener {
+            basicDialog.show()
+        }
+
+        id_availability.setOnClickListener {
+            basicDialog.show()
+        }
+    }
+
+    private fun handleDialogClicked(basicDialog: Dialog, dialogContainer: View, dialogBody: View) {
+        // Handle/Retrieve data from the dialog body
+        dialogContainer.id_positive.setOnClickListener {
+            availableDays.clear()
+            if (dialogBody.id_mon_checkbox.isChecked) {
+                availableDays.add("mon")
+            }
+
+            Log.d("TEST", availableDays.toString())
+            basicDialog.dismiss()
+        }
+
+        dialogContainer.id_negative.setOnClickListener {
+            basicDialog.dismiss()
         }
     }
 

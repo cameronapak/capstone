@@ -39,5 +39,9 @@ class AddService : Activity() {
         label_cancel_add_service.setOnClickListener {
             finish()
         }
+
+        label_add_service.setOnClickListener {
+            
+        }
     }
 }

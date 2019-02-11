@@ -23,10 +23,11 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         <TextView
-                android:text="Service"
+                android:text="@string/service"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView2" android:layout_marginTop="8dp"
+                android:id="@+id/id_service"
+                android:layout_marginTop="8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/id_service_form_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
@@ -34,22 +35,22 @@
                 android:fontFamily="@font/qualio_bold" android:textSize="28sp"
                 android:textColor="@color/colorHeaderDark"/>
         <TextView
-                android:text="Form"
+                android:text="@string/form"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/id_form"
-                app:layout_constraintTop_toTopOf="@+id/textView2" android:layout_marginBottom="8dp"
+                app:layout_constraintTop_toTopOf="@+id/id_service" android:layout_marginBottom="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/id_service_form_toolbar"
                 app:layout_constraintVertical_bias="0.0"
                 android:fontFamily="@font/qualio_bold" android:textSize="28sp" android:textColor="@color/colorGrayText"
-                app:layout_constraintStart_toEndOf="@+id/textView2" android:layout_marginStart="4dp"/>
+                app:layout_constraintStart_toEndOf="@+id/id_service" android:layout_marginStart="4dp"/>
         <TextView
                 android:text="@string/specify_your_issue"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/id_subtitle"
-                app:layout_constraintTop_toBottomOf="@+id/textView2"
-                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/id_service"
+                app:layout_constraintStart_toStartOf="@+id/id_service"
                 android:textSize="12dp" android:fontFamily="@font/qualio"/>
         <TextView
                 android:text="@string/availability"
@@ -62,7 +63,7 @@
         <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp" app:srcCompat="@drawable/ic_date_range_gray_24dp"
-                android:id="@+id/id_calendarIcon" android:layout_marginTop="72dp"
+                android:id="@+id/id_calendarIcon" android:layout_marginTop="76dp"
                 app:layout_constraintTop_toBottomOf="@+id/id_service_form_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="72dp"/>
@@ -71,61 +72,61 @@
                 android:layout_width="264dp"
                 android:layout_height="48dp"
                 android:theme="@style/ThemeSpinner"
-                android:id="@+id/id_vehicle_spinner" android:layout_marginTop="44dp"
+                android:id="@+id/id_vehicle_spinner" android:layout_marginTop="28dp"
                 app:layout_constraintTop_toBottomOf="@+id/id_calendarIcon" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="8dp"
                 android:spinnerMode="dropdown"
                 android:backgroundTint="@color/colorGrayText" app:layout_constraintHorizontal_bias="0.496"/>
-        <Spinner
-                style="@style/Widget.AppCompat.Spinner.Underlined"
-                android:layout_width="0dp"
-                android:layout_height="48dp"
-                android:theme="@style/ThemeSpinner"
-                android:id="@+id/id_service_spinner" android:layout_marginTop="32dp"
-                app:layout_constraintTop_toBottomOf="@+id/id_vehicle_spinner"
-                app:layout_constraintStart_toStartOf="@+id/id_vehicle_spinner"
-                app:layout_constraintEnd_toEndOf="@+id/id_vehicle_spinner"
-                app:layout_constraintHorizontal_bias="1.0" android:spinnerMode="dropdown"/>
         <EditText
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:id="@+id/id_comment" android:layout_marginTop="52dp"
-                app:layout_constraintTop_toBottomOf="@+id/id_service_spinner"
-                app:layout_constraintStart_toStartOf="@+id/id_service_spinner"
-                app:layout_constraintEnd_toEndOf="@+id/id_service_spinner"
-                android:inputType="textMultiLine" android:hint="Comment" app:layout_constraintHorizontal_bias="0.0"
+                android:id="@+id/id_comment"
+                android:inputType="textMultiLine" android:hint="Comment"
                 android:backgroundTint="@color/colorGrayText" android:drawableTint="@color/colorPrimaryDark"
-                android:fontFamily="@font/qualio" android:textSize="24sp"/>
+                android:fontFamily="@font/qualio" android:textSize="24sp"
+                android:layout_marginTop="112dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_warningMessage"
+                app:layout_constraintStart_toStartOf="@+id/id_vehicle_spinner"
+                app:layout_constraintEnd_toEndOf="@+id/id_vehicle_spinner" app:layout_constraintHorizontal_bias="0.0"/>
         <Button
                 android:text="@string/submit"
                 android:layout_width="201dp"
                 android:layout_height="40dp"
-                android:id="@+id/id_submit" android:layout_marginTop="80dp"
+                android:id="@+id/id_submit" android:layout_marginTop="60dp"
                 app:layout_constraintTop_toBottomOf="@+id/id_comment"
                 app:layout_constraintStart_toStartOf="@+id/id_comment"
                 app:layout_constraintEnd_toEndOf="@+id/id_comment" android:fontFamily="@font/timeburnernormal"
                 android:textColor="@color/colorPrimary"
                 android:background="@drawable/round_corner_button"
-                app:layout_constraintHorizontal_bias="0.507" android:textSize="16dp"/>
+                app:layout_constraintHorizontal_bias="0.488" android:textSize="16dp"/>
         <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp" app:srcCompat="@drawable/ic_warning_red_24dp"
                 android:id="@+id/id_warning_icon"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="40dp"
                 android:layout_marginEnd="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/id_service_form_toolbar"
-                app:layout_constraintHorizontal_bias="0.097" android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_vehicle_spinner"
+                app:layout_constraintHorizontal_bias="0.097" android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"/>
         <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/id_warning_message"
-                app:layout_constraintTop_toTopOf="@+id/id_warning_icon"
+                android:layout_height="wrap_content" android:id="@+id/id_warningMessage"
                 app:layout_constraintStart_toEndOf="@+id/id_warning_icon" android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:layout_marginTop="4dp"
-                app:layout_constraintHorizontal_bias="0.0" android:textColor="@color/colorPrimary3"
-                android:text="An error as occurred."/>
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                app:layout_constraintHorizontal_bias="0.011" android:textColor="@color/colorGrayText"
+                android:text="Your garage is empty." android:fontFamily="@font/qualio"
+                android:textSize="18sp"
+                app:layout_constraintTop_toBottomOf="@+id/id_vehicle_spinner"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" android:id="@+id/id_warningMessageAddVehicle"
+                app:layout_constraintEnd_toEndOf="@+id/id_warningMessage"
+                app:layout_constraintHorizontal_bias="0.015" android:textColor="@color/colorPrimary3"
+                android:text="Click here to add a vehicle."
+                android:fontFamily="@font/qualio" app:layout_constraintTop_toBottomOf="@+id/id_warningMessage"
+                app:layout_constraintStart_toStartOf="@+id/id_warningMessage"/>
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout android:layout_width="match_parent" android:layout_height="wrap_content"

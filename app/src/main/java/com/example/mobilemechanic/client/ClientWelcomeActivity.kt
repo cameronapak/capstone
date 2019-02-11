@@ -15,6 +15,7 @@ import android.view.WindowManager
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.History.HistoryActivity
 import com.example.mobilemechanic.client.postserviceissue.PostServiceRequestActivity
+import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
 
@@ -87,8 +88,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        hideStatusBar()
-        hideBottomNavigationBar()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
     }
 

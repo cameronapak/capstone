@@ -1,9 +1,10 @@
 package com.example.mobilemechanic.shared
 
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
@@ -35,28 +36,32 @@ class RegistrationActivity : AppCompatActivity() {
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
 
-        setUpStateSpinner()
+        setUpRegistrationActivity()
+
 
         id_register_button.setOnClickListener {
             createUserAccount()
         }
     }
 
+    private fun setUpRegistrationActivity() {
+        setUpStateSpinner()
+        id_register_signIn.paintFlags = id_register_signIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+    }
+
     private fun createUserAccount() {
         val userType = getUserType(id_registration_client.isChecked)
         val email = id_registration_email.text.toString().trim()
         val password = id_registration_password.text.toString().trim()
-        val passwordConfirmation = id_registration_passwordConfirmation.text.toString().trim()
         val firstName = id_registration_firstName.text.toString().trim()
         val lastName = id_registration_lastName.text.toString().trim()
-        val phoneNumber = id_registation_phoneNumber.text.toString().trim()
+        val phoneNumber = id_registration_phoneNumber.text.toString().trim()
         val address = id_registration_address.text.toString().trim()
         val city = id_registration_city.text.toString().trim()
         val state = findViewById<Spinner>(R.id.id_registration_state).selectedItem.toString().trim()
         val zip = id_registration_zipcode.text.toString().trim()
 
-        if(validateInformation(email, password, passwordConfirmation,
-                firstName, lastName, phoneNumber, address, city, state, zip)) {
+        if(validateInformation(email, password, firstName, lastName, phoneNumber, address, city, state, zip)) {
 
             val userInfo = User("", email, password, userType, firstName,
                 lastName, phoneNumber, address, city, state, zip, "")
@@ -115,12 +120,15 @@ class RegistrationActivity : AppCompatActivity() {
         val states = DataProviderManager.getAllStates()
 
         id_registration_state.adapter =
-            StatesSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, states)
+            HintSpinnerAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                states
+            )
     }
 
     private fun validateInformation(email: String,
                                     password: String,
-                                    passwordConfirmation: String,
                                     firstName: String,
                                     lastName: String,
                                     phoneNumber: String,
@@ -136,11 +144,6 @@ class RegistrationActivity : AppCompatActivity() {
 
         if(password.length < 6) {
             Toast.makeText(this, "Password should have a minimum of 6 characters.", Toast.LENGTH_SHORT).show()
-            return false
-        }
-
-        if(!passwordConfirmation.equals(password)) {
-            Toast.makeText(this, "Password and Password Confirmation don't match.", Toast.LENGTH_SHORT).show()
             return false
         }
 
@@ -182,4 +185,8 @@ class RegistrationActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+    }
 }

@@ -7,6 +7,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
+import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
@@ -17,11 +19,11 @@ import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 class PostServiceRequestActivity : AppCompatActivity() {
 
     val availableDays = ArrayList<String>()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         setUpPostServiceRequestActivity()
+        val mechanicSelected = intent.getSerializableExtra(EXTRA_MECHANIC)
     }
 
     private fun setUpPostServiceRequestActivity() {
@@ -43,12 +45,33 @@ class PostServiceRequestActivity : AppCompatActivity() {
     }
 
     private fun setUpAvailabilityDialog() {
+        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+        val bodyView = layoutInflater.inflate(R.layout.dialog_body_availability, null)
+        val basicDialog = BasicDialog.Builder.apply {
+            title = "My Title"
+            positive = "Confirm"
+            negative = "Cancel"
+        }.build(this, dialogContainer, bodyView)
+
         id_calendar_icon.setOnClickListener {
-            displayAvailabilityDialog()
+            basicDialog.show()
         }
 
         id_availability.setOnClickListener {
-            displayAvailabilityDialog()
+            basicDialog.show()
+        }
+
+        dialogContainer.id_positive.setOnClickListener {
+            availableDays.clear()
+            if (bodyView.id_mon_checkbox.isChecked) {
+                availableDays.add("mon")
+                basicDialog.dismiss()
+            }
+            Log.d("TEST", availableDays.toString())
+        }
+
+        dialogContainer.id_negative.setOnClickListener {
+            basicDialog.dismiss()
         }
     }
 
@@ -68,34 +91,6 @@ class PostServiceRequestActivity : AppCompatActivity() {
                     com.example.mobilemechanic.R.layout.support_simple_spinner_dropdown_item,
                     vehicles
                 )
-        }
-    }
-
-    private fun displayAvailabilityDialog() {
-        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
-        val availabilityBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
-        dialogContainer.apply {
-            id_title.text = "Availability"
-            id_negative.text = "Cancel"
-            id_positive.text = "Save"
-        }
-
-        val availabilityDialog = BasicDialog(this, dialogContainer, availabilityBody)
-        availabilityDialog.show()
-
-        dialogContainer.id_positive.setOnClickListener {
-            availableDays.clear()
-            if (availabilityBody.id_mon_checkbox.isChecked) {
-                availableDays.add("mon")
-            }
-
-            if (availabilityBody.id_tues_checkbox.isChecked) {
-                availableDays.add("tues")
-            }
-
-            Log.d("TEST", availableDays.toString())
-
-            availabilityDialog.dismiss()
         }
     }
 

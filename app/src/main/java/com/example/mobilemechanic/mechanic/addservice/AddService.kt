@@ -41,7 +41,7 @@ class AddService : Activity() {
         }
 
         label_add_service.setOnClickListener {
-            
+
         }
     }
 }

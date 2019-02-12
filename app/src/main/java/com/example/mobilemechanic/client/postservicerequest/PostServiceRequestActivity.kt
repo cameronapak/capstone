@@ -66,28 +66,25 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun validateForm() {
         val submitButton = id_submit as Button
         if ((id_vehicle_spinner.selectedItemPosition == 0) or (availableDays.isEmpty())) {
-                disableButton(submitButton)
+                disableSubmitButton()
         } else {
-                enableButton(submitButton)
+                enableSubmitButton()
         }
     }
 
 
     private fun setUpVehicleSpinner() {
-        val vehicles =
-            arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
-                .asList()
+        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+              .asList()
 
+//        val vehicles = arrayOf("Vehicle").asList()
+
+        id_vehicle_spinner.adapter =
+            HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
         if (isGarageEmpty(vehicles)) {
             showWarningIconAndMessage()
         } else {
             hideWarningIconAndMessage()
-            id_vehicle_spinner.adapter =
-                HintSpinnerAdapter(
-                    this,
-                    R.layout.support_simple_spinner_dropdown_item,
-                    vehicles
-                )
         }
     }
 
@@ -103,6 +100,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun handleDialogClicked(basicDialog: Dialog, dialogContainer: View, dialogBody: View) {
         dialogContainer.id_positive.setOnClickListener {
+            validateForm()
             availableDays.clear()
             if (dialogBody.id_mon_checkbox.isChecked) {
                 availableDays.add("mon")
@@ -129,14 +127,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_warning_message_add.visibility = View.VISIBLE
     }
 
-    private fun disableButton(button: Button) {
-        button.isEnabled = false
-        button.setBackgroundResource(R.drawable.button_round_corner_disabled)
+    private fun disableSubmitButton() {
+        id_submit.isEnabled = false
+        id_submit.setBackgroundResource(R.drawable.button_round_corner_disabled)
     }
 
-    private fun enableButton(button: Button) {
-        button.isEnabled = true
-        button.setBackgroundResource(R.drawable.button_round_corner)
+    private fun enableSubmitButton() {
+        id_submit.isEnabled = true
+        id_submit.setBackgroundResource(R.drawable.button_round_corner)
     }
 
     private fun isGarageEmpty(vehicles: List<String>): Boolean {

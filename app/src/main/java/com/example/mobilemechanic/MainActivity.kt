@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             R.id.id_mechanicButton -> {
                 val i = Intent(this, MechanicWelcomeActivity::class.java)
                 startActivity(i)
-                finish()
 
             }
         }

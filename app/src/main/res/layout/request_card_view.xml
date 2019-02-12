@@ -22,7 +22,7 @@
                     android:id="@+id/image_client_profile"
                     android:layout_width="68dp"
                     android:layout_height="68dp"
-                    android:src="@drawable/chan_profile_cropped"
+                    android:src="@drawable/chan_profile"
                     app:civ_border_width="2dp"
                     app:civ_border_color="#FF000000" android:layout_marginTop="22dp"
                     android:layout_alignParentTop="true"

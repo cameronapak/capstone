@@ -3,23 +3,18 @@ package com.example.mobilemechanic.model
 import android.os.Parcel
 import android.os.Parcelable
 
-enum class ServiceType
+data class Service(var serviceType: String, var price: Double, var comment: String) : Parcelable
 {
-    CHECK_ENGINE_LIGHT, FILL_GAS, OIL_CHANGE, TIRE_CHANGE
-}
-
-data class Service(var serviceType: ServiceType, var price: Double, var comment: String) : Parcelable
-{
-    constructor() : this(ServiceType.CHECK_ENGINE_LIGHT, 0.0, "")
+    constructor() : this("", 0.0, "")
 
     constructor(parcel: Parcel) : this(
-        ServiceType.values()[parcel.readInt()],
+        parcel.readString(),
         parcel.readDouble(),
         parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(serviceType.ordinal)
+        parcel.writeString(serviceType)
         parcel.writeDouble(price)
         parcel.writeString(comment)
     }

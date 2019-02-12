@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.Button
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
 import com.example.mobilemechanic.shared.BasicDialog
@@ -17,32 +19,28 @@ import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 
 
-class PostServiceRequestActivity : AppCompatActivity() {
+class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    val availableDays = ArrayList<String>()
+    private val availableDays = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         setUpPostServiceRequestActivity()
         val mechanicSelected = intent.getSerializableExtra(EXTRA_MECHANIC)
+        id_vehicle_spinner.onItemSelectedListener = this
     }
 
     private fun setUpPostServiceRequestActivity() {
-        setUpToolBar()
-        setUpFormSpinners()
+        setUpActionBar()
+        setUpVehicleSpinner()
         setUpAvailabilityDialog()
+        handleSubmit()
     }
 
-    private fun setUpToolBar() {
+    private fun setUpActionBar() {
         setSupportActionBar(id_service_form_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
-        actionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-        }
-    }
-
-    private fun setUpFormSpinners() {
-        setUpVehicleSpinner()
+        actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setUpAvailabilityDialog() {
@@ -58,6 +56,23 @@ class PostServiceRequestActivity : AppCompatActivity() {
         handleDialogClicked(basicDialog, dialogContainer, dialogBody)
     }
 
+    private fun handleSubmit() {
+        id_submit.setOnClickListener {
+
+
+        }
+    }
+
+    private fun validateForm() {
+        val submitButton = id_submit as Button
+        if ((id_vehicle_spinner.selectedItemPosition == 0) or (availableDays.isEmpty())) {
+                disableButton(submitButton)
+        } else {
+                enableButton(submitButton)
+        }
+    }
+
+
     private fun setUpVehicleSpinner() {
         val vehicles =
             arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
@@ -65,13 +80,12 @@ class PostServiceRequestActivity : AppCompatActivity() {
 
         if (isGarageEmpty(vehicles)) {
             showWarningIconAndMessage()
-            id_submit.isEnabled = false
         } else {
             hideWarningIconAndMessage()
             id_vehicle_spinner.adapter =
                 HintSpinnerAdapter(
                     this,
-                    com.example.mobilemechanic.R.layout.support_simple_spinner_dropdown_item,
+                    R.layout.support_simple_spinner_dropdown_item,
                     vehicles
                 )
         }
@@ -88,7 +102,6 @@ class PostServiceRequestActivity : AppCompatActivity() {
     }
 
     private fun handleDialogClicked(basicDialog: Dialog, dialogContainer: View, dialogBody: View) {
-        // Handle/Retrieve data from the dialog body
         dialogContainer.id_positive.setOnClickListener {
             availableDays.clear()
             if (dialogBody.id_mon_checkbox.isChecked) {
@@ -104,16 +117,6 @@ class PostServiceRequestActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
-    }
-
     private fun hideWarningIconAndMessage() {
         id_warning_icon.visibility = View.GONE
         id_warning_message.visibility = View.GONE
@@ -126,10 +129,37 @@ class PostServiceRequestActivity : AppCompatActivity() {
         id_warning_message_add.visibility = View.VISIBLE
     }
 
+    private fun disableButton(button: Button) {
+        button.isEnabled = false
+        button.setBackgroundResource(R.drawable.button_round_corner_disabled)
+    }
+
+    private fun enableButton(button: Button) {
+        button.isEnabled = true
+        button.setBackgroundResource(R.drawable.button_round_corner)
+    }
+
     private fun isGarageEmpty(vehicles: List<String>): Boolean {
         if (vehicles.size <= 1) {
             return true
         }
         return false
     }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        validateForm()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
 }

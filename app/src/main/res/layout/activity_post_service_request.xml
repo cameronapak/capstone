@@ -185,7 +185,7 @@
                 app:layout_constraintStart_toStartOf="@+id/id_comment"
                 app:layout_constraintEnd_toEndOf="@+id/id_comment" android:fontFamily="@font/timeburnernormal"
                 android:textColor="@color/colorPrimary"
-                android:background="@drawable/round_corner_button"
+                android:background="@drawable/button_round_corner"
                 app:layout_constraintHorizontal_bias="0.507" android:textSize="16dp" android:layout_marginBottom="85dp"
                 app:layout_constraintBottom_toBottomOf="parent"/>
     </android.support.constraint.ConstraintLayout>

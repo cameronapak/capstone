@@ -6,6 +6,7 @@
                                              android:layout_height="322dp">
 
     <TextView
+            android:text="@string/text_title"
             android:layout_width="0dp"
             android:layout_height="75dp"
             android:id="@+id/id_title"
@@ -15,11 +16,11 @@
             android:gravity="center"
             android:textColor="@color/colorPrimary" android:fontFamily="@font/qualio_bold" android:textSize="32sp"/>
     <android.support.constraint.ConstraintLayout
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="171dp"
             app:layout_constraintTop_toBottomOf="@+id/id_title" app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintHorizontal_bias="0.0" app:layout_constraintVertical_bias="0.17"
             android:id="@+id/id_body">
 
@@ -34,17 +35,18 @@
         <TextView
                 android:id="@+id/id_negative"
                 android:background="@drawable/border_top"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:textSize="18sp"
                 android:fontFamily="@font/timeburnerbold"
                 android:gravity="center"
-                android:textColor="@color/colorGrayText"/>
+                android:textColor="@color/colorGrayText" android:text="@string/text_cancel"/>
         <TextView
                 android:id="@+id/id_positive"
+                android:text="@string/text_confirm"
                 android:background="@drawable/border_top"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:gravity="center"

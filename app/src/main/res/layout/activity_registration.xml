@@ -155,7 +155,7 @@
                         app:layout_constraintTop_toBottomOf="@+id/id_registration_zipcode"
                         app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
                         app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                        android:background="@drawable/round_corner_button" android:textSize="18sp"
+                        android:background="@drawable/button_round_corner" android:textSize="18sp"
                         android:fontFamily="@font/timeburnerbold" android:textColor="@color/colorPrimary"/>
                 <TextView
                         android:layout_width="wrap_content"

@@ -79,5 +79,9 @@
     <string name="label_button_info_manage">Manage</string>
     <string name="label_button_choice_accept">Accept</string>
     <string name="label_button_choice_complete">Complete</string>
+    <string name="label_remove_service">Remove</string>
+    <string name="label_update_service">Update</string>
+
+    <string name="price">$%.2f</string>
 
 </resources>

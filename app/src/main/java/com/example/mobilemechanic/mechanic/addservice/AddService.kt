@@ -91,6 +91,8 @@ class AddService : Activity() {
                     mDb?.collection("Accounts")
                         ?.document(mAuth?.uid.toString())
                         ?.update("services", services )
+                    val i = Intent()
+                    setResult(Activity.RESULT_OK, i)
                     finish()
                 }
                 else {

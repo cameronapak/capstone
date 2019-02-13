@@ -19,6 +19,16 @@
     <string name="text_details">Details</string>
     <string name="text_rating">Rating</string>
     <string name="text_rating_initial">0</string>
+    <string name="text_rating_wrong">What went Wrong?</string>
+    <string name="text_rating_comment">Comment</string>
+
+    <string name="text_selection1">Poor service</string>
+    <string name="text_selection2">Expensive</string>
+    <string name="text_selection3">Rude</string>
+    <string name="text_selection4">Service takes too long</string>
+    <string name="text_selection5">Not on time</string>
+    <string name="text_selection6">Not helpful</string>
+    <string name="text_selection7">Other</string>
 
     <string name="specify_your_issue">Specify your issue</string>
     <string name="availability">Availability</string>

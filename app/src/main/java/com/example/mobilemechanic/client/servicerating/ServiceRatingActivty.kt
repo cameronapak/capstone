@@ -16,7 +16,7 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
         setContentView(R.layout.activity_service_rating_activty)
 
         val ss:String = intent.getStringExtra("name")
-        val question = findViewById<TextView>(R.id.id_rating_how)
+        val question = findViewById<TextView>(R.id.id_rating_question)
         val ratingBar = findViewById<RatingBar>(R.id.id_rating_bar)
 
         question.text = "How was ${ss}'s service?"

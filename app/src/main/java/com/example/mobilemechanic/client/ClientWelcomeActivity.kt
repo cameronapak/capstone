@@ -12,7 +12,7 @@ import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
-import com.example.mobilemechanic.client.history.HistoryActivity
+import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -75,7 +75,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.id_history-> {
-                    startActivity(Intent(this, HistoryActivity::class.java))
+                    startActivity(Intent(this, ClientHistoryActivity::class.java))
                     Log.d("History", "History activity selected")
                     true
                 }

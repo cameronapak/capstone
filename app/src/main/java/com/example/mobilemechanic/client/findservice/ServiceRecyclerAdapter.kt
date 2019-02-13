@@ -13,6 +13,7 @@ import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestAc
 import com.example.mobilemechanic.model.User
 
 const val EXTRA_MECHANIC = "extra_echanic"
+const val EXTRA_SERVICE = "extra_service"
 
 class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<User>) :
     RecyclerView.Adapter<ServiceRecyclerAdapter.ViewHolder>() {
@@ -39,8 +40,10 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<User>)
 
         holder.selectButton.setOnClickListener {
 
+            val service = user.services?.get(0)
             val intent = Intent(context, PostServiceRequestActivity::class.java)
             intent.putExtra(EXTRA_MECHANIC, user)
+            intent.putExtra(EXTRA_SERVICE, service)
             context.startActivity(intent)
         }
     }

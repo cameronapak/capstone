@@ -15,8 +15,8 @@ data class User(var uid: String, var email: String, var password: String, var us
     constructor() : this("", "", "", UserType.CLIENT, "", "", "", "",
         "", "", "", "")
 
-    var vehicles: ArrayList<Vehicle>? = null
-    var services: ArrayList<Service>? = null
+    var vehicles: ArrayList<Vehicle>? = ArrayList()
+    var services: ArrayList<Service>? = ArrayList()
     var rating: Float = 0f
 
     constructor(parcel: Parcel) : this(

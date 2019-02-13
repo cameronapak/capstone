@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.Service
+import com.example.mobilemechanic.model.ServiceType
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.ScreenManager
@@ -37,11 +39,9 @@ class FindServiceActivity : AppCompatActivity() {
             ""
         )
 
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
+        val service = Service(ServiceType.OIL_CHANGE, 30.00, "")
+        user.services?.add(service)
+
         mechanics.add(user)
 
         val serviceAdapter = ServiceRecyclerAdapter(this, mechanics)

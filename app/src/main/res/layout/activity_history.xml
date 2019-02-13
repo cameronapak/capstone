@@ -5,7 +5,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".client.History.History" android:id="@+id/frameLayout">
+        tools:context=".client.history.History" android:id="@+id/frameLayout">
 
     <android.support.constraint.ConstraintLayout
             android:layout_width="412dp"
@@ -34,7 +34,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="72dp" app:layout_constraintVertical_bias="0.263"
                 android:fontFamily="@font/qualio_bold" android:textSize="28sp"
-                android:textColor="@color/colorHeaderDark" android:text="@string/history"/>
+                android:textColor="@color/colorHeaderDark" android:text="@string/text_history"/>
         <TextView
                 android:text="@string/previous"
                 android:layout_width="wrap_content"

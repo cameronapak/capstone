@@ -30,7 +30,7 @@ class ClientHistoryActivity : AppCompatActivity() {
         )
 
         val service = Service(
-            ServiceType.OIL_CHANGE,
+            "${DataProviderManager.getAllServices()[1]}",
             30.0,
             ""
         )
@@ -41,7 +41,7 @@ class ClientHistoryActivity : AppCompatActivity() {
             "",
             vehicle,
             service,
-            true,
+            Status.COMPLETE,
             0L,
             0L
         )

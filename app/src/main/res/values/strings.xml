@@ -21,6 +21,7 @@
     <string name="text_rating_initial">0</string>
     <string name="text_rating_wrong">What went Wrong?</string>
     <string name="text_rating_comment">Comment</string>
+    <string name="text_rating_subititle">Rate the service</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>

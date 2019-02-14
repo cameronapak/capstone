@@ -1,6 +1,7 @@
 package com.example.mobilemechanic.client.postservicerequest
 
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -17,11 +18,13 @@ import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
+import java.util.*
 
 
-class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
     private val availableDays = ArrayList<String>()
+    private lateinit var dialogContainer: View
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
@@ -44,7 +47,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpAvailabilityDialog() {
-        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+//        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+        dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
             title = "My Title"
@@ -158,6 +162,30 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun clickTimePicker(view: View) {
+        val c = Calendar.getInstance()
+        var hour = c.get(Calendar.HOUR)
+        val minute = c.get(Calendar.MINUTE)
+
+        val tpd = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { v, h, m ->
+            val time = (if (h > 12) "${h % 12}:" else "${h}:").toString() +
+                    (if (m < 10) "0${m}" else "${m}").toString() +
+                    (if (h >= 12) " PM" else " AM").toString()
+
+            when (view.id) {
+                dialogContainer.id_btnFromTime.id -> {
+                    dialogContainer.id_btnFromTime.text = time.toString()
+                }
+                dialogContainer.id_btnToTime.id -> {
+                    dialogContainer.id_btnToTime.text = time.toString()
+                }
+            }
+
+        },hour,minute,false)
+
+        tpd.show()
     }
 
 }

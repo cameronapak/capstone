@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             // Yanfay
             R.id.id_registrationButton -> {
                 startActivity(Intent(this, RegistrationActivity::class.java))
-                true
+
             }
 
             // Bisi
@@ -46,7 +46,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             // Tomy, Dat, Cameron
             R.id.id_clientButton -> {
                 startActivity(Intent(this, ClientWelcomeActivity::class.java))
-                true
+
             }
 
             // Robert, Pham

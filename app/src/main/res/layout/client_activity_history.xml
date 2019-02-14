@@ -5,44 +5,51 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".client.History.History" android:id="@+id/frameLayout">
+        tools:context=".client.history.ClientHistoryActivity" android:id="@+id/frameLayout">
 
     <android.support.constraint.ConstraintLayout
-            android:layout_width="412dp"
+            android:layout_width="411dp"
             android:background="@drawable/round_corner_bottom"
             android:elevation="5dp"
             android:fitsSystemWindows="true"
-            android:layout_height="574dp" android:layout_gravity="top"
+            android:layout_height="621dp" android:layout_gravity="top"
             app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="16dp" >
+            android:layout_marginEnd="16dp">
 
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="389dp"
+                android:layout_height="485dp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+                android:id="@+id/id_recyclerview_history"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="85dp"
+        />
         <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:background="@drawable/toolbar_bottom_border"
                 android:theme="?attr/actionBarTheme"
                 android:minHeight="@dimen/toolbar_height"
-                android:id="@+id/id_service_form_toolbar"
+                android:id="@+id/id_client_history_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/id_subtitle" android:layout_marginTop="8dp"
+                android:id="@+id/id_" android:layout_marginTop="8dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="@+id/id_service_form_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginStart="72dp" app:layout_constraintVertical_bias="0.263"
+                android:layout_marginStart="40dp" app:layout_constraintVertical_bias="0.263"
                 android:fontFamily="@font/qualio_bold" android:textSize="28sp"
-                android:textColor="@color/colorHeaderDark" android:text="@string/history"/>
+                android:textColor="@color/colorHeaderDark" android:text="@string/text_history"/>
         <TextView
                 android:text="@string/previous"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/id_subtitle_previous"
-                app:layout_constraintTop_toBottomOf="@+id/id_subtitle"
-                app:layout_constraintStart_toStartOf="@+id/id_subtitle"
-                android:textSize="18sp" android:fontFamily="@font/qualio"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:textSize="18sp" android:fontFamily="@font/qualio" android:layout_marginStart="40dp"
+                android:layout_marginTop="40dp" app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
     <RelativeLayout
@@ -52,9 +59,10 @@
         <ImageView
                 android:src="@drawable/bottom_bg2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" android:id="@+id/imageView2"
-                app:layout_constraintBottom_toBottomOf="parent" tools:layout_editor_absoluteX="1dp"
+                android:layout_height="wrap_content" android:id="@+id/id_history_imageView"
+                app:layout_constraintBottom_toBottomOf="parent" tools:layout_editor_absoluteX="0dp"
                 android:background="@drawable/bottom_bg2"
                 android:contentDescription="bottom @string/bottom_sheet_behavior"/>
     </RelativeLayout>
+
 </FrameLayout>

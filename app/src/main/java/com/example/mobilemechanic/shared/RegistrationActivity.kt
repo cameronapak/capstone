@@ -20,7 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 
-const val ACCOUNT_DOC_PATH = "Accounts"
+const val ACCOUNT_DOC_PATH = "account/accountDoc"
+const val USER_INFO = "user_info"
 
 class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
@@ -84,8 +85,9 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun saveUserInfo(userInfo: User) {
-        mFireStore?.collection(ACCOUNT_DOC_PATH)
-            ?.document(userInfo.uid)
+
+        mFireStore?.collection("$ACCOUNT_DOC_PATH/${userInfo.email}")
+            ?.document(USER_INFO)
             ?.set(userInfo)
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()

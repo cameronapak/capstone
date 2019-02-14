@@ -26,14 +26,19 @@
                 android:label="@string/title_activity_mechanic_welcome"
                 android:theme="@style/NoActionBar">
         </activity>
-        <activity android:name=".client.History.HistoryActivity">
+
+        <activity android:name=".client.servicerating.ServiceRatingActivity">
+        </activity>
+        <activity android:name=".client.findservice.FindServiceActivity">
+        </activity>
+        <activity android:name=".client.history.ClientHistoryActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
         <activity android:name=".shared.RegistrationActivity">
         </activity>
-        <activity android:name=".client.postserviceissue.PostServiceRequestActivity">
+        <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>
         <activity android:name=".client.ClientWelcomeActivity">
         </activity>
@@ -44,6 +49,10 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <meta-data
+                android:name="preloaded_fonts"
+                android:resource="@array/preloaded_fonts"/>
     </application>
 
 </manifest>

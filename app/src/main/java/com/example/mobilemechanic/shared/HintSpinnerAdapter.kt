@@ -11,7 +11,7 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 
 
-class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String>) :
+class HintSpinnerAdapter(context: Context, resource: Int, var stateList: List<String>) :
     ArrayAdapter<String>(context, resource, stateList) {
 
     override fun isEnabled(position: Int): Boolean {

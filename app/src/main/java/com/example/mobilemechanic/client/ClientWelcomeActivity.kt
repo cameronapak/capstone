@@ -10,11 +10,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.view.WindowManager
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.History.HistoryActivity
-import com.example.mobilemechanic.client.postserviceissue.PostServiceRequestActivity
+import com.example.mobilemechanic.client.findservice.FindServiceActivity
+import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -25,7 +23,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.mobilemechanic.R.layout.activity_client_welcome)
+        setContentView(R.layout.activity_client_welcome)
         setUpClientWelcomeActivity()
     }
 
@@ -38,6 +36,8 @@ class ClientWelcomeActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
+
 
     private fun setUpClientWelcomeActivity() {
         setUpToolBar()
@@ -70,13 +70,13 @@ class ClientWelcomeActivity : AppCompatActivity() {
         id_client_nav_view.setNavigationItemSelectedListener { item ->
             when(item.itemId) {
                 R.id.id_service_request -> {
-                    startActivity(Intent(this, PostServiceRequestActivity::class.java))
+                    startActivity(Intent(this, FindServiceActivity::class.java))
                     Log.d("WELCOME", "Post service request selected")
                     true
                 }
                 R.id.id_history-> {
-                    startActivity(Intent(this, HistoryActivity::class.java))
-                    Log.d("Historty", "History activity selected")
+                    startActivity(Intent(this, ClientHistoryActivity::class.java))
+                    Log.d("History", "History activity selected")
                     true
                 }
                 else -> {
@@ -90,23 +90,5 @@ class ClientWelcomeActivity : AppCompatActivity() {
     override fun onResume() {
         ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
-    }
-
-    private fun hideStatusBar() {
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
-    }
-
-    private fun hideBottomNavigationBar() {
-        window.decorView.apply {
-            systemUiVisibility =
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE or
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or
-                        View.SYSTEM_UI_FLAG_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION or
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-        }
     }
 }

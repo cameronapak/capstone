@@ -3,6 +3,7 @@ package com.example.mobilemechanic.client.history
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
 import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.ServiceType
+import com.example.mobilemechanic.model.Status
 
 class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
     RecyclerView.Adapter<ClientHistoryRecyclerAdapter.ViewHolder>() {
@@ -32,15 +33,11 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val request = dataset[position]
-        var type = ""
+        var type = "${request.service.serviceType}"
+        Log.d("abcde", type)
 
-        if(request.isComplete) holder.serviceProgress.text = "Service Completed"
+        if(request.status == Status.COMPLETE) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"
-
-        if(request.service.serviceType == ServiceType.OIL_CHANGE) type = "Oil Change"
-        else if(request.service.serviceType == ServiceType.CHECK_ENGINE_LIGHT) type = "Check Engine Light"
-        else if(request.service.serviceType == ServiceType.FILL_GAS) type = "Fill Gas"
-        else if(request.service.serviceType == ServiceType.TIRE_CHANGE) type = "Tire Change"
 
         holder.name.text = "${request.mechanicId}"
         holder.description.text = "${type} for ${request.vehicle.year} ${request.vehicle.make} ${request.vehicle.model}"

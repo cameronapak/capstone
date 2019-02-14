@@ -42,7 +42,18 @@
     <style name="SpinnerItemStyle">
         <item name="android:textSize">14dp</item>
     </style>
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
 
+
+    <style name="AddService">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowCloseOnTouchOutside">true</item>
+    </style>
     <style name="CheckBoxStyle" parent="Base.Widget.AppCompat.CompoundButton.CheckBox">
         <item name="colorAccent">@color/colorPrimary3</item>
         <item name="android:textColorSecondary">@color/colorGrayText</item>

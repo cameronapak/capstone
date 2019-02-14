@@ -3,13 +3,16 @@ package com.example.mobilemechanic.model
 import android.os.Parcel
 import android.os.Parcelable
 
+enum class Status
+{
+    REQUEST, ACTIVE, COMPLETE
+}
+
 data class Request(var clientId: String, var mechanicId: String, var description: String, var vehicle: Vehicle,
-                   var service: Service, var isComplete: Boolean, var timePosted: Long, var timeCompleted: Long) : Parcelable
+                   var service: Service, var status: Status, var timePosted: Long, var timeCompleted: Long) : Parcelable
 {
     constructor() : this("", "", "",
-        Vehicle(),
-        Service(), false, 0L,
-        0L)
+        Vehicle(), Service(), Status.REQUEST, 0L, 0L)
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -17,7 +20,7 @@ data class Request(var clientId: String, var mechanicId: String, var description
         parcel.readString(),
         parcel.readTypedObject(Vehicle),
         parcel.readTypedObject(Service),
-        parcel.readByte() != 0.toByte(),
+        Status.values()[parcel.readInt()],
         parcel.readLong(),
         parcel.readLong()
     )
@@ -28,7 +31,7 @@ data class Request(var clientId: String, var mechanicId: String, var description
         parcel.writeString(description)
         parcel.writeTypedObject(vehicle, flags)
         parcel.writeTypedObject(service, flags)
-        parcel.writeByte(if(isComplete) 1 else 0)
+        parcel.writeInt(status.ordinal)
         parcel.writeLong(timePosted)
         parcel.writeLong(timeCompleted)
     }

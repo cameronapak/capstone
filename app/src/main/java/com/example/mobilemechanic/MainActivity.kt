@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_main.*
@@ -50,7 +51,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             // Robert, Pham
             R.id.id_mechanicButton -> {
-
+                val i = Intent(this, MechanicWelcomeActivity::class.java)
+                startActivity(i)
 
             }
         }

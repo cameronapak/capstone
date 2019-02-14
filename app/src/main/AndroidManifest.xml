@@ -11,6 +11,22 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".mechanic.addservice.AddService"
+                  android:label="Add Service"
+        android:theme="@style/AddService"
+        >
+        </activity>
+        <activity
+                android:name=".mechanic.MechanicServices"
+                android:label="@string/title_activity_mechanic_services"
+                android:theme="@style/NoActionBar">
+        </activity>
+        <activity
+                android:name=".mechanic.MechanicWelcomeActivity"
+                android:label="@string/title_activity_mechanic_welcome"
+                android:theme="@style/NoActionBar">
+        </activity>
+
         <activity android:name=".client.servicerating.ServiceRatingActivity">
         </activity>
         <activity android:name=".client.findservice.FindServiceActivity">

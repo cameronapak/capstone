@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.CheckBox
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
 import com.example.mobilemechanic.shared.BasicDialog
@@ -19,6 +20,7 @@ import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
@@ -51,7 +53,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
-            title = "My Title"
+            title = "Availability"
             positive = "Confirm"
             negative = "Cancel"
         }.build(this, dialogContainer, dialogBody)
@@ -106,8 +108,23 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         dialogContainer.id_positive.setOnClickListener {
             validateForm()
             availableDays.clear()
-            if (dialogBody.id_mon_checkbox.isChecked) {
-                availableDays.add("mon")
+            var checkBoxArray = listOf(
+                dialogBody.id_mon_checkbox,
+                dialogBody.id_tues_checkbox,
+                dialogBody.id_wed_checkbox,
+                dialogBody.id_thur_checkbox,
+                dialogBody.id_fri_checkbox,
+                dialogBody.id_sat_checkbox,
+                dialogBody.id_sun_checkbox
+            )
+
+            var daysOfWeek = listOf("mon","tues","wed","thur","fri","sat","sun")
+
+            // add checked days of week to an array
+            for ((index, day) in checkBoxArray.withIndex()) {
+                if (day.isChecked) {
+                    availableDays.add(daysOfWeek[index])
+                }
             }
 
             Log.d("TEST", availableDays.toString())

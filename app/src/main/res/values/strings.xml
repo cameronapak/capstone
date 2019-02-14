@@ -60,6 +60,14 @@
     <string name="service">Service</string>
     <string name="form">Form</string>
 
+    <string name="email_identification">Are you %1$s?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="verification">Verification</string>
+    <string name="login_success">Login Successfull</string>
+    <string name="email_input">Enter your Email address</string>
+    <string name="reset_success">Reset Successfull: Check your Email</string>
+    <string name="reset_failed">Reset Failed</string>
 
     <string-array name="vehicles_array">
         <item>Vehicle</item>

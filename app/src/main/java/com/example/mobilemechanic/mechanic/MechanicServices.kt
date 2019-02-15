@@ -142,7 +142,6 @@ return true
     private fun handleDialogClicked(basicDialog: Dialog, dialogContainer: View, dialogBody: View) {
         dialogContainer.id_positive.setOnClickListener {
             addService()
-            //id_mechanic_service_recyclerview.adapter?.notifyDataSetChanged()
             basicDialog.dismiss()
         }
 

@@ -9,6 +9,7 @@ import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
 import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.SignInActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnClickListener {
@@ -39,7 +40,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             // Bisi
             R.id.id_loginButton -> {
-
+                val i = Intent(this, SignInActivity::class.java)
+                startActivity(i)
 
             }
 

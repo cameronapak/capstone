@@ -10,11 +10,11 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
-import com.example.mobilemechanic.model.User
+import com.example.mobilemechanic.model.ServiceModel
 
-const val EXTRA_MECHANIC = "extra_echanic"
+const val EXTRA_SERVICE = "extra_service"
 
-class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<User>) :
+class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<ServiceModel>) :
     RecyclerView.Adapter<ServiceRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -32,15 +32,16 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<User>)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val user = dataset[position]
+        val service = dataset[position]
         holder.title.text = "Mechanic"
-        holder.name.text = "${user.firstName} ${user.lastName}"
-        holder.price.text = "$30"
+        holder.name.text = "${service.mechanicName}"
+        holder.price.text = "$${service.price.toInt()}"
+
 
         holder.selectButton.setOnClickListener {
 
             val intent = Intent(context, PostServiceRequestActivity::class.java)
-            intent.putExtra(EXTRA_MECHANIC, user)
+            intent.putExtra(EXTRA_SERVICE, service)
             context.startActivity(intent)
         }
     }

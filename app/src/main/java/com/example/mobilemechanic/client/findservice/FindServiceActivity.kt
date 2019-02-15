@@ -21,11 +21,18 @@ class FindServiceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_find_service)
 
         mFireStore = FirebaseStorage.getInstance()
-        
+
         services = ArrayList()
 
         val mockService =
-            ServiceModel("Jason Statham", "jasonuid", "Oil Change", 30.toDouble(), "description", 4.5f)
+            ServiceModel(
+                "Jason Statham",
+                "jasonuid",
+                "Oil Change",
+                30.toDouble(),
+                "Guarantee complete under 30 minutes.",
+                4.5f
+            )
 
 
         services.add(mockService)

@@ -5,10 +5,12 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
@@ -71,6 +73,7 @@ class RegistrationActivity : AppCompatActivity() {
                 ?.addOnCompleteListener {
                     userInfo.uid = mAuth!!.uid.toString()
                     handleAccountCreationSuccess(it, userInfo)
+                    Log.d(MECHANIC_TAG, "[RegistrationActivity]: createUserAccount()")
             }
         }
     }

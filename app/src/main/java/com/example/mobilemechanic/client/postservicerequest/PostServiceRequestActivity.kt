@@ -9,10 +9,8 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.model.Service
-import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
@@ -58,24 +56,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpServiceSelected() {
-
-        val mechanicSelected = intent.getParcelableExtra<User>(EXTRA_MECHANIC)
         val service = intent.getParcelableExtra<Service>(EXTRA_SERVICE)
-
     }
 
     private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
             val description = id_description.text.toString()
             val vehicle = id_vehicle_spinner.selectedItem.toString()
-            val mechanic = intent.getParcelableExtra<User>(EXTRA_MECHANIC)
             val service = intent.getParcelableExtra<Service>(EXTRA_SERVICE)
-
-            Log.d("TEST", "$description \n $vehicle \n $mechanic \n $service")
-
-
-
-
         }
     }
 

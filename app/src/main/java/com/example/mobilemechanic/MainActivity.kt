@@ -3,11 +3,9 @@ package com.example.mobilemechanic
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
-import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
 import com.example.mobilemechanic.shared.ScreenManager
@@ -22,22 +20,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         setContentView(R.layout.activity_main)
         // For testing purposes
         navigationsSetup()
-
-        mAuth = FirebaseAuth.getInstance()
-
-        id_login_button.setOnClickListener {
-
-            Log.d(MECHANIC_TAG, "[MainActivity]: onCreate() login clicked")
-            mAuth?.signInWithEmailAndPassword("dat@gmail.com", "Password1!")
-                ?.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.d(MECHANIC_TAG, "[MainActivity]: logged in success")
-                    }
-
-                    val uid = mAuth?.currentUser?.uid
-                    Log.d(MECHANIC_TAG, "[MainActivity]: ${mAuth?.currentUser?.uid}")
-                }
-        }
     }
 
     private fun navigationsSetup() {

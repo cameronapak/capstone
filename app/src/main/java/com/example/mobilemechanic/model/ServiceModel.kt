@@ -6,17 +6,17 @@ import android.os.Parcelable
 data class ServiceModel(
     var mechanicName: String,
     var uid: String,
-    var serviceType: ServiceType,
+    var serviceType: String,
     var price: Double,
     var description: String,
     var rating: Float
 ) : Parcelable {
-    constructor() : this("", "", ServiceType.CHECK_ENGINE_LIGHT, 0.0, "", 0.0f)
+    constructor() : this("", "", "", 0.0, "", 0.0f)
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
-        ServiceType.values()[parcel.readInt()],
+        parcel.readString(),
         parcel.readDouble(),
         parcel.readString(),
         parcel.readFloat()
@@ -25,7 +25,8 @@ data class ServiceModel(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(mechanicName)
         parcel.writeString(uid)
-        parcel.writeInt(serviceType.ordinal)
+//        parcel.writeInt(serviceType.ordinal)
+        parcel.writeString(serviceType)
         parcel.writeDouble(price)
         parcel.writeString(description)
         parcel.writeFloat(rating)

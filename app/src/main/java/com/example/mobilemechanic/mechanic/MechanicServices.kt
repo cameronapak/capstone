@@ -39,10 +39,22 @@ class MechanicServices : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_services)
-        setSupportActionBar(toolbar)
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+
+        mAuth?.signInWithEmailAndPassword("dat@gmail.com", "123456")
+            ?.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    Log.d(MECHANIC_TAG, "you is logged in")
+                    Log.d(MECHANIC_TAG, "[MechanicService]: onCreate() uid=${mAuth?.currentUser?.uid}")
+                }
+            }?.addOnFailureListener {
+                Log.d(MECHANIC_TAG, it.toString())
+            }
+
+
+        setSupportActionBar(toolbar)
         setUpMechanicServiceActivity()
     }
 

@@ -1,8 +1,10 @@
 package com.example.mobilemechanic.client.history
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.shared.ScreenManager
@@ -17,7 +19,7 @@ class ClientHistoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.client_activity_history)
 
-        request = ArrayList<Request>()
+        request = ArrayList()
 
         val viewManager = LinearLayoutManager(this)
 
@@ -61,6 +63,17 @@ class ClientHistoryActivity : AppCompatActivity() {
         }
 
         historyAdapter.notifyDataSetChanged()
+        setUpToolBar()
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_client_history_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "History"
+            subtitle = "Previous services"
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     override fun onResume() {

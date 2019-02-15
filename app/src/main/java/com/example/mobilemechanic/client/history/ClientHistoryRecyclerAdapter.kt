@@ -34,7 +34,6 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val request = dataset[position]
         var type = "${request.service.serviceType}"
-        Log.d("abcde", type)
 
         if(request.status == Status.COMPLETE) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"

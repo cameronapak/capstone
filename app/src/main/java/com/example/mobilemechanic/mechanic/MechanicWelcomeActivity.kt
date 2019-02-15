@@ -1,5 +1,6 @@
 package com.example.mobilemechanic.mechanic
 
+import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
@@ -11,14 +12,23 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
+import com.example.mobilemechanic.shared.BasicDialog
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.app_bar_mechanic_welcome.*
+import kotlinx.android.synthetic.main.basic_dialog.*
+import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.content_mechanic_welcome.*
+
+const val EXTRA_REQUEST = "service_request"
+const val REQ_CODE_MORE_INFO = 1
 
 class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener
 {
@@ -35,6 +45,7 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
+        //login for testing
         mAuth?.signInWithEmailAndPassword("testdb2@uco.edu","123456")
 
         fab.setOnClickListener { view ->
@@ -55,6 +66,12 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         {
             requests.add(Request())
         }
+        //load test requests from firebase
+        /*
+        db?.collection("Requests/${mAuth?.currentUser?.email}/requests")
+            ?.document(Timestamp.now().toString())
+            ?.set(Request(mAuth!!.currentUser!!.uid!!.toString(), ))
+            */
 
         //Recycler View
         id_mechanic_welcome_recyclerview.layoutManager = LinearLayoutManager(this)
@@ -113,5 +130,43 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    fun createChoiceDialog(title: String) : Dialog
+    {
+        var positive = ""
+        var dialogBody: View? = null
+        if(title == getString(R.string.label_choice_accept))
+        {
+            positive = getString(R.string.yes)
+            dialogBody = layoutInflater.inflate(R.layout.dialog_body_choice, null)
+        }
+        else if(title == getString(R.string.label_choice_complete))
+        {
+            positive = getString(R.string.label_choice_confirm)
+            dialogBody = layoutInflater.inflate(R.layout.dialog_body_complete, null)
+        }
+
+        val dialogContainer
+                = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
+
+        var choiceDialog = BasicDialog.Builder.apply {
+            this.title = title
+            this.positive = positive
+            negative = getString(R.string.label_cancel_add_service)
+        }.build(this, dialogContainer, dialogBody!!)
+
+
+        dialogContainer.id_positive.setOnClickListener {
+            Toast.makeText(this, "You pressed Positive!", Toast.LENGTH_SHORT).show()
+            choiceDialog.dismiss()
+        }
+
+        dialogContainer.id_negative.setOnClickListener {
+            Toast.makeText(this, "You pressed Negative!", Toast.LENGTH_SHORT).show()
+            choiceDialog.dismiss()
+        }
+
+        return choiceDialog
     }
 }

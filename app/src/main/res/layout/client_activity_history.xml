@@ -17,12 +17,15 @@
             android:layout_marginEnd="16dp">
 
         <android.support.v7.widget.RecyclerView
-                android:layout_width="389dp"
-                android:layout_height="485dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintStart_toStartOf="parent"
                 android:id="@+id/id_recyclerview_history"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="85dp"
-        />
+                android:layout_marginTop="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_client_history_toolbar" android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"/>
         <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"

@@ -50,7 +50,7 @@ class MechanicServices : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
 
 
-
+val test = 0;
 
         //Recycler View
         id_mechanic_service_recyclerview.layoutManager = LinearLayoutManager(this)

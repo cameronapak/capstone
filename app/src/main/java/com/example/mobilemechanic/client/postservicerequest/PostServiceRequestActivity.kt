@@ -8,9 +8,9 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Button
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
+import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
+import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
@@ -26,15 +26,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         setUpPostServiceRequestActivity()
-        val mechanicSelected = intent.getSerializableExtra(EXTRA_MECHANIC)
-        id_vehicle_spinner.onItemSelectedListener = this
     }
 
     private fun setUpPostServiceRequestActivity() {
         setUpActionBar()
         setUpVehicleSpinner()
         setUpAvailabilityDialog()
-        handleSubmit()
+        setUpServiceSelected()
+        setUpOnSubmit()
     }
 
     private fun setUpActionBar() {
@@ -56,15 +55,19 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         handleDialogClicked(basicDialog, dialogContainer, dialogBody)
     }
 
-    private fun handleSubmit() {
+    private fun setUpServiceSelected() {
+        val service = intent.getParcelableExtra<Service>(EXTRA_SERVICE)
+    }
+
+    private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
-
-
+            val description = id_description.text.toString()
+            val vehicle = id_vehicle_spinner.selectedItem.toString()
+            val service = intent.getParcelableExtra<Service>(EXTRA_SERVICE)
         }
     }
 
     private fun validateForm() {
-        val submitButton = id_submit as Button
         if ((id_vehicle_spinner.selectedItemPosition == 0) or (availableDays.isEmpty())) {
                 disableSubmitButton()
         } else {
@@ -74,6 +77,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
 
     private fun setUpVehicleSpinner() {
+        id_vehicle_spinner.onItemSelectedListener = this
         val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
               .asList()
 

@@ -12,8 +12,9 @@ import kotlinx.android.synthetic.main.activity_find_service.*
 class FindServiceActivity : AppCompatActivity() {
 
     private lateinit var services: ArrayList<ServiceModel>
-
     private lateinit var mFireStore: FirebaseStorage
+    private lateinit var viewManager: LinearLayoutManager
+    private lateinit var serviceAdapter: ServiceRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +22,7 @@ class FindServiceActivity : AppCompatActivity() {
 
         mFireStore = FirebaseStorage.getInstance()
         
-        services = ArrayList<ServiceModel>()
+        services = ArrayList()
 
         val mockService =
             ServiceModel("Jason Statham", "jasonuid", "Oil Change", 30.toDouble(), "description", 4.5f)
@@ -29,8 +30,8 @@ class FindServiceActivity : AppCompatActivity() {
 
         services.add(mockService)
 
-        val viewManager = LinearLayoutManager(this)
-        val serviceAdapter = ServiceRecyclerAdapter(this, services)
+        viewManager = LinearLayoutManager(this)
+        serviceAdapter = ServiceRecyclerAdapter(this, services)
         id_recyclerview_services.apply {
             setHasFixedSize(true)
             layoutManager = viewManager

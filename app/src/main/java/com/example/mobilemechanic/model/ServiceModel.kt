@@ -36,12 +36,12 @@ data class ServiceModel(
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<Service> {
-        override fun createFromParcel(parcel: Parcel): Service {
-            return Service(parcel)
+    companion object CREATOR : Parcelable.Creator<ServiceModel> {
+        override fun createFromParcel(parcel: Parcel): ServiceModel {
+            return ServiceModel(parcel)
         }
 
-        override fun newArray(size: Int): Array<Service?> {
+        override fun newArray(size: Int): Array<ServiceModel?> {
             return arrayOfNulls(size)
         }
     }

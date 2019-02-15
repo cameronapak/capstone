@@ -39,7 +39,6 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<Servic
 
 
         holder.selectButton.setOnClickListener {
-
             val intent = Intent(context, PostServiceRequestActivity::class.java)
             intent.putExtra(EXTRA_SERVICE, service)
             context.startActivity(intent)

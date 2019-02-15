@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MobileMechanic.iml" filepath="$PROJECT_DIR$/MobileMechanic.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/capstone.iml" filepath="$PROJECT_DIR$/.idea/capstone.iml" />
     </modules>

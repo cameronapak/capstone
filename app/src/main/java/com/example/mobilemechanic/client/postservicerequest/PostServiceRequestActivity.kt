@@ -5,12 +5,11 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
-import com.example.mobilemechanic.model.Service
+import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
@@ -22,6 +21,7 @@ import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private val availableDays = ArrayList<String>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
@@ -32,7 +32,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         setUpActionBar()
         setUpVehicleSpinner()
         setUpAvailabilityDialog()
-        setUpServiceSelected()
+        setUpServiceParcel()
         setUpOnSubmit()
     }
 
@@ -55,20 +55,25 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         handleDialogClicked(basicDialog, dialogContainer, dialogBody)
     }
 
-    private fun setUpServiceSelected() {
-        val service = intent.getParcelableExtra<Service>(EXTRA_SERVICE)
+    private fun setUpServiceParcel() {
+        val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+        id_name.text = service.mechanicName
+        id_service.text = service.serviceType
+        id_price.text = "$${service.price}"
+        id_rating.text = service.rating.toString()
     }
 
     private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
             val description = id_description.text.toString()
             val vehicle = id_vehicle_spinner.selectedItem.toString()
-            val service = intent.getParcelableExtra<Service>(EXTRA_SERVICE)
+            val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+
         }
     }
 
     private fun validateForm() {
-        if ((id_vehicle_spinner.selectedItemPosition == 0) or (availableDays.isEmpty())) {
+        if ((id_vehicle_spinner.selectedItemPosition == 0)) {
                 disableSubmitButton()
         } else {
                 enableSubmitButton()
@@ -109,8 +114,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             if (dialogBody.id_mon_checkbox.isChecked) {
                 availableDays.add("mon")
             }
-
-            Log.d("TEST", availableDays.toString())
             basicDialog.dismiss()
         }
 

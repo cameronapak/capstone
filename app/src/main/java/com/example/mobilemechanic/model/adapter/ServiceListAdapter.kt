@@ -2,7 +2,6 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -36,10 +35,10 @@ class ServiceListAdapter(var context: Context, var serviceArray: ArrayList<Servi
         fun bindItem(position: Int)
         {
             //references to text views
-            val typeView = itemView.findViewById<TextView>(R.id.label_service_type)
+            val typeView = itemView.findViewById<TextView>(R.id.text_service_type)
             val costView = itemView.findViewById<TextView>(R.id.label_cost_service)
             val descriptionView = itemView.findViewById<TextView>(R.id.label_service_description)
-            val updateBtn = itemView.findViewById<Button>(R.id.id_button_update)
+            val updateBtn = itemView.findViewById<Button>(R.id.id_button_choice)
             val removeBtn = itemView.findViewById<Button>(R.id.id_button_remove)
 
 

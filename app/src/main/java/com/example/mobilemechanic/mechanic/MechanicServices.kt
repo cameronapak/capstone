@@ -43,8 +43,6 @@ class MechanicServices : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
-
         setUpMechanicServiceActivity()
     }
 
@@ -64,15 +62,16 @@ class MechanicServices : AppCompatActivity() {
         reactiveServiceRecyclerView()
     }
 
+    //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
     private fun populateServiceRecyclerView() {
-        db?.collection("Accounts")?.document("zCi7WKObkrcjmqOL3IR7wl64ZZM2")
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
             ?.get()?.addOnSuccessListener { it ->
                 Log.d("tag", it.toString())
                 val account = it.toObject(User::class.java)
                 if (account?.services != null) {
                     account?.services?.forEach {
                         services.add(it)
-                        Log.d("tag", "$it\n")
+                        Log.d("tag", "populate recy $it\n")
                     }
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()
@@ -80,7 +79,7 @@ class MechanicServices : AppCompatActivity() {
     }
 
     private fun reactiveServiceRecyclerView() {
-        db?.collection("Accounts")?.document("zCi7WKObkrcjmqOL3IR7wl64ZZM2")
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
             ?.addSnapshotListener { snapshot, firebaseFireestoreException ->
                 val account = snapshot?.toObject(User::class.java)
                 if (account?.services != null) {
@@ -125,23 +124,27 @@ class MechanicServices : AppCompatActivity() {
             return
         }
 
-        db?.collection("Accounts")?.document("zCi7WKObkrcjmqOL3IR7wl64ZZM2")
+
+        services.clear()
+        services.add(Service(serviceType, cost.toDouble(), comment))
+
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
             ?.get()?.addOnSuccessListener {
                 val Serv = it.toObject(User::class.java)
 
                 if(Serv!!.services == null){
                     db?.collection("Accounts")
                         ?.document(mAuth?.uid.toString())
-                        ?.update("services", services )?.addOnSuccessListener {
-                            val adapter = id_mechanic_service_recyclerview.adapter
-                            adapter?.notifyDataSetChanged()
+                        ?.update("services", services )
                             //Log.d(log, services.toString())
-                        }
+                    //Log.d(log, "${it}")
                 }
                 else {
                     val delService = Serv!!.services!!.find { s -> s.serviceType == serviceType}
                     if( delService != null){
+
                         Toast.makeText(this, "You can't have same service", Toast.LENGTH_LONG).show()
+                        return@addOnSuccessListener
                     }
                     else {
                         Serv!!.services!!.forEach {
@@ -150,22 +153,15 @@ class MechanicServices : AppCompatActivity() {
                         }
                         db?.collection("Accounts")
                             ?.document(mAuth?.uid.toString())
-                            ?.update("services", services)?.addOnCanceledListener {
-                                //Log.d(log, services.toString())
-                                val adapter = id_mechanic_service_recyclerview.adapter
-                                adapter?.notifyDataSetChanged()
-                            }
+                            ?.update("services", services)
+                        //Log.d(log, "Add again ${it}")
 
                     }
                 }
-                val adapter = id_mechanic_service_recyclerview.adapter
-                adapter?.notifyDataSetChanged()
             }
             ?.addOnFailureListener { ex: Exception ->
                 Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show()
             }
-        val adapter = id_mechanic_service_recyclerview.adapter
-        adapter?.notifyDataSetChanged()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

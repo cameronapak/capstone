@@ -1,19 +1,15 @@
 package com.example.mobilemechanic.mechanic
 
-import android.app.Activity
 import android.app.Dialog
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
-
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
@@ -34,109 +30,67 @@ class MechanicServices : AppCompatActivity() {
 
     private var mAuth: FirebaseAuth? = null
     private var db: FirebaseFirestore? = null
-
-    private var serviceArray = ArrayList<Service>()
+    private lateinit var viewManager: LinearLayoutManager
+    private lateinit var mechanicServiceAdapter: ServiceListAdapter
     private var services = ArrayList<Service>()
     private lateinit var basicDialog: Dialog
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_services)
         setSupportActionBar(toolbar)
-
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
-val test = 0;
-
-        //Recycler View
-        id_mechanic_service_recyclerview.layoutManager = LinearLayoutManager(this)
-        id_mechanic_service_recyclerview.adapter = ServiceListAdapter(this, serviceArray)
-        val change = id_mechanic_service_recyclerview.adapter
-        change?.notifyDataSetChanged()
-
-        //update info on card view
-        db?.collection("Accounts")?.document(mAuth?.uid.toString())
-            ?.get()?.addOnSuccessListener {
-                val Serv = it.toObject(User::class.java)
-                if(Serv!!.services != null){
-                    serviceArray.clear()
-                    Serv!!.services!!.forEach {
-                        serviceArray.add(it)
-                    }
-                    change?.notifyDataSetChanged()
-                }
-
-        }
-
-        Log.d(log, "${mAuth?.currentUser?.uid.toString()}")
-        db?.collection("Accounts")
-            ?.document(mAuth?.uid.toString())
-            ?.addSnapshotListener { snapshot, e ->
-
-                if (snapshot != null && snapshot.exists()) {
-                    Log.d(log, "Current data: " + snapshot.data)
-
-                    val Serv = snapshot.toObject(User::class.java)
-
-                    if (Serv != null) {
-                        services.clear()
-                        Serv?.services?.forEach {
-                            services.add(it)
-                            Log.d(log, "$it\n")
-                        }
-
-                    }
-
-                    id_mechanic_service_recyclerview.adapter?.notifyDataSetChanged()
-                } else {
-                    Log.d(log, "Current data: null")
-                }
-            }
-
-    }
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        menuInflater.inflate(R.menu.mechanic_service, menu)
-        return true
+        setUpMechanicServiceActivity()
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        when (item.itemId) {
-            R.id.action_add -> {
-                val dialogContainer
-                        = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
-                // inflate your custom body here.
-                val dialogBody
-                        = layoutInflater.inflate(com.example.mobilemechanic.R.layout.activity_add_service, null)
+    private fun setUpMechanicServiceActivity() {
+        setUpServiceRecyclerView()
+    }
 
-                val service = DataProviderManager.getAllServices()
-                dialogBody.add_service_spinner.adapter =
-                    HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
-
-
-               //dialogBody.add_service_spinner.onItemSelectedListener = this
-
-                basicDialog = BasicDialog.Builder.apply {
-                    title = "Add Service"
-                    positive = "Add"
-                    negative = "Cancel"
-                }.build(this, dialogContainer,dialogBody)
-
-                basicDialog.show()
-                    handleDialogClicked(basicDialog, dialogContainer, dialogBody)
-                //Log.d(log, services.toString())
-return true
-
-            }
-            else -> return super.onOptionsItemSelected(item)
+    private fun setUpServiceRecyclerView() {
+        viewManager = LinearLayoutManager(this)
+        mechanicServiceAdapter = ServiceListAdapter(this, services)
+        id_mechanic_service_recyclerview.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = mechanicServiceAdapter
         }
+        populateServiceRecyclerView()
+        reactiveServiceRecyclerView()
+    }
+
+    //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
+    private fun populateServiceRecyclerView() {
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+            ?.get()?.addOnSuccessListener { it ->
+                Log.d("tag", it.toString())
+                val account = it.toObject(User::class.java)
+                if (account?.services != null) {
+                    account?.services?.forEach {
+                        services.add(it)
+                        Log.d("tag", "populate recy $it\n")
+                    }
+                }
+                mechanicServiceAdapter.notifyDataSetChanged()
+            }
+    }
+
+    private fun reactiveServiceRecyclerView() {
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+            ?.addSnapshotListener { snapshot, firebaseFireestoreException ->
+                val account = snapshot?.toObject(User::class.java)
+                if (account?.services != null) {
+                    services.clear()
+                    account?.services?.forEach {
+                        services.add(it)
+                        Log.d("tag", "data chagned: $it")
+                    }
+                }
+                mechanicServiceAdapter.notifyDataSetChanged()
+            }
     }
 
     private fun handleDialogClicked(basicDialog: Dialog, dialogContainer: View, dialogBody: View) {
@@ -150,8 +104,7 @@ return true
         }
     }
 
-    private fun addService(){
-        //val serviceType = findViewById<Spinner>(R.id.add_service_spinner).selectedItem.toString().trim()
+    private fun addService() {
         val serviceType = basicDialog.add_service_spinner.selectedItem.toString().trim()
         val cost = basicDialog.label_price.text.toString().trim()
         val comment = basicDialog.label_comment.text.toString().trim()
@@ -170,29 +123,28 @@ return true
             Toast.makeText(this, "Invalid service type", Toast.LENGTH_SHORT).show()
             return
         }
-        val user = mAuth?.currentUser?.email.toString()
+
 
         services.clear()
         services.add(Service(serviceType, cost.toDouble(), comment))
 
-
-        db?.collection("Accounts")?.document(mAuth?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
             ?.get()?.addOnSuccessListener {
                 val Serv = it.toObject(User::class.java)
 
                 if(Serv!!.services == null){
                     db?.collection("Accounts")
                         ?.document(mAuth?.uid.toString())
-                        ?.update("services", services )?.addOnSuccessListener {
-                            val adapter = id_mechanic_service_recyclerview.adapter
-                            adapter?.notifyDataSetChanged()
+                        ?.update("services", services )
                             //Log.d(log, services.toString())
-                        }
+                    //Log.d(log, "${it}")
                 }
                 else {
                     val delService = Serv!!.services!!.find { s -> s.serviceType == serviceType}
                     if( delService != null){
+
                         Toast.makeText(this, "You can't have same service", Toast.LENGTH_LONG).show()
+                        return@addOnSuccessListener
                     }
                     else {
                         Serv!!.services!!.forEach {
@@ -201,22 +153,46 @@ return true
                         }
                         db?.collection("Accounts")
                             ?.document(mAuth?.uid.toString())
-                            ?.update("services", services)?.addOnCanceledListener {
-                                //Log.d(log, services.toString())
-                                val adapter = id_mechanic_service_recyclerview.adapter
-                                adapter?.notifyDataSetChanged()
-                            }
+                            ?.update("services", services)
+                        //Log.d(log, "Add again ${it}")
 
                     }
                 }
-                val adapter = id_mechanic_service_recyclerview.adapter
-                adapter?.notifyDataSetChanged()
             }
             ?.addOnFailureListener { ex: Exception ->
                 Toast.makeText(this, ex.toString(), Toast.LENGTH_LONG).show()
             }
-        val adapter = id_mechanic_service_recyclerview.adapter
-        adapter?.notifyDataSetChanged()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.mechanic_service, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.action_add -> {
+                val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
+                // inflate your custom body here.
+                val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.activity_add_service, null)
+
+                val service = DataProviderManager.getAllServices()
+                dialogBody.add_service_spinner.adapter =
+                    HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
+                basicDialog = BasicDialog.Builder.apply {
+                    title = "Add Service"
+                    positive = "Add"
+                    negative = "Cancel"
+                }.build(this, dialogContainer, dialogBody)
+
+                basicDialog.show()
+                handleDialogClicked(basicDialog, dialogContainer, dialogBody)
+                //Log.d(log, services.toString())
+                return true
+
+            }
+            else -> return super.onOptionsItemSelected(item)
+        }
     }
 
 }

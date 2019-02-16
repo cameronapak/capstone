@@ -39,7 +39,6 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_welcome)
         setSupportActionBar(toolbar)
-
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 

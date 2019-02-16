@@ -12,6 +12,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
 import android.widget.CheckBox
+import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
@@ -21,6 +22,7 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
+import kotlinx.android.synthetic.main.activity_post_service_request.view.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import java.util.*
@@ -153,6 +155,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     availableDays.add(daysOfWeek[index])
                 }
             }
+
+            val daysOfWeekString = daysOfWeek.joinToString(separator = ", ")
+            val fromTime = dialogContainer.id_btnFromTime.text
+            val toTime = dialogContainer.id_btnToTime.text
+            id_availability.text = "Available from $fromTime to $toTime on $daysOfWeekString"
+
             basicDialog.dismiss()
         }
 
@@ -212,9 +220,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         val minute = c.get(Calendar.MINUTE)
 
         val tpd = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { v, h, m ->
-            val time = (if (h > 12) "${h % 12}:" else "${h}:").toString() +
+            val time = (if (h > 12) "${h % 12}:" else "${if (h == 0) "12" else h}:").toString() +
                     (if (m < 10) "0${m}" else "${m}").toString() +
                     (if (h >= 12) " PM" else " AM").toString()
+
+            // TODO: compare times from and to, and do not allow continue unless from is before to
 
             when (view.id) {
                 dialogContainer.id_btnFromTime.id -> {

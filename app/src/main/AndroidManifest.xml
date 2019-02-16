@@ -11,6 +11,9 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".shared.ForgotPasswordActivity">
+        </activity>
+        <activity android:name=".client.History.HistoryActivity">
         <activity android:name=".mechanic.addservice.AddService"
                   android:label="Add Service"
         android:theme="@style/AddService"
@@ -48,6 +51,8 @@
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+        </activity>
+        <activity android:name=".shared.SignInActivity">
         </activity>
 
         <meta-data

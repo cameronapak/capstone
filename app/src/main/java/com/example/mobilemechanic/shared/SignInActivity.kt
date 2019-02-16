@@ -1,9 +1,9 @@
 package com.example.mobilemechanic.shared
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -21,7 +21,6 @@ class SignInActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
 
         id_login_button.setOnClickListener { login() }
-
         id_forgot_password.setOnClickListener { resetPassword() }
     }
         private fun login() {

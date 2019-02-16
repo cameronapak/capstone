@@ -107,10 +107,10 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpVehicleSpinner() {
         id_vehicle_spinner.onItemSelectedListener = this
-//        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
-//              .asList()
+        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+              .asList()
 
-        val vehicles = arrayOf("Vehicle").asList()
+//        val vehicles = arrayOf("Vehicle").asList()
 
         id_vehicle_spinner.adapter =
             HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)

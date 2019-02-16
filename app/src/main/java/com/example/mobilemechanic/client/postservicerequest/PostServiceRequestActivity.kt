@@ -2,6 +2,7 @@ package com.example.mobilemechanic.client.postservicerequest
 
 import android.app.Dialog
 import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -12,7 +13,10 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.CheckBox
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
+import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
+import com.example.mobilemechanic.client.garage.GarageActivity
+import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
@@ -22,24 +26,25 @@ import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-
+const val POST_SERVICE_TAG = "postservice"
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         setUpPostServiceRequestActivity()
-        val mechanicSelected = intent.getSerializableExtra(EXTRA_MECHANIC)
-        id_vehicle_spinner.onItemSelectedListener = this
     }
 
     private fun setUpPostServiceRequestActivity() {
         setUpActionBar()
         setUpVehicleSpinner()
         setUpAvailabilityDialog()
-        handleSubmit()
+        setUpServiceParcel()
+        setUpOnSubmit()
+        setUpOnAddVehicle()
     }
 
     private fun setUpActionBar() {
@@ -62,16 +67,37 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         handleDialogClicked(basicDialog, dialogContainer, dialogBody)
     }
 
-    private fun handleSubmit() {
+    private fun setUpServiceParcel() {
+        val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+        id_mechanic_name.text = service.mechanicName
+        id_service_type.text = service.serviceType
+        id_service_description.text = service.description
+        id_service_price.text = "$${service.price.toInt()}"
+        id_mechanic_rating.text = service.rating.toString()
+    }
+
+    private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
+            validateForm()
+            val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+            val vehicle = id_vehicle_spinner.selectedItem.toString()
+            val comment = id_comment.text
+            Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ncomment: $comment")
 
+            // Create request and submit to database.
 
+            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+        }
+    }
+
+    private fun setUpOnAddVehicle() {
+        id_warning_message_add.setOnClickListener {
+            startActivity(Intent(this, GarageActivity::class.java))
         }
     }
 
     private fun validateForm() {
-        val submitButton = id_submit as Button
-        if ((id_vehicle_spinner.selectedItemPosition == 0) or (availableDays.isEmpty())) {
+        if ((id_vehicle_spinner.selectedItemPosition == 0)) {
                 disableSubmitButton()
         } else {
                 enableSubmitButton()
@@ -80,10 +106,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
 
     private fun setUpVehicleSpinner() {
-        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
-              .asList()
+        id_vehicle_spinner.onItemSelectedListener = this
+//        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+//              .asList()
 
-//        val vehicles = arrayOf("Vehicle").asList()
+        val vehicles = arrayOf("Vehicle").asList()
 
         id_vehicle_spinner.adapter =
             HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
@@ -126,8 +153,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     availableDays.add(daysOfWeek[index])
                 }
             }
-
-            Log.d("TEST", availableDays.toString())
             basicDialog.dismiss()
         }
 

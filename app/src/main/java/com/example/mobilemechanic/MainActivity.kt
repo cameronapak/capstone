@@ -6,16 +6,18 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
 import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.SignInActivity
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnClickListener {
+    private lateinit var mAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         // For testing purposes
         navigationsSetup()
     }
@@ -38,7 +40,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             // Bisi
             R.id.id_loginButton -> {
-
+                val i = Intent(this, SignInActivity::class.java)
+                startActivity(i)
 
             }
 
@@ -50,7 +53,8 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             // Robert, Pham
             R.id.id_mechanicButton -> {
-
+                val i = Intent(this, MechanicWelcomeActivity::class.java)
+                startActivity(i)
 
             }
         }

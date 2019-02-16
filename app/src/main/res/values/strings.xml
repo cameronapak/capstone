@@ -15,11 +15,34 @@
     <string name="text_title">Title</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
+    <string name="text_rate">Rate</string>
+    <string name="text_details">Details</string>
+    <string name="text_rating">Rating</string>
+    <string name="text_rating_initial">0</string>
+    <string name="text_rating_wrong">What went Wrong?</string>
+    <string name="text_rating_comment">Comment</string>
+    <string name="text_rating_subititle">Rate the service</string>
+
+    <string name="notification">Notification</string>
+    <string name="garage">Garage</string>
+    <string name="service_request">Service Request</string>
+    <string name="history">History</string>
+    <string name="settings">Settings</string>
+    <string name="sign_out">Sign out</string>
+    <string name="my_service">My Service</string>
+    <string name="text_selection1">Poor service</string>
+    <string name="text_selection2">Expensive</string>
+    <string name="text_selection3">Rude</string>
+    <string name="text_selection4">Service takes too long</string>
+    <string name="text_selection5">Not on time</string>
+    <string name="text_selection6">Not helpful</string>
+    <string name="text_selection7">Other</string>
 
     <string name="specify_your_issue">Specify your issue</string>
     <string name="availability">Availability</string>
     <string name="submit">Submit</string>
-    <string name="previous">Previous</string>
+    <string name="previous">Previous services</string>
+
 
     <string name="text_registration_subtitle">Create a new account</string>
     <string name="hint_registration_email">Email Address</string>
@@ -37,5 +60,67 @@
     <string name="service">Service</string>
     <string name="form">Form</string>
 
+    <string name="email_identification">Are you %1$s?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="verification">Verification</string>
+    <string name="login_success">Login Successfull</string>
+    <string name="email_input">Enter your Email address</string>
+    <string name="reset_success">Reset Successfull: Check your Email</string>
+    <string name="reset_failed">Reset Failed</string>
+
+    <string-array name="vehicles_array">
+        <item>Vehicle</item>
+        <item>2011 Toyota Avalon</item>
+        <item>2013 Toyota Camry</item>
+    </string-array>
+
+    <string-array name="services_array">
+        <item>Service</item>
+        <item>Oil Change.</item>
+        <item>Change Tire</item>
+        <item>Air Tire</item>
+        <item>Check Engine Light</item>
+    </string-array>
+
+    <string name="title_activity_mechanic_welcome">MechanicWelcomeActivity</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_title">Android Studio</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+    <string name="action_add">Add</string>
+    <string name="title_activity_mechanic_services">MechanicServices</string>
+    <string name="label_Price">Price</string>
+    <string name="label_comment_add_serivce">Comment</string>
+    <string name="label_cancel_add_service">Cancel</string>
+    <string name="label_add_service">Add</string>
+
+    <!--request_card_view-->
+    <string name="place_holder_client_name">Jackie Chan</string>
+    <string name="request_on">Requested on %s</string>
+    <string name="complete_on">Completed on %s</string>
+    <string name="request_status_request">Request</string>
+    <string name="request_status_active">Active</string>
+    <string name="request_status_complete">Complete</string>
+    <string name="request_desc">%s for %s</string>
+    <string name="place_holder_request_desc">Oil Change for 2011 Toyota Venza.</string>
+    <string name="place_holder_distance">3.14 mi</string>
+    <string name="label_button_info_more">More</string>
+    <string name="label_button_info_manage">Manage</string>
+    <string name="label_choice_accept">Accept</string>
+    <string name="label_choice_complete">Complete</string>
+    <string name="label_choice_confirm">Confirm</string>
+    <string name="label_remove_service">Remove</string>
+    <string name="label_update_service">Update</string>
+
+    <string name="price">$%.2f</string>
+    <string name="are_you_sure">Are you sure?</string>
+    <string name="confirm_desc">1. The client issue has been resolved\\n2. You have received the correct payment for
+        your service
+    </string>
+    <string name="confirm_that">Here you confirm that</string>
+    <string name="title_activity_mechanic_more_information">Map</string>
 
 </resources>

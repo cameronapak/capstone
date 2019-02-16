@@ -12,7 +12,8 @@ import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
-import com.example.mobilemechanic.client.history.HistoryActivity
+import com.example.mobilemechanic.client.garage.GarageActivity
+import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -69,14 +70,18 @@ class ClientWelcomeActivity : AppCompatActivity() {
     private fun setUpNavigationListener() {
         id_client_nav_view.setNavigationItemSelectedListener { item ->
             when(item.itemId) {
-                R.id.id_service_request -> {
+                R.id.id_find_service -> {
                     startActivity(Intent(this, FindServiceActivity::class.java))
                     Log.d("WELCOME", "Post service request selected")
                     true
                 }
-                R.id.id_history-> {
-                    startActivity(Intent(this, HistoryActivity::class.java))
+                R.id.id_history -> {
+                    startActivity(Intent(this, ClientHistoryActivity::class.java))
                     Log.d("History", "History activity selected")
+                    true
+                }
+                R.id.id_garage -> {
+                    startActivity(Intent(this, GarageActivity::class.java))
                     true
                 }
                 else -> {

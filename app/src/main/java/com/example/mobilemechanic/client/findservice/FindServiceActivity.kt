@@ -4,47 +4,41 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.User
-import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.ScreenManager
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
 
 class FindServiceActivity : AppCompatActivity() {
 
-    private lateinit var mechanics: ArrayList<User>
+    private lateinit var services: ArrayList<ServiceModel>
+    private lateinit var mFireStore: FirebaseStorage
+    private lateinit var viewManager: LinearLayoutManager
+    private lateinit var serviceAdapter: ServiceRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_service)
 
-        mechanics = ArrayList<User>()
+        mFireStore = FirebaseStorage.getInstance()
 
-        val viewManager = LinearLayoutManager(this)
+        services = ArrayList()
 
-        //Mock data
-        val user = User(
-            "",
-            "fake@gmail.com",
-            "password",
-            UserType.MECHANIC,
-            "Jason",
-            "Statham",
-            "405",
-            "123 street",
-            "Boston",
-            "MA",
-            "02125",
-            ""
-        )
+        val mockService =
+            ServiceModel(
+                "Jason Statham",
+                "jasonuid",
+                "Oil Change",
+                30.toDouble(),
+                "Guarantee complete under 30 minutes.",
+                4.5f
+            )
 
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
-        mechanics.add(user)
 
-        val serviceAdapter = ServiceRecyclerAdapter(this, mechanics)
+        services.add(mockService)
+
+        viewManager = LinearLayoutManager(this)
+        serviceAdapter = ServiceRecyclerAdapter(this, services)
         id_recyclerview_services.apply {
             setHasFixedSize(true)
             layoutManager = viewManager

@@ -20,7 +20,7 @@ class BasicDialog {
                 dialog.setContentView(container)
                 val body = container.id_body as ConstraintLayout
                 container.apply {
-                    id_title.text = title
+                    id_service_type.text = title
                     id_positive.text = positive
                     id_negative.text = negative
                 }

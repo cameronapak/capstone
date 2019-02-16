@@ -18,11 +18,12 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<Servic
     RecyclerView.Adapter<ServiceRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title = itemView.findViewById<TextView>(R.id.id_title)
+        val title = itemView.findViewById<TextView>(R.id.id_service_type)
         val description = itemView.findViewById<TextView>(R.id.id_description)
-        val name = itemView.findViewById<TextView>(R.id.id_name)
+        val name = itemView.findViewById<TextView>(R.id.id_mechanic_name)
         val selectButton = itemView.findViewById<Button>(R.id.id_select_button)
-        val price = itemView.findViewById<TextView>(R.id.id_price)
+        val price = itemView.findViewById<TextView>(R.id.id_service_price)
+        val rating = itemView.findViewById<TextView>(R.id.id_mechanic_rating)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceRecyclerAdapter.ViewHolder {
@@ -33,10 +34,11 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<Servic
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val service = dataset[position]
-        holder.title.text = "Mechanic"
+        holder.title.text = service.serviceType
+        holder.description.text = service.description
         holder.name.text = "${service.mechanicName}"
         holder.price.text = "$${service.price.toInt()}"
-
+        holder.rating.text = service.rating.toString()
 
         holder.selectButton.setOnClickListener {
             val intent = Intent(context, PostServiceRequestActivity::class.java)

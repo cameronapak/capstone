@@ -45,4 +45,13 @@ data class ServiceModel(
             return arrayOfNulls(size)
         }
     }
+
+    override fun toString(): String {
+        return "\nmechanicName: $mechanicName\n" +
+                "uid: $uid\n" +
+                "serviceType: $serviceType\n" +
+                "description: $description\n" +
+                "price: $price\n" +
+                "ratingL $rating\n"
+    }
 }

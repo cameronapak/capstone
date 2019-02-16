@@ -10,14 +10,14 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
 import com.example.mobilemechanic.shared.ScreenManager
 import com.example.mobilemechanic.shared.SignInActivity
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), OnClickListener {
+    private lateinit var mAuth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-
         // For testing purposes
         navigationsSetup()
     }

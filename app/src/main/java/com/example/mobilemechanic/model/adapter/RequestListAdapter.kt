@@ -1,8 +1,6 @@
 package com.example.mobilemechanic.model.adapter
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -10,10 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
-import com.example.mobilemechanic.mechanic.REQ_CODE_MORE_INFO
-import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
 
 class RequestListAdapter(var context: Context, var requests: ArrayList<Request>) :
@@ -62,9 +57,9 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
             }
 
             infoButton.setOnClickListener {
-                val intent = Intent(context, MechanicMoreInformationActivity::class.java)
-                intent.putExtra(EXTRA_REQUEST, requests[position])
-                (context as Activity).startActivityForResult(intent, REQ_CODE_MORE_INFO)
+//                val intent = Intent(context, MechanicMoreInformationActivity::class.java)
+//                intent.putExtra(EXTRA_REQUEST, requests[position])
+//                (context as Activity).startActivityForResult(intent, REQ_CODE_MORE_INFO)
             }
 
             choiceButton.setOnClickListener {

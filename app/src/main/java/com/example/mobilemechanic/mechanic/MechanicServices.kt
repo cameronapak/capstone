@@ -76,7 +76,7 @@ class MechanicServices : AppCompatActivity() {
 
     //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
     private fun populateServiceRecyclerView() {
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.get()?.addOnSuccessListener { it ->
                 Log.d("tag", it.toString())
                 val account = it.toObject(User::class.java)
@@ -91,7 +91,7 @@ class MechanicServices : AppCompatActivity() {
     }
 
     private fun reactiveServiceRecyclerView() {
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.addSnapshotListener { snapshot, firebaseFireestoreException ->
                 val account = snapshot?.toObject(User::class.java)
                 if (account?.services != null) {
@@ -140,13 +140,13 @@ class MechanicServices : AppCompatActivity() {
         services.clear()
         services.add(Service(serviceType, cost.toDouble(), comment))
 
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.get()?.addOnSuccessListener {
                 val Serv = it.toObject(User::class.java)
 
                 if(Serv!!.services == null){
                     db?.collection("Accounts")
-                        ?.document(mAuth?.uid.toString())
+                        ?.document(mAuth?.currentUser?.email.toString())
                         ?.update("services", services )
                             //Log.d(log, services.toString())
                     //Log.d(log, "${it}")
@@ -164,7 +164,7 @@ class MechanicServices : AppCompatActivity() {
                             //Log.d(log, services.toString())
                         }
                         db?.collection("Accounts")
-                            ?.document(mAuth?.uid.toString())
+                            ?.document(mAuth?.currentUser?.email.toString())
                             ?.update("services", services)
                         //Log.d(log, "Add again ${it}")
 

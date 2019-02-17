@@ -90,7 +90,7 @@ class MechanicServices : AppCompatActivity() {
                     services.clear()
                     account?.services?.forEach {
                         services.add(it)
-                        Log.d(MECHANIC_TAG, "data chagned: $it")
+                        Log.d(MECHANIC_TAG, "data changed: $it")
                     }
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()

@@ -43,7 +43,7 @@ class ClientHistoryActivity : AppCompatActivity() {
             "",
             vehicle,
             service,
-            Status.COMPLETE,
+            Status.Complete,
             0L,
             0L
         )

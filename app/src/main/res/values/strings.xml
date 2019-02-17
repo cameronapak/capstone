@@ -1,9 +1,5 @@
 <resources>
     <string name="app_name"></string>
-    <string name="mapbox_access_token" translatable="false">
-        pk.eyJ1IjoicnVzaGhvdXIxOSIsImEiOiJjanJwOGx6ZGgxYmNnNDNwOTBtaWQ1bTZ3In0.JLbi8uVF9AbDzC3rA4S4Hg
-    </string>
-
     <string name="text_notification">Notification</string>
     <string name="text_find_service">Find Service</string>
     <string name="text_garage">Garage</string>

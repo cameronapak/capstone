@@ -35,7 +35,7 @@ class ServiceListAdapter(var context: Context, var serviceArray: ArrayList<Servi
         fun bindItem(position: Int)
         {
             //references to text views
-            val typeView = itemView.findViewById<TextView>(R.id.text_service_type)
+            val typeView = itemView.findViewById<TextView>(R.id.text_client_name)
             val costView = itemView.findViewById<TextView>(R.id.label_cost_service)
             val descriptionView = itemView.findViewById<TextView>(R.id.label_service_description)
             val updateBtn = itemView.findViewById<Button>(R.id.id_button_choice)

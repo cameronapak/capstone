@@ -15,7 +15,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.BasicDialog
 import com.google.firebase.auth.FirebaseAuth
@@ -75,8 +75,11 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         nav_view.setNavigationItemSelectedListener(this)
 
         //Add placeholder data to recycler view for now...
+        val service = Service("Oil Change", 20.00, "")
+
         for (i in 0..10) {
-            requests.add(Request())
+            requests.add(Request("12345", "12345", "Need an oil change!",
+                Vehicle(), service, Status.Request, System.currentTimeMillis(), 0L))
         }
         //load test requests from firebase
         /*

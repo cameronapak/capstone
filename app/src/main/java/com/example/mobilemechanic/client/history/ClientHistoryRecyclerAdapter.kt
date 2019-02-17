@@ -3,7 +3,6 @@ package com.example.mobilemechanic.client.history
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -35,7 +34,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         val request = dataset[position]
         var type = "${request.service.serviceType}"
 
-        if(request.status == Status.COMPLETE) holder.serviceProgress.text = "Service Completed"
+        if(request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"
 
         holder.name.text = "${request.mechanicId}"

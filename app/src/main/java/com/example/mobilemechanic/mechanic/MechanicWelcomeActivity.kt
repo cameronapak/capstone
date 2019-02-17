@@ -45,7 +45,7 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity]: onCreate()")
         Log.d(MECHANIC_TAG, mAuth.toString())
 //        login for testing
-        mAuth?.signInWithEmailAndPassword("testdb2@uco.edu", "123456")
+        mAuth?.signInWithEmailAndPassword("dpham9@uco.edu", "123456")
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
                     val user = mAuth?.currentUser

@@ -1,8 +1,10 @@
 package com.example.mobilemechanic.client.findservice
 
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.ScreenManager
@@ -46,10 +48,24 @@ class FindServiceActivity : AppCompatActivity() {
         }
 
         serviceAdapter.notifyDataSetChanged()
+        setUpActionBar()
+    }
+
+    private fun setUpActionBar() {
+        setSupportActionBar(id_find_service_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     override fun onResume() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

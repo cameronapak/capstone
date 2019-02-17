@@ -42,18 +42,8 @@ class MechanicServices : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         db = FirebaseFirestore.getInstance()
 
-
-        mAuth?.signInWithEmailAndPassword("dat@gmail.com", "123456")
-            ?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Log.d(MECHANIC_TAG, "you is logged in")
-                    Log.d(MECHANIC_TAG, "[MechanicService]: onCreate() uid=${mAuth?.currentUser?.uid}")
-                }
-            }?.addOnFailureListener {
-                Log.d(MECHANIC_TAG, it.toString())
-            }
-
-
+        Log.d(MECHANIC_TAG, "User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(MECHANIC_TAG, "User email: ${mAuth?.currentUser?.email}")
         setSupportActionBar(toolbar)
         setUpMechanicServiceActivity()
     }
@@ -76,29 +66,31 @@ class MechanicServices : AppCompatActivity() {
 
     //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
     private fun populateServiceRecyclerView() {
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.get()?.addOnSuccessListener { it ->
-                Log.d("tag", it.toString())
+                Log.d(MECHANIC_TAG, it.toString())
                 val account = it.toObject(User::class.java)
                 if (account?.services != null) {
                     account?.services?.forEach {
                         services.add(it)
-                        Log.d("tag", "populate recy $it\n")
+                        Log.d(MECHANIC_TAG, "services: ${account?.services}\n")
                     }
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()
+            }?.addOnFailureListener {
+                Log.d(MECHANIC_TAG, it.message.toString())
             }
     }
 
     private fun reactiveServiceRecyclerView() {
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.addSnapshotListener { snapshot, firebaseFireestoreException ->
                 val account = snapshot?.toObject(User::class.java)
                 if (account?.services != null) {
                     services.clear()
                     account?.services?.forEach {
                         services.add(it)
-                        Log.d("tag", "data chagned: $it")
+                        Log.d(MECHANIC_TAG, "data chagned: $it")
                     }
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()
@@ -140,13 +132,13 @@ class MechanicServices : AppCompatActivity() {
         services.clear()
         services.add(Service(serviceType, cost.toDouble(), comment))
 
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.uid.toString())
+        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.get()?.addOnSuccessListener {
                 val Serv = it.toObject(User::class.java)
 
                 if(Serv!!.services == null){
                     db?.collection("Accounts")
-                        ?.document(mAuth?.uid.toString())
+                        ?.document(mAuth?.currentUser?.email.toString())
                         ?.update("services", services )
                             //Log.d(log, services.toString())
                     //Log.d(log, "${it}")
@@ -164,7 +156,7 @@ class MechanicServices : AppCompatActivity() {
                             //Log.d(log, services.toString())
                         }
                         db?.collection("Accounts")
-                            ?.document(mAuth?.uid.toString())
+                            ?.document(mAuth?.currentUser?.email.toString())
                             ?.update("services", services)
                         //Log.d(log, "Add again ${it}")
 

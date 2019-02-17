@@ -10,9 +10,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Button
-import android.widget.CheckBox
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
@@ -22,7 +19,6 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
-import kotlinx.android.synthetic.main.activity_post_service_request.view.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import java.util.*
@@ -50,7 +46,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpActionBar() {
-        setSupportActionBar(id_service_form_toolbar as Toolbar)
+        setSupportActionBar(id_find_service_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -109,7 +105,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpVehicleSpinner() {
         id_vehicle_spinner.onItemSelectedListener = this
-        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+        val vehicles = arrayOf("Vehicle", "2011 Toyota Venza")
               .asList()
 
 //        val vehicles = arrayOf("Vehicle").asList()

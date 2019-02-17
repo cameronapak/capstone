@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "677793229139-8lb95mvjpk6ma7o7mealpppi0rn1s2na.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.mobilemechanic",
+            "certificate_hash": "ff692a2c77296a524ef1c1e11d15e409e6bc6c31"
+          }
+        },
+        {
           "client_id": "677793229139-rsavern53rb2l0cc5agsct22rll224ut.apps.googleusercontent.com",
           "client_type": 3
         }

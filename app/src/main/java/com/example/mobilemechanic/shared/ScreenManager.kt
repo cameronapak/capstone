@@ -1,6 +1,8 @@
 package com.example.mobilemechanic.shared
 
 import android.app.Activity
+import android.app.Dialog
+import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 
@@ -26,5 +28,17 @@ object ScreenManager {
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or
                         View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
         }
+    }
+
+    fun setBasicDialogWidth(activity: Activity, dialog: Dialog, proportion: Float)
+            : WindowManager.LayoutParams {
+        val displayMetrics = DisplayMetrics()
+        activity.windowManager.defaultDisplay.getMetrics(displayMetrics)
+        val displayWidth = displayMetrics.widthPixels
+        val layoutParams = WindowManager.LayoutParams()
+        layoutParams.copyFrom(dialog.window.attributes)
+        val dialogWindowWidth = (displayWidth * proportion).toInt()
+        layoutParams.width = dialogWindowWidth
+        return layoutParams
     }
 }

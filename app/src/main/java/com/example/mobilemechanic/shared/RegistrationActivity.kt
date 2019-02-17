@@ -5,12 +5,10 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
-import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
@@ -23,7 +21,6 @@ import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 
 const val ACCOUNT_DOC_PATH = "Accounts"
-
 class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
     private var mFireStore: FirebaseFirestore? = null
@@ -39,7 +36,11 @@ class RegistrationActivity : AppCompatActivity() {
         mStorage = FirebaseStorage.getInstance()
 
         setUpRegistrationActivity()
+    }
 
+    private fun setUpRegistrationActivity() {
+        setUpStateSpinner()
+        id_register_signIn.paintFlags = id_register_signIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         id_register_button.setOnClickListener {
             createUserAccount()
         }
@@ -47,11 +48,6 @@ class RegistrationActivity : AppCompatActivity() {
         id_register_signIn.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
         }
-    }
-
-    private fun setUpRegistrationActivity() {
-        setUpStateSpinner()
-        id_register_signIn.paintFlags = id_register_signIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 
     private fun createUserAccount() {
@@ -75,7 +71,6 @@ class RegistrationActivity : AppCompatActivity() {
                 ?.addOnCompleteListener {
                     userInfo.uid = mAuth!!.uid.toString()
                     handleAccountCreationSuccess(it, userInfo)
-                    Log.d(MECHANIC_TAG, "[RegistrationActivity]: createUserAccount()")
             }
         }
     }
@@ -91,7 +86,7 @@ class RegistrationActivity : AppCompatActivity() {
 
     private fun saveUserInfo(userInfo: User) {
         mFireStore?.collection(ACCOUNT_DOC_PATH)
-            ?.document(userInfo.email)
+            ?.document(userInfo.uid)
             ?.set(userInfo)
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()
@@ -118,8 +113,8 @@ class RegistrationActivity : AppCompatActivity() {
 
 
     private fun getUserType(isClient: Boolean): UserType {
-        if(isClient) return UserType.CLIENT
-        else return UserType.MECHANIC
+        return  if (isClient) UserType.CLIENT
+                else UserType.MECHANIC
     }
 
     private fun setUpStateSpinner() {

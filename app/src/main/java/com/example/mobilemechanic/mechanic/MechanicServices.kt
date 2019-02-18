@@ -173,10 +173,11 @@ class MechanicServices : AppCompatActivity() {
     }
 
     private fun parseDouble(strNumber: String?): Double {
-        return if (strNumber != null && strNumber.isNotEmpty())
-                strNumber.toDouble()
-            else
-                0.0
+        return if (strNumber != null && strNumber.isNotEmpty()) {
+            strNumber.toDouble()
+        } else {
+            0.0
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

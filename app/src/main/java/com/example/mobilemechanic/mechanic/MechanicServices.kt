@@ -24,26 +24,25 @@ import kotlinx.android.synthetic.main.activity_mechanic_services.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.content_mechanic_services.*
 
-const val log = "TAG"
-
 class MechanicServices : AppCompatActivity() {
 
-    private var mAuth: FirebaseAuth? = null
-    private var db: FirebaseFirestore? = null
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
+
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var mechanicServiceAdapter: ServiceListAdapter
-    private var services = ArrayList<Service>()
     private lateinit var basicDialog: Dialog
+    private var services = ArrayList<Service>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_services)
         mAuth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
 
-        Log.d(MECHANIC_TAG, "User uid: ${mAuth?.currentUser?.uid}")
-        Log.d(MECHANIC_TAG, "User email: ${mAuth?.currentUser?.email}")
+        Log.d(MECHANIC_TAG, "[MechanicServices] User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(MECHANIC_TAG, "[MechanicServices] User email: ${mAuth?.currentUser?.email}")
         setSupportActionBar(toolbar)
         setUpMechanicServiceActivity()
     }
@@ -66,7 +65,8 @@ class MechanicServices : AppCompatActivity() {
 
     //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
     private fun populateServiceRecyclerView() {
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
+        mFirestore?.collection("Accounts")
+            ?.document(mAuth?.currentUser?.email.toString())
             ?.get()?.addOnSuccessListener { it ->
                 Log.d(MECHANIC_TAG, it.toString())
                 val account = it.toObject(User::class.java)
@@ -83,7 +83,8 @@ class MechanicServices : AppCompatActivity() {
     }
 
     private fun reactiveServiceRecyclerView() {
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
+        mFirestore?.collection("Accounts")
+            ?.document(mAuth?.currentUser?.email.toString())
             ?.addSnapshotListener { snapshot, firebaseFireestoreException ->
                 val account = snapshot?.toObject(User::class.java)
                 if (account?.services != null) {
@@ -113,17 +114,17 @@ class MechanicServices : AppCompatActivity() {
         val cost = basicDialog.label_price.text.toString().trim()
         val comment = basicDialog.label_comment.text.toString().trim()
 
-        if(serviceType.isNullOrEmpty() || serviceType.isNullOrBlank()) {
+        if (serviceType.isNullOrEmpty() || serviceType.isNullOrBlank()) {
             Toast.makeText(this, "Invalid service type", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if(cost.isNullOrEmpty() || cost.isNullOrBlank()) {
+        if (cost.isNullOrEmpty() || cost.isNullOrBlank()) {
             Toast.makeText(this, "Invalid service type", Toast.LENGTH_SHORT).show()
             return
         }
 
-        if(comment.isNullOrEmpty() || comment.isNullOrBlank()) {
+        if (comment.isNullOrEmpty() || comment.isNullOrBlank()) {
             Toast.makeText(this, "Invalid service type", Toast.LENGTH_SHORT).show()
             return
         }
@@ -132,30 +133,28 @@ class MechanicServices : AppCompatActivity() {
         services.clear()
         services.add(Service(serviceType, cost.toDouble(), comment))
 
-        db?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
+        mFirestore?.collection("Accounts")?.document(mAuth?.currentUser?.email.toString())
             ?.get()?.addOnSuccessListener {
                 val Serv = it.toObject(User::class.java)
 
-                if(Serv!!.services == null){
-                    db?.collection("Accounts")
+                if (Serv!!.services == null) {
+                    mFirestore?.collection("Accounts")
                         ?.document(mAuth?.currentUser?.email.toString())
-                        ?.update("services", services )
-                            //Log.d(log, services.toString())
+                        ?.update("services", services)
+                    //Log.d(log, services.toString())
                     //Log.d(log, "${it}")
-                }
-                else {
-                    val delService = Serv!!.services!!.find { s -> s.serviceType == serviceType}
-                    if( delService != null){
+                } else {
+                    val delService = Serv!!.services!!.find { s -> s.serviceType == serviceType }
+                    if (delService != null) {
 
                         Toast.makeText(this, "You can't have same service", Toast.LENGTH_LONG).show()
                         return@addOnSuccessListener
-                    }
-                    else {
+                    } else {
                         Serv!!.services!!.forEach {
                             services.add(it)
                             //Log.d(log, services.toString())
                         }
-                        db?.collection("Accounts")
+                        mFirestore?.collection("Accounts")
                             ?.document(mAuth?.currentUser?.email.toString())
                             ?.update("services", services)
                         //Log.d(log, "Add again ${it}")

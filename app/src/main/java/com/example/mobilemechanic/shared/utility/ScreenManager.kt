@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared
+package com.example.mobilemechanic.shared.utility
 
 import android.app.Activity
 import android.app.Dialog

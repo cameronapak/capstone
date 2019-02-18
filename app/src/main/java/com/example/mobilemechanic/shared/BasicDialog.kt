@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.view.View
 import android.widget.LinearLayout
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 
 

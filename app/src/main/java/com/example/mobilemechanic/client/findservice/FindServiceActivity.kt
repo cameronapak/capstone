@@ -7,7 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.ServiceModel
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
 

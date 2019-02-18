@@ -4,47 +4,61 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
-import android.support.design.widget.Snackbar
 import android.support.v4.view.GravityCompat
-import android.support.v7.app.ActionBarDrawerToggle
+import android.support.v4.widget.DrawerLayout
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.*
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Service
+import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
-import kotlinx.android.synthetic.main.app_bar_mechanic_welcome.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.content_mechanic_welcome.*
 
 const val EXTRA_REQUEST = "service_request"
 const val REQ_CODE_MORE_INFO = 1
 const val MECHANIC_TAG = "mechanic"
-class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MechanicWelcomeActivity : AppCompatActivity() {
 
-    private var mAuth: FirebaseAuth? = null
-    private var db: FirebaseFirestore? = null
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
 
+    private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var viewManager: LinearLayoutManager
+    private lateinit var mechanicRequestListAdapter: RequestListAdapter
     private var requests = ArrayList<Request>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_welcome)
-        setSupportActionBar(toolbar)
         mAuth = FirebaseAuth.getInstance()
-        db = FirebaseFirestore.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+        setUpMechanicWelcomeActivity()
+    }
 
-        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity]: onCreate()")
-        Log.d(MECHANIC_TAG, mAuth.toString())
-//        login for testing
+    private fun setUpMechanicWelcomeActivity() {
+        mockLogin()       // Replace with real login later
+        mockRequests()    // Replace with real requests later
+        setUpToolBar()
+        setUpDrawerMenu()
+        setUpNavigationListener()
+        setUpRequestRecyclerView()
+    }
+
+    private fun mockLogin() {
         mAuth?.signInWithEmailAndPassword("dpham9@uco.edu", "123456")
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -54,94 +68,93 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
             }?.addOnFailureListener {
                 Log.d(MECHANIC_TAG, it.toString())
             }
+    }
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-            mAuth?.signInWithEmailAndPassword("testdb2@uco.edu", "123456")
-                ?.addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.d("tag", "you is logged in")
-                    }
-                }
-        }
-
-        val toggle = ActionBarDrawerToggle(
-            this, drawer_layout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close
-        )
-        drawer_layout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        nav_view.setNavigationItemSelectedListener(this)
-
-        //Add placeholder data to recycler view for now...
-        val service = Service("Oil Change", 20.00, "")
-
+    private fun mockRequests() {
         for (i in 0..10) {
-            requests.add(Request("12345", "12345", "Need an oil change!",
-                Vehicle(), service, Status.Request, System.currentTimeMillis(), 0L))
-        }
-        //load test requests from firebase
-        /*
-        db?.collection("Requests/${mAuth?.currentUser?.email}/requests")
-            ?.document(Timestamp.now().toString())
-            ?.set(Request(mAuth!!.currentUser!!.uid!!.toString(), ))
-            */
-
-        //Recycler View
-        id_mechanic_welcome_recyclerview.layoutManager = LinearLayoutManager(this)
-        id_mechanic_welcome_recyclerview.adapter = RequestListAdapter(this, requests)
-        id_mechanic_welcome_recyclerview.adapter?.notifyDataSetChanged()
-    }
-
-    override fun onBackPressed() {
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
+            val mockService = Service("Oil Change", 20.00, "")
+            val mockRequest = Request(
+                "12345", "12345", "Need an oil change!",
+                Vehicle(), mockService, Status.Request, System.currentTimeMillis(), 0L
+            )
+            requests.add(mockRequest)
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.mechanic_welcome, menu)
-        return true
+    private fun setUpToolBar() {
+        setSupportActionBar(id_welcome_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "Welcome"
+            subtitle = "Mechanic: Jason Statham"
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(R.drawable.ic_menu)
+        }
+    }
+
+    private fun setUpDrawerMenu() {
+        mDrawerLayout = findViewById(R.id.mechanic_drawer_layout)
+        val clientNavigationView = findViewById<NavigationView>(R.id.id_mechanic_nav_view)
+        clientNavigationView.setNavigationItemSelectedListener { menuItem ->
+            menuItem.isChecked = true
+            mDrawerLayout.closeDrawers()
+            true
+        }
+    }
+
+    private fun setUpNavigationListener() {
+        id_mechanic_nav_view.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_notification -> {
+                    // Handle the camera action
+                    true
+                }
+                R.id.nav_services -> {
+                    val i = Intent(this, MechanicServices::class.java)
+                    startActivity(i)
+                    true
+                }
+                R.id.nav_history -> {
+                    true
+                }
+                R.id.nav_settings -> {
+                    true
+                }
+                R.id.nav_share -> {
+                    true
+                }
+                R.id.nav_send -> {
+                    true
+                }
+                else -> {
+                    mDrawerLayout.closeDrawers()
+                    true
+                }
+            }
+        }
+    }
+
+    private fun setUpRequestRecyclerView() {
+        viewManager = LinearLayoutManager(this)
+        mechanicRequestListAdapter = RequestListAdapter(this, requests)
+        id_mechanic_welcome_recyclerview.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = mechanicRequestListAdapter
+
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            android.R.id.home -> {
+                mDrawerLayout.openDrawer(GravityCompat.START)
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
-        when (item.itemId) {
-            R.id.nav_notification -> {
-                // Handle the camera action
-            }
-            R.id.nav_services -> {
-                val i = Intent(this, MechanicServices::class.java)
-                startActivity(i)
-                //finish()
-            }
-            R.id.nav_history -> {
-
-            }
-            R.id.nav_settings -> {
-
-            }
-            R.id.nav_share -> {
-
-            }
-            R.id.nav_send -> {
-
-            }
-        }
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
-    }
 
     fun createChoiceDialog(title: String): Dialog {
         var positive = ""
@@ -176,8 +189,8 @@ class MechanicWelcomeActivity : AppCompatActivity(), NavigationView.OnNavigation
         return choiceDialog
     }
 
-    override fun onStart() {
-        super.onStart()
-        val currentUser = mAuth?.currentUser
+    override fun onResume() {
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+        super.onResume()
     }
 }

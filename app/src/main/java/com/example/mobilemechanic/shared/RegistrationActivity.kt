@@ -13,6 +13,7 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth

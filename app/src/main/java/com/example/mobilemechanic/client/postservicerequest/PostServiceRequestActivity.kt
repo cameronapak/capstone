@@ -17,7 +17,7 @@ import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*

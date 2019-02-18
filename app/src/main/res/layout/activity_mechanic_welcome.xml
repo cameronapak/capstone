@@ -3,24 +3,41 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/drawer_layout"
+        android:id="@+id/mechanic_drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
-    <include
-            layout="@layout/app_bar_mechanic_welcome"
+    <!--<include-->
+            <!--layout="@layout/app_bar_mechanic_welcome"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"/>-->
+    <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent">
+
+        <include layout="@layout/content_mechanic_welcome"></include>
+
+        <android.support.v7.widget.Toolbar
+                android:id="@+id/id_welcome_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/toolbar_height"
+                android:minHeight="@dimen/toolbar_height"
+                app:titleTextAppearance="@style/ToolbarTitleAppearance"
+                app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+                android:background="@drawable/toolbar_bottom_border">
+        </android.support.v7.widget.Toolbar>
+
+    </FrameLayout>
 
     <android.support.design.widget.NavigationView
-            android:id="@+id/nav_view"
+            android:id="@+id/id_mechanic_nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:headerLayout="@layout/nav_header_mechanic_welcome"
-            app:menu="@menu/activity_mechanic_welcome_drawer"/>
+            app:headerLayout="@layout/drawer_header"
+            app:menu="@menu/drawer_mechanic"/>
 
 </android.support.v4.widget.DrawerLayout>

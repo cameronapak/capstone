@@ -5,6 +5,20 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+    <Spinner
+            android:layout_width="268dp"
+            android:layout_height="42dp"
+            android:id="@+id/add_service_spinner"
+            android:layout_marginTop="16dp"
+            style="@style/Widget.AppCompat.Spinner.Underlined"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.496"
+            android:focusable="auto"
+            android:spinnerMode="dropdown"/>
     <EditText
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -25,18 +39,4 @@
             app:layout_constraintStart_toStartOf="@+id/label_price"
             app:layout_constraintEnd_toEndOf="@+id/label_price" android:hint="@string/label_comment_add_serivce"
             android:fontFamily="@font/qualio" android:textSize="24sp"/>
-    <Spinner
-            android:layout_width="268dp"
-            android:layout_height="42dp"
-            android:id="@+id/add_service_spinner"
-            android:layout_marginTop="16dp"
-            style="@style/Widget.AppCompat.Spinner.Underlined"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp"
-            app:layout_constraintHorizontal_bias="0.496"
-            android:focusable="auto"
-            android:spinnerMode="dropdown"/>
 </android.support.constraint.ConstraintLayout>

@@ -118,5 +118,7 @@
     </string>
     <string name="confirm_that">Here you confirm that</string>
     <string name="title_activity_mechanic_more_information">Map</string>
+    <string name="text_more">More</string>
+    <string name="text_accept">Accept</string>
 
 </resources>

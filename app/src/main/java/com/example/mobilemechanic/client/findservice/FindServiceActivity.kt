@@ -34,10 +34,22 @@ class FindServiceActivity : AppCompatActivity() {
     private fun setUpAlgolioa() {
         viewManager = LinearLayoutManager(this)
         serviceAdapter = ServiceRecyclerAdapter(this, services)
+        val mockService = ServiceModel(
+            "Jason Statham",
+            "uid",
+            "Oil Change",
+            11.00,
+            "Be done",
+            4.4f
+        )
+
+        for (i in 1..5)
+            services.add(mockService)
         id_recyclerview_services.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = serviceAdapter
+            isNestedScrollingEnabled = false
         }
         serviceAdapter.notifyDataSetChanged()
     }

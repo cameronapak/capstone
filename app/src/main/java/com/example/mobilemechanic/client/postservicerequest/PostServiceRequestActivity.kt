@@ -19,7 +19,7 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
-import kotlinx.android.synthetic.main.basic_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -52,8 +52,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpAvailabilityDialog() {
-//        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
-        dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+//        val dialogContainer = layoutInflater.inflate(R.layout.dialog_container_basic, null)
+        dialogContainer = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
             title = "Availability"

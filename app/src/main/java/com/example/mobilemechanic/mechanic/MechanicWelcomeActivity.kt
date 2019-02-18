@@ -25,7 +25,7 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
-import kotlinx.android.synthetic.main.basic_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
 const val EXTRA_REQUEST = "service_request"
@@ -59,7 +59,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun mockLogin() {
-        mAuth?.signInWithEmailAndPassword("dpham9@uco.edu", "123456")
+        mAuth?.signInWithEmailAndPassword("datm@gmail.com", "123456")
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
                     val user = mAuth?.currentUser
@@ -167,7 +167,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
             dialogBody = layoutInflater.inflate(R.layout.dialog_body_complete, null)
         }
 
-        val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
+        val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
 
         var choiceDialog = BasicDialog.Builder.apply {
             this.title = title

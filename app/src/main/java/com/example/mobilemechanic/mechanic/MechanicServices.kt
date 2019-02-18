@@ -18,7 +18,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_service.*
 import kotlinx.android.synthetic.main.activity_mechanic_services.*
-import kotlinx.android.synthetic.main.basic_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 
 class MechanicServices : AppCompatActivity() {
 
@@ -65,8 +65,8 @@ class MechanicServices : AppCompatActivity() {
             layoutManager = viewManager
             adapter = mechanicServiceAdapter
         }
-//        populateServiceRecyclerView()
-//        reactiveServiceRecyclerView()
+        populateServiceRecyclerView()
+        reactiveServiceRecyclerView()
     }
 
     //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
@@ -179,7 +179,7 @@ class MechanicServices : AppCompatActivity() {
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
 //        when (item.itemId) {
 //            R.id.action_add -> {
-//                val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
+//                val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
 //                // inflate your custom body here.
 //                val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.activity_add_service, null)
 //

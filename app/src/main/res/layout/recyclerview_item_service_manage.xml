@@ -5,6 +5,7 @@
                                              android:layout_width="match_parent"
                                              android:background="@drawable/default_border"
                                              android:layout_marginTop="20dp"
+                                             android:elevation="2dp"
                                              android:layout_height="141dp">
 
     <TextView
@@ -42,7 +43,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:fontFamily="@font/timeburnernormal"
             android:textColor="@color/colorFocus"
-            android:elevation="0dp" app:layout_constraintEnd_toStartOf="@+id/id_button_update"
+            style="?android:attr/borderlessButtonStyle"
+            app:layout_constraintEnd_toStartOf="@+id/id_button_update"
             app:layout_constraintTop_toTopOf="@+id/id_button_update"/>
 
     <Button
@@ -58,7 +60,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:fontFamily="@font/timeburnernormal"
             android:textColor="@color/colorPrimary3"
-            android:elevation="0dp"/>
+            style="?android:attr/borderlessButtonStyle"/>
     <TextView
             android:text="id_price"
             android:layout_width="wrap_content"

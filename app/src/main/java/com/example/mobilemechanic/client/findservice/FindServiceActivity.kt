@@ -13,32 +13,25 @@ import kotlinx.android.synthetic.main.activity_find_service.*
 
 class FindServiceActivity : AppCompatActivity() {
 
-    private lateinit var services: ArrayList<ServiceModel>
+
     private lateinit var mFireStore: FirebaseStorage
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var serviceAdapter: ServiceRecyclerAdapter
+    private var services: ArrayList<ServiceModel> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_find_service)
-
         mFireStore = FirebaseStorage.getInstance()
+        setUpFindServiceActivity()
+    }
 
-        services = ArrayList()
+    private fun setUpFindServiceActivity() {
+        setUpAlgolioa()
+        setUpToolBar()
+    }
 
-        val mockService =
-            ServiceModel(
-                "Jason Statham",
-                "jasonuid",
-                "Oil Change",
-                30.toDouble(),
-                "Guarantee complete under 30 minutes.",
-                4.5f
-            )
-
-
-        services.add(mockService)
-
+    private fun setUpAlgolioa() {
         viewManager = LinearLayoutManager(this)
         serviceAdapter = ServiceRecyclerAdapter(this, services)
         id_recyclerview_services.apply {
@@ -46,12 +39,10 @@ class FindServiceActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = serviceAdapter
         }
-
         serviceAdapter.notifyDataSetChanged()
-        setUpActionBar()
     }
 
-    private fun setUpActionBar() {
+    private fun setUpToolBar() {
         setSupportActionBar(id_find_service_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
@@ -60,8 +51,8 @@ class FindServiceActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        super.onResume()
     }
 
     override fun onSupportNavigateUp(): Boolean {

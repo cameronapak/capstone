@@ -39,5 +39,4 @@
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/drawer_header"
             app:menu="@menu/drawer_mechanic"/>
-
 </android.support.v4.widget.DrawerLayout>

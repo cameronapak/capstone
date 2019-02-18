@@ -10,14 +10,18 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.adapter.ServiceListAdapter
+import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.android.synthetic.main.activity_add_service.*
 import kotlinx.android.synthetic.main.activity_mechanic_services.*
+import kotlinx.android.synthetic.main.dialog_body_add_service.*
+import kotlinx.android.synthetic.main.dialog_body_add_service.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 
 class MechanicServices : AppCompatActivity() {
@@ -45,6 +49,7 @@ class MechanicServices : AppCompatActivity() {
     private fun setUpMechanicServiceActivity() {
         setUpToolBar()
         setUpServiceRecyclerView()
+        setUpAddService()
     }
 
     private fun setUpToolBar() {
@@ -102,6 +107,24 @@ class MechanicServices : AppCompatActivity() {
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()
             }
+    }
+
+    private fun setUpAddService() {
+        id_add_service.setOnClickListener {
+            val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
+            val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_body_add_service, null)
+            val service = DataProviderManager.getAllServices()
+            dialogBody.add_service_spinner.adapter =
+                HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
+            basicDialog = BasicDialog.Builder.apply {
+                title = "Add Service"
+                positive = "Add"
+                negative = "Cancel"
+            }.build(this, dialogContainer, dialogBody)
+
+            basicDialog.show()
+            handleDialogClicked(basicDialog, dialogContainer, dialogBody)
+        }
     }
 
     private fun handleDialogClicked(basicDialog: Dialog, dialogContainer: View, dialogBody: View) {
@@ -177,11 +200,11 @@ class MechanicServices : AppCompatActivity() {
 //    }
 
 //    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-//        when (item.itemId) {
-//            R.id.action_add -> {
+////        when (item.itemId) {
+////            R.id.action_add -> {
 //                val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
 //                // inflate your custom body here.
-//                val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.activity_add_service, null)
+//                val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_body_add_service, null)
 //
 //                val service = DataProviderManager.getAllServices()
 //                dialogBody.add_service_spinner.adapter =

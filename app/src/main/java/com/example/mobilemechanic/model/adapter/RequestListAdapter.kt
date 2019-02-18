@@ -24,7 +24,7 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestListAdapter.ViewHolder
     {
         val view = LayoutInflater.from(context)
-            .inflate(R.layout.request_card_view, parent, false)
+            .inflate(R.layout.recyclerview_item_request, parent, false)
         return ViewHolder(view)
     }
 
@@ -43,10 +43,10 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
         {
             val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
             val description = itemView.findViewById<TextView>(R.id.id_description)
-            val status = itemView.findViewById<TextView>(R.id.id_status)
+            val status = itemView.findViewById<TextView>(R.id.id_service_type)
             //val location = itemView.findViewById<TextView>(R.id.text_distance)
             val infoButton = itemView.findViewById<Button>(R.id.id_button_info)
-            val choiceButton = itemView.findViewById<Button>(R.id.id_button_choice)
+            val choiceButton = itemView.findViewById<Button>(R.id.id_button_update)
 
             //fill card view
             //name.text = "${requests[position].clientInfo.firstName} ${requests[position].clientInfo.lastName}"

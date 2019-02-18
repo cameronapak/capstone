@@ -24,7 +24,7 @@ class BasicDialog {
 
                 val body = container.id_body as LinearLayout
                 container.apply {
-                    id_status.text = title
+                    id_service_type.text = title
                     id_positive.text = positive
                     id_negative.text = negative
                 }

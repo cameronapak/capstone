@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.shared.utility.ScreenManager
-import kotlinx.android.synthetic.main.client_activity_history.*
+import kotlinx.android.synthetic.main.activity_client_history.*
 
 
 class ClientHistoryActivity : AppCompatActivity() {
@@ -17,7 +17,7 @@ class ClientHistoryActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.client_activity_history)
+        setContentView(R.layout.activity_client_history)
 
         request = ArrayList()
 

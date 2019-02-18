@@ -18,11 +18,11 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<Servic
     RecyclerView.Adapter<ServiceRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val title = itemView.findViewById<TextView>(R.id.id_status)
+        val title = itemView.findViewById<TextView>(R.id.id_service_type)
         val description = itemView.findViewById<TextView>(R.id.id_description)
         val name = itemView.findViewById<TextView>(R.id.id_mechanic_name)
-        val selectButton = itemView.findViewById<Button>(R.id.id_button_choice)
-        val price = itemView.findViewById<TextView>(R.id.id_distance)
+        val selectButton = itemView.findViewById<Button>(R.id.id_button_update)
+        val price = itemView.findViewById<TextView>(R.id.id_price)
         val rating = itemView.findViewById<TextView>(R.id.id_mechanic_rating)
     }
 

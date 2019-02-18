@@ -2,27 +2,23 @@ package com.example.mobilemechanic.mechanic
 
 import android.app.Dialog
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.adapter.ServiceListAdapter
-import com.example.mobilemechanic.shared.BasicDialog
-import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_add_service.*
-import kotlinx.android.synthetic.main.activity_add_service.view.*
 import kotlinx.android.synthetic.main.activity_mechanic_services.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
-import kotlinx.android.synthetic.main.content_mechanic_services.*
 
 class MechanicServices : AppCompatActivity() {
 
@@ -43,12 +39,22 @@ class MechanicServices : AppCompatActivity() {
 
         Log.d(MECHANIC_TAG, "[MechanicServices] User uid: ${mAuth?.currentUser?.uid}")
         Log.d(MECHANIC_TAG, "[MechanicServices] User email: ${mAuth?.currentUser?.email}")
-        setSupportActionBar(toolbar)
         setUpMechanicServiceActivity()
     }
 
     private fun setUpMechanicServiceActivity() {
+        setUpToolBar()
         setUpServiceRecyclerView()
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_manage_service_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "Services"
+            subtitle = "Manage your services"
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     private fun setUpServiceRecyclerView() {
@@ -59,14 +65,14 @@ class MechanicServices : AppCompatActivity() {
             layoutManager = viewManager
             adapter = mechanicServiceAdapter
         }
-        populateServiceRecyclerView()
-        reactiveServiceRecyclerView()
+//        populateServiceRecyclerView()
+//        reactiveServiceRecyclerView()
     }
 
     //  "zCi7WKObkrcjmqOL3IR7wl64ZZM2"
     private fun populateServiceRecyclerView() {
         mFirestore?.collection("Accounts")
-            ?.document(mAuth?.currentUser?.email.toString())
+            ?.document(mAuth?.currentUser?.uid.toString())
             ?.get()?.addOnSuccessListener { it ->
                 Log.d(MECHANIC_TAG, it.toString())
                 val account = it.toObject(User::class.java)
@@ -84,14 +90,14 @@ class MechanicServices : AppCompatActivity() {
 
     private fun reactiveServiceRecyclerView() {
         mFirestore?.collection("Accounts")
-            ?.document(mAuth?.currentUser?.email.toString())
-            ?.addSnapshotListener { snapshot, firebaseFireestoreException ->
+            ?.document(mAuth?.currentUser?.uid.toString())
+            ?.addSnapshotListener { snapshot, exception ->
                 val account = snapshot?.toObject(User::class.java)
                 if (account?.services != null) {
                     services.clear()
                     account?.services?.forEach {
                         services.add(it)
-                        Log.d(MECHANIC_TAG, "data changed: $it")
+                        Log.d(MECHANIC_TAG, "[MechanicServices] addSnapshotListener: $it")
                     }
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()
@@ -141,8 +147,6 @@ class MechanicServices : AppCompatActivity() {
                     mFirestore?.collection("Accounts")
                         ?.document(mAuth?.currentUser?.email.toString())
                         ?.update("services", services)
-                    //Log.d(log, services.toString())
-                    //Log.d(log, "${it}")
                 } else {
                     val delService = Serv!!.services!!.find { s -> s.serviceType == serviceType }
                     if (delService != null) {
@@ -167,35 +171,44 @@ class MechanicServices : AppCompatActivity() {
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.mechanic_service, menu)
+//    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+//        menuInflater.inflate(R.menu.mechanic_service, menu)
+//        return true
+//    }
+
+//    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+//        when (item.itemId) {
+//            R.id.action_add -> {
+//                val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
+//                // inflate your custom body here.
+//                val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.activity_add_service, null)
+//
+//                val service = DataProviderManager.getAllServices()
+//                dialogBody.add_service_spinner.adapter =
+//                    HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
+//                basicDialog = BasicDialog.Builder.apply {
+//                    title = "Add Service"
+//                    positive = "Add"
+//                    negative = "Cancel"
+//                }.build(this, dialogContainer, dialogBody)
+//
+//                basicDialog.show()
+//                handleDialogClicked(basicDialog, dialogContainer, dialogBody)
+//                //Log.d(log, services.toString())
+//                return true
+//
+//            }
+//            else -> return super.onOptionsItemSelected(item)
+//        }
+//    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_add -> {
-                val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.basic_dialog, null)
-                // inflate your custom body here.
-                val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.activity_add_service, null)
-
-                val service = DataProviderManager.getAllServices()
-                dialogBody.add_service_spinner.adapter =
-                    HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
-                basicDialog = BasicDialog.Builder.apply {
-                    title = "Add Service"
-                    positive = "Add"
-                    negative = "Cancel"
-                }.build(this, dialogContainer, dialogBody)
-
-                basicDialog.show()
-                handleDialogClicked(basicDialog, dialogContainer, dialogBody)
-                //Log.d(log, services.toString())
-                return true
-
-            }
-            else -> return super.onOptionsItemSelected(item)
-        }
+    override fun onResume() {
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+        super.onResume()
     }
-
 }

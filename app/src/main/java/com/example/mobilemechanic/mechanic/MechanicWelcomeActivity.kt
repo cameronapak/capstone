@@ -26,7 +26,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
-import kotlinx.android.synthetic.main.content_mechanic_welcome.*
+import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
 const val EXTRA_REQUEST = "service_request"
 const val REQ_CODE_MORE_INFO = 1
@@ -50,7 +50,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setUpMechanicWelcomeActivity() {
-        mockLogin()       // Replace with real login later
+       //mockLogin()       // Replace with real login later
         mockRequests()    // Replace with real requests later
         setUpToolBar()
         setUpDrawerMenu()

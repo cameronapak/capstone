@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <include layout="@layout/content_mechanic_welcome"></include>
+        <include layout="@layout/content_mechanic_frame"></include>
 
         <android.support.v7.widget.Toolbar
                 android:id="@+id/id_welcome_toolbar"

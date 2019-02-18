@@ -12,7 +12,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <include layout="@layout/client_content_frame"></include>
+        <include layout="@layout/content_client_frame"></include>
 
         <android.support.v7.widget.Toolbar
                 android:id="@+id/id_welcome_toolbar"

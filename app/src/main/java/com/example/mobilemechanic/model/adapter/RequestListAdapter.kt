@@ -5,7 +5,10 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.Request
 
 class RequestListAdapter(var context: Context, var requests: ArrayList<Request>) :
@@ -31,7 +34,39 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
     {
         fun bindItem(position: Int)
         {
-            /* Set card info here */
+            //references to text views
+            val serviceType = itemView.findViewById<TextView>(R.id.text_service_type)
+            val timeStamp = itemView.findViewById<TextView>(R.id.text_time_stamp)
+            val description = itemView.findViewById<TextView>(R.id.text_description)
+            val status = itemView.findViewById<TextView>(R.id.text_status)
+            val location = itemView.findViewById<TextView>(R.id.text_distance)
+            val infoButton = itemView.findViewById<Button>(R.id.id_button_info)
+            val choiceButton = itemView.findViewById<Button>(R.id.id_button_choice)
+
+            //fill card view
+            serviceType.text = requests[position].service.serviceType
+            status.text = requests[position].status.name
+            description.text = requests[position].description
+            //********** implement distance later ***************************/
+            location.text = "0 mi"
+
+            timeStamp.text = if(requests[position].timeCompleted > 0){
+                context.getString(R.string.complete_on, requests[position].timeCompleted.toString())
+            } else {
+                context.getString(R.string.request_on, requests[position].timePosted.toString())
+            }
+
+            infoButton.setOnClickListener {
+//                val intent = Intent(context, MechanicMoreInformationActivity::class.java)
+//                intent.putExtra(EXTRA_REQUEST, requests[position])
+//                (context as Activity).startActivityForResult(intent, REQ_CODE_MORE_INFO)
+            }
+
+            choiceButton.setOnClickListener {
+                val choiceDialog =
+                    (context as MechanicWelcomeActivity).createChoiceDialog(choiceButton.text.toString())
+                choiceDialog.show()
+            }
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.example.mobilemechanic.client.postservicerequest
 
 import android.app.Dialog
+import android.app.TimePickerDialog
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -9,32 +11,40 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Button
+import android.widget.CheckBox
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC
+import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
+import com.example.mobilemechanic.client.garage.GarageActivity
+import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.basic_dialog.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
-
-class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+const val POST_SERVICE_TAG = "postservice"
+class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
     private val availableDays = ArrayList<String>()
+    private lateinit var dialogContainer: View
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         setUpPostServiceRequestActivity()
-        val mechanicSelected = intent.getSerializableExtra(EXTRA_MECHANIC)
-        id_vehicle_spinner.onItemSelectedListener = this
     }
 
     private fun setUpPostServiceRequestActivity() {
         setUpActionBar()
         setUpVehicleSpinner()
         setUpAvailabilityDialog()
-        handleSubmit()
+        setUpServiceParcel()
+        setUpOnSubmit()
+        setUpOnAddVehicle()
     }
 
     private fun setUpActionBar() {
@@ -44,10 +54,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpAvailabilityDialog() {
-        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+//        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+        dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
-            title = "My Title"
+            title = "Availability"
             positive = "Confirm"
             negative = "Cancel"
         }.build(this, dialogContainer, dialogBody)
@@ -56,16 +67,37 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         handleDialogClicked(basicDialog, dialogContainer, dialogBody)
     }
 
-    private fun handleSubmit() {
+    private fun setUpServiceParcel() {
+        val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+        id_mechanic_name.text = service.mechanicName
+        id_service_type.text = service.serviceType
+        id_service_description.text = service.description
+        id_service_price.text = "$${service.price.toInt()}"
+        id_mechanic_rating.text = service.rating.toString()
+    }
+
+    private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
+            validateForm()
+            val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+            val vehicle = id_vehicle_spinner.selectedItem.toString()
+            val comment = id_comment.text
+            Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ncomment: $comment")
 
+            // Create request and submit to database.
 
+            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+        }
+    }
+
+    private fun setUpOnAddVehicle() {
+        id_warning_message_add.setOnClickListener {
+            startActivity(Intent(this, GarageActivity::class.java))
         }
     }
 
     private fun validateForm() {
-        val submitButton = id_submit as Button
-        if ((id_vehicle_spinner.selectedItemPosition == 0) or (availableDays.isEmpty())) {
+        if ((id_vehicle_spinner.selectedItemPosition == 0)) {
                 disableSubmitButton()
         } else {
                 enableSubmitButton()
@@ -74,6 +106,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
 
     private fun setUpVehicleSpinner() {
+        id_vehicle_spinner.onItemSelectedListener = this
         val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
               .asList()
 
@@ -102,11 +135,24 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         dialogContainer.id_positive.setOnClickListener {
             validateForm()
             availableDays.clear()
-            if (dialogBody.id_mon_checkbox.isChecked) {
-                availableDays.add("mon")
-            }
+            var checkBoxArray = listOf(
+                dialogBody.id_mon_checkbox,
+                dialogBody.id_tues_checkbox,
+                dialogBody.id_wed_checkbox,
+                dialogBody.id_thur_checkbox,
+                dialogBody.id_fri_checkbox,
+                dialogBody.id_sat_checkbox,
+                dialogBody.id_sun_checkbox
+            )
 
-            Log.d("TEST", availableDays.toString())
+            var daysOfWeek = listOf("mon","tues","wed","thur","fri","sat","sun")
+
+            // add checked days of week to an array
+            for ((index, day) in checkBoxArray.withIndex()) {
+                if (day.isChecked) {
+                    availableDays.add(daysOfWeek[index])
+                }
+            }
             basicDialog.dismiss()
         }
 
@@ -158,6 +204,30 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    fun clickTimePicker(view: View) {
+        val c = Calendar.getInstance()
+        var hour = c.get(Calendar.HOUR)
+        val minute = c.get(Calendar.MINUTE)
+
+        val tpd = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { v, h, m ->
+            val time = (if (h > 12) "${h % 12}:" else "${h}:").toString() +
+                    (if (m < 10) "0${m}" else "${m}").toString() +
+                    (if (h >= 12) " PM" else " AM").toString()
+
+            when (view.id) {
+                dialogContainer.id_btnFromTime.id -> {
+                    dialogContainer.id_btnFromTime.text = time.toString()
+                }
+                dialogContainer.id_btnToTime.id -> {
+                    dialogContainer.id_btnToTime.text = time.toString()
+                }
+            }
+
+        },hour,minute,false)
+
+        tpd.show()
     }
 
 }

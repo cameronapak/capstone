@@ -3,7 +3,7 @@
           package="com.example.mobilemechanic">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -11,13 +11,23 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".shared.ForgotPasswordActivity">
+        <activity android:name=".client.garage.GarageActivity">
         </activity>
-        <activity android:name=".client.History.HistoryActivity">
-        <activity android:name=".mechanic.addservice.AddService"
-                  android:label="Add Service"
-        android:theme="@style/AddService"
-        >
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+
+        <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyC_DQTYyo0CagoAgYat5YNYxsK_RGbzAVc" />
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
+
+        <activity
+                android:name=".mechanic.map.MechanicMoreInformationActivity"
+                android:label="@string/title_activity_mechanic_more_information">
         </activity>
         <activity
                 android:name=".mechanic.MechanicServices"
@@ -29,7 +39,6 @@
                 android:label="@string/title_activity_mechanic_welcome"
                 android:theme="@style/NoActionBar">
         </activity>
-
         <activity android:name=".client.servicerating.ServiceRatingActivity">
         </activity>
         <activity android:name=".client.findservice.FindServiceActivity">
@@ -45,14 +54,16 @@
         </activity>
         <activity android:name=".client.ClientWelcomeActivity">
         </activity>
+        <activity android:name=".shared.SignInActivity">
+        </activity>
+        <activity android:name=".shared.ForgotPasswordActivity">
+        </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
-        </activity>
-        <activity android:name=".shared.SignInActivity">
         </activity>
 
         <meta-data

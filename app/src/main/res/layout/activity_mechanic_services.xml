@@ -22,6 +22,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_mechanic_services"/>
+    <include layout="@layout/content_mechanic_services" android:layout_height="635dp"/>
 
 </android.support.design.widget.CoordinatorLayout>

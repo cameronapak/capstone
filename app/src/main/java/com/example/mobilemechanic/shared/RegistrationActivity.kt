@@ -5,10 +5,12 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
@@ -20,8 +22,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 
-const val ACCOUNT_DOC_PATH = "account/accountDoc"
-const val USER_INFO = "user_info"
+const val ACCOUNT_DOC_PATH = "Accounts"
 
 class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
@@ -39,9 +40,12 @@ class RegistrationActivity : AppCompatActivity() {
 
         setUpRegistrationActivity()
 
-
         id_register_button.setOnClickListener {
             createUserAccount()
+        }
+
+        id_register_signIn.setOnClickListener {
+            startActivity(Intent(this, SignInActivity::class.java))
         }
     }
 
@@ -71,6 +75,7 @@ class RegistrationActivity : AppCompatActivity() {
                 ?.addOnCompleteListener {
                     userInfo.uid = mAuth!!.uid.toString()
                     handleAccountCreationSuccess(it, userInfo)
+                    Log.d(MECHANIC_TAG, "[RegistrationActivity]: createUserAccount()")
             }
         }
     }
@@ -85,9 +90,8 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun saveUserInfo(userInfo: User) {
-
-        mFireStore?.collection("$ACCOUNT_DOC_PATH/${userInfo.email}")
-            ?.document(USER_INFO)
+        mFireStore?.collection(ACCOUNT_DOC_PATH)
+            ?.document(userInfo.email)
             ?.set(userInfo)
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()

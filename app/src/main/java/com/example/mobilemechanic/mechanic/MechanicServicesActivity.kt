@@ -143,9 +143,6 @@ class MechanicServicesActivity : AppCompatActivity() {
                 Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia account $account")
                 Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAloglia service  $newService")
 
-                // Cloud function will use documentId to create the objectID for algolia.
-                // The objectID set at reactiveServiceRecyclerView()
-                // This helps avoid double write to the database.
                 var service = ServiceModel(
                     "",
                     account.firstName,

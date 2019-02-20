@@ -6,13 +6,12 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.ServiceModel
+import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
 
 class FindServiceActivity : AppCompatActivity() {
-
 
     private lateinit var mFireStore: FirebaseStorage
     private lateinit var viewManager: LinearLayoutManager
@@ -34,17 +33,6 @@ class FindServiceActivity : AppCompatActivity() {
     private fun setUpAlgolioa() {
         viewManager = LinearLayoutManager(this)
         serviceAdapter = ServiceRecyclerAdapter(this, services)
-        val mockService = ServiceModel(
-            "Jason Statham",
-            "uid",
-            "Oil Change",
-            11.00,
-            "Be done",
-            4.4f
-        )
-
-        for (i in 1..5)
-            services.add(mockService)
         id_recyclerview_services.apply {
             setHasFixedSize(true)
             layoutManager = viewManager

@@ -3,7 +3,7 @@ package com.example.mobilemechanic.model
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Service(var serviceType: String, var price: Double, var comment: String) : Parcelable
+data class Service(var serviceType: String, var price: Double, var description: String) : Parcelable
 {
     constructor() : this("", 0.0, "")
 
@@ -16,7 +16,7 @@ data class Service(var serviceType: String, var price: Double, var comment: Stri
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(serviceType)
         parcel.writeDouble(price)
-        parcel.writeString(comment)
+        parcel.writeString(description)
     }
 
     override fun describeContents(): Int {

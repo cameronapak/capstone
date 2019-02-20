@@ -14,7 +14,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
-import com.example.mobilemechanic.model.ServiceModel
+import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -67,7 +67,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpServiceParcel() {
         val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-        id_mechanic_name.text = service.mechanicName
+        id_mechanic_name.text = service.mechanicFirstName
         id_service_type.text = service.serviceType
         id_service_description.text = service.description
         id_price.text = "$${service.price.toInt()}"
@@ -80,7 +80,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
             val vehicle = id_vehicle_spinner.selectedItem.toString()
             val comment = id_comment.text
-            Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ncomment: $comment")
+            Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ndescription: $comment")
 
             // Create request and submit to database.
 

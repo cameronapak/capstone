@@ -10,7 +10,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
-import com.example.mobilemechanic.model.ServiceModel
+import com.example.mobilemechanic.model.algolia.ServiceModel
 
 const val EXTRA_SERVICE = "extra_service"
 
@@ -36,7 +36,7 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<Servic
         val service = dataset[position]
         holder.title.text = service.serviceType
         holder.description.text = service.description
-        holder.name.text = "${service.mechanicName}"
+        holder.name.text = "${service.mechanicFirstName}"
         holder.price.text = "$${service.price.toInt()}"
         holder.rating.text = service.rating.toString()
 

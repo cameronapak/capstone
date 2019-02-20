@@ -1,19 +1,34 @@
-package com.example.mobilemechanic.model
+package com.example.mobilemechanic.model.algolia
 
 import android.os.Parcel
 import android.os.Parcelable
 
 data class ServiceModel(
-    var mechanicName: String,
+    var objectID: String,
+    var mechanicFirstName: String,
+    var mechanicLastName: String,
+    var mechanicPhotoUrl: String,
     var uid: String,
     var serviceType: String,
     var price: Double,
     var description: String,
     var rating: Float
 ) : Parcelable {
-    constructor() : this("", "", "", 0.0, "", 0.0f)
+    constructor() : this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        0.0,
+        "",
+        0.0f)
 
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -23,9 +38,11 @@ data class ServiceModel(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(mechanicName)
+        parcel.writeString(objectID)
+        parcel.writeString(mechanicFirstName)
+        parcel.writeString(mechanicLastName)
+        parcel.writeString(mechanicPhotoUrl)
         parcel.writeString(uid)
-//        parcel.writeInt(serviceType.ordinal)
         parcel.writeString(serviceType)
         parcel.writeDouble(price)
         parcel.writeString(description)
@@ -47,11 +64,14 @@ data class ServiceModel(
     }
 
     override fun toString(): String {
-        return "\nmechanicName: $mechanicName\n" +
+        return  "\nobjectID: $objectID\n" +
+                "mechanicFirstName: $mechanicFirstName\n" +
+                "mechanicLastName: $mechanicLastName\n" +
+                "mechanicPhotoUrl: $mechanicPhotoUrl\n" +
                 "uid: $uid\n" +
                 "serviceType: $serviceType\n" +
-                "description: $description\n" +
                 "price: $price\n" +
-                "ratingL $rating\n"
+                "description: $description\n" +
+                "rating: $rating\n"
     }
 }

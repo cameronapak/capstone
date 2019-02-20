@@ -12,29 +12,30 @@ import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.adapter.ServiceListAdapter
+import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_services.*
 import kotlinx.android.synthetic.main.dialog_body_add_service.*
 import kotlinx.android.synthetic.main.dialog_body_add_service.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
-
-class MechanicServices : AppCompatActivity() {
+class MechanicServicesActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var userAccountRef: DocumentReference
+    private lateinit var serviceRef: CollectionReference
 
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var mechanicServiceAdapter: ServiceListAdapter
     private lateinit var basicDialog: Dialog
-    private var services = ArrayList<Service>()
+    private var services = ArrayList<ServiceModel>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,16 +45,17 @@ class MechanicServices : AppCompatActivity() {
         mFirestore = FirebaseFirestore.getInstance()
         userAccountRef = mFirestore?.collection("Accounts")
             ?.document(mAuth?.currentUser?.uid.toString())
+        serviceRef = mFirestore?.collection("Services")
 
-        Log.d(MECHANIC_TAG, "[MechanicServices] User uid: ${mAuth?.currentUser?.uid}")
-        Log.d(MECHANIC_TAG, "[MechanicServices] User email: ${mAuth?.currentUser?.email}")
+        Log.d(MECHANIC_TAG, "[MechanicServicesActivity] User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(MECHANIC_TAG, "[MechanicServicesActivity] User email: ${mAuth?.currentUser?.email}")
         setUpMechanicServiceActivity()
     }
 
     private fun setUpMechanicServiceActivity() {
         setUpToolBar()
         setUpServiceRecyclerView()
-        setUpAddService()
+        setUpAddServiceDialog()
     }
 
     private fun setUpToolBar() {
@@ -74,42 +76,27 @@ class MechanicServices : AppCompatActivity() {
             layoutManager = viewManager
             adapter = mechanicServiceAdapter
         }
-        populateServiceRecyclerView()
         reactiveServiceRecyclerView()
     }
 
-    private fun populateServiceRecyclerView() {
-        userAccountRef?.get()?.addOnSuccessListener { it ->
-            Log.d(MECHANIC_TAG, it.toString())
-            val account = it.toObject(User::class.java)
-            if (account?.services != null) {
-                services.clear()
-                account?.services?.forEach {
-                    services.add(it)
-                    Log.d(MECHANIC_TAG, "services: ${account?.services}\n")
-                }
-            }
-            mechanicServiceAdapter.notifyDataSetChanged()
-        }?.addOnFailureListener {
-            Log.d(MECHANIC_TAG, it.message.toString())
-        }
-    }
-
     private fun reactiveServiceRecyclerView() {
-        userAccountRef?.addSnapshotListener { snapshot, exception ->
-            val account = snapshot?.toObject(User::class.java)
-            if (account?.services != null) {
-                services.clear()
-                account?.services?.forEach {
-                    services.add(it)
-                    Log.d(MECHANIC_TAG, "[MechanicServices] addSnapshotListener: $it")
+        serviceRef.whereEqualTo("uid", mAuth?.currentUser?.uid.toString())
+            ?.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    return@addSnapshotListener
                 }
+                services.clear()
+                for (doc in querySnapshot!!) {
+                    val service = doc.toObject(ServiceModel::class.java)
+                    service.objectID = doc.id
+                    Log.d(MECHANIC_TAG, "[MechanicServices] snapshotListener service documentID: ${service.objectID}")
+                    services.add(service)
+                }
+                mechanicServiceAdapter.notifyDataSetChanged()
             }
-            mechanicServiceAdapter.notifyDataSetChanged()
-        }
     }
 
-    private fun setUpAddService() {
+    private fun setUpAddServiceDialog() {
         id_add_service.setOnClickListener {
             val dialogContainer =
                 layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
@@ -149,16 +136,31 @@ class MechanicServices : AppCompatActivity() {
     }
 
     private fun addService(newService: Service) {
-        userAccountRef?.update("services", FieldValue.arrayUnion(newService))
-            ?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    Toast.makeText(this, "Service Added Successfully", Toast.LENGTH_LONG).show()
-                    Log.d(MECHANIC_TAG, "[MechanicServices] addService: successful")
-                }
-            }?.addOnFailureListener {
-                Log.d(MECHANIC_TAG, "[MechanicServices] ${it.message}")
-            }
+        userAccountRef?.get()?.addOnSuccessListener {
+            Log.d(MECHANIC_TAG, it.toString())
+            val account = it.toObject(User::class.java)
+            if (account != null) {
+                Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia account $account")
+                Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAloglia service  $newService")
 
+                // Cloud function will use documentId to create the objectID for algolia.
+                // The objectID set at reactiveServiceRecyclerView()
+                // This helps avoid double write to the database.
+                var service = ServiceModel(
+                    "",
+                    account.firstName,
+                    account.lastName,
+                    account.photoUrl,
+                    account.uid,
+                    newService.serviceType,
+                    newService.price,
+                    newService.description,
+                    account.rating)
+                serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
+                    Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAloglia $documentRef")
+                }
+            }
+        }
     }
 
     private fun isFieldsValidated(service: Service): Boolean {

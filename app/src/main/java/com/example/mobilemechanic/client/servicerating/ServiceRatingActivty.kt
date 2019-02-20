@@ -5,7 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_service_rating_activty.*
 
 class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeListener {

@@ -1,6 +1,5 @@
 package com.example.mobilemechanic.model.adapter
 
-import android.app.Activity
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -17,7 +16,7 @@ class ServiceListAdapter(var context: Context, var serviceArray: ArrayList<Servi
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ServiceListAdapter.ViewHolder
     {
         val view = LayoutInflater.from(context)
-            .inflate(R.layout.service_card_view, parent, false)
+            .inflate(R.layout.recyclerview_item_service_manage, parent, false)
         return ViewHolder(view)
     }
 
@@ -34,19 +33,16 @@ class ServiceListAdapter(var context: Context, var serviceArray: ArrayList<Servi
     {
         fun bindItem(position: Int)
         {
-            //references to text views
-            val typeView = itemView.findViewById<TextView>(R.id.text_client_name)
-            val costView = itemView.findViewById<TextView>(R.id.label_cost_service)
-            val descriptionView = itemView.findViewById<TextView>(R.id.label_service_description)
-            val updateBtn = itemView.findViewById<Button>(R.id.id_button_choice)
+            val serviceItem = serviceArray[position]
+            val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
+            val price = itemView.findViewById<TextView>(R.id.id_price)
+            val description = itemView.findViewById<TextView>(R.id.id_description)
+            val updateBtn = itemView.findViewById<Button>(R.id.id_button_update)
             val removeBtn = itemView.findViewById<Button>(R.id.id_button_remove)
 
-
-
-            typeView.text = serviceArray[position].serviceType
-            if(context is Activity)
-                costView.text = context.getString(R.string.price, serviceArray[position].price)
-            descriptionView.text = serviceArray[position].comment
+            serviceType.text = serviceItem.serviceType
+            price.text = serviceItem.price.toString()
+            description.text = serviceItem.comment
 
 
             //itemView represents 1 card entry

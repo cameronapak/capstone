@@ -110,7 +110,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_services -> {
-                    val i = Intent(this, MechanicServices::class.java)
+                    val i = Intent(this, MechanicServicesActivity::class.java)
                     startActivity(i)
                     true
                 }

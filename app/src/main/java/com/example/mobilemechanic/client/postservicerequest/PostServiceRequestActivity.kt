@@ -10,8 +10,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Button
-import android.widget.CheckBox
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
@@ -19,9 +17,9 @@ import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.model.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
-import kotlinx.android.synthetic.main.basic_dialog.view.*
+import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import java.util.*
 import kotlin.collections.ArrayList
@@ -48,14 +46,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpActionBar() {
-        setSupportActionBar(id_service_form_toolbar as Toolbar)
+        setSupportActionBar(id_find_service_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     private fun setUpAvailabilityDialog() {
-//        val dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
-        dialogContainer = layoutInflater.inflate(R.layout.basic_dialog, null)
+//        val dialogContainer = layoutInflater.inflate(R.layout.dialog_container_basic, null)
+        dialogContainer = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
             title = "Availability"
@@ -72,7 +70,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_mechanic_name.text = service.mechanicName
         id_service_type.text = service.serviceType
         id_service_description.text = service.description
-        id_service_price.text = "$${service.price.toInt()}"
+        id_price.text = "$${service.price.toInt()}"
         id_mechanic_rating.text = service.rating.toString()
     }
 
@@ -107,7 +105,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpVehicleSpinner() {
         id_vehicle_spinner.onItemSelectedListener = this
-        val vehicles = arrayOf("Vehicle","2011 Toyota Venza", "2013 Toyota Camry")
+        val vehicles = arrayOf("Vehicle", "2011 Toyota Venza")
               .asList()
 
 //        val vehicles = arrayOf("Vehicle").asList()
@@ -153,6 +151,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     availableDays.add(daysOfWeek[index])
                 }
             }
+
+            val daysOfWeekString = daysOfWeek.joinToString(separator = ", ")
+            val fromTime = dialogContainer.id_btnFromTime.text
+            val toTime = dialogContainer.id_btnToTime.text
+            id_availability.text = "Available from $fromTime to $toTime on $daysOfWeekString"
+
             basicDialog.dismiss()
         }
 
@@ -212,9 +216,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         val minute = c.get(Calendar.MINUTE)
 
         val tpd = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { v, h, m ->
-            val time = (if (h > 12) "${h % 12}:" else "${h}:").toString() +
+            val time = (if (h > 12) "${h % 12}:" else "${if (h == 0) "12" else h}:").toString() +
                     (if (m < 10) "0${m}" else "${m}").toString() +
                     (if (h >= 12) " PM" else " AM").toString()
+
+            // TODO: compare times from and to, and do not allow continue unless from is before to
 
             when (view.id) {
                 dialogContainer.id_btnFromTime.id -> {

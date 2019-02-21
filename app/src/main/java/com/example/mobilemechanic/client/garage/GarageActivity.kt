@@ -5,7 +5,7 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_garage.*
 
 class GarageActivity : AppCompatActivity() {
@@ -13,7 +13,6 @@ class GarageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_garage)
-
         setUpGarageActivity()
     }
 

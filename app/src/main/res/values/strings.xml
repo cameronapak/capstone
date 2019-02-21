@@ -93,7 +93,7 @@
     <string name="label_cancel_add_service">Cancel</string>
     <string name="label_add_service">Add</string>
 
-    <!--request_card_view-->
+    <!--recyclerview_item_request-->
     <string name="place_holder_client_name">Jackie Chan</string>
     <string name="request_on">Requested on %s</string>
     <string name="complete_on">Completed on %s</string>
@@ -118,5 +118,9 @@
     </string>
     <string name="confirm_that">Here you confirm that</string>
     <string name="title_activity_mechanic_more_information">Map</string>
+    <string name="text_more">More</string>
+    <string name="text_accept">Accept</string>
+    <string name="text_remove">Remove</string>
+    <string name="text_update">Update</string>
 
 </resources>

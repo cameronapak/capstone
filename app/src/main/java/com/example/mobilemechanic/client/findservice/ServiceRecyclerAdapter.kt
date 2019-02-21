@@ -21,8 +21,8 @@ class ServiceRecyclerAdapter(val context: Context, val dataset: ArrayList<Servic
         val title = itemView.findViewById<TextView>(R.id.id_service_type)
         val description = itemView.findViewById<TextView>(R.id.id_description)
         val name = itemView.findViewById<TextView>(R.id.id_mechanic_name)
-        val selectButton = itemView.findViewById<Button>(R.id.id_select_button)
-        val price = itemView.findViewById<TextView>(R.id.id_service_price)
+        val selectButton = itemView.findViewById<Button>(R.id.id_button_update)
+        val price = itemView.findViewById<TextView>(R.id.id_price)
         val rating = itemView.findViewById<TextView>(R.id.id_mechanic_rating)
     }
 

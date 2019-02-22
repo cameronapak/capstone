@@ -15,16 +15,28 @@
 
         <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:background="@drawable/toolbar_bottom_border"
-                android:theme="?attr/actionBarTheme"
+                android:layout_height="122dp"
+                android:background="@drawable/top_bg1"
+                android:theme="@style/ToolbarTheme"
                 android:minHeight="@dimen/toolbar_height"
                 android:id="@+id/id_find_service_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
-
-        <com.algolia.instantsearch.ui.views.Hits
-                android:id="@+id/id_hits"
+        <com.algolia.instantsearch.ui.views.SearchBox
+                android:id="@+id/searchBox"
+                android:layout_width="0dp"
+                android:background="@drawable/bg_white_rounded"
+                android:layout_height="45dp" android:layout_marginTop="16dp"
+                app:layout_constraintTop_toTopOf="@+id/id_find_service_toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/id_hits_customized"
+                app:layout_constraintVertical_bias="0.962"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"/>
+        <com.example.mobilemechanic.client.findservice.HitsCustomized
+                android:id="@+id/id_hits_customized"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 algolia:itemLayout="@layout/algolia_hits_item"
@@ -33,6 +45,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginEnd="16dp" app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="16dp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_filter"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+                android:text="@string/text_filter" android:fontFamily="@font/qualio" android:textSize="32sp"
+                android:textColor="@color/colorPrimary"
+                android:layout_marginTop="20dp" app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

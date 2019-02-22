@@ -3,11 +3,10 @@ package com.example.mobilemechanic.client.findservice
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.algolia.instantsearch.core.helpers.Searcher
 import com.algolia.instantsearch.ui.helpers.InstantSearch
-import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.R
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
@@ -16,12 +15,7 @@ import kotlinx.android.synthetic.main.activity_find_service.*
 class FindServiceActivity : AppCompatActivity() {
 
     private lateinit var mFireStore: FirebaseStorage
-    private lateinit var viewManager: LinearLayoutManager
-    private lateinit var serviceAdapter: ServiceRecyclerAdapter
-    private var services: ArrayList<ServiceModel> = ArrayList()
-    private var searcher: Searcher = Searcher.create("YVL1UI29QL",
-        "d1e8a0c7b4dfaaeafbcc1b6d48d7e5fc",
-        "services")
+    private lateinit var searcher: Searcher
     private lateinit var helper: InstantSearch
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,18 +31,11 @@ class FindServiceActivity : AppCompatActivity() {
     }
 
     private fun setUpAlgolia() {
+        searcher = Searcher.create(getString(R.string.algolia_app_id),
+            getString(R.string.algolia_api_key),
+            getString(R.string.algolia_services_index))
         helper = InstantSearch(this, searcher)
         helper.search()
-
-//        viewManager = LinearLayoutManager(this)
-//        serviceAdapter = ServiceRecyclerAdapter(this, services)
-//        id_recyclerview_services.apply {
-//            setHasFixedSize(true)
-//            layoutManager = viewManager
-//            adapter = serviceAdapter
-//            isNestedScrollingEnabled = false
-//        }
-//        serviceAdapter.notifyDataSetChanged()
     }
 
     private fun setUpToolBar() {

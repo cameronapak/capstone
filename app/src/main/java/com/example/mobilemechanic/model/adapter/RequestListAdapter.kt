@@ -46,7 +46,7 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
             val status = itemView.findViewById<TextView>(R.id.id_service_type)
             //val location = itemView.findViewById<TextView>(R.id.text_distance)
             val infoButton = itemView.findViewById<Button>(R.id.id_button_info)
-            val choiceButton = itemView.findViewById<Button>(R.id.id_button_update)
+            val choiceButton = itemView.findViewById<Button>(R.id.id_select)
 
             //fill card view
             //name.text = "${requests[position].clientInfo.firstName} ${requests[position].clientInfo.lastName}"

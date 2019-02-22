@@ -43,7 +43,7 @@ class ServiceListAdapter(var context: Context, var serviceArray: ArrayList<Servi
             val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
             val price = itemView.findViewById<TextView>(R.id.id_price)
             val description = itemView.findViewById<TextView>(R.id.id_description)
-            val updateBtn = itemView.findViewById<Button>(R.id.id_button_update)
+            val updateBtn = itemView.findViewById<Button>(R.id.id_select)
             val removeBtn = itemView.findViewById<Button>(R.id.id_button_remove)
 
             serviceType.text = serviceItem.serviceType

@@ -19,8 +19,8 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_post_service_request.*
-import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
+import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -66,12 +66,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpServiceParcel() {
-        val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-        id_mechanic_name.text = service.mechanicFirstName
-        id_service_type.text = service.serviceType
-        id_service_description.text = service.description
-        id_price.text = "$${service.price.toInt()}"
-        id_mechanic_rating.text = service.rating.toString()
+        if (intent.hasExtra(EXTRA_SERVICE)) {
+            val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+            id_mechanic_name.text = service.mechanicFirstName
+            id_service_type.text = service.serviceType
+            id_service_description.text = service.description
+            id_price.text = "$${service.price.toInt()}"
+            id_mechanic_rating.text = service.rating.toString()
+        }
     }
 
     private fun setUpOnSubmit() {

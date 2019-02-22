@@ -17,7 +17,7 @@ import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
-
+const val CLIENT_TAG = "client"
 class ClientWelcomeActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout

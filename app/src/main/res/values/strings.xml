@@ -1,7 +1,7 @@
 <resources>
     <string name="algolia_app_id">YVL1UI29QL</string>
-    <string name="algolia_admin_key">3c0ee02fbfdf857eaae8b05ac6dff157</string>
     <string name="algolia_api_key">d1e8a0c7b4dfaaeafbcc1b6d48d7e5fc</string>
+    <string name="algolia_services_index">services</string>
     <string name="app_name"></string>
     <string name="text_notification">Notification</string>
     <string name="text_find_service">Find Service</string>
@@ -125,5 +125,6 @@
     <string name="text_accept">Accept</string>
     <string name="text_remove">Remove</string>
     <string name="text_update">Update</string>
+    <string name="text_filter">Filter</string>
 
 </resources>

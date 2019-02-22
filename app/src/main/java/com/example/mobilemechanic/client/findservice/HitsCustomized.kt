@@ -93,7 +93,7 @@ class HitsCustomized
                 }
             }
 
-            BindingHelper.setVariantForView(this, attrs) //TODO: Can I use this as default variant for all subviews?
+            BindingHelper.setVariantForView(this, attrs)
         } finally {
             styledAttributes.recycle()
         }
@@ -118,51 +118,24 @@ class HitsCustomized
         }
     }
 
-
-    /**
-     * Sets a listener for click events on child views.
-     *
-     * @param listener An [OnItemLongClickListener][OnItemClickListener] which should receive these events.
-     */
-    // For library users
     fun setOnItemClickListener(listener: OnItemClickListener) {
 
         ItemClickSupport.addTo(this).setOnItemClickListener(listener)
     }
 
-    /**
-     * Sets a listener for long click events on child views.
-     *
-     * @param listener An [OnItemLongClickListener] which should receive these events.
-     */
-    // For library users
     fun setOnItemLongClickListener(listener: OnItemLongClickListener) {
 
         ItemClickSupport.addTo(this).setOnItemLongClickListener(listener)
     }
 
-    /**
-     * Clears the Hits, emptying the underlying data.
-     */
-    // For library users
     fun clear() {
         adapter.clear()
     }
 
-    /**
-     * Gets the hit at a given position.
-     *
-     * @param position the position to look at.
-     * @return a JSONObject representing the hit.
-     */
     operator fun get(position: Int): JSONObject {
         return adapter.getItemAt(position)
     }
 
-    /**
-     * Starts closing the keyboard when the hits are scrolled.
-     */
-    // For library users
     fun enableKeyboardAutoHiding() {
         keyboardListener = object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
@@ -178,21 +151,11 @@ class HitsCustomized
         addOnScrollListener(keyboardListener!!)
     }
 
-    /**
-     * Stops closing the keyboard when the hits are scrolled.
-     */
-    // For library users
     fun disableKeyboardAutoHiding() {
         removeOnScrollListener(keyboardListener!!)
         keyboardListener = null
     }
 
-    /**
-     * Adds or replaces hits to/in this widget.
-     *
-     * @param results     A [JSONObject] containing hits.
-     * @param isReplacing `true` if the given hits should replace the current hits.
-     */
     protected fun addHits(results: SearchResults?, isReplacing: Boolean) {
         if (results == null) {
             if (isReplacing) {

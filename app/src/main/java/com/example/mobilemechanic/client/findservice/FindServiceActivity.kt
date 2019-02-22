@@ -36,6 +36,8 @@ class FindServiceActivity : AppCompatActivity() {
             getString(R.string.algolia_services_index))
         helper = InstantSearch(this, searcher)
         helper.search()
+        val hits = findViewById<HitsCustomized>(R.id.id_hits_customized)
+        hits.enableKeyboardAutoHiding()
     }
 
     private fun setUpToolBar() {

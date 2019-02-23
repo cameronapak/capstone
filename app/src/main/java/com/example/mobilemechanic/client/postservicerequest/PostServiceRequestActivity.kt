@@ -10,10 +10,14 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
@@ -29,21 +33,30 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 const val POST_SERVICE_TAG = "postservice"
-
+const val HINT_VEHICLE = "Vehicle"
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
-    private lateinit var requestRef: CollectionReference
+    private lateinit var requestsRef: CollectionReference
+    private lateinit var vehiclesRef: CollectionReference
+    private lateinit var spinnerAdapter: HintSpinnerAdapter
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
+    private lateinit var daysOfWeekString: String
+    private lateinit var fromTime: String
+    private lateinit var toTime: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         mFirestore = FirebaseFirestore.getInstance()
-        requestRef = mFirestore.collection("Requests")
+        requestsRef = mFirestore.collection("Requests")
         mAuth = FirebaseAuth.getInstance()
+        vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth?.currentUser?.email}")
         setUpPostServiceRequestActivity()
     }
 
@@ -95,23 +108,33 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ndescription: $comment")
             val clientId = mAuth?.currentUser?.uid
             val currentTime = System.currentTimeMillis()/1000
+            var clientPhotoUrl = mAuth?.currentUser?.photoUrl.toString()
             if (clientId != null) {
-//                val request = Request(
-//                    clientId,
-//                    service.uid,
-//                    service.description,
-//                    vehicle,
-//                    service.serviceType,
-//                    Status.Request,
-//                    currentTime,
-//                    -1
-//                )
-//
-//                requestRef.document().set(request).addOnSuccessListener {
-//                    Toast.makeText(this, "Request sent successfully.", Toast.LENGTH_LONG)
-//                }
+                val request = Request(
+                    "requestID",
+                    clientId,
+                    clientPhotoUrl,
+                    service.uid,
+                    service.description,
+                    vehicle,
+                    service.serviceType,
+                    Status.Request,
+                    currentTime,
+                    -1,
+                    "$fromTime to $toTime",
+                    "$daysOfWeekString"
+                )
+                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] request $request")
+
+                requestsRef.document().set(request).addOnSuccessListener {
+                    Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG)
+                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                    finish()
+                }?.addOnFailureListener {
+                    Log.d(CLIENT_TAG, it.message)
+                    Toast.makeText(this, "Request failed", Toast.LENGTH_LONG)
+                }
             }
-            startActivity(Intent(this, ClientWelcomeActivity::class.java))
         }
     }
 
@@ -129,25 +152,27 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         }
     }
 
-
     private fun setUpVehicleSpinner() {
-        id_vehicle_spinner.onItemSelectedListener = this
         val vehicles = ArrayList<String>()
-        vehicles.add("Vehicle")
-
-        val vehicle = Vehicle("vehicleID", "2011", "Toyota", "Venza", "")
-
-        vehicles.add(vehicle.toString())
-        vehicles.add(vehicle.toString())
-        vehicles.add(vehicle.toString())
-
-        id_vehicle_spinner.adapter =
-            HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
-        if (isGarageEmpty(vehicles)) {
-            showWarningIconAndMessage()
-        } else {
-            hideWarningIconAndMessage()
+        id_vehicle_spinner.onItemSelectedListener = this
+        spinnerAdapter = HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
+        vehiclesRef.addSnapshotListener { querySnapshot, exception ->
+            if (exception != null) {
+                return@addSnapshotListener
+            }
+            vehicles.clear()
+            vehicles.add(HINT_VEHICLE)
+            for (doc in querySnapshot!!) {
+                val vehicle = doc.toObject(Vehicle::class.java)
+                vehicle.objectID = doc.id
+                vehicles.add(vehicle.toString())
+                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] snapshotListener vehicle objectID: ${vehicle.objectID}")
+            }
+            spinnerAdapter.notifyDataSetChanged()
+            checkIfGarageIsEmpty(vehicles)
         }
+
+        id_vehicle_spinner.adapter = spinnerAdapter
     }
 
     private fun handleDialogPopup(basicDialog: Dialog) {
@@ -175,20 +200,16 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             )
 
             var daysOfWeek = listOf("mon", "tues", "wed", "thur", "fri", "sat", "sun")
-
-            // add checked days of week to an array
             for ((index, day) in checkBoxArray.withIndex()) {
                 if (day.isChecked) {
                     availableDays.add(daysOfWeek[index])
                 }
             }
 
-            val daysOfWeekString = daysOfWeek.joinToString(separator = ", ")
-            val fromTime = dialogContainer.id_btnFromTime.text
-            val toTime = dialogContainer.id_btnToTime.text
-//            id_availability.text = "Available from $fromTime to $toTime on $daysOfWeekString"
+            daysOfWeekString = availableDays.joinToString(separator = ", ")
+            fromTime = dialogContainer.id_btnFromTime.text.toString()
+            toTime = dialogContainer.id_btnToTime.text.toString()
             id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
-
             basicDialog.dismiss()
         }
 
@@ -219,27 +240,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_submit.setBackgroundResource(R.drawable.button_round_corner)
     }
 
-    private fun isGarageEmpty(vehicles: ArrayList<String>): Boolean {
+    private fun checkIfGarageIsEmpty(vehicles: ArrayList<String>) {
         if (vehicles.size <= 1) {
-            return true
+            showWarningIconAndMessage()
+        } else {
+            hideWarningIconAndMessage()
         }
-        return false
-    }
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {}
-
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        validateForm()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
-
-    override fun onSupportNavigateUp(): Boolean {
-        onBackPressed()
-        return true
     }
 
     fun clickTimePicker(view: View) {
@@ -268,4 +274,20 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         tpd.show()
     }
 
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+        validateForm()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        hideWarningIconAndMessage()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
 }

@@ -10,6 +10,7 @@ enum class Status {
 data class Request(
     var objectID: String,
     var clientId: String,
+    var clientPhotoUrl: String,
     var mechanicId: String,
     var description: String,
     var vehicle: String,
@@ -21,6 +22,7 @@ data class Request(
     var availableDay: String
 ) : Parcelable {
     constructor() : this(
+        "",
         "",
         "",
         "",
@@ -41,6 +43,7 @@ data class Request(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
+        parcel.readString(),
         Status.values()[parcel.readInt()],
         parcel.readLong(),
         parcel.readLong(),
@@ -51,6 +54,7 @@ data class Request(
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(objectID)
         parcel.writeString(clientId)
+        parcel.writeString(clientPhotoUrl)
         parcel.writeString(mechanicId)
         parcel.writeString(description)
         parcel.writeString(vehicle)

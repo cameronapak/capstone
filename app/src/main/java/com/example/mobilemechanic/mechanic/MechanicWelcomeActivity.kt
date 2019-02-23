@@ -83,7 +83,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         for (i in 0..10) {
             val mockService = Service("Oil Change", 20.00, "")
             val mockRequest = Request(
-                "12345", "12345", "Need an oil change!",
+                "", "12345", "12345", "Need an oil change!",
                 Vehicle(), mockService, Status.Request, System.currentTimeMillis(), 0L
             )
             requests.add(mockRequest)
@@ -165,7 +165,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
 
-    fun createChoiceDialog(title: String): Dialog {
+    fun createChoiceDialog(title: String, request: Request): Dialog {
         var positive = ""
         var dialogBody: View? = null
         if (title == getString(R.string.label_choice_accept)) {
@@ -182,6 +182,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
             this.title = title
             this.positive = positive
             negative = getString(R.string.label_cancel_add_service)
+            this.dataListPosition = dataListPosition;
         }.build(this, dialogContainer, dialogBody!!)
 
 
@@ -191,7 +192,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         }
 
         dialogContainer.id_negative.setOnClickListener {
-            Toast.makeText(this, "You pressed Negative!", Toast.LENGTH_SHORT).show()
             choiceDialog.dismiss()
         }
 

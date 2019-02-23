@@ -78,7 +78,8 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
 
             choiceButton.setOnClickListener {
                 val choiceDialog =
-                    (context as MechanicWelcomeActivity).createChoiceDialog(choiceButton.text.toString())
+                    (context as MechanicWelcomeActivity).createChoiceDialog(choiceButton.text.toString(),
+                        requests[position])
                 choiceDialog.show()
             }
         }

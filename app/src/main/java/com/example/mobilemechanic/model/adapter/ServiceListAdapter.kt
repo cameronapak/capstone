@@ -120,13 +120,15 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
             val descriptionUpdate = basicDialog.label_comment.text.toString().trim()
 
             serviceRef.document("${serviceItem.objectID}")
-                .update("serviceType", serviceType, "price", parseDouble(priceUpdate), "description", descriptionUpdate)
+                .update("serviceType", serviceType, "price",
+                    parseDouble(priceUpdate), "description", descriptionUpdate)
                 .addOnSuccessListener {
                 Toast.makeText(context, "Service Update Successfully", Toast.LENGTH_LONG).show()
             }?.addOnFailureListener {
                 Toast.makeText(context, "Failed to Updadate", Toast.LENGTH_LONG).show()
                 Log.w(MECHANIC_TAG, "Error update services", it)
             }
+            basicDialog.dismiss()
         }
         basicDialog.id_negative.setOnClickListener {
             basicDialog.dismiss()

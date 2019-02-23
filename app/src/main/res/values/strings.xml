@@ -122,5 +122,6 @@
     <string name="text_accept">Accept</string>
     <string name="text_remove">Remove</string>
     <string name="text_update">Update</string>
+    <string name="label_remove_service_view">Are you sure you want to remove this service?</string>
 
 </resources>

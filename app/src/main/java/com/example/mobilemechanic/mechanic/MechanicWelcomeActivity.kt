@@ -46,7 +46,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mechanic_welcome)
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
-        setUpMechanicWelcomeActivity()
         mAuth?.signInWithEmailAndPassword("dpham@uco.edu", "123456")?.addOnCompleteListener {
             if (it.isSuccessful) {
                 val user = mAuth?.currentUser
@@ -55,6 +54,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         }?.addOnFailureListener {
             Log.d(MECHANIC_TAG, it.toString())
         }
+        setUpMechanicWelcomeActivity()
+
     }
 
     private fun setUpMechanicWelcomeActivity() {

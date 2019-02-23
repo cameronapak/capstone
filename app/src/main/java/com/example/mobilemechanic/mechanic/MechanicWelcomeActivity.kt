@@ -155,7 +155,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         }
     }
 
-
     fun createChoiceDialog(title: String): Dialog {
         var positive = ""
         var dialogBody: View? = null
@@ -178,6 +177,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
         dialogContainer.id_positive.setOnClickListener {
             Toast.makeText(this, "You pressed Positive!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "${choiceDialog.bundle}", Toast.LENGTH_LONG).show()
             choiceDialog.dismiss()
         }
 

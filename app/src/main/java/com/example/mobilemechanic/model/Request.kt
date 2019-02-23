@@ -10,60 +10,33 @@ enum class Status {
 data class Request(
     var objectID: String,
     var clientId: String,
-    var clientPhotoUrl: String,
     var mechanicId: String,
-    var description: String,
-    var vehicle: String,
-    var service: String,
+    var vehicle: Vehicle,
+    var service: Service,
     var status: Status,
     var timePosted: Long,
-    var timeCompleted: Long,
-    var availableTime: String,
-    var availableDay: String
-) : Parcelable {
-    constructor() : this(
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        Status.Request,
-        0L,
-        0L,
-        "",
-        ""
-    )
-
+    var timeCompleted: Long
+): Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        Status.values()[parcel.readInt()],
+        parcel.readParcelable(Vehicle::class.java.classLoader),
+        parcel.readParcelable(Service::class.java.classLoader),
+        Status.valueOf(parcel.readString()),
         parcel.readLong(),
-        parcel.readLong(),
-        parcel.readString(),
-        parcel.readString()
+        parcel.readLong()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(objectID)
         parcel.writeString(clientId)
-        parcel.writeString(clientPhotoUrl)
         parcel.writeString(mechanicId)
-        parcel.writeString(description)
-        parcel.writeString(vehicle)
-        parcel.writeString(service)
-        parcel.writeInt(status.ordinal)
+        parcel.writeParcelable(vehicle, flags)
+        parcel.writeParcelable(service, flags)
+        parcel.writeString(status.name)
         parcel.writeLong(timePosted)
         parcel.writeLong(timeCompleted)
-        parcel.writeString(availableTime)
-        parcel.writeString(availableDay)
     }
 
     override fun describeContents(): Int {
@@ -79,4 +52,5 @@ data class Request(
             return arrayOfNulls(size)
         }
     }
+
 }

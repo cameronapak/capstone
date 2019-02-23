@@ -10,14 +10,10 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
-import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
@@ -109,32 +105,33 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val clientId = mAuth?.currentUser?.uid
             val currentTime = System.currentTimeMillis()/1000
             var clientPhotoUrl = mAuth?.currentUser?.photoUrl.toString()
-            if (clientId != null) {
-                val request = Request(
-                    "requestID",
-                    clientId,
-                    clientPhotoUrl,
-                    service.uid,
-                    service.description,
-                    vehicle,
-                    service.serviceType,
-                    Status.Request,
-                    currentTime,
-                    -1,
-                    "$fromTime to $toTime",
-                    "$daysOfWeekString"
-                )
-                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] request $request")
+//            if (clientId != null) {
+//                val request = Request(
+//                    "requestID",
+//                    clientId,
+//                    clientPhotoUrl,
+//                    service.uid,
+//                    service.description,
+//                    vehicle,
+//                    service.serviceType,
+//                    Status.Request,
+//                    currentTime,
+//                    -1,
+//                    "$fromTime to $toTime",
+//                    "$daysOfWeekString"
+//                )
+//                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] request $request")
+//
+//                requestsRef.document().set(request).addOnSuccessListener {
+//                    Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG)
+//                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
+//                    finish()
+//                }?.addOnFailureListener {
+//                    Log.d(CLIENT_TAG, it.message)
+//                    Toast.makeText(this, "Request failed", Toast.LENGTH_LONG)
+//                }
+//            }
 
-                requestsRef.document().set(request).addOnSuccessListener {
-                    Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG)
-                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
-                    finish()
-                }?.addOnFailureListener {
-                    Log.d(CLIENT_TAG, it.message)
-                    Toast.makeText(this, "Request failed", Toast.LENGTH_LONG)
-                }
-            }
         }
     }
 

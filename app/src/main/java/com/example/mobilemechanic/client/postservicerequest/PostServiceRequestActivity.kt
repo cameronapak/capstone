@@ -14,10 +14,14 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
+import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.view.*
@@ -25,14 +29,21 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 const val POST_SERVICE_TAG = "postservice"
-class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener  {
 
+class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var requestRef: CollectionReference
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
+        mFirestore = FirebaseFirestore.getInstance()
+        requestRef = mFirestore.collection("Requests")
+        mAuth = FirebaseAuth.getInstance()
         setUpPostServiceRequestActivity()
     }
 
@@ -52,7 +63,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpAvailabilityDialog() {
-//        val dialogContainer = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         dialogContainer = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_availability, null)
         val basicDialog = BasicDialog.Builder.apply {
@@ -83,9 +93,24 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val vehicle = id_vehicle_spinner.selectedItem.toString()
             val comment = id_comment.text
             Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ndescription: $comment")
-
-            // Create request and submit to database.
-
+            val clientId = mAuth?.currentUser?.uid
+            val currentTime = System.currentTimeMillis()/1000
+            if (clientId != null) {
+//                val request = Request(
+//                    clientId,
+//                    service.uid,
+//                    service.description,
+//                    vehicle,
+//                    service.serviceType,
+//                    Status.Request,
+//                    currentTime,
+//                    -1
+//                )
+//
+//                requestRef.document().set(request).addOnSuccessListener {
+//                    Toast.makeText(this, "Request sent successfully.", Toast.LENGTH_LONG)
+//                }
+            }
             startActivity(Intent(this, ClientWelcomeActivity::class.java))
         }
     }
@@ -98,19 +123,23 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun validateForm() {
         if ((id_vehicle_spinner.selectedItemPosition == 0)) {
-                disableSubmitButton()
+            disableSubmitButton()
         } else {
-                enableSubmitButton()
+            enableSubmitButton()
         }
     }
 
 
     private fun setUpVehicleSpinner() {
         id_vehicle_spinner.onItemSelectedListener = this
-        val vehicles = arrayOf("Vehicle", "2011 Toyota Venza")
-              .asList()
+        val vehicles = ArrayList<String>()
+        vehicles.add("Vehicle")
 
-//        val vehicles = arrayOf("Vehicle").asList()
+        val vehicle = Vehicle("vehicleID", "2011", "Toyota", "Venza", "")
+
+        vehicles.add(vehicle.toString())
+        vehicles.add(vehicle.toString())
+        vehicles.add(vehicle.toString())
 
         id_vehicle_spinner.adapter =
             HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
@@ -145,7 +174,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 dialogBody.id_sun_checkbox
             )
 
-            var daysOfWeek = listOf("mon","tues","wed","thur","fri","sat","sun")
+            var daysOfWeek = listOf("mon", "tues", "wed", "thur", "fri", "sat", "sun")
 
             // add checked days of week to an array
             for ((index, day) in checkBoxArray.withIndex()) {
@@ -157,7 +186,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val daysOfWeekString = daysOfWeek.joinToString(separator = ", ")
             val fromTime = dialogContainer.id_btnFromTime.text
             val toTime = dialogContainer.id_btnToTime.text
-            id_availability.text = "Available from $fromTime to $toTime on $daysOfWeekString"
+//            id_availability.text = "Available from $fromTime to $toTime on $daysOfWeekString"
+            id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
 
             basicDialog.dismiss()
         }
@@ -189,7 +219,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_submit.setBackgroundResource(R.drawable.button_round_corner)
     }
 
-    private fun isGarageEmpty(vehicles: List<String>): Boolean {
+    private fun isGarageEmpty(vehicles: ArrayList<String>): Boolean {
         if (vehicles.size <= 1) {
             return true
         }
@@ -217,7 +247,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         var hour = c.get(Calendar.HOUR)
         val minute = c.get(Calendar.MINUTE)
 
-        val tpd = TimePickerDialog(this,TimePickerDialog.OnTimeSetListener { v, h, m ->
+        val tpd = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { v, h, m ->
             val time = (if (h > 12) "${h % 12}:" else "${if (h == 0) "12" else h}:").toString() +
                     (if (m < 10) "0${m}" else "${m}").toString() +
                     (if (h >= 12) " PM" else " AM").toString()
@@ -226,14 +256,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
             when (view.id) {
                 dialogContainer.id_btnFromTime.id -> {
-                    dialogContainer.id_btnFromTime.text = time.toString()
+                    dialogContainer.id_btnFromTime.text = time
                 }
                 dialogContainer.id_btnToTime.id -> {
-                    dialogContainer.id_btnToTime.text = time.toString()
+                    dialogContainer.id_btnToTime.text = time
                 }
             }
 
-        },hour,minute,false)
+        }, hour, minute, false)
 
         tpd.show()
     }

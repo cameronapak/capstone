@@ -16,17 +16,14 @@ import android.view.View
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Service
-import com.example.mobilemechanic.model.Status
-import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
-import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
+import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 
 const val EXTRA_REQUEST = "service_request"
 const val REQ_CODE_MORE_INFO = 1
@@ -71,14 +68,14 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun mockRequests() {
-        for (i in 0..10) {
-            val mockService = Service("Oil Change", 20.00, "")
-            val mockRequest = Request(
-                "12345", "12345", "Need an oil change!",
-                Vehicle(), mockService, Status.Request, System.currentTimeMillis(), 0L
-            )
-            requests.add(mockRequest)
-        }
+//        for (i in 0..10) {
+////            val mockService = Service("Oil Change", 20.00, "")
+////            val mockRequest = Request(
+////                "12345", "12345", "Need an oil change!",
+////                Vehicle(), mockService, Status.Request, System.currentTimeMillis(), 0L
+////            )
+////            requests.add(mockRequest)
+//        }
     }
 
     private fun setUpToolBar() {

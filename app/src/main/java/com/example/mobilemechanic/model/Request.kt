@@ -3,37 +3,63 @@ package com.example.mobilemechanic.model
 import android.os.Parcel
 import android.os.Parcelable
 
-enum class Status
-{
+enum class Status {
     Request, Active, Complete
 }
 
-data class Request(var clientId: String, var mechanicId: String, var description: String, var vehicle: Vehicle,
-                   var service: Service, var status: Status, var timePosted: Long, var timeCompleted: Long) : Parcelable
-{
-    constructor() : this("", "", "",
-        Vehicle(), Service(), Status.Request, 0L, 0L)
+data class Request(
+    var objectID: String,
+    var clientId: String,
+    var mechanicId: String,
+    var description: String,
+    var vehicle: String,
+    var service: String,
+    var status: Status,
+    var timePosted: Long,
+    var timeCompleted: Long,
+    var availableTime: String,
+    var availableDay: String
+) : Parcelable {
+    constructor() : this(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        Status.Request,
+        0L,
+        0L,
+        "",
+        ""
+    )
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readTypedObject(Vehicle),
-        parcel.readTypedObject(Service),
+        parcel.readString(),
+        parcel.readString(),
+        parcel.readString(),
         Status.values()[parcel.readInt()],
         parcel.readLong(),
-        parcel.readLong()
+        parcel.readLong(),
+        parcel.readString(),
+        parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(objectID)
         parcel.writeString(clientId)
         parcel.writeString(mechanicId)
         parcel.writeString(description)
-        parcel.writeTypedObject(vehicle, flags)
-        parcel.writeTypedObject(service, flags)
+        parcel.writeString(vehicle)
+        parcel.writeString(service)
         parcel.writeInt(status.ordinal)
         parcel.writeLong(timePosted)
         parcel.writeLong(timeCompleted)
+        parcel.writeString(availableTime)
+        parcel.writeString(availableDay)
     }
 
     override fun describeContents(): Int {

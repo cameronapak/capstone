@@ -11,7 +11,6 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
 import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
 
 class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
     RecyclerView.Adapter<ClientHistoryRecyclerAdapter.ViewHolder>() {
@@ -32,14 +31,14 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val request = dataset[position]
-        var type = "${request.service.serviceType}"
-
-        if(request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
-        else holder.serviceProgress.text = "Service in Progress"
-
-        holder.name.text = "${request.mechanicId}"
-        holder.description.text = "${type} for ${request.vehicle.year} ${request.vehicle.make} ${request.vehicle.model}"
-
+//        var type = "${request.service.serviceType}"
+//
+//        if(request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
+//        else holder.serviceProgress.text = "Service in Progress"
+//
+//        holder.name.text = "${request.mechanicId}"
+//        holder.description.text = "${type} for ${request.vehicle.year} ${request.vehicle.make} ${request.vehicle.model}"
+//
 
         holder.rateButton.setOnClickListener {
 

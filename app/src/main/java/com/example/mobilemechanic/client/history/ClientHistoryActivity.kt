@@ -6,7 +6,10 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.*
+import com.example.mobilemechanic.model.DataProviderManager
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Service
+import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_history.*
 
@@ -25,7 +28,8 @@ class ClientHistoryActivity : AppCompatActivity() {
 
         //Mock data
         val vehicle = Vehicle(
-            2011,
+            "",
+            "2011",
             "Toyota",
             "Venza",
             ""
@@ -37,23 +41,24 @@ class ClientHistoryActivity : AppCompatActivity() {
             ""
         )
 
-        val r = Request(
-            " Client",     //Temporary used for Name
-            "Jason",    //Temporary used for Name
-            "",
-            vehicle,
-            service,
-            Status.Complete,
-            0L,
-            0L
-        )
-
-        request.add(r)
-        request.add(r)
-        request.add(r)
-        request.add(r)
-        request.add(r)
-        request.add(r)
+//        val r = Request(
+//            "objectID",
+//            "ClientId",     //Temporary used for Name
+//            "MechanicId",    //Temporary used for Name
+//            "description",
+//            vehicle.toString(),
+//            service,
+//            Status.Complete,
+//            0L,
+//            0L
+//        )
+//
+//        request.add(r)
+//        request.add(r)
+//        request.add(r)
+//        request.add(r)
+//        request.add(r)
+//        request.add(r)
 
         val historyAdapter = ClientHistoryRecyclerAdapter(this, request)
         id_recyclerview_history.apply {

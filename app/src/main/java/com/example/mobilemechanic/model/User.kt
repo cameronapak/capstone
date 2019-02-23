@@ -16,7 +16,6 @@ data class User(var uid: String, var email: String, var password: String, var us
         "", "", "", "")
 
     var vehicles: ArrayList<Vehicle>? = ArrayList()
-    var services: ArrayList<Service>? = ArrayList()
     var rating: Float = 0f
 
     constructor(parcel: Parcel) : this(
@@ -37,9 +36,6 @@ data class User(var uid: String, var email: String, var password: String, var us
         arrayListOf<Vehicle>().apply{
             parcel.readList(this, Vehicle::class.java.classLoader)
         }
-        arrayListOf<Service>().apply{
-            parcel.readList(this, Service::class.java.classLoader)
-        }
         rating = parcel.readFloat()
     }
 
@@ -58,7 +54,6 @@ data class User(var uid: String, var email: String, var password: String, var us
         parcel.writeString(zipCode)
         parcel.writeString(photoUrl)
         parcel.writeList(vehicles)
-        parcel.writeList(services)
         parcel.writeFloat(rating)
     }
 

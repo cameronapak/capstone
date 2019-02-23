@@ -15,6 +15,7 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.mechanic.REQ_CODE_MORE_INFO
 import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.shared.BasicDialog
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -79,6 +80,7 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
             choiceButton.setOnClickListener {
                 val choiceDialog =
                     (context as MechanicWelcomeActivity).createChoiceDialog(choiceButton.text.toString())
+                (choiceDialog as BasicDialog).bundle.putInt("position", position)
                 choiceDialog.show()
             }
         }

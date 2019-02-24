@@ -22,6 +22,7 @@ class BasicDialog(parentActivity: Activity, container: View, bodyView: View)
             var title = "Title"
             var positive = "Yes"
             var negative = "No"
+            var dataListPosition = 0
 
             fun build(parentActivity: Activity, container: View, bodyView: View) : BasicDialog{
                 var dialog = BasicDialog(parentActivity, container, bodyView)

@@ -105,6 +105,7 @@ class MechanicServicesActivity : AppCompatActivity() {
             val service = DataProviderManager.getAllServices()
             dialogBody.add_service_spinner.adapter =
                 HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
+
             basicDialog = BasicDialog.Builder.apply {
                 title = "Add Service"
                 positive = "Add"

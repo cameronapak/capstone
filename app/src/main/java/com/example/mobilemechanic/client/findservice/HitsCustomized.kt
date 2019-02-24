@@ -29,9 +29,6 @@ import com.algolia.instantsearch.core.model.*
 import com.algolia.instantsearch.core.utils.JSONUtils
 import com.algolia.instantsearch.ui.databinding.BindingHelper
 import com.algolia.instantsearch.ui.databinding.RenderingHelper
-import com.algolia.instantsearch.ui.utils.ItemClickSupport
-import com.algolia.instantsearch.ui.utils.ItemClickSupport.OnItemClickListener
-import com.algolia.instantsearch.ui.utils.ItemClickSupport.OnItemLongClickListener
 import com.algolia.instantsearch.ui.utils.LayoutViews
 import com.algolia.instantsearch.ui.views.AlgoliaHitView
 import com.algolia.search.saas.AlgoliaException
@@ -58,7 +55,7 @@ class HitsCustomized
     var adapter: HitsAdapter
     lateinit var searcher: Searcher
     private var imeManager: InputMethodManager
-    private lateinit var gson: Gson
+    private var gson: Gson
     protected var infiniteScrollListener: InfiniteScrollListener?
     private var keyboardListener: RecyclerView.OnScrollListener? = null
     private var emptyView: View? = null
@@ -116,16 +113,6 @@ class HitsCustomized
         if (infiniteScroll) {
             addOnScrollListener(infiniteScrollListener!!)
         }
-    }
-
-    fun setOnItemClickListener(listener: OnItemClickListener) {
-
-        ItemClickSupport.addTo(this).setOnItemClickListener(listener)
-    }
-
-    fun setOnItemLongClickListener(listener: OnItemLongClickListener) {
-
-        ItemClickSupport.addTo(this).setOnItemLongClickListener(listener)
     }
 
     fun clear() {

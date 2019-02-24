@@ -1,7 +1,4 @@
 <resources>
-    <string name="algolia_app_id">YVL1UI29QL</string>
-    <string name="algolia_api_key">d1e8a0c7b4dfaaeafbcc1b6d48d7e5fc</string>
-    <string name="algolia_services_index">services</string>
     <string name="app_name"></string>
     <string name="text_notification">Notification</string>
     <string name="text_find_service">Find Service</string>
@@ -20,7 +17,7 @@
     <string name="text_rating_initial">0</string>
     <string name="text_rating_wrong">What went Wrong?</string>
     <string name="text_rating_comment">Comment</string>
-    <string name="text_rating_subititle">Rate the service</string>
+    <string name="text_rating_subitle">Rate the service</string>
     <string name="text_service">Service</string>
 
     <string name="notification">Notification</string>
@@ -57,6 +54,7 @@
     <string name="hint_registration_zipcode">Zip</string>
     <string name="hint_register_button">Register</string>
     <string name="hint_signIn">Sign In</string>
+    <string name="service">Service</string>
     <string name="form">Form</string>
 
     <string name="email_identification">Are you %1$s?</string>
@@ -125,6 +123,5 @@
     <string name="text_accept">Accept</string>
     <string name="text_remove">Remove</string>
     <string name="text_update">Update</string>
-    <string name="text_filter">Filter</string>
 
 </resources>

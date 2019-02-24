@@ -1,4 +1,9 @@
 <resources>
+    <string name="algolia_app_id">YVL1UI29QL</string>
+    <string name="algolia_api_key">d1e8a0c7b4dfaaeafbcc1b6d48d7e5fc</string>
+    <string name="algolia_services_index">services</string>
+
+
     <string name="app_name"></string>
     <string name="text_notification">Notification</string>
     <string name="text_find_service">Find Service</string>
@@ -19,6 +24,7 @@
     <string name="text_rating_comment">Comment</string>
     <string name="text_rating_subitle">Rate the service</string>
     <string name="text_service">Service</string>
+    <string name="text_filter">Filter</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>

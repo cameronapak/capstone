@@ -20,6 +20,18 @@ data class Request(
     var postedOn: Long?,
     var acceptedOn: Long?
 ) : Parcelable {
+    constructor() : this(
+        "",
+        ClientInfo(),
+        MechanicInfo(),
+        Service(),
+        Vehicle(),
+        "",
+        Status.Request,
+        -1,
+        -1
+    )
+
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readParcelable(ClientInfo::class.java.classLoader),

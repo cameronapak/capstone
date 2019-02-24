@@ -1,6 +1,7 @@
 package com.example.mobilemechanic.client.history
 
 import android.content.Context
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,9 +9,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
+import com.example.mobilemechanic.model.Receipt
+import com.example.mobilemechanic.model.Status
 
-class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
+class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Receipt>) :
     RecyclerView.Adapter<ClientHistoryRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,22 +31,21 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val request = dataset[position]
-//        var type = "${request.service.serviceType}"
-//
-//        if(request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
-//        else holder.serviceProgress.text = "Service in Progress"
-//
-//        holder.name.text = "${request.mechanicId}"
-//        holder.description.text = "${type} for ${request.vehicle.year} ${request.vehicle.make} ${request.vehicle.model}"
-//
+        val receipt = dataset[position]
+        var type = "${receipt.request.service?.serviceType}"
+
+        if (receipt.request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
+        else holder.serviceProgress.text = "Service in Progress"
+
+        holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName}"
+        holder.description.text =
+            "$type for ${receipt.request.vehicle?.year} ${receipt.request.vehicle?.make} ${receipt.request.vehicle?.model}"
+
 
         holder.rateButton.setOnClickListener {
-
-//            val intent = Intent(context, ServiceRatingActivity::class.java)
-//            intent.putExtra("name", "${request.mechanicId}")
-//            context.startActivity(intent)
-
+            val intent = Intent(context, ServiceRatingActivity::class.java)
+            intent.putExtra("name", "${receipt.request.mechanicInfo?.uid}")
+            context.startActivity(intent)
         }
 
         holder.detailsButton.setOnClickListener {

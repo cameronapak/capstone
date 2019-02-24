@@ -8,13 +8,23 @@ enum class Status
     Request, Active, Complete
 }
 
-data class Request(var clientId: String, var mechanicId: String, var description: String, var vehicle: Vehicle,
-                   var service: Service, var status: Status, var timePosted: Long, var timeCompleted: Long) : Parcelable
+data class Request(
+    var objectID: String,
+    var clientID: String,
+    var mechanicID: String,
+    var description: String,
+    var vehicle: Vehicle,
+    var service: Service,
+    var status: Status,
+    var timePosted: Long,
+    var timeCompleted: Long
+) : Parcelable
 {
-    constructor() : this("", "", "",
+    constructor() : this("", "", "", "",
         Vehicle(), Service(), Status.Request, 0L, 0L)
 
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
@@ -26,8 +36,9 @@ data class Request(var clientId: String, var mechanicId: String, var description
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(clientId)
-        parcel.writeString(mechanicId)
+        parcel.writeString(objectID)
+        parcel.writeString(clientID)
+        parcel.writeString(mechanicID)
         parcel.writeString(description)
         parcel.writeTypedObject(vehicle, flags)
         parcel.writeTypedObject(service, flags)

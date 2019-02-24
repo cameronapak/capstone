@@ -23,18 +23,22 @@ import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
+import kotlinx.android.synthetic.main.dialog_container_basic.*
 
 const val EXTRA_REQUEST = "service_request"
 const val REQ_CODE_MORE_INFO = 1
 const val MECHANIC_TAG = "mechanic"
+
 class MechanicWelcomeActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var requestRef: CollectionReference
 
     private lateinit var mDrawerLayout: DrawerLayout
     private lateinit var viewManager: LinearLayoutManager
@@ -60,7 +64,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
     private fun setUpMechanicWelcomeActivity() {
        //mockLogin()       // Replace with real login later
-        mockRequests()    // Replace with real requests later
+        //mockRequests()    // Replace with real requests later
         setUpToolBar()
         setUpDrawerMenu()
         setUpNavigationListener()
@@ -83,7 +87,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         for (i in 0..10) {
             val mockService = Service("Oil Change", 20.00, "")
             val mockRequest = Request(
-                "12345", "12345", "Need an oil change!",
+                "", "12345", "12345", "Need an oil change!",
                 Vehicle(), mockService, Status.Request, System.currentTimeMillis(), 0L
             )
             requests.add(mockRequest)
@@ -152,6 +156,25 @@ class MechanicWelcomeActivity : AppCompatActivity() {
             adapter = mechanicRequestListAdapter
 
         }
+        reactiveRequestRecyclerView()
+    }
+
+    private fun reactiveRequestRecyclerView() {
+        requestRef.whereEqualTo("mechanicID", mAuth?.currentUser?.uid.toString())
+            ?.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    return@addSnapshotListener
+                }
+                requests.clear()
+                for (doc in querySnapshot!!) {
+                    if(doc["status"] != Status.Complete.name) {
+                        val request = doc.toObject(Request::class.java)
+                        request.objectID = doc.id
+                        requests.add(request)
+                    }
+                }
+                mechanicRequestListAdapter.notifyDataSetChanged()
+            }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -162,40 +185,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
             }
             else -> super.onOptionsItemSelected(item)
         }
-    }
-
-    fun createChoiceDialog(title: String): Dialog {
-        var positive = ""
-        var dialogBody: View? = null
-        if (title == getString(R.string.label_choice_accept)) {
-            positive = getString(R.string.yes)
-            dialogBody = layoutInflater.inflate(R.layout.dialog_body_choice, null)
-        } else if (title == getString(R.string.label_choice_complete)) {
-            positive = getString(R.string.label_choice_confirm)
-            dialogBody = layoutInflater.inflate(R.layout.dialog_body_complete, null)
-        }
-
-        val dialogContainer = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
-
-        var choiceDialog = BasicDialog.Builder.apply {
-            this.title = title
-            this.positive = positive
-            negative = getString(R.string.label_cancel_add_service)
-        }.build(this, dialogContainer, dialogBody!!)
-
-
-        dialogContainer.id_positive.setOnClickListener {
-            Toast.makeText(this, "You pressed Positive!", Toast.LENGTH_SHORT).show()
-            Toast.makeText(this, "${choiceDialog.bundle}", Toast.LENGTH_LONG).show()
-            choiceDialog.dismiss()
-        }
-
-        dialogContainer.id_negative.setOnClickListener {
-            Toast.makeText(this, "You pressed Negative!", Toast.LENGTH_SHORT).show()
-            choiceDialog.dismiss()
-        }
-
-        return choiceDialog
     }
 
     override fun onResume() {

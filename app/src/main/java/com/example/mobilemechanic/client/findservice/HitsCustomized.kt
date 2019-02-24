@@ -464,7 +464,7 @@ class HitsCustomized
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val viewMap = HashMap<View, String>()
             private val defaultValue = "ADefaultValueForHitsVariant"
-            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_mechanic_name)
+            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_client_name)
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
 

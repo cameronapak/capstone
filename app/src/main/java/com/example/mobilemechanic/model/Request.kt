@@ -18,7 +18,8 @@ data class Request(
     var comment: String?,
     var status: Status?,
     var postedOn: Long?,
-    var acceptedOn: Long?
+    var acceptedOn: Long?,
+    var completedOn: Long?
 ) : Parcelable {
     constructor() : this(
         "",
@@ -28,8 +29,9 @@ data class Request(
         Vehicle(),
         "",
         Status.Request,
-        -1,
-        -1
+        Long.MIN_VALUE,
+        Long.MIN_VALUE,
+        Long.MIN_VALUE
     )
 
     constructor(parcel: Parcel) : this(
@@ -40,6 +42,7 @@ data class Request(
         parcel.readParcelable(Vehicle::class.java.classLoader),
         parcel.readString(),
         Status.valueOf(parcel.readString()),
+        parcel.readLong(),
         parcel.readLong(),
         parcel.readLong()
     )
@@ -54,6 +57,7 @@ data class Request(
         parcel.writeString(status?.name)
         postedOn?.let { parcel.writeLong(it) }
         acceptedOn?.let { parcel.writeLong(it) }
+        completedOn?.let { parcel.writeLong(it) }
     }
 
     override fun describeContents(): Int {
@@ -79,8 +83,9 @@ data class Request(
         var vehicle: Vehicle? = null,
         var comment: String? = null,
         var status: Status? = null,
-        var postedOn: Long? = null,
-        var acceptedOn: Long? = null
+        var postedOn: Long? = Long.MIN_VALUE,
+        var acceptedOn: Long? = Long.MIN_VALUE,
+        var completedOn: Long? = Long.MIN_VALUE
     ) {
         fun clientInfo(info: ClientInfo) = apply { this.clientInfo = info }
         fun mechanicInfo(info: MechanicInfo) = apply { this.mechanicInfo = info }
@@ -90,7 +95,8 @@ data class Request(
         fun status(status: Status) = apply { this.status = status }
         fun postedOn(posted: Long) = apply { this.postedOn = posted }
         fun acceptedOn(accepted: Long) = apply { this.acceptedOn = accepted }
+        fun completedOn(completed: Long) = apply { this.completedOn = completed }
         fun build() =
-            Request("", clientInfo, mechanicInfo, service, vehicle, comment, status, postedOn, acceptedOn)
+            Request("", clientInfo, mechanicInfo, service, vehicle, comment, status, postedOn, acceptedOn, completedOn)
     }
 }

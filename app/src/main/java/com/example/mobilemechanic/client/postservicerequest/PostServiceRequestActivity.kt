@@ -96,7 +96,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_mechanic_name.text =
+            id_client_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description

@@ -61,6 +61,7 @@ class ClientHistoryActivity : AppCompatActivity() {
             .status(Status.Request)
             .postedOn(currentTime)
             .acceptedOn(-1)
+            .completedOn(-1)
             .build()
 
         val mockedReceipt = Receipt("receiptID", request, 30.0, 1.5, 31.5)

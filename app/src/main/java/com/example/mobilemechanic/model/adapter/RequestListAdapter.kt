@@ -15,13 +15,13 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.mechanic.REQ_CODE_MORE_INFO
 import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
+import java.text.SimpleDateFormat
 import java.util.*
 
 class RequestListAdapter(var context: Context, var requests: ArrayList<Request>) :
     RecyclerView.Adapter<RequestListAdapter.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestListAdapter.ViewHolder
-    {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestListAdapter.ViewHolder {
         val view = LayoutInflater.from(context)
             .inflate(R.layout.recyclerview_item_request, parent, false)
         return ViewHolder(view)
@@ -31,55 +31,51 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
         return requests.size
     }
 
-    override fun onBindViewHolder(holder: RequestListAdapter.ViewHolder, position: Int)
-    {
-        holder.bindItem(position)
+    override fun onBindViewHolder(holder: RequestListAdapter.ViewHolder, position: Int) {
+        val request = requests[position]
+        //fill card view
+        holder.name.text =
+            "${requests[position].clientInfo?.basicInfo?.firstName} ${requests[position].clientInfo?.basicInfo?.lastName}"
+        holder.status.text = request.status.toString()
+        holder.description.text = request.comment
+        //location.text = "0 mi"
+        /*TO DO
+        Add: - profile photo url downloads photo into image container
+             - location calculation
+         */
+
+            holder.timeStamp.text = if(request.completedOn!! > 0){
+                val time = Date(request.completedOn!!)
+                val dateFormat = SimpleDateFormat("MMM d, y")
+                val date = dateFormat.format(time)
+                context.getString(R.string.complete_on, date)
+            } else {
+                val time = Date(request.postedOn!!)
+                val dateFormat = SimpleDateFormat("MMM d, y")
+                val date = dateFormat.format(time)
+                context.getString(R.string.request_on, date)
+            }
+
+        holder.infoButton.setOnClickListener {
+            val intent = Intent(context, MechanicMoreInformationActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, requests[position])
+            (context as Activity).startActivityForResult(intent, REQ_CODE_MORE_INFO)
+        }
+
+        holder.choiceButton.setOnClickListener {
+            val choiceDialog =
+                (context as MechanicWelcomeActivity).createChoiceDialog(holder.choiceButton.text.toString())
+            choiceDialog.show()
+        }
     }
 
-    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v)
-    {
-        fun bindItem(position: Int)
-        {
-            val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
-            val description = itemView.findViewById<TextView>(R.id.id_description)
-            val status = itemView.findViewById<TextView>(R.id.id_service_type)
-            //val location = itemView.findViewById<TextView>(R.id.text_distance)
-            val infoButton = itemView.findViewById<Button>(R.id.id_button_info)
-            val choiceButton = itemView.findViewById<Button>(R.id.id_select)
-
-            //fill card view
-            //name.text = "${requests[position].clientInfo.firstName} ${requests[position].clientInfo.lastName}"
-//            status.text = requests[position].status.name
-//            description.text = requests[position].description
-            //location.text = "0 mi"
-            /*TO DO
-            Add: - profile photo url downloads photo into image container
-                 - location calculation
-             */
-
-//            timeStamp.text = if(requests[position].timeCompleted > 0){
-//                val time = Date(requests[position].timeCompleted)
-//                val dateFormat = SimpleDateFormat("MMM d, y")
-//                val date = dateFormat.format(time)
-//                context.getString(R.string.complete_on, date)
-//            } else {
-//                val time = Date(requests[position].timePosted)
-//                val dateFormat = SimpleDateFormat("MMM d, y")
-//                val date = dateFormat.format(time)
-//                context.getString(R.string.request_on, date)
-//            }
-
-            infoButton.setOnClickListener {
-                val intent = Intent(context, MechanicMoreInformationActivity::class.java)
-                intent.putExtra(EXTRA_REQUEST, requests[position])
-                (context as Activity).startActivityForResult(intent, REQ_CODE_MORE_INFO)
-            }
-
-            choiceButton.setOnClickListener {
-                val choiceDialog =
-                    (context as MechanicWelcomeActivity).createChoiceDialog(choiceButton.text.toString())
-                choiceDialog.show()
-            }
-        }
+    inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val name = itemView.findViewById<TextView>(R.id.id_client_name)
+        val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
+        val description = itemView.findViewById<TextView>(R.id.id_description)
+        val status = itemView.findViewById<TextView>(R.id.id_service_type)
+        //val location = itemView.findViewById<TextView>(R.id.text_distance)
+        val infoButton = itemView.findViewById<Button>(R.id.id_button_info)
+        val choiceButton = itemView.findViewById<Button>(R.id.id_select)
     }
 }

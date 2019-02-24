@@ -1,6 +1,5 @@
 package com.example.mobilemechanic.mechanic
 
-import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.NavigationView
@@ -12,23 +11,18 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
-import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
-import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
-import kotlinx.android.synthetic.main.dialog_container_basic.*
 
 const val EXTRA_REQUEST = "service_request"
 const val REQ_CODE_MORE_INFO = 1
@@ -50,14 +44,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mechanic_welcome)
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
-        mAuth?.signInWithEmailAndPassword("dpham@uco.edu", "123456")?.addOnCompleteListener {
-            if (it.isSuccessful) {
-                val user = mAuth?.currentUser
-                Log.d(MECHANIC_TAG, "you is logged in ${user?.uid}")
-            }
-        }?.addOnFailureListener {
-            Log.d(MECHANIC_TAG, it.toString())
-        }
+        requestRef = mFirestore.collection("Requests")
         setUpMechanicWelcomeActivity()
 
     }
@@ -72,15 +59,14 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun mockLogin() {
-        mAuth?.signInWithEmailAndPassword("datm@gmail.com", "123456")
-            ?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val user = mAuth?.currentUser
-                    Log.d(MECHANIC_TAG, "you is logged in ${user?.uid}")
-                }
-            }?.addOnFailureListener {
-                Log.d(MECHANIC_TAG, it.toString())
+        mAuth?.signInWithEmailAndPassword("dpham@uco.edu", "123456")?.addOnCompleteListener {
+            if (it.isSuccessful) {
+                val user = mAuth?.currentUser
+                Log.d(MECHANIC_TAG, "you is logged in ${user?.uid}")
             }
+        }?.addOnFailureListener {
+            Log.d(MECHANIC_TAG, it.toString())
+        }
     }
 
     private fun mockRequests() {

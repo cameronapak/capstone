@@ -2,7 +2,6 @@ package com.example.mobilemechanic.shared
 
 import android.app.Activity
 import android.app.Dialog
-import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -14,15 +13,12 @@ import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 class BasicDialog(parentActivity: Activity, container: View, bodyView: View)
     : Dialog(parentActivity)
 {
-    var bundle = Bundle()
-
     class Builder
     {
         companion object {
             var title = "Title"
             var positive = "Yes"
             var negative = "No"
-            var dataListPosition = 0
 
             fun build(parentActivity: Activity, container: View, bodyView: View) : BasicDialog{
                 var dialog = BasicDialog(parentActivity, container, bodyView)

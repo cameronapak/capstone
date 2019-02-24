@@ -46,9 +46,9 @@ class ServiceListAdapter(var context: Context, var serviceArray: ArrayList<Servi
             val updateBtn = itemView.findViewById<Button>(R.id.id_select)
             val removeBtn = itemView.findViewById<Button>(R.id.id_button_remove)
 
-            serviceType.text = serviceItem.serviceType
-            price.text = serviceItem.price.toString()
-            description.text = serviceItem.description
+            serviceType.text = serviceItem.service.serviceType
+            price.text = serviceItem.service.price.toString()
+            description.text = serviceItem.service.description
 
 
             removeBtn.setOnClickListener {

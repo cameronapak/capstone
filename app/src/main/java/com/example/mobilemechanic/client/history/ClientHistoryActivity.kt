@@ -37,8 +37,8 @@ class ClientHistoryActivity : AppCompatActivity() {
 
         val service = Service(
             "${DataProviderManager.getAllServices()[1]}",
-            30.0,
-            ""
+            "",
+            30.0
         )
 
 //        val r = Request(

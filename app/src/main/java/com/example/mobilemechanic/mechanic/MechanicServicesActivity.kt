@@ -13,6 +13,8 @@ import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.adapter.ServiceListAdapter
 import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -80,7 +82,7 @@ class MechanicServicesActivity : AppCompatActivity() {
     }
 
     private fun reactiveServiceRecyclerView() {
-        serviceRef.whereEqualTo("uid", mAuth?.currentUser?.uid.toString())
+        serviceRef.whereEqualTo("mechanicInfo.uid", mAuth?.currentUser?.uid.toString())
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
@@ -89,7 +91,7 @@ class MechanicServicesActivity : AppCompatActivity() {
                 for (doc in querySnapshot!!) {
                     val service = doc.toObject(ServiceModel::class.java)
                     service.objectID = doc.id
-                    Log.d(MECHANIC_TAG, "[MechanicServices] snapshotListener service documentID: ${service.objectID}")
+                    Log.d(MECHANIC_TAG, "[MechanicServices] snapshotListener ServiceModel documentID: ${service.objectID}")
                     services.add(service)
                 }
                 mechanicServiceAdapter.notifyDataSetChanged()
@@ -119,11 +121,11 @@ class MechanicServicesActivity : AppCompatActivity() {
         basicDialog.id_positive.setOnClickListener {
             val serviceType = basicDialog.add_service_spinner.selectedItem.toString().trim()
             val cost = basicDialog.label_price.text.toString().trim()
-            val comment = basicDialog.label_comment.text.toString().trim()
-            val newService = Service(serviceType, parseDouble(cost), comment)
+            val description = basicDialog.label_comment.text.toString().trim()
+            val service = Service(serviceType, description, parseDouble(cost))
 
-            if (isFieldsValidated(newService)) {
-                addService(newService)
+            if (isFieldsValidated(service)) {
+                addService(service)
             } else {
                 Toast.makeText(this, "Please enter in all fields", Toast.LENGTH_LONG).show()
             }
@@ -135,26 +137,29 @@ class MechanicServicesActivity : AppCompatActivity() {
         }
     }
 
-    private fun addService(newService: Service) {
+    private fun addService(service: Service) {
         userAccountRef?.get()?.addOnSuccessListener {
             Log.d(MECHANIC_TAG, it.toString())
             val account = it.toObject(User::class.java)
             if (account != null) {
                 Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia account $account")
-                Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAloglia service  $newService")
+                Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia service  $service")
 
-                var service = ServiceModel(
-                    "",
+                val address = Address(account.address, account.city, account.state, account.zipCode)
+                val mechanicInfo = MechanicInfo(
+                    account.uid,
+                    account.email,
                     account.firstName,
                     account.lastName,
+                    account.phoneNumber,
                     account.photoUrl,
-                    account.uid,
-                    newService.serviceType,
-                    newService.price,
-                    newService.description,
-                    account.rating)
+                    address,
+                    account.rating
+                )
+
+                var service = ServiceModel("", mechanicInfo, service)
                 serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
-                    Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAloglia $documentRef")
+                    Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
                 }
             }
         }

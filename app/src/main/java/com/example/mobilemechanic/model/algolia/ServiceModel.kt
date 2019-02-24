@@ -2,51 +2,26 @@ package com.example.mobilemechanic.model.algolia
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.mobilemechanic.model.Service
+import com.example.mobilemechanic.model.dto.MechanicInfo
 
 data class ServiceModel(
     var objectID: String,
-    var mechanicFirstName: String,
-    var mechanicLastName: String,
-    var mechanicPhotoUrl: String,
-    var uid: String,
-    var serviceType: String,
-    var price: Double,
-    var description: String,
-    var rating: Float
+    var mechanicInfo: MechanicInfo,
+    var service: Service
 ) : Parcelable {
-    constructor() : this(
-        "",
-        "",
-        "",
-        "",
-        "",
-        "",
-        0.0,
-        "",
-        0.0f)
+    constructor() : this("", MechanicInfo(), Service())
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readDouble(),
-        parcel.readString(),
-        parcel.readFloat()
+        parcel.readParcelable(MechanicInfo::class.java.classLoader),
+        parcel.readParcelable(Service::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(objectID)
-        parcel.writeString(mechanicFirstName)
-        parcel.writeString(mechanicLastName)
-        parcel.writeString(mechanicPhotoUrl)
-        parcel.writeString(uid)
-        parcel.writeString(serviceType)
-        parcel.writeDouble(price)
-        parcel.writeString(description)
-        parcel.writeFloat(rating)
+        parcel.writeParcelable(mechanicInfo, flags)
+        parcel.writeParcelable(service, flags)
     }
 
     override fun describeContents(): Int {
@@ -64,14 +39,7 @@ data class ServiceModel(
     }
 
     override fun toString(): String {
-        return  "\nobjectID: $objectID\n" +
-                "mechanicFirstName: $mechanicFirstName\n" +
-                "mechanicLastName: $mechanicLastName\n" +
-                "mechanicPhotoUrl: $mechanicPhotoUrl\n" +
-                "uid: $uid\n" +
-                "serviceType: $serviceType\n" +
-                "price: $price\n" +
-                "description: $description\n" +
-                "rating: $rating\n"
+        return "\nobjectID: $objectID\n" +
+                "mechanicInfo: $mechanicInfo"
     }
 }

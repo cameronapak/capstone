@@ -1,7 +1,6 @@
 package com.example.mobilemechanic.client.history
 
 import android.content.Context
-import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -9,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
 import com.example.mobilemechanic.model.Request
 
 class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
@@ -42,9 +40,9 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
         holder.rateButton.setOnClickListener {
 
-            val intent = Intent(context, ServiceRatingActivity::class.java)
-            intent.putExtra("name", "${request.mechanicId}")
-            context.startActivity(intent)
+//            val intent = Intent(context, ServiceRatingActivity::class.java)
+//            intent.putExtra("name", "${request.mechanicId}")
+//            context.startActivity(intent)
 
         }
 

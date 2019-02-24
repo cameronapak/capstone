@@ -15,7 +15,6 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.mechanic.REQ_CODE_MORE_INFO
 import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
-import java.text.SimpleDateFormat
 import java.util.*
 
 class RequestListAdapter(var context: Context, var requests: ArrayList<Request>) :
@@ -50,25 +49,25 @@ class RequestListAdapter(var context: Context, var requests: ArrayList<Request>)
 
             //fill card view
             //name.text = "${requests[position].clientInfo.firstName} ${requests[position].clientInfo.lastName}"
-            status.text = requests[position].status.name
-            description.text = requests[position].description
+//            status.text = requests[position].status.name
+//            description.text = requests[position].description
             //location.text = "0 mi"
             /*TO DO
             Add: - profile photo url downloads photo into image container
                  - location calculation
              */
 
-            timeStamp.text = if(requests[position].timeCompleted > 0){
-                val time = Date(requests[position].timeCompleted)
-                val dateFormat = SimpleDateFormat("MMM d, y")
-                val date = dateFormat.format(time)
-                context.getString(R.string.complete_on, date)
-            } else {
-                val time = Date(requests[position].timePosted)
-                val dateFormat = SimpleDateFormat("MMM d, y")
-                val date = dateFormat.format(time)
-                context.getString(R.string.request_on, date)
-            }
+//            timeStamp.text = if(requests[position].timeCompleted > 0){
+//                val time = Date(requests[position].timeCompleted)
+//                val dateFormat = SimpleDateFormat("MMM d, y")
+//                val date = dateFormat.format(time)
+//                context.getString(R.string.complete_on, date)
+//            } else {
+//                val time = Date(requests[position].timePosted)
+//                val dateFormat = SimpleDateFormat("MMM d, y")
+//                val date = dateFormat.format(time)
+//                context.getString(R.string.request_on, date)
+//            }
 
             infoButton.setOnClickListener {
                 val intent = Intent(context, MechanicMoreInformationActivity::class.java)

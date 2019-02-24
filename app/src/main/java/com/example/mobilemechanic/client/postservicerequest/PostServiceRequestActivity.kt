@@ -17,7 +17,7 @@ import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
-import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -36,7 +36,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var requestsRef: CollectionReference
     private lateinit var vehiclesRef: CollectionReference
-    private lateinit var spinnerAdapter: HintSpinnerAdapter
+    private lateinit var spinnerAdapter: HintVehicleSpinnerAdapter
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
     private lateinit var daysOfWeekString: String
@@ -87,50 +87,44 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_mechanic_name.text = service.mechanicFirstName
-            id_service_type.text = service.serviceType
-            id_service_description.text = service.description
-            id_price.text = "$${service.price.toInt()}"
-            id_mechanic_rating.text = service.rating.toString()
+//            id_mechanic_name.text = service.mechanicFirstName
+//            id_service_type.text = service.serviceType
+//            id_service_description.text = service.description
+//            id_price.text = "$${service.price.toInt()}"
+//            id_mechanic_rating.text = service.rating.toString()
         }
     }
 
     private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
             validateForm()
-            val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            val vehicle = id_vehicle_spinner.selectedItem.toString()
-            val comment = id_comment.text
-            Log.d(POST_SERVICE_TAG, "service: $service\nvehicle: $vehicle\ndescription: $comment")
-            val clientId = mAuth?.currentUser?.uid
-            val currentTime = System.currentTimeMillis()/1000
-            var clientPhotoUrl = mAuth?.currentUser?.photoUrl.toString()
-//            if (clientId != null) {
-//                val request = Request(
-//                    "requestID",
-//                    clientId,
-//                    clientPhotoUrl,
-//                    service.uid,
-//                    service.description,
-//                    vehicle,
-//                    service.serviceType,
-//                    Status.Request,
-//                    currentTime,
-//                    -1,
-//                    "$fromTime to $toTime",
-//                    "$daysOfWeekString"
-//                )
-//                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] request $request")
+//            val serviceSelected = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+//            val vehicle = id_vehicle_spinner.selectedItem as Vehicle
+//            val service= Service(serviceSelected.serviceType, serviceSelected.description, serviceSelected.price)
+//            val comment = id_comment.text.toString()
+//            var availability = Availability(fromTime, toTime, availableDays)
 //
-//                requestsRef.document().set(request).addOnSuccessListener {
-//                    Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG)
-//                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
-//                    finish()
-//                }?.addOnFailureListener {
-//                    Log.d(CLIENT_TAG, it.message)
-//                    Toast.makeText(this, "Request failed", Toast.LENGTH_LONG)
-//                }
-//            }
+//            val mechanictInfo = MechanicInfo(serviceSelected.uid, serviceSelected.m, "Jason", "Statham", "1231231234", "", address)
+//
+//
+//
+//            val clientInfo = ClientInfo(userUid, "datm@gmail.com", "dat", "tran", "4041231234", "photoUrl", availability, address)
+//
+//            val currentTime = System.currentTimeMillis()/1000
+//
+//            val request = Request.Builder()
+//                .clientInfo(clientInfo)
+//                .mechanicInfo(mechanictInfo)
+//                .service(serviceSelected)
+//                .vehicle(vehicle)
+//                .comment(comment)
+//                .status(Status.Request)
+//                .postedOn(currentTime)
+//                .acceptedOn(-1)
+//                .build()
+//
+//            Log.d(CLIENT_TAG, "$request)")
+//            requestsRef.document().set(request)
 
         }
     }
@@ -150,23 +144,24 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun setUpVehicleSpinner() {
-        val vehicles = ArrayList<String>()
+        val vehicles = ArrayList<Vehicle>()
         id_vehicle_spinner.onItemSelectedListener = this
-        spinnerAdapter = HintSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
+        spinnerAdapter = HintVehicleSpinnerAdapter(this, R.layout.support_simple_spinner_dropdown_item, vehicles)
         vehiclesRef.addSnapshotListener { querySnapshot, exception ->
             if (exception != null) {
                 return@addSnapshotListener
             }
             vehicles.clear()
-            vehicles.add(HINT_VEHICLE)
+            vehicles.add(Vehicle("","","","",""))
+
             for (doc in querySnapshot!!) {
                 val vehicle = doc.toObject(Vehicle::class.java)
                 vehicle.objectID = doc.id
-                vehicles.add(vehicle.toString())
+                vehicles.add(vehicle)
                 Log.d(CLIENT_TAG, "[PostServiceRequestActivity] snapshotListener vehicle objectID: ${vehicle.objectID}")
             }
             spinnerAdapter.notifyDataSetChanged()
-            checkIfGarageIsEmpty(vehicles)
+//            checkIfGarageIsEmpty(vehicles)
         }
 
         id_vehicle_spinner.adapter = spinnerAdapter

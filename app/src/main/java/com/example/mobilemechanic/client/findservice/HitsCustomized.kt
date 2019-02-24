@@ -257,8 +257,6 @@ class HitsCustomized
     /**
      * Specify an empty View to display instead of these Hits when they are empty.
      * By default, we will search for a view with id `@android:id/empty` and will use it if it exists.
-     *
-     * @param emptyView the View you want to display when Hits are empty.
      */
     fun setEmptyView(emptyView: View?) {
         this.emptyView = emptyView
@@ -268,11 +266,6 @@ class HitsCustomized
         private var lastItemCount = 0 // Item count after last event
         private var currentlyLoading = true // Are we waiting for new results?
 
-        /**
-         * Calculate the position of last visible item, notwithstanding the LayoutManager's class.
-         *
-         * @return the last visible item's position in the list.
-         */
         private// last position = biggest value within the list of positions
         val lastVisibleItemPosition: Int
             get() {
@@ -371,7 +364,8 @@ class HitsCustomized
             val serviceJson = hits[position]
             val serviceObj = gson.fromJson(serviceJson.toString(), ServiceModel::class.java)
             holder.price.text = "$${serviceObj.service.price.toInt()}"
-            holder.mechanicName.text = "${serviceObj.mechanicInfo.firstName} ${serviceObj.mechanicInfo.lastName}"
+            holder.mechanicName.text =
+                "${serviceObj.mechanicInfo.basicInfo.firstName} ${serviceObj.mechanicInfo.basicInfo.lastName}"
             holder.selectButton.setOnClickListener {
                 val intent = Intent(context, PostServiceRequestActivity::class.java)
                 intent.putExtra(EXTRA_SERVICE, serviceObj)
@@ -379,7 +373,8 @@ class HitsCustomized
             }
 
             val mappedViews = holder.viewMap.keys
-            val hitViews = LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
+            val hitViews =
+                LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
             val hit = hits[position]
 
             // For every AlgoliaHitView that is not bound, trigger onResults
@@ -472,6 +467,7 @@ class HitsCustomized
             val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_mechanic_name)
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
+
             init {
                 var indexVariant: String? = defaultValue
                 val views = LayoutViews.findAny(itemView as ViewGroup)
@@ -510,7 +506,6 @@ class HitsCustomized
          * Default amount of remaining results to display before loading a new page
          */
         val DEFAULT_REMAINING_ITEMS = 5
-
         private val MISSING_VALUE = Integer.MIN_VALUE
     }
 }

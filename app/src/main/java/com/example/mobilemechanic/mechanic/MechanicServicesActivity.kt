@@ -13,7 +13,6 @@ import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.adapter.ServiceListAdapter
 import com.example.mobilemechanic.model.algolia.ServiceModel
-import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
@@ -140,21 +139,17 @@ class MechanicServicesActivity : AppCompatActivity() {
     private fun addService(service: Service) {
         userAccountRef?.get()?.addOnSuccessListener {
             Log.d(MECHANIC_TAG, it.toString())
-            val account = it.toObject(User::class.java)
-            if (account != null) {
-                Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia account $account")
+            val user = it.toObject(User::class.java)
+            if (user != null) {
+                Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia account $user")
                 Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia service  $service")
 
-                val address = Address(account.address, account.city, account.state, account.zipCode)
+                val address = user.address
                 val mechanicInfo = MechanicInfo(
-                    account.uid,
-                    account.email,
-                    account.firstName,
-                    account.lastName,
-                    account.phoneNumber,
-                    account.photoUrl,
+                    user.uid,
+                    user.basicInfo,
                     address,
-                    account.rating
+                    user.rating
                 )
 
                 var service = ServiceModel("", mechanicInfo, service)

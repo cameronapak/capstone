@@ -19,7 +19,6 @@ import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
-import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
 import com.example.mobilemechanic.shared.BasicDialog
@@ -97,7 +96,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_mechanic_name.text = "${serviceModel.mechanicInfo.firstName} ${serviceModel.mechanicInfo.lastName}"
+            id_mechanic_name.text =
+                "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
             id_price.text = "$${serviceModel.service.price.toInt()}"
@@ -119,7 +119,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         return@addSnapshotListener
                     }
 
-                    var clientInfo = extraUserInfo(snapshot)
+                    var clientInfo = extractUserInfo(snapshot)
                     if (clientInfo != null) {
                         val request = Request.Builder()
                             .clientInfo(clientInfo)
@@ -141,19 +141,16 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         }
     }
 
-    private fun extraUserInfo(snapshot: DocumentSnapshot?): ClientInfo? {
+    private fun extractUserInfo(snapshot: DocumentSnapshot?): ClientInfo? {
         var availability = Availability(fromTime, toTime, availableDays)
         if (snapshot != null && snapshot.exists()) {
             val client = snapshot.toObject(User::class.java)
             if (client != null) {
-                val address = Address(client.address, client.city, client.state, client.zipCode)
+                val basicInfo = client.basicInfo
+                val address = client.address
                 return ClientInfo(
                     client.uid,
-                    client.email,
-                    client.firstName,
-                    client.lastName,
-                    client.phoneNumber,
-                    client.photoUrl,
+                    client.basicInfo,
                     availability,
                     address
                 )
@@ -185,7 +182,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 return@addSnapshotListener
             }
             vehicles.clear()
-            vehicles.add(Vehicle("", "", "", "", ""))
+            vehicles.add(Vehicle("", "", "", "", "")) //Dummy hint
 
             for (doc in querySnapshot!!) {
                 val vehicle = doc.toObject(Vehicle::class.java)

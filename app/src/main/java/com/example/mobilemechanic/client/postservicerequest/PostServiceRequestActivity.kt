@@ -14,13 +14,20 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.model.dto.Availability
+import com.example.mobilemechanic.model.dto.ClientInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
@@ -30,10 +37,12 @@ import kotlin.collections.ArrayList
 
 const val POST_SERVICE_TAG = "postservice"
 const val HINT_VEHICLE = "Vehicle"
+
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var accountRef: CollectionReference
     private lateinit var requestsRef: CollectionReference
     private lateinit var vehiclesRef: CollectionReference
     private lateinit var spinnerAdapter: HintVehicleSpinnerAdapter
@@ -50,6 +59,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         requestsRef = mFirestore.collection("Requests")
         mAuth = FirebaseAuth.getInstance()
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+        accountRef = mFirestore.collection("Accounts")
 
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth?.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth?.currentUser?.email}")
@@ -86,47 +96,70 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
-            val service = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-//            id_mechanic_name.text = service.mechanicFirstName
-//            id_service_type.text = service.serviceType
-//            id_service_description.text = service.description
-//            id_price.text = "$${service.price.toInt()}"
-//            id_mechanic_rating.text = service.rating.toString()
+            val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+            id_mechanic_name.text = "${serviceModel.mechanicInfo.firstName} ${serviceModel.mechanicInfo.lastName}"
+            id_service_type.text = serviceModel.service.serviceType
+            id_service_description.text = serviceModel.service.description
+            id_price.text = "$${serviceModel.service.price.toInt()}"
+            id_mechanic_rating.text = serviceModel.mechanicInfo.rating.toString()
         }
     }
 
     private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
             validateForm()
-//            val serviceSelected = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-//            val vehicle = id_vehicle_spinner.selectedItem as Vehicle
-//            val service= Service(serviceSelected.serviceType, serviceSelected.description, serviceSelected.price)
-//            val comment = id_comment.text.toString()
-//            var availability = Availability(fromTime, toTime, availableDays)
-//
-//            val mechanictInfo = MechanicInfo(serviceSelected.uid, serviceSelected.m, "Jason", "Statham", "1231231234", "", address)
-//
-//
-//
-//            val clientInfo = ClientInfo(userUid, "datm@gmail.com", "dat", "tran", "4041231234", "photoUrl", availability, address)
-//
-//            val currentTime = System.currentTimeMillis()/1000
-//
-//            val request = Request.Builder()
-//                .clientInfo(clientInfo)
-//                .mechanicInfo(mechanictInfo)
-//                .service(serviceSelected)
-//                .vehicle(vehicle)
-//                .comment(comment)
-//                .status(Status.Request)
-//                .postedOn(currentTime)
-//                .acceptedOn(-1)
-//                .build()
-//
-//            Log.d(CLIENT_TAG, "$request)")
-//            requestsRef.document().set(request)
+            val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+            val vehicle = id_vehicle_spinner.selectedItem as Vehicle
+            val comment = id_comment.text.toString()
+            val currentTime = System.currentTimeMillis() / 1000
 
+            accountRef.document(mAuth?.currentUser?.uid.toString())
+                .addSnapshotListener { snapshot, exception ->
+                    if (exception != null) {
+                        return@addSnapshotListener
+                    }
+
+                    var clientInfo = extraUserInfo(snapshot)
+                    if (clientInfo != null) {
+                        val request = Request.Builder()
+                            .clientInfo(clientInfo)
+                            .mechanicInfo(serviceModel.mechanicInfo)
+                            .service(serviceModel.service)
+                            .vehicle(vehicle)
+                            .comment(comment)
+                            .status(Status.Request)
+                            .postedOn(currentTime)
+                            .acceptedOn(-1)
+                            .build()
+
+                        Log.d(CLIENT_TAG, "$request)")
+                        requestsRef.document().set(request)?.addOnSuccessListener {
+
+                        }
+                    }
+                }
         }
+    }
+
+    private fun extraUserInfo(snapshot: DocumentSnapshot?): ClientInfo? {
+        var availability = Availability(fromTime, toTime, availableDays)
+        if (snapshot != null && snapshot.exists()) {
+            val client = snapshot.toObject(User::class.java)
+            if (client != null) {
+                val address = Address(client.address, client.city, client.state, client.zipCode)
+                return ClientInfo(
+                    client.uid,
+                    client.email,
+                    client.firstName,
+                    client.lastName,
+                    client.phoneNumber,
+                    client.photoUrl,
+                    availability,
+                    address
+                )
+            }
+        }
+        return null
     }
 
     private fun setUpOnAddVehicle() {
@@ -152,7 +185,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 return@addSnapshotListener
             }
             vehicles.clear()
-            vehicles.add(Vehicle("","","","",""))
+            vehicles.add(Vehicle("", "", "", "", ""))
 
             for (doc in querySnapshot!!) {
                 val vehicle = doc.toObject(Vehicle::class.java)
@@ -161,7 +194,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 Log.d(CLIENT_TAG, "[PostServiceRequestActivity] snapshotListener vehicle objectID: ${vehicle.objectID}")
             }
             spinnerAdapter.notifyDataSetChanged()
-//            checkIfGarageIsEmpty(vehicles)
+            checkIfGarageIsEmpty(vehicles)
         }
 
         id_vehicle_spinner.adapter = spinnerAdapter
@@ -232,7 +265,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_submit.setBackgroundResource(R.drawable.button_round_corner)
     }
 
-    private fun checkIfGarageIsEmpty(vehicles: ArrayList<String>) {
+    private fun checkIfGarageIsEmpty(vehicles: ArrayList<Vehicle>) {
         if (vehicles.size <= 1) {
             showWarningIconAndMessage()
         } else {

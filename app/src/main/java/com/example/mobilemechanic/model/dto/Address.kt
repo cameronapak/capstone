@@ -7,7 +7,7 @@ data class Address(
     var street: String,
     var city: String,
     var state: String,
-    var zipcode: String
+    var zipCode: String
 ) : Parcelable {
     constructor() : this("", "", "", "")
 
@@ -23,7 +23,7 @@ data class Address(
         parcel.writeString(street)
         parcel.writeString(state)
         parcel.writeString(city)
-        parcel.writeString(zipcode)
+        parcel.writeString(zipCode)
     }
 
     override fun describeContents(): Int {

@@ -13,6 +13,8 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -58,34 +60,34 @@ class RegistrationActivity : AppCompatActivity() {
         val firstName = id_registration_firstName.text.toString().trim()
         val lastName = id_registration_lastName.text.toString().trim()
         val phoneNumber = id_registration_phoneNumber.text.toString().trim()
-        val address = id_registration_address.text.toString().trim()
+        val street = id_registration_address.text.toString().trim()
         val city = id_registration_city.text.toString().trim()
         val state = findViewById<Spinner>(R.id.id_registration_state).selectedItem.toString().trim()
         val zip = id_registration_zipcode.text.toString().trim()
 
-        if(validateInformation(email, password, firstName, lastName, phoneNumber, address, city, state, zip)) {
+        if(validateInformation(email, password, firstName, lastName, phoneNumber, street, city, state, zip)) {
+            val address = Address(street, city, state, zip)
+            val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
+            val user = User("", password, userType, basicInfo, address, 0f)
 
-            val userInfo = User("", email, password, userType, firstName,
-                lastName, phoneNumber, address, city, state, zip, "")
-
-            mAuth?.createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+            mAuth?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener {
-                    userInfo.uid = mAuth!!.uid.toString()
-                    handleAccountCreationSuccess(it, userInfo)
+                    user.uid = mAuth?.uid.toString()
+                    handleAccountCreationSuccess(it, user)
             }
         }
     }
 
-    private fun handleAccountCreationSuccess(it: Task<AuthResult>, userInfo: User) {
+    private fun handleAccountCreationSuccess(it: Task<AuthResult>, user: User) {
         if(it.isSuccessful) {
             Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
-            saveUserInfo(userInfo)
+            saveUser(user)
         } else {
             Toast.makeText(this, "Account created failed!\n${it.exception.toString()}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun saveUserInfo(userInfo: User) {
+    private fun saveUser(userInfo: User) {
         mFireStore?.collection(ACCOUNT_DOC_PATH)
             ?.document(userInfo.uid)
             ?.set(userInfo)

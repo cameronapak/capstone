@@ -5,23 +5,19 @@ import android.os.Parcelable
 
 data class ClientInfo(
     var uid: String,
-    var email: String,
-    var firstName: String,
-    var lastName: String,
-    var phoneNumber: String,
-    var photoUrl: String,
+    var basicInfo: BasicInfo,
     var availability: Availability,
     var address: Address
 ) : Parcelable {
-    constructor() : this("", "", "", "", "", "", Availability(), Address())
+    constructor() : this(
+        "",
+        BasicInfo(),
+        Availability(),
+        Address())
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readParcelable(BasicInfo::class.java.classLoader),
         parcel.readParcelable(Availability::class.java.classLoader),
         parcel.readParcelable(Address::class.java.classLoader)
     ) {
@@ -29,11 +25,7 @@ data class ClientInfo(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uid)
-        parcel.writeString(email)
-        parcel.writeString(firstName)
-        parcel.writeString(lastName)
-        parcel.writeString(phoneNumber)
-        parcel.writeString(photoUrl)
+        parcel.writeParcelable(basicInfo, flags)
         parcel.writeParcelable(availability, flags)
         parcel.writeParcelable(address, flags)
     }

@@ -371,6 +371,7 @@ class HitsCustomized
             val serviceJson = hits[position]
             val serviceObj = gson.fromJson(serviceJson.toString(), ServiceModel::class.java)
             holder.price.text = "$${serviceObj.service.price.toInt()}"
+            holder.mechanicName.text = "${serviceObj.mechanicInfo.firstName} ${serviceObj.mechanicInfo.lastName}"
             holder.selectButton.setOnClickListener {
                 val intent = Intent(context, PostServiceRequestActivity::class.java)
                 intent.putExtra(EXTRA_SERVICE, serviceObj)
@@ -467,21 +468,18 @@ class HitsCustomized
 
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val viewMap = HashMap<View, String>()
-            // needed to differentiate initial key value from Pair{null,null} which is legitimate
             private val defaultValue = "ADefaultValueForHitsVariant"
+            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_mechanic_name)
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
             init {
-
                 var indexVariant: String? = defaultValue
-
-                // Get the index and variant for this layout
                 val views = LayoutViews.findAny(itemView as ViewGroup)
                 for (view in views) {
                     if (!BindingHelper.isBound(view.id)) {
                         continue // If the view is not bound, we can skip it
                     }
-                    if (view is AlgoliaHitView) { //TODO: Test variants + AlgoliaHitView
+                    if (view is AlgoliaHitView) {
                         continue
                     }
 

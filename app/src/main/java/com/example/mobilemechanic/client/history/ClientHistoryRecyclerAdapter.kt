@@ -37,14 +37,14 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         if(request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"
 
-        holder.name.text = "${request.mechanicId}"
+        holder.name.text = "${request.mechanicID}"
         holder.description.text = "${type} for ${request.vehicle.year} ${request.vehicle.make} ${request.vehicle.model}"
 
 
         holder.rateButton.setOnClickListener {
 
             val intent = Intent(context, ServiceRatingActivity::class.java)
-            intent.putExtra("name", "${request.mechanicId}")
+            intent.putExtra("name", "${request.mechanicID}")
             context.startActivity(intent)
 
         }

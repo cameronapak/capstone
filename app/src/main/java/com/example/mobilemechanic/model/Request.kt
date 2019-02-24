@@ -9,9 +9,9 @@ enum class Status
 }
 
 data class Request(
-    var objectId: String,
-    var clientId: String,
-    var mechanicId: String,
+    var objectID: String,
+    var clientID: String,
+    var mechanicID: String,
     var description: String,
     var vehicle: Vehicle,
     var service: Service,
@@ -36,9 +36,9 @@ data class Request(
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(objectId)
-        parcel.writeString(clientId)
-        parcel.writeString(mechanicId)
+        parcel.writeString(objectID)
+        parcel.writeString(clientID)
+        parcel.writeString(mechanicID)
         parcel.writeString(description)
         parcel.writeTypedObject(vehicle, flags)
         parcel.writeTypedObject(service, flags)

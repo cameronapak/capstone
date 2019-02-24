@@ -38,6 +38,7 @@ class ClientHistoryActivity : AppCompatActivity() {
         )
 
         val r = Request(
+            "objectID",
             " Client",     //Temporary used for Name
             "Jason",    //Temporary used for Name
             "",

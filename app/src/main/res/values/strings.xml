@@ -124,4 +124,12 @@
     <string name="text_update">Update</string>
     <string name="label_remove_service_view">Are you sure you want to remove this service?</string>
 
+    <!-- FireStore Collection References -->
+    <string name="ref_accounts">Accounts</string>
+    <string name="ref_services">Services</string>
+    <string name="ref_requests">Requests</string>
+
+    <string name="err_accept_fail">Failed to accept request.</string>
+    <string name="err_complete_fail">Failed to complete service.</string>
+
 </resources>

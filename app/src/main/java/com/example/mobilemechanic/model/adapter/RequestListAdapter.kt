@@ -29,6 +29,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private lateinit var requestRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val price = itemView.findViewById<TextView>(R.id.id_price)
         val name = itemView.findViewById<TextView>(R.id.id_client_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
@@ -57,8 +58,9 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         handleRequestViewType(request, holder)
 
         //fill card view
+        holder.price.text = context.getString(R.string.price, request?.service?.price)
         holder.name.text =
-            "${requests[position].clientInfo?.basicInfo?.firstName} ${requests[position].clientInfo?.basicInfo?.lastName}"
+            "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
         holder.description.text = request.comment
         //location.text = "0 mi"
@@ -67,11 +69,11 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
              - location calculation
          */
 
-        holder.timeStamp.text = if (request.completedOn!! > 0) {
-            val time = Date(request.completedOn!!)
+        holder.timeStamp.text = if (request.acceptedOn!! > 0) {
+            val time = Date(request.acceptedOn!!)
             val dateFormat = SimpleDateFormat("MMM d, y")
             val date = dateFormat.format(time)
-            context.getString(R.string.complete_on, date)
+            context.getString(R.string.accept_on, date)
         } else {
             val time = Date(request.postedOn!!)
             val dateFormat = SimpleDateFormat("MMM d, y")

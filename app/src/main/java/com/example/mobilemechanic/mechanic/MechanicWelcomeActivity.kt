@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -46,7 +47,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setUpMechanicWelcomeActivity() {
-        //mockLogin()       // Replace with real login later
+        mockLogin()       // Replace with real login later
         setUpToolBar()
         setUpDrawerMenu()
         setUpNavigationListener()
@@ -54,7 +55,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun mockLogin() {
-        mAuth?.signInWithEmailAndPassword("datm@gmail.com", "123456")
+        mAuth?.signInWithEmailAndPassword("statham@gmail.com", "123456")
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
                     val user = mAuth?.currentUser
@@ -85,13 +86,16 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
                 requests.clear()
                 for (doc in querySnapshot!!) {
-                    val request = doc.toObject(Request::class.java)
-                    request.objectID = doc.id
-                    Log.d(
-                        MECHANIC_TAG,
-                        "[MechanicServices] snapshotListener ServiceModel documentID: ${request.objectID}"
-                    )
-                    requests.add(request)
+                    if(doc["status"] == Status.Request.name || doc["status"] == Status.Active.name)
+                    {
+                        val request = doc.toObject(Request::class.java)
+                        request.objectID = doc.id
+                        Log.d(
+                            MECHANIC_TAG,
+                            "[MechanicServices] snapshotListener ServiceModel documentID: ${request.objectID}"
+                        )
+                        requests.add(request)
+                    }
                 }
                 mechanicRequestListAdapter.notifyDataSetChanged()
             }

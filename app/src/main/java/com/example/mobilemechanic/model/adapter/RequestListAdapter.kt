@@ -170,9 +170,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     }
 
     private fun acceptRequest(request: Request) {
-        val acceptedOn = System.currentTimeMillis() / 1000
+        val acceptedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
-            .update("status", Status.Active, "acceptedOn", acceptedOn)
+            .update("status", Status.Active,
+                "acceptedOn", acceptedOn)
             ?.addOnSuccessListener {
                 Toast.makeText(context, "Accepted successfully", Toast.LENGTH_SHORT).show()
             }
@@ -182,7 +183,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     }
 
     private fun completeRequest(request: Request) {
-        val completedOn = System.currentTimeMillis() / 1000
+        val completedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
             .update("status", Status.Complete, "completedOn", completedOn)
             ?.addOnSuccessListener {

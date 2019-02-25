@@ -80,9 +80,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         }
 
         holder.secondaryButton.setOnClickListener {
-            val intent = Intent(context, MechanicMoreInformationActivity::class.java)
-            intent.putExtra(EXTRA_REQUEST, requests[position])
-            (context).startActivityForResult(intent, REQ_CODE_MORE_INFO)
+            handleSecondaryOnClick(request)
         }
 
         holder.primaryButton.setOnClickListener {
@@ -112,7 +110,19 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         }
     }
 
-    // TODO: do handleSecondaryOnClick() here
+    private fun handleSecondaryOnClick(request: Request) {
+        if (request.status == Status.Request) {
+            val intent = Intent(context, MechanicMoreInformationActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, request)
+            context.startActivityForResult(intent, REQ_CODE_MORE_INFO)
+        }
+
+        if (request.status == Status.Active) {
+            // TODO: Go to ManageRequest Activity
+
+
+        }
+    }
 
 
     private fun createAcceptDialog(request: Request)

@@ -5,6 +5,7 @@ import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
@@ -19,7 +20,9 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 
@@ -68,13 +71,25 @@ class RegistrationActivity : AppCompatActivity() {
         if(validateInformation(email, password, firstName, lastName, phoneNumber, street, city, state, zip)) {
             val address = Address(street, city, state, zip)
             val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
-            val user = User("", password, userType, basicInfo, address, 0f)
+            val user = User("", "", password, userType, basicInfo, address, 0f)
 
-            mAuth?.createUserWithEmailAndPassword(email, password)
+            // get Firebase token
+            FirebaseInstanceId.getInstance().instanceId
                 ?.addOnCompleteListener {
-                    user.uid = mAuth?.uid.toString()
-                    handleAccountCreationSuccess(it, user)
-            }
+                    if (!it.isSuccessful) {
+                        return@addOnCompleteListener
+                    }
+
+                    val token = it.result?.token
+
+                    mAuth?.createUserWithEmailAndPassword(email, password)
+                        ?.addOnCompleteListener {
+                            user.uid = mAuth?.uid.toString()
+                            user.fbToken = token.toString()
+                            Toast.makeText(this, user.fbToken, Toast.LENGTH_SHORT).show()
+                            handleAccountCreationSuccess(it, user)
+                        }
+                }
         }
     }
 

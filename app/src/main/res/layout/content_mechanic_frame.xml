@@ -5,18 +5,14 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        tools:showIn="@layout/app_bar_mechanic_welcome"
         tools:context=".mechanic.MechanicWelcomeActivity">
-
     <android.support.v7.widget.RecyclerView
-            android:layout_width="395dp"
-            android:layout_height="659dp"
-            android:id="@+id/id_mechanic_welcome_recyclerview" android:scrollbars="vertical"
-            android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
-            android:layout_marginTop="8dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:id="@+id/id_mechanic_welcome_recyclerview"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:paddingTop="65dp" android:paddingLeft="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:paddingTop="65dp" android:paddingLeft="20dp"
             android:paddingRight="20dp"/>
 </android.support.constraint.ConstraintLayout>

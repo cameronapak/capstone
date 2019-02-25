@@ -2,63 +2,47 @@ package com.example.mobilemechanic.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.model.dto.BasicInfo
 
-enum class UserType
-{
+enum class UserType {
     CLIENT, MECHANIC
 }
 
-data class User(var uid: String, var email: String, var password: String, var userType: UserType, var firstName: String,
-                var lastName: String, var phoneNumber: String, var address: String, var city: String, var state: String,
-                var zipCode: String, var photoUrl: String) : Parcelable
-{
-    constructor() : this("", "", "", UserType.CLIENT, "", "", "", "",
-        "", "", "", "")
+data class User(
+    var uid: String,
+    var password: String,
+    var userType: UserType,
+    var basicInfo: BasicInfo,
+    var address: Address,
+    var rating: Float
+) : Parcelable {
+    constructor() : this(
+        "", "", UserType.CLIENT, BasicInfo(), Address(), 0f
+    )
 
     var vehicles: ArrayList<Vehicle>? = ArrayList()
-    var services: ArrayList<Service>? = ArrayList()
-    var rating: Float = 0f
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
         UserType.values()[parcel.readInt()],
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString(),
-        parcel.readString()
-    )
-    {
-        arrayListOf<Vehicle>().apply{
+        parcel.readParcelable(BasicInfo::class.java.classLoader),
+        parcel.readParcelable(Address::class.java.classLoader),
+        parcel.readFloat()
+    ) {
+        arrayListOf<Vehicle>().apply {
             parcel.readList(this, Vehicle::class.java.classLoader)
         }
-        arrayListOf<Service>().apply{
-            parcel.readList(this, Service::class.java.classLoader)
-        }
-        rating = parcel.readFloat()
     }
 
-    override fun writeToParcel(parcel: Parcel, flags: Int)
-    {
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uid)
-        parcel.writeString(email)
         parcel.writeString(password)
-        parcel.writeInt(userType.ordinal)
-        parcel.writeString(firstName)
-        parcel.writeString(lastName)
-        parcel.writeString(phoneNumber)
-        parcel.writeString(address)
-        parcel.writeString(city)
-        parcel.writeString(state)
-        parcel.writeString(zipCode)
-        parcel.writeString(photoUrl)
+        parcel.writeString(userType.name)
+        parcel.writeParcelable(basicInfo, flags)
+        parcel.writeParcelable(address, flags)
         parcel.writeList(vehicles)
-        parcel.writeList(services)
         parcel.writeFloat(rating)
     }
 

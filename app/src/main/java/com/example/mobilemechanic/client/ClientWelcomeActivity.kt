@@ -14,10 +14,10 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
-
+const val CLIENT_TAG = "client"
 class ClientWelcomeActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
@@ -38,11 +38,9 @@ class ClientWelcomeActivity : AppCompatActivity() {
         }
     }
 
-
-
     private fun setUpClientWelcomeActivity() {
         setUpToolBar()
-        setUpDrawerLayout()
+        setUpDrawerMenu()
         setUpNavigationListener()
     }
 
@@ -51,13 +49,13 @@ class ClientWelcomeActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Welcome"
-            subtitle = "Jackie Chan"
+            subtitle = "Client: Jackie Chan"
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }
     }
 
-    private fun setUpDrawerLayout() {
+    private fun setUpDrawerMenu() {
         mDrawerLayout = findViewById(R.id.client_drawer_layout)
         val clientNavigationView = findViewById<NavigationView>(R.id.id_client_nav_view)
         clientNavigationView.setNavigationItemSelectedListener { menuItem ->

@@ -1,11 +1,13 @@
 package com.example.mobilemechanic.client.servicerating
 
 import android.graphics.Color
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.widget.*
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.shared.ScreenManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_service_rating_activty.*
 
 class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeListener {
@@ -70,12 +72,33 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
             Toast.makeText(applicationContext, s, Toast.LENGTH_LONG).show()
             wrongText = ""
         }
+
+        setUpServiceRatingActivity()
+    }
+
+    private fun setUpServiceRatingActivity() {
+        setUpToolBar()
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_rating_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "Rating"
+            subtitle = "Rate the service"
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
-
         id_rating_rate.text = "$rating"
     }
+
     override fun onResume() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)

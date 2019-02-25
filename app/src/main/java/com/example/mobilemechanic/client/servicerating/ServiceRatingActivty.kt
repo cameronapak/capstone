@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.*
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.Receipt
+import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_service_rating_activty.*
 
@@ -17,7 +19,7 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service_rating_activty)
 
-        val ss:String = intent.getStringExtra("name")
+        val ss: Request? = intent.getParcelableExtra("request")
         val question = findViewById<TextView>(R.id.id_rating_question)
         val ratingBar = findViewById<RatingBar>(R.id.id_rating_bar)
         val checkBox1 = findViewById<CheckBox>(R.id.id_rating_checkbox1)
@@ -40,7 +42,7 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
         checkGroup.add(checkBox6)
         checkGroup.add(checkBox7)
 
-        question.text = "How was ${ss}'s service?"
+        question.text = "How was ${ss?.mechanicInfo?.basicInfo?.firstName}'s service?"
         ratingBar.numStars = 5
         ratingBar.stepSize = .5F
         ratingBar.onRatingBarChangeListener = this
@@ -64,9 +66,9 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
                 if(box.isChecked) wrongText += "${box.text} "
             }
             if(wrongText == "") {
-                 s = "Name: $ss \nRating: ${id_rating_rate.text} \nComment: ${id_rating_comment.text}"
+                 s = "Name: ${ss?.mechanicInfo?.rating} \nRating: ${id_rating_rate.text} \nComment: ${id_rating_comment.text}"
             }else {
-                 s = "Name: $ss \nRating: ${id_rating_rate.text} \nTags: $wrongText \nComment: ${id_rating_comment.text}"
+                 s = "Name: ${ss?.mechanicInfo?.rating} \nRating: ${id_rating_rate.text} \nTags: $wrongText \nComment: ${id_rating_comment.text}"
             }
 
             Toast.makeText(applicationContext, s, Toast.LENGTH_LONG).show()

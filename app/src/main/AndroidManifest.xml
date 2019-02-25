@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.mobilemechanic">
 
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>-->
     <uses-permission android:name="android.permission.INTERNET" />
     <application
             android:allowBackup="true"
@@ -13,15 +13,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".client.garage.GarageActivity">
         </activity>
-        <!--
-             The API key for Google Maps-based APIs is defined as a string resource.
-             (See the file "res/values/google_maps_api.xml").
-             Note that the API key is linked to the encryption key used to sign the APK.
-             You need a different API key for each encryption key, including the release key that is used to
-             sign the APK for publishing.
-             You can define the keys for the debug and release targets in src/debug/ and src/release/.
-        -->
-
         <meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyC_DQTYyo0CagoAgYat5YNYxsK_RGbzAVc" />
         <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 
@@ -30,9 +21,9 @@
                 android:label="@string/title_activity_mechanic_more_information">
         </activity>
         <activity
-                android:name=".mechanic.MechanicServices"
+                android:name=".mechanic.MechanicServicesActivity"
                 android:label="@string/title_activity_mechanic_services"
-                android:theme="@style/NoActionBar">
+                android:theme="@style/AppTheme">
         </activity>
         <activity
                 android:name=".mechanic.MechanicWelcomeActivity"

@@ -9,15 +9,16 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.Vehicle
 
 
-class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String>) :
-    ArrayAdapter<String>(context, resource, stateList) {
+class HintVehicleSpinnerAdapter(context: Context, resource: Int, stateList: List<Vehicle>) :
+    ArrayAdapter<Vehicle>(context, resource, stateList) {
 
     override fun isEnabled(position: Int): Boolean {
-       if (position == 0) {
-           return false
-       }
+        if (position == 0) {
+            return false
+        }
         return true
     }
 
@@ -33,6 +34,7 @@ class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String
         }
 
         if (position == 0) {
+            v.text = "Vehicle"
             textView.setTextColor(ResourcesCompat.getColor(parent.resources, R.color.colorGrayText, null))
         } else {
             textView.setTextColor(ResourcesCompat.getColor(parent.resources, R.color.colorHeaderDark, null))
@@ -46,6 +48,7 @@ class HintSpinnerAdapter(context: Context, resource: Int, stateList: List<String
         val v = super.getDropDownView(position, convertView, parent)
         val textView = v as TextView
         if (position == 0) {
+            v.text = "Vehicle"
             textView.setTextColor(Color.GRAY)
         } else {
             textView.setTextColor(Color.BLACK)

@@ -14,6 +14,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
+import com.example.mobilemechanic.shared.ProfilePictureActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
@@ -25,6 +26,15 @@ class ClientWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_welcome)
+
+        /*val isFirstSignedUp = intent?.extras?.getString("IS_FIRST_SIGN_UP")
+
+        if(isFirstSignedUp != null) {
+            if(isFirstSignedUp.equals("yes")) {
+                startActivity(Intent(this, ProfilePictureActivity::class.java))
+            }
+        }*/
+
         setUpClientWelcomeActivity()
     }
 

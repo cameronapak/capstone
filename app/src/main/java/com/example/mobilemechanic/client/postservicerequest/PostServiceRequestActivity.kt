@@ -111,7 +111,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
             val vehicle = id_vehicle_spinner.selectedItem as Vehicle
             val comment = id_comment.text.toString()
-            val currentTime = System.currentTimeMillis() / 1000
+            val currentTime = System.currentTimeMillis()
 
             accountRef.document(mAuth?.currentUser?.uid.toString())
                 .addSnapshotListener { snapshot, exception ->

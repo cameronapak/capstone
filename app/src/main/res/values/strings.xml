@@ -103,6 +103,7 @@
     <!--recyclerview_item_request-->
     <string name="place_holder_client_name">Jackie Chan</string>
     <string name="request_on">Requested on %s</string>
+    <string name="accept_on">Accepted on %s</string>
     <string name="complete_on">Completed on %s</string>
     <string name="request_status_request">Request</string>
     <string name="request_status_active">Active</string>
@@ -120,7 +121,7 @@
 
     <string name="price">$%.2f</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="confirm_desc">1. The client issue has been resolved\\n2. You have received the correct payment for
+    <string name="confirm_desc">1. The client issue has been resolved\n2. You have received the correct payment for
         your service
     </string>
     <string name="confirm_that">Here you confirm that</string>

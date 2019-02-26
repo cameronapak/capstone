@@ -10,17 +10,21 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
+import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
 
 class ClientWelcomeActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
+    var mAuth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -82,6 +86,15 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, GarageActivity::class.java))
                     true
                 }
+                R.id.id_sign_out -> {
+                    mAuth?.signOut()
+                    Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT ).show()
+                    val i = Intent(this, MainActivity::class.java )
+                    startActivity(i)
+                    true
+                }
+
+
                 else -> {
                     mDrawerLayout.closeDrawers()
                     true

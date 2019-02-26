@@ -20,7 +20,7 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
-
+const val CLIENT_TAG = "client"
 class ClientWelcomeActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout

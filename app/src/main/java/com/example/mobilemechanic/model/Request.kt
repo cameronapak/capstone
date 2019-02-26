@@ -2,38 +2,62 @@ package com.example.mobilemechanic.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.example.mobilemechanic.model.dto.ClientInfo
+import com.example.mobilemechanic.model.dto.MechanicInfo
 
-enum class Status
-{
-    Request, Active, Complete
+enum class Status {
+    Request, Active, Complete, Cancelled
 }
 
-data class Request(var clientId: String, var mechanicId: String, var description: String, var vehicle: Vehicle,
-                   var service: Service, var status: Status, var timePosted: Long, var timeCompleted: Long) : Parcelable
-{
-    constructor() : this("", "", "",
-        Vehicle(), Service(), Status.Request, 0L, 0L)
+data class Request(
+    var objectID: String,
+    var clientInfo: ClientInfo?,
+    var mechanicInfo: MechanicInfo?,
+    var service: Service?,
+    var vehicle: Vehicle?,
+    var comment: String?,
+    var status: Status?,
+    var postedOn: Long?,
+    var acceptedOn: Long?,
+    var completedOn: Long?
+) : Parcelable {
+    constructor() : this(
+        "",
+        ClientInfo(),
+        MechanicInfo(),
+        Service(),
+        Vehicle(),
+        "",
+        Status.Request,
+        Long.MIN_VALUE,
+        Long.MIN_VALUE,
+        Long.MIN_VALUE
+    )
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
+        parcel.readParcelable(ClientInfo::class.java.classLoader),
+        parcel.readParcelable(MechanicInfo::class.java.classLoader),
+        parcel.readParcelable(Service::class.java.classLoader),
+        parcel.readParcelable(Vehicle::class.java.classLoader),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readTypedObject(Vehicle),
-        parcel.readTypedObject(Service),
-        Status.values()[parcel.readInt()],
+        Status.valueOf(parcel.readString()),
+        parcel.readLong(),
         parcel.readLong(),
         parcel.readLong()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(clientId)
-        parcel.writeString(mechanicId)
-        parcel.writeString(description)
-        parcel.writeTypedObject(vehicle, flags)
-        parcel.writeTypedObject(service, flags)
-        parcel.writeInt(status.ordinal)
-        parcel.writeLong(timePosted)
-        parcel.writeLong(timeCompleted)
+        parcel.writeString(objectID)
+        parcel.writeParcelable(clientInfo, flags)
+        parcel.writeParcelable(mechanicInfo, flags)
+        parcel.writeParcelable(service, flags)
+        parcel.writeParcelable(vehicle, flags)
+        parcel.writeString(comment)
+        parcel.writeString(status?.name)
+        postedOn?.let { parcel.writeLong(it) }
+        acceptedOn?.let { parcel.writeLong(it) }
+        completedOn?.let { parcel.writeLong(it) }
     }
 
     override fun describeContents(): Int {
@@ -48,5 +72,31 @@ data class Request(var clientId: String, var mechanicId: String, var description
         override fun newArray(size: Int): Array<Request?> {
             return arrayOfNulls(size)
         }
+    }
+
+
+    data class Builder(
+        var objectID: String? = null,
+        var clientInfo: ClientInfo? = null,
+        var mechanicInfo: MechanicInfo? = null,
+        var service: Service? = null,
+        var vehicle: Vehicle? = null,
+        var comment: String? = null,
+        var status: Status? = null,
+        var postedOn: Long? = Long.MIN_VALUE,
+        var acceptedOn: Long? = Long.MIN_VALUE,
+        var completedOn: Long? = Long.MIN_VALUE
+    ) {
+        fun clientInfo(info: ClientInfo) = apply { this.clientInfo = info }
+        fun mechanicInfo(info: MechanicInfo) = apply { this.mechanicInfo = info }
+        fun service(s: Service) = apply { this.service = s }
+        fun vehicle(v: Vehicle) = apply { this.vehicle = v }
+        fun comment(c: String) = apply { this.comment = c }
+        fun status(status: Status) = apply { this.status = status }
+        fun postedOn(posted: Long) = apply { this.postedOn = posted }
+        fun acceptedOn(accepted: Long) = apply { this.acceptedOn = accepted }
+        fun completedOn(completed: Long) = apply { this.completedOn = completed }
+        fun build() =
+            Request("", clientInfo, mechanicInfo, service, vehicle, comment, status, postedOn, acceptedOn, completedOn)
     }
 }

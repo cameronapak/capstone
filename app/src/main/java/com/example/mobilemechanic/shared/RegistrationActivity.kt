@@ -94,26 +94,15 @@ class RegistrationActivity : AppCompatActivity() {
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()
 
-                goToMainActivity(userInfo.userType)
+                goToUploadPictureActivity(userInfo.userType)
             }
             ?.addOnFailureListener {
                 Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun goToMainActivity(userType: UserType) {
-        var intent = Intent()
-        intent = Intent(this, ProfilePictureActivity::class.java)
-
-        /*if(userType == UserType.CLIENT) {
-            intent = Intent(this, ClientWelcomeActivity::class.java)
-        }
-        else if(userType == UserType.MECHANIC) {
-            intent = Intent(this, MechanicWelcomeActivity::class.java)
-        }
-
-        intent.putExtra("IS_FIRST_SIGN_UP", "yes")*/
-        startActivity(intent)
+    private fun goToUploadPictureActivity(userType: UserType) {
+        startActivity(Intent(this, ProfilePictureActivity::class.java))
         finish()
     }
 

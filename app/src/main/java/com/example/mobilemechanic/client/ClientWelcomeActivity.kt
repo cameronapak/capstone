@@ -27,14 +27,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_welcome)
 
-        /*val isFirstSignedUp = intent?.extras?.getString("IS_FIRST_SIGN_UP")
-
-        if(isFirstSignedUp != null) {
-            if(isFirstSignedUp.equals("yes")) {
-                startActivity(Intent(this, ProfilePictureActivity::class.java))
-            }
-        }*/
-
         setUpClientWelcomeActivity()
     }
 

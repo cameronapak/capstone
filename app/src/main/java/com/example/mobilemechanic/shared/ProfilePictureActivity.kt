@@ -9,7 +9,10 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.ClientWelcomeActivity
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.User
+import com.example.mobilemechanic.model.UserType
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -21,12 +24,10 @@ import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_profile_picture.*
 
 class ProfilePictureActivity : AppCompatActivity() {
-    private var mAuth: FirebaseAuth?= null
+    private var mAuth: FirebaseAuth? = null
     private var mFireStore: FirebaseFirestore? = null
     private var mStorage: FirebaseStorage? = null
     private var selectedImageUri: Uri? = null
-
-    val uid = "l1laJN6sgZP89ODvqt5CquXfRE33"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,28 +36,24 @@ class ProfilePictureActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
-        val user = mAuth?.currentUser
-
-        if(user != null) {
-            mFireStore?.collection(ACCOUNT_DOC_PATH)
-                ?.document(user.uid)
-                ?.get()
-                ?.addOnSuccessListener {
-                    val users = it.toObject(User::class.java) ?: return@addOnSuccessListener
-                    val userType = users.userType
-                    Toast.makeText(this, "$userType", Toast.LENGTH_SHORT).show()
-                }
-        }
-
+        val currentUser = mAuth?.currentUser
 
         img_profilePicture.setOnClickListener {
             openGallery()
         }
 
         btn_uploadProfilePicture.setOnClickListener {
-            Toast.makeText(this, "$selectedImageUri", Toast.LENGTH_SHORT).show()
-            if(isImageUriExist()) {
-                uploadProfileImage()
+            if (currentUser != null) {
+                //Toast.makeText(this, "$selectedImageUri", Toast.LENGTH_SHORT).show()
+                if (isImageUriExist()) {
+                    uploadProfileImage(currentUser.uid)
+                }
+            }
+        }
+
+        btn_skip.setOnClickListener {
+            if (currentUser != null) {
+                goToMainActivity(currentUser.uid)
             }
         }
     }
@@ -64,7 +61,9 @@ class ProfilePictureActivity : AppCompatActivity() {
     private fun openGallery() {
         CropImage.activity()
             .setGuidelines(CropImageView.Guidelines.ON)
-            .start(this);
+            .setFixAspectRatio(true)
+            .setAspectRatio(1, 1)
+            .start(this)
     }
 
 
@@ -89,11 +88,11 @@ class ProfilePictureActivity : AppCompatActivity() {
             selectedImageUri = imageUri
             Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
-            img_profilePicture.setImageBitmap(bitmap)
+            id_temp_profile.setImageBitmap(bitmap)
         }
     }
 
-    private fun uploadProfileImage() {
+    private fun uploadProfileImage(uid: String) {
         Log.d(CLIENT_TAG, "[ProfilePictureActivity] uploadProfileImage() to firestorage for uid: $uid")
         val ref = mStorage?.reference?.child("$ACCOUNT_DOC_PATH/$uid/profile_image")
         ref?.putFile(selectedImageUri as Uri)
@@ -119,8 +118,31 @@ class ProfilePictureActivity : AppCompatActivity() {
                     ?.update("basicInfo.photoUrl", "$downloadUrl")
                     ?.addOnSuccessListener {
                         Toast.makeText(this, "photoUrl saved successfully", Toast.LENGTH_LONG).show()
+                        goToMainActivity(uid)
                     }
             }
         }
+    }
+
+    private fun goToMainActivity(uid: String) {
+        mFireStore?.collection("$ACCOUNT_DOC_PATH")
+            ?.document(uid)
+            ?.get()
+            ?.addOnSuccessListener {
+                val user = it.toObject(User::class.java)
+                if (user == null) return@addOnSuccessListener
+
+                val userType = user.userType
+                var intent = Intent()
+
+                if (userType == UserType.CLIENT) {
+                    intent = Intent(this, ClientWelcomeActivity::class.java)
+                } else if (userType == UserType.MECHANIC) {
+                    intent = Intent(this, MechanicWelcomeActivity::class.java)
+                }
+
+                startActivity(intent)
+                finish()
+            }
     }
 }

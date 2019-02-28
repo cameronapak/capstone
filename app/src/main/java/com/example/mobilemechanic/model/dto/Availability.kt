@@ -6,18 +6,17 @@ import android.os.Parcelable
 class Availability(
     var fromTime: String,
     var toTime: String,
-    var days: ArrayList<String> = ArrayList()
+    var days: ArrayList<String>
 ) : Parcelable {
     constructor() : this("", "", ArrayList<String>())
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
-        parcel.readString()
-    ) {
+        parcel.readString(),
         arrayListOf<String>().apply {
             parcel.readList(this, String::class.java.classLoader)
         }
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(fromTime)

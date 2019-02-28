@@ -2,22 +2,22 @@ package com.example.mobilemechanic.mechanic.map
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
-import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
+
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -26,15 +26,13 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.android.synthetic.main.activity_mechanic_manage_job.*
 import kotlinx.android.synthetic.main.activity_mechanic_more_information.*
 import kotlinx.android.synthetic.main.card_vehicle_container.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
-const val MY_PERMISSION_REQ_GPS = 1
-const val TAG = "moreInfo"
+class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
 
-class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
-{
     private lateinit var mMap: GoogleMap
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var requestRef: CollectionReference
@@ -43,7 +41,7 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_mechanic_more_information)
+        setContentView(R.layout.activity_mechanic_manage_job)
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -53,10 +51,10 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         //get request from MechanicWelcomeActivity
         request = intent.getParcelableExtra(EXTRA_REQUEST)
 
-        setUpMechanicMoreInformationActivity()
+        setUpMechanicManageJobActivity()
     }
 
-    private fun setUpMechanicMoreInformationActivity()
+    private fun setUpMechanicManageJobActivity()
     {
         setUpToolBar()
         setUpVehicleContainer()
@@ -64,18 +62,18 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
 
 
     private fun setUpToolBar() {
-        setSupportActionBar(id_more_toolbar as Toolbar)
+        setSupportActionBar(id_manage_job_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
-            title = "More Information"
-            subtitle = "Request details"
+            title = "Manage Job"
+            subtitle = "Cancel the job or contact the client"
             setDisplayHomeAsUpEnabled(true)
         }
     }
 
     private fun setUpVehicleContainer()
     {
-        val holder = id_mechanic_more_info_card
+        val holder = id_mechanic_manage_job_card
         holder.id_car_title.text = "${request.vehicle?.year} ${request.vehicle?.make} ${request.vehicle?.model}"
         //TODO: holder.id_car_image.setImageURI()
         holder.id_service_needed.text = request.service?.serviceType
@@ -89,12 +87,14 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         holder.id_availability.text = availabilityText
         //Log.d(MECHANIC_TAG, "${availability.days}")
 
+        holder.id_positive.text = getString(R.string.text_contact)
         holder.id_positive.setOnClickListener {
-            acceptRequest()
+            //TODO: Contact Customer Dialog
         }
 
+        holder.id_negative.text = getString(R.string.text_cancel_job)
         holder.id_negative.setOnClickListener {
-            createDeclineDialog()
+            createCancelJobDialog()
         }
     }
 
@@ -156,52 +156,37 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         super.onResume()
     }
 
-    private fun createDeclineDialog()
+    private fun createCancelJobDialog()
     {
         val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_choice, null)
-        val declineDialog = BasicDialog.Builder.apply{
-            title = getString(R.string.text_decline)
+        val cancelJobDialog = BasicDialog.Builder.apply{
+            title = getString(R.string.text_cancel_job)
             positive = getString(R.string.yes)
             negative = getString(R.string.text_cancel)
         }.build(this, container, dialogBody)
-        declineDialog.show()
+        cancelJobDialog.show()
 
-        declineDialog.id_positive.setOnClickListener {
-            declineRequest()
-            declineDialog.dismiss()
+        cancelJobDialog.id_positive.setOnClickListener {
+            cancelJob()
+            cancelJobDialog.dismiss()
         }
 
-        declineDialog.id_negative.setOnClickListener {
-            declineDialog.dismiss()
+        cancelJobDialog.id_negative.setOnClickListener {
+            cancelJobDialog.dismiss()
         }
     }
 
-    private fun acceptRequest()
-    {
-        val acceptedOn = System.currentTimeMillis()
-        requestRef.document(request.objectID)
-            .update("status", Status.Active,
-                "acceptedOn", acceptedOn)
-            ?.addOnSuccessListener {
-                Toast.makeText(this, "Accepted successfully", Toast.LENGTH_SHORT).show()
-                finish()
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, getString(R.string.err_accept_fail), Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun declineRequest()
+    private fun cancelJob()
     {
         requestRef.document(request.objectID)
             .update("status", Status.Cancelled)
             ?.addOnSuccessListener {
-                Toast.makeText(this, "Declined successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Canceled job successfully", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, getString(R.string.err_decline_fail), Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.err_cancel_job_fail), Toast.LENGTH_SHORT).show()
             }
     }
 }

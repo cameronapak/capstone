@@ -3,43 +3,41 @@ package com.example.mobilemechanic.client.findservice
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import com.algolia.instantsearch.core.helpers.Searcher
+import com.algolia.instantsearch.ui.helpers.InstantSearch
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
 
+
 class FindServiceActivity : AppCompatActivity() {
 
     private lateinit var mFireStore: FirebaseStorage
-    private lateinit var viewManager: LinearLayoutManager
-    private lateinit var serviceAdapter: ServiceRecyclerAdapter
-    private var services: ArrayList<ServiceModel> = ArrayList()
+    private lateinit var searcher: Searcher
+    private lateinit var helper: InstantSearch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_find_service)
+        setContentView(com.example.mobilemechanic.R.layout.activity_find_service)
         mFireStore = FirebaseStorage.getInstance()
         setUpFindServiceActivity()
     }
 
     private fun setUpFindServiceActivity() {
-        setUpAlgolioa()
+        setUpAlgolia()
         setUpToolBar()
     }
 
-    private fun setUpAlgolioa() {
-        viewManager = LinearLayoutManager(this)
-        serviceAdapter = ServiceRecyclerAdapter(this, services)
-        id_recyclerview_services.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = serviceAdapter
-            isNestedScrollingEnabled = false
-        }
-        serviceAdapter.notifyDataSetChanged()
+    private fun setUpAlgolia() {
+        searcher = Searcher.create(getString(R.string.algolia_app_id),
+            getString(R.string.algolia_api_key),
+            getString(R.string.algolia_services_index))
+        helper = InstantSearch(this, searcher)
+        helper.search()
+        val hits = findViewById<HitsCustomized>(R.id.id_hits_customized)
+        hits.enableKeyboardAutoHiding()
     }
 
     private fun setUpToolBar() {
@@ -58,5 +56,10 @@ class FindServiceActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onDestroy() {
+        searcher.destroy()
+        super.onDestroy()
     }
 }

@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.Spinner
 import android.widget.Toast
@@ -13,6 +14,8 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
@@ -26,7 +29,6 @@ class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
     private var mFireStore: FirebaseFirestore? = null
     private var mStorage: FirebaseStorage? = null
-    private var fileUriPath: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,57 +60,49 @@ class RegistrationActivity : AppCompatActivity() {
         val firstName = id_registration_firstName.text.toString().trim()
         val lastName = id_registration_lastName.text.toString().trim()
         val phoneNumber = id_registration_phoneNumber.text.toString().trim()
-        val address = id_registration_address.text.toString().trim()
+        val street = id_registration_address.text.toString().trim()
         val city = id_registration_city.text.toString().trim()
         val state = findViewById<Spinner>(R.id.id_registration_state).selectedItem.toString().trim()
         val zip = id_registration_zipcode.text.toString().trim()
 
-        if(validateInformation(email, password, firstName, lastName, phoneNumber, address, city, state, zip)) {
+        if(validateInformation(email, password, firstName, lastName, phoneNumber, street, city, state, zip)) {
+            val address = Address(street, city, state, zip)
+            val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
+            val user = User("", password, userType, basicInfo, address, 0f)
 
-            val userInfo = User("", email, password, userType, firstName,
-                lastName, phoneNumber, address, city, state, zip, "")
-
-            mAuth?.createUserWithEmailAndPassword(userInfo.email, userInfo.password)
+            mAuth?.createUserWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener {
-                    userInfo.uid = mAuth!!.uid.toString()
-                    handleAccountCreationSuccess(it, userInfo)
+                    user.uid = mAuth?.uid.toString()
+                    handleAccountCreationSuccess(it, user)
             }
         }
     }
 
-    private fun handleAccountCreationSuccess(it: Task<AuthResult>, userInfo: User) {
+    private fun handleAccountCreationSuccess(it: Task<AuthResult>, user: User) {
         if(it.isSuccessful) {
             Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
-            saveUserInfo(userInfo)
+            saveUser(user)
         } else {
             Toast.makeText(this, "Account created failed!\n${it.exception.toString()}", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun saveUserInfo(userInfo: User) {
+    private fun saveUser(userInfo: User) {
         mFireStore?.collection(ACCOUNT_DOC_PATH)
             ?.document(userInfo.uid)
             ?.set(userInfo)
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()
-                goToMainActivity(userInfo.userType)
+
+                goToUploadPictureActivity(userInfo.userType)
             }
             ?.addOnFailureListener {
                 Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun goToMainActivity(userType: UserType) {
-        var intent = Intent()
-
-        if(userType == UserType.CLIENT) {
-            intent = Intent(this, ClientWelcomeActivity::class.java)
-        }
-        else if(userType == UserType.MECHANIC) {
-            intent = Intent(this, MechanicWelcomeActivity::class.java)
-        }
-
-        startActivity(intent)
+    private fun goToUploadPictureActivity(userType: UserType) {
+        startActivity(Intent(this, ProfilePictureActivity::class.java))
         finish()
     }
 

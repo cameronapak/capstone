@@ -1,4 +1,9 @@
 <resources>
+    <string name="algolia_app_id">YVL1UI29QL</string>
+    <string name="algolia_api_key">d1e8a0c7b4dfaaeafbcc1b6d48d7e5fc</string>
+    <string name="algolia_services_index">services</string>
+
+
     <string name="app_name"></string>
     <string name="text_notification">Notification</string>
     <string name="text_find_service">Find Service</string>
@@ -17,7 +22,9 @@
     <string name="text_rating_initial">0</string>
     <string name="text_rating_wrong">What went Wrong?</string>
     <string name="text_rating_comment">Comment</string>
-    <string name="text_rating_subititle">Rate the service</string>
+    <string name="text_rating_subitle">Rate the service</string>
+    <string name="text_service">Service</string>
+    <string name="text_filter">Filter</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>
@@ -96,6 +103,7 @@
     <!--recyclerview_item_request-->
     <string name="place_holder_client_name">Jackie Chan</string>
     <string name="request_on">Requested on %s</string>
+    <string name="accept_on">Accepted on %s</string>
     <string name="complete_on">Completed on %s</string>
     <string name="request_status_request">Request</string>
     <string name="request_status_active">Active</string>
@@ -113,7 +121,7 @@
 
     <string name="price">$%.2f</string>
     <string name="are_you_sure">Are you sure?</string>
-    <string name="confirm_desc">1. The client issue has been resolved\\n2. You have received the correct payment for
+    <string name="confirm_desc">1. The client issue has been resolved\n2. You have received the correct payment for
         your service
     </string>
     <string name="confirm_that">Here you confirm that</string>
@@ -122,6 +130,13 @@
     <string name="text_accept">Accept</string>
     <string name="text_remove">Remove</string>
     <string name="text_update">Update</string>
-    <string name="label_remove_service_view">Are you sure you want to remove this service?</string>
+
+    <!-- FireStore Collection References -->
+    <string name="ref_accounts">Accounts</string>
+    <string name="ref_services">Services</string>
+    <string name="ref_requests">Requests</string>
+
+    <string name="err_accept_fail">Failed to accept request.</string>
+    <string name="err_complete_fail">Failed to complete service.</string>
 
 </resources>

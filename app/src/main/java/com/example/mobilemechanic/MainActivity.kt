@@ -7,6 +7,7 @@ import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
+import com.example.mobilemechanic.shared.ProfilePictureActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.example.mobilemechanic.shared.SignInActivity
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         id_loginButton.setOnClickListener(this)
         id_clientButton.setOnClickListener(this)
         id_mechanicButton.setOnClickListener(this)
+        id_uploadButton.setOnClickListener(this)
     }
 
     override fun onClick(view: View) {
@@ -36,6 +38,10 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             R.id.id_registrationButton -> {
                 startActivity(Intent(this, RegistrationActivity::class.java))
 
+            }
+
+            R.id.id_uploadButton -> {
+                startActivity(Intent(this, ProfilePictureActivity::class.java))
             }
 
             // Bisi

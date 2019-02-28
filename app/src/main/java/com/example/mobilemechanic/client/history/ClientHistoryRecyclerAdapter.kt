@@ -23,6 +23,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         val description = itemView.findViewById<TextView>(R.id.id_service_description)
         val rateButton = itemView.findViewById<Button>(R.id.id_rate_button)
         val detailsButton = itemView.findViewById<Button>(R.id.id_details_button)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientHistoryRecyclerAdapter.ViewHolder {
@@ -37,6 +38,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
         if (receipt.request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"
+
 
         holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName} ${receipt.request.mechanicInfo?.basicInfo?.lastName}"
         holder.description.text =

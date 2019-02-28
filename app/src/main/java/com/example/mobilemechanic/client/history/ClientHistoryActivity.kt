@@ -43,11 +43,13 @@ class ClientHistoryActivity : AppCompatActivity() {
 
         receipts = ArrayList()
 
+
         requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
                 }
+
 
                 receipts.clear()
                 for (doc in querySnapshot!!) {
@@ -59,6 +61,7 @@ class ClientHistoryActivity : AppCompatActivity() {
 
                 historyAdapter.notifyDataSetChanged()
             }
+
     }
 
     private fun mockLogin() {
@@ -159,6 +162,11 @@ class ClientHistoryActivity : AppCompatActivity() {
             subtitle = "Previous services"
             setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onResume() {

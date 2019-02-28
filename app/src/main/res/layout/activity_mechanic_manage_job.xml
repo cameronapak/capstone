@@ -9,7 +9,7 @@
 
     <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
         <android.support.v7.widget.Toolbar
-                android:id="@+id/id_more_toolbar"
+                android:id="@+id/id_manage_job_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/toolbar_height"
                 android:minHeight="@dimen/toolbar_height"
@@ -19,15 +19,15 @@
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/id_more_toolbar"
+                android:layout_below="@id/id_manage_job_toolbar"
                 map:srcCompat="@drawable/bg_more"
-                android:id="@+id/bg_more"/>
+                android:id="@+id/bg_manage_job"/>
         <fragment
                 android:layout_width="match_parent"
                 android:layout_height="355dp"
-                android:layout_below="@id/bg_more"
+                android:layout_below="@id/bg_manage_job"
                 android:id="@+id/map"
-                tools:context=".mechanic.map.MechanicMoreInformationActivity"
+                tools:context=".mechanic.map.MechanicManageJobActivity"
                 android:name="com.google.android.gms.maps.SupportMapFragment"/>
         <include layout="@layout/card_vehicle_container"
                  android:layout_marginTop="20dp"
@@ -35,8 +35,8 @@
                  android:layout_height="342dp"
                  android:layout_gravity="center"
                  android:layout_centerHorizontal="true"
-                 android:layout_below="@+id/id_more_toolbar"
-                 android:id="@+id/id_mechanic_more_info_card"></include>
+                 android:layout_below="@+id/id_manage_job_toolbar"
+                 android:id="@+id/id_mechanic_manage_job_card"></include>
 
     </RelativeLayout>
 

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:elevation="5dp"
+             android:layout_height="342dp">
+    <android.support.constraint.ConstraintLayout
+            android:background="@drawable/round_corner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <TextView
+                android:text="2011 Toyota Venza"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_car_title"
+                app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="32dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="32dp" app:layout_constraintHorizontal_bias="0.498" android:textSize="24sp"
+                android:textAlignment="center" android:fontFamily="@font/qualio"
+                android:textColor="@color/colorGrayTextDark" android:layout_marginTop="8dp"/>
+        <ImageView
+                android:layout_width="227dp"
+                android:layout_height="150dp" app:srcCompat="@drawable/toyota_venza"
+                android:id="@+id/id_car_image" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_car_title" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_service_needed_title" android:layout_marginTop="12dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_car_image" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="60dp" android:text="@string/text_service_needed" android:textSize="18sp"
+                android:textColor="@color/colorHeaderDark" android:fontFamily="@font/qualio_bold"/>
+        <TextView
+                android:text="@string/text_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_address_title"
+                app:layout_constraintTop_toTopOf="@+id/id_service_needed_title"
+                app:layout_constraintStart_toEndOf="@+id/id_service_needed_title"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" android:textSize="18sp" android:textColor="@color/colorHeaderDark"
+                android:fontFamily="@font/qualio_bold"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_service_needed"
+                app:layout_constraintTop_toBottomOf="@+id/id_service_needed_title"
+                app:layout_constraintStart_toStartOf="@+id/id_service_needed_title" android:textSize="12sp"
+                android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_address"
+                app:layout_constraintTop_toBottomOf="@+id/id_address_title"
+                app:layout_constraintStart_toStartOf="@+id/id_address_title" android:textSize="12sp"
+                android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio"/>
+        <TextView
+                android:text="@string/availability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_availability_title" android:layout_marginTop="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_service_needed"
+                app:layout_constraintStart_toStartOf="@+id/id_service_needed" android:textSize="18sp"
+                android:textColor="@color/colorHeaderDark" android:fontFamily="@font/qualio_bold"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_availability"
+                app:layout_constraintTop_toBottomOf="@+id/id_availability_title"
+                app:layout_constraintStart_toStartOf="@+id/id_availability_title" android:textSize="12sp"
+                android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio"/>
+
+        <Button
+                android:text="@string/text_accept"
+                android:layout_width="82dp"
+                android:layout_height="36dp"
+                android:textAllCaps="false"
+                android:background="@drawable/default_border"
+                android:id="@+id/id_positive"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:fontFamily="@font/timeburnernormal"
+                android:textColor="@color/colorPrimary3"
+                style="?android:attr/borderlessButtonStyle"/>
+        <Button
+                android:text="@string/text_decline"
+                android:layout_width="82dp"
+                android:layout_height="36dp"
+                android:textAllCaps="false"
+                android:background="@drawable/default_border_focus"
+                android:id="@+id/id_negative"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:fontFamily="@font/timeburnernormal"
+                android:textColor="@color/colorFocus"
+                style="?android:attr/borderlessButtonStyle" app:layout_constraintEnd_toStartOf="@+id/id_positive"/>
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

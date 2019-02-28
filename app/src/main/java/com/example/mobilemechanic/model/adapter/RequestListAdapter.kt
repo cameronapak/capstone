@@ -24,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.support.v4.content.ContextCompat.startActivity
+import android.net.Uri
+
 
 class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>) :
     RecyclerView.Adapter<RequestListAdapter.ViewHolder>() {
@@ -133,7 +136,19 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
 
     private fun handleDirectionsOnClick(request: Request)
     {
-        //TODO: open NavigationActivity map with coordinates, use functions in AddressManager to get LatLng for Client
+        val address = AddressManager.getFullAddress(request.clientInfo!!.address)
+        val latLong = AddressManager.convertAddress(context, address)
+
+        // Create a Uri from an intent string. Use the result to create an Intent.
+        val gmmIntentUri = Uri.parse("google.streetview:cbll=${latLong.latitude},${latLong.longitude}")
+
+        // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+
+        // Make the Intent explicit by setting the Google Maps package
+        mapIntent.setPackage("com.google.android.apps.maps")
+        
+        context.startActivity(mapIntent)
     }
 
     private fun createAcceptDialog(request: Request)

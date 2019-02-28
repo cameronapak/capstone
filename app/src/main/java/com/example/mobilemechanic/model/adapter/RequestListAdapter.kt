@@ -13,11 +13,12 @@ import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
-import com.example.mobilemechanic.mechanic.REQ_CODE_MORE_INFO
+import com.example.mobilemechanic.mechanic.map.MechanicManageJobActivity
 import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_container_basic.*
@@ -47,7 +48,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             .inflate(R.layout.recyclerview_item_request, parent, false)
 
         mFirestore = FirebaseFirestore.getInstance()
-        requestRef = mFirestore.collection("Requests")
+        requestRef = mFirestore.collection(context.getString(R.string.ref_requests))
         return ViewHolder(view)
     }
 
@@ -66,9 +67,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
         holder.description.text = request.comment
-        //location.text = "0 mi"
-        // TODO: location calculation (https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address)
-        // TODO: then, get directions with Location.distanceBetween(long1, lat1, long2, lat2) from google API
+        holder.distance.text = context.getString(R.string.miles, getDistance(request))
         holder.timeStamp.text = if (request.acceptedOn!! > 0) {
             val time = Date(request.acceptedOn!!)
             val dateFormat = SimpleDateFormat("MMM d, y")
@@ -122,19 +121,19 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         if (request.status == Status.Request) {
             val intent = Intent(context, MechanicMoreInformationActivity::class.java)
             intent.putExtra(EXTRA_REQUEST, request)
-            context.startActivityForResult(intent, REQ_CODE_MORE_INFO)
+            context.startActivity(intent)
         }
 
         if (request.status == Status.Active) {
-            // TODO: Go to ManageRequest Activity
-
-
+            val intent = Intent(context, MechanicManageJobActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, request)
+            context.startActivity(intent)
         }
     }
 
     private fun handleDirectionsOnClick(request: Request)
     {
-        //TODO: open maps with coordinates
+        //TODO: open NavigationActivity map with coordinates, use functions in AddressManager to get LatLng for Client
     }
 
     private fun createAcceptDialog(request: Request)
@@ -166,7 +165,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         val completeDialog = BasicDialog.Builder.apply{
             title = context.getString(R.string.label_choice_complete)
             positive = context.getString(R.string.label_choice_confirm)
-            negative = context.getString(R.string.label_cancel_add_service)
+            negative = context.getString(R.string.text_cancel)
         }.build(context, container, dialogBody)
 
         completeDialog.show()
@@ -204,5 +203,14 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             .addOnFailureListener {
                 Toast.makeText(context, context.getString(R.string.err_complete_fail), Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun getDistance(request: Request) : Double
+    {
+        val clientAddress = AddressManager.getFullAddress(request.clientInfo!!.address)
+        val mechanicAddress = AddressManager.getFullAddress(request.mechanicInfo!!.address)
+        val clientLatLng = AddressManager.convertAddress(context, clientAddress)
+        val mechanicLatLng = AddressManager.convertAddress(context, mechanicAddress)
+        return AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
     }
 }

@@ -147,7 +147,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
 
         // Make the Intent explicit by setting the Google Maps package
         mapIntent.setPackage("com.google.android.apps.maps")
-        
+
         context.startActivity(mapIntent)
     }
 

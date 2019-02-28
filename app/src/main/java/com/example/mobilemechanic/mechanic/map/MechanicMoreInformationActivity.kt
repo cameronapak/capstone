@@ -2,19 +2,22 @@ package com.example.mobilemechanic.mechanic.map
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.example.mobilemechanic.R
-
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_mechanic_more_information.*
 
 const val MY_PERMISSION_REQ_GPS = 1
 const val TAG = "moreInfo"
@@ -31,6 +34,23 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        setUpMechanicMoreInformationActivity()
+    }
+
+    private fun setUpMechanicMoreInformationActivity() {
+        setUpToolBar()
+    }
+
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_more_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "More Information"
+            subtitle = "Request details"
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     /**
@@ -86,5 +106,10 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+        super.onResume()
     }
 }

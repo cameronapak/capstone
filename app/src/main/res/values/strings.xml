@@ -138,5 +138,8 @@
 
     <string name="err_accept_fail">Failed to accept request.</string>
     <string name="err_complete_fail">Failed to complete service.</string>
+    <string name="text_service_need">Service Need</string>
+    <string name="text_address">Address</string>
+    <string name="text_decline">Decline</string>
 
 </resources>

@@ -2,11 +2,13 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.opengl.Visibility
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.R
@@ -34,10 +36,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
         val status = itemView.findViewById<TextView>(R.id.id_service_type)
-        //val location = itemView.findViewById<TextView>(R.id.text_distance)
+        val distance = itemView.findViewById<TextView>(R.id.id_distance)
+        val directionsButton = itemView.findViewById<ImageButton>(R.id.id_directions_btn)
         val primaryButton = itemView.findViewById<Button>(R.id.id_primary_btn)
         val secondaryButton = itemView.findViewById<Button>(R.id.id_secondary_btn)
-//        val choiceButton = itemView.findViewById<Button>(R.id.id_select)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestListAdapter.ViewHolder {
@@ -58,17 +60,15 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         handleRequestViewType(request, holder)
 
         //fill card view
+        // TODO: profile photo url downloads photo into image container
         holder.price.text = context.getString(R.string.price, request?.service?.price)
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
         holder.description.text = request.comment
         //location.text = "0 mi"
-        /*TO DO
-        Add: - profile photo url downloads photo into image container
-             - location calculation
-         */
-
+        // TODO: location calculation (https://stackoverflow.com/questions/3574644/how-can-i-find-the-latitude-and-longitude-from-address)
+        // TODO: then, get directions with Location.distanceBetween(long1, lat1, long2, lat2) from google API
         holder.timeStamp.text = if (request.acceptedOn!! > 0) {
             val time = Date(request.acceptedOn!!)
             val dateFormat = SimpleDateFormat("MMM d, y")
@@ -88,17 +88,23 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         holder.primaryButton.setOnClickListener {
             handlePrimaryOnClick(request)
         }
+
+        holder.directionsButton.setOnClickListener{
+            handleDirectionsOnClick(request)
+        }
     }
 
     private fun handleRequestViewType(request: Request, holder: RequestListAdapter.ViewHolder) {
         if (request.status == Status.Request) {
-            holder.primaryButton.text = "Accept"
-            holder.secondaryButton.text = "More"
+            holder.primaryButton.text = context.getString(R.string.label_choice_accept)
+            holder.secondaryButton.text = context.getString(R.string.label_button_info_more)
+            holder.directionsButton.visibility = View.GONE
         }
 
         if (request.status == Status.Active){
-            holder.primaryButton.text = "Complete"
-            holder.secondaryButton.text = "Manage"
+            holder.primaryButton.text = context.getString(R.string.label_choice_complete)
+            holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
+            holder.directionsButton.visibility = View.VISIBLE
         }
     }
 
@@ -126,6 +132,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         }
     }
 
+    private fun handleDirectionsOnClick(request: Request)
+    {
+        //TODO: open maps with coordinates
+    }
 
     private fun createAcceptDialog(request: Request)
     {

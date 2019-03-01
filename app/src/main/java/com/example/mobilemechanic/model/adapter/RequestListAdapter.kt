@@ -2,7 +2,7 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Intent
-import android.opengl.Visibility
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -24,8 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.support.v4.content.ContextCompat.startActivity
-import android.net.Uri
 
 
 class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>) :
@@ -35,11 +33,12 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private lateinit var requestRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val price = itemView.findViewById<TextView>(R.id.id_price)
+//        val price = itemView.findViewById<TextView>(R.id.id_price)
         val name = itemView.findViewById<TextView>(R.id.id_client_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
-        val status = itemView.findViewById<TextView>(R.id.id_service_type)
+        val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
+        val status = itemView.findViewById<TextView>(R.id.id_request_status)
         val distance = itemView.findViewById<TextView>(R.id.id_distance)
         val directionsButton = itemView.findViewById<ImageButton>(R.id.id_directions_btn)
         val primaryButton = itemView.findViewById<Button>(R.id.id_primary_btn)
@@ -65,7 +64,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
 
         //fill card view
         // TODO: profile photo url downloads photo into image container
-        holder.price.text = context.getString(R.string.price, request?.service?.price)
+//        holder.price.text = context.getString(R.string.price, request?.service?.price)
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()

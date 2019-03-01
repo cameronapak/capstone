@@ -140,6 +140,8 @@
     <string name="err_accept_fail">Failed to accept request.</string>
     <string name="err_decline_fail">Failed to decline request.</string>
     <string name="err_complete_fail">Failed to complete service.</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="add_button">Add</string>
     <string name="err_cancel_job_fail">Failed to cancel job.</string>
     <string name="text_service_needed">Service Needed</string>
     <string name="text_address">Address</string>

@@ -43,13 +43,11 @@ class ClientHistoryActivity : AppCompatActivity() {
 
         receipts = ArrayList()
 
-
         requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
                 }
-
 
                 receipts.clear()
                 for (doc in querySnapshot!!) {
@@ -58,10 +56,8 @@ class ClientHistoryActivity : AppCompatActivity() {
 
                     receipts.add(receipt)
                 }
-
-                historyAdapter.notifyDataSetChanged()
+                    historyAdapter.notifyDataSetChanged()
             }
-
     }
 
     private fun mockLogin() {

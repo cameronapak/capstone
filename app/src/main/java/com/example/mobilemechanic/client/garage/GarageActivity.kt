@@ -1,5 +1,6 @@
 package com.example.mobilemechanic.client.garage
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +15,11 @@ class GarageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_garage)
         setUpGarageActivity()
+
+        id_add_vehicle.setOnClickListener {
+            val i = Intent(this, AddVechicleInfo::class.java)
+            startActivity(i)
+        }
     }
 
     private fun setUpGarageActivity() {
@@ -39,4 +45,5 @@ class GarageActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
+
 }

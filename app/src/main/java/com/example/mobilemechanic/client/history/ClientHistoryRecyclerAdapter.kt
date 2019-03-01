@@ -3,6 +3,7 @@ package com.example.mobilemechanic.client.history
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         val description = itemView.findViewById<TextView>(R.id.id_service_description)
         val rateButton = itemView.findViewById<Button>(R.id.id_rate_button)
         val detailsButton = itemView.findViewById<Button>(R.id.id_details_button)
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientHistoryRecyclerAdapter.ViewHolder {
@@ -32,19 +34,19 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val receipt = dataset[position]
+
         var type = "${receipt.request.service?.serviceType}"
 
         if (receipt.request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"
 
-        holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName}"
+        holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName} ${receipt.request.mechanicInfo?.basicInfo?.lastName}"
         holder.description.text =
             "$type for ${receipt.request.vehicle?.year} ${receipt.request.vehicle?.make} ${receipt.request.vehicle?.model}"
 
-
         holder.rateButton.setOnClickListener {
             val intent = Intent(context, ServiceRatingActivity::class.java)
-            intent.putExtra("name", "${receipt.request.mechanicInfo?.uid}")
+            intent.putExtra("request", receipt.request)
             context.startActivity(intent)
         }
 

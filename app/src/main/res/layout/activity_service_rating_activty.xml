@@ -181,13 +181,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         <TextView
-                android:layout_width="209dp"
+                android:layout_width="284dp"
                 android:layout_height="24dp"
                 android:id="@+id/id_rating_question"
                 android:fontFamily="@font/qualio_bold" android:textSize="24sp"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="111dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="101dp"
-                android:textColor="@color/colorPrimary3" android:textAlignment="center"/>
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="112dp"
+                android:textColor="@color/colorPrimary3" android:textAlignment="center"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="63dp"/>
         <TextView
                 android:layout_width="209dp"
                 android:layout_height="24dp"

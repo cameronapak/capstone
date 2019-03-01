@@ -34,16 +34,15 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val receipt = dataset[position]
+
         var type = "${receipt.request.service?.serviceType}"
 
         if (receipt.request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
         else holder.serviceProgress.text = "Service in Progress"
 
-
         holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName} ${receipt.request.mechanicInfo?.basicInfo?.lastName}"
         holder.description.text =
             "$type for ${receipt.request.vehicle?.year} ${receipt.request.vehicle?.make} ${receipt.request.vehicle?.model}"
-
 
         holder.rateButton.setOnClickListener {
             val intent = Intent(context, ServiceRatingActivity::class.java)

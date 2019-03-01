@@ -17,6 +17,7 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.SetOptions
 import kotlinx.android.synthetic.main.activity_service_rating_activty.*
 
 class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeListener {
@@ -30,6 +31,18 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service_rating_activty)
 
+        setUpServiceRatingActivity()
+
+    }
+
+    private fun setUpServiceRatingActivity() {
+        setUpToolBar()
+        initFireStore()
+        mockLogin()
+        setUpReview()
+    }
+
+    private fun setUpReview () {
         val ss: Request? = intent.getParcelableExtra("request")
         val question = findViewById<TextView>(R.id.id_rating_question)
         val ratingBar = findViewById<RatingBar>(R.id.id_rating_bar)
@@ -74,8 +87,10 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
             var s = ""
 
             for(box in checkGroup) {
-                if(box.isChecked) wrongText += "${box.text} "
+                if(box.isChecked) wrongText += "${box.text}, "
             }
+
+            wrongText = wrongText.dropLast(2)
 
             if(wrongText == "") {
                 s = "Name: ${ss?.mechanicInfo?.rating} \nRating: ${id_rating_rate.text} \nComment: ${id_rating_comment.text}"
@@ -89,43 +104,20 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
             wrongText = ""
 
             addRating(review)
+
+            onBackPressed()
+
         }
-
-        setUpServiceRatingActivity()
-
     }
 
     private fun addRating(review: Review) {
-        try {
-            reviewRef.document()?.set(review)?.addOnSuccessListener { documentRef ->
+
+        var doc = "${review.clientInfo?.uid}${review.mechanicInfo?.uid}"
+
+            reviewRef.document(doc)?.set(review, SetOptions.merge())?.addOnSuccessListener {
+                SetOptions.merge()
             }
-        }catch (e: Throwable) {
-            reviewRef.whereEqualTo("clientInfo.uid",review.clientInfo?.uid)
-                .whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid)
-                ?.addSnapshotListener { querySnapshot, exception ->
-                    if (exception != null) {
-                        return@addSnapshotListener
-                    }
-                    for (doc in querySnapshot!!) {
-                        reviewRef?.document(doc.id).set(
-                            review
-                        )
 
-                    }
-                }
-        }
-
-//        val intent = Intent(applicationContext, ClientHistoryActivity::class.java)
-//        applicationContext.startActivity(intent)
-
-
-    }
-
-
-    private fun setUpServiceRatingActivity() {
-        setUpToolBar()
-        initFireStore()
-        mockLogin()
     }
 
     //mock login

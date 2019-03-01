@@ -11,6 +11,7 @@ enum class UserType {
 
 data class User(
     var uid: String,
+    var fbToken: String,
     var password: String,
     var userType: UserType,
     var basicInfo: BasicInfo,
@@ -18,12 +19,13 @@ data class User(
     var rating: Float
 ) : Parcelable {
     constructor() : this(
-        "", "", UserType.CLIENT, BasicInfo(), Address(), 0f
+        "", "", "", UserType.CLIENT, BasicInfo(), Address(), 0f
     )
 
     var vehicles: ArrayList<Vehicle>? = ArrayList()
 
     constructor(parcel: Parcel) : this(
+        parcel.readString(),
         parcel.readString(),
         parcel.readString(),
         UserType.values()[parcel.readInt()],
@@ -38,6 +40,7 @@ data class User(
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(uid)
+        parcel.writeString(fbToken)
         parcel.writeString(password)
         parcel.writeString(userType.name)
         parcel.writeParcelable(basicInfo, flags)

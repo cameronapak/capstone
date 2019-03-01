@@ -3,14 +3,18 @@ package com.example.mobilemechanic.shared
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_sign_in.*
 
 class SignInActivity : AppCompatActivity() {
@@ -39,6 +43,17 @@ class SignInActivity : AppCompatActivity() {
             mAuth?.signInWithEmailAndPassword(email, password)
                 ?.addOnCompleteListener {
                     if (it.isSuccessful) {
+
+                        FirebaseInstanceId.getInstance().instanceId
+                            .addOnCompleteListener(OnCompleteListener { task ->
+                                if (!task.isSuccessful) {
+                                    Log.w(CLIENT_TAG, "getInstanceId failed", task.exception)
+                                    return@OnCompleteListener
+                                }
+                                val token = task.result?.token
+                                Log.d(CLIENT_TAG, "[SignInActvity] token: $token")
+                            })
+
                         mFirestore.collection("Accounts")
                             .document(mAuth?.currentUser?.uid.toString()).get()
                             ?.addOnSuccessListener {

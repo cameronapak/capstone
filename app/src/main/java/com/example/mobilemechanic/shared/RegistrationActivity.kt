@@ -2,16 +2,11 @@ package com.example.mobilemechanic.shared
 
 import android.content.Intent
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.ClientWelcomeActivity
-import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
@@ -21,7 +16,6 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
@@ -85,8 +79,8 @@ class RegistrationActivity : AppCompatActivity() {
                     mAuth?.createUserWithEmailAndPassword(email, password)
                         ?.addOnCompleteListener {
                             user.uid = mAuth?.uid.toString()
-                            user.fbToken = token.toString()
-                            Toast.makeText(this, user.fbToken, Toast.LENGTH_SHORT).show()
+                            user.fcmToken = token.toString()
+                            Toast.makeText(this, user.fcmToken, Toast.LENGTH_SHORT).show()
                             handleAccountCreationSuccess(it, user)
                         }
                 }

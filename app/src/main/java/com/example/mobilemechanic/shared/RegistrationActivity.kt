@@ -4,6 +4,7 @@ import android.content.Intent
 import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.Spinner
 import android.widget.Toast
@@ -28,7 +29,6 @@ class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
     private var mFireStore: FirebaseFirestore? = null
     private var mStorage: FirebaseStorage? = null
-    private var fileUriPath: Uri? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -93,24 +93,16 @@ class RegistrationActivity : AppCompatActivity() {
             ?.set(userInfo)
             ?.addOnSuccessListener {
                 Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()
-                goToMainActivity(userInfo.userType)
+
+                goToUploadPictureActivity(userInfo.userType)
             }
             ?.addOnFailureListener {
                 Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun goToMainActivity(userType: UserType) {
-        var intent = Intent()
-
-        if(userType == UserType.CLIENT) {
-            intent = Intent(this, ClientWelcomeActivity::class.java)
-        }
-        else if(userType == UserType.MECHANIC) {
-            intent = Intent(this, MechanicWelcomeActivity::class.java)
-        }
-
-        startActivity(intent)
+    private fun goToUploadPictureActivity(userType: UserType) {
+        startActivity(Intent(this, ProfilePictureActivity::class.java))
         finish()
     }
 

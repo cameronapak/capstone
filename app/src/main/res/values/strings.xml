@@ -118,6 +118,7 @@
     <string name="label_choice_confirm">Confirm</string>
     <string name="label_remove_service">Remove</string>
     <string name="label_update_service">Update</string>
+    <string name="miles">%.2f mi</string>
 
     <string name="price">$%.2f</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -137,8 +138,16 @@
     <string name="ref_requests">Requests</string>
 
     <string name="err_accept_fail">Failed to accept request.</string>
+    <string name="err_decline_fail">Failed to decline request.</string>
     <string name="err_complete_fail">Failed to complete service.</string>
     <string name="cancel_button">Cancel</string>
     <string name="add_button">Add</string>
+    <string name="err_cancel_job_fail">Failed to cancel job.</string>
+    <string name="text_service_needed">Service Needed</string>
+    <string name="text_address">Address</string>
+    <string name="text_decline">Decline</string>
+    <string name="title_activity_mechanic_manage_job">Map</string>
+    <string name="text_cancel_job">Cancel Job</string>
+    <string name="text_contact">Contact</string>
 
 </resources>

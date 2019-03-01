@@ -23,7 +23,6 @@ import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
 const val EXTRA_REQUEST = "service_request"
-const val REQ_CODE_MORE_INFO = 1
 const val MECHANIC_TAG = "mechanic"
 
 class MechanicWelcomeActivity : AppCompatActivity() {
@@ -42,7 +41,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_mechanic_welcome)
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
-        requestRef = mFirestore.collection("Requests")
+        requestRef = mFirestore.collection(getString(R.string.ref_requests))
         setUpMechanicWelcomeActivity()
     }
 

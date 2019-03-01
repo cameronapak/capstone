@@ -11,6 +11,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".client.garage.AddVechicleInfo">
+        </activity>
         <activity android:name=".shared.ProfilePictureActivity">
         </activity>
         <activity android:name=".client.garage.GarageActivity">

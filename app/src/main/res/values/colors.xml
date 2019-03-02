@@ -14,6 +14,7 @@
 
     <color name="colorGrayText">#A0A5AE</color>
     <color name="colorGrayTextDark">#7B83A9</color>
+    <color name="colorGrayTextDark2">#333333</color>
     <color name="colorWarning">#EB8356</color>
     <color name="colorFocus">#BC4343</color>
 

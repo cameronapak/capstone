@@ -19,6 +19,14 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".client.garage.AddVechicleInfo">
+        </activity>
+
+        <service android:name=".shared.utility.CustomFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -73,6 +81,10 @@
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>
         <activity android:name=".client.ClientWelcomeActivity">
+            <intent-filter>
+                <action android:name="CLIENT_WELCOME_ACTIVITY"/>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
         <activity android:name=".shared.SignInActivity">
         </activity>
@@ -81,7 +93,6 @@
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>

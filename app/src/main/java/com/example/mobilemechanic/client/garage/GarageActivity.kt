@@ -15,15 +15,11 @@ class GarageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_garage)
         setUpGarageActivity()
-
-        id_add_vehicle.setOnClickListener {
-            val i = Intent(this, AddVechicleInfo::class.java)
-            startActivity(i)
-        }
     }
 
     private fun setUpGarageActivity() {
         setUpActionBar()
+        setUpOnAddVehicle()
     }
 
     private fun setUpActionBar() {
@@ -33,6 +29,13 @@ class GarageActivity : AppCompatActivity() {
             title = "Garage"
             subtitle = "Manage your vehicles"
             setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun setUpOnAddVehicle() {
+        id_add_vehicle.setOnClickListener {
+            val i = Intent(this, AddVechicleInfo::class.java)
+            startActivity(i)
         }
     }
 

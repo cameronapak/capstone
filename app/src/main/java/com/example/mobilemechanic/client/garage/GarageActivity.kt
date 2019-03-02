@@ -108,7 +108,6 @@ class GarageActivity : AppCompatActivity(),  AdapterView.OnItemSelectedListener 
     private fun handleDialogClick(basicDialog: BasicDialog) {
         basicDialog.id_positive.setOnClickListener {
             addVehicleToFirestore(basicDialog)
-            basicDialog.dismiss()
         }
 
         basicDialog.id_negative.setOnClickListener {
@@ -129,6 +128,7 @@ class GarageActivity : AppCompatActivity(),  AdapterView.OnItemSelectedListener 
                 }?.addOnFailureListener {
                     Toast.makeText(this, "Unable to add vehicle", Toast.LENGTH_LONG).show()
                 }
+            basicDialog.dismiss()
         } else {
             Toast.makeText(this, "Please fill all information", Toast.LENGTH_LONG).show()
         }

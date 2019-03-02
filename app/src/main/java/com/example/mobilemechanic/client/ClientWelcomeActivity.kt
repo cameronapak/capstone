@@ -16,7 +16,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
-import com.example.mobilemechanic.shared.ProfilePictureActivity
+import com.example.mobilemechanic.shared.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_client_welcome.*
@@ -30,7 +30,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_welcome)
-
+        mAuth = FirebaseAuth.getInstance()
         setUpClientWelcomeActivity()
     }
 
@@ -105,7 +105,18 @@ class ClientWelcomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkIfUserIsSignedIn() {
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] checkIfUserIsSignedIn() User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User email: ${mAuth?.currentUser?.email}")
+        val user = mAuth?.currentUser
+        if (user == null) {
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }
+    }
+
     override fun onResume() {
+        checkIfUserIsSignedIn()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
     }

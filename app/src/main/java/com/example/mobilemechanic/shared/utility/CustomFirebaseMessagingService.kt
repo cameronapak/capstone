@@ -28,6 +28,7 @@ class CustomFirebaseMessagingService : FirebaseMessagingService() {
         Log.d(CLIENT_TAG, "[CustomFirebaseMessagingService] title: $notificationTitle")
         Log.d(CLIENT_TAG, "[CustomFirebaseMessagingService] body: $notificationBody")
         Log.d(CLIENT_TAG, "[CustomFirebaseMessagingService] data: $notificationData")
+
     }
 
     override fun onDeletedMessages() {

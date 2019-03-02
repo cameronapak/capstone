@@ -9,10 +9,11 @@ import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.ProfilePictureActivity
 import com.example.mobilemechanic.shared.RegistrationActivity
-import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.example.mobilemechanic.shared.SignInActivity
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+
 
 class MainActivity : AppCompatActivity(), OnClickListener {
     private lateinit var mAuth: FirebaseAuth

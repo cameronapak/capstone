@@ -54,7 +54,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun mockLogin() {
-        mAuth?.signInWithEmailAndPassword("statham@gmail.com", "123456")
+        mAuth?.signInWithEmailAndPassword("dpham9@uco.edu", "123456")
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
                     val user = mAuth?.currentUser

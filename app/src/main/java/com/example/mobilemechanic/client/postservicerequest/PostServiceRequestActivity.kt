@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
+import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -50,8 +51,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
     private lateinit var daysOfWeekString: String
-    private lateinit var fromTime: String
-    private lateinit var toTime: String
+    private var fromTime: String = ""
+    private var toTime: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -234,10 +235,16 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
 
             daysOfWeekString = availableDays.joinToString(separator = ", ")
-            fromTime = dialogContainer.id_btnFromTime.text.toString()
-            toTime = dialogContainer.id_btnToTime.text.toString()
-            id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
-            basicDialog.dismiss()
+//            fromTime = dialogContainer.id_btnFromTime.text.toString()
+//            toTime = dialogContainer.id_btnToTime.text.toString()
+            if (availableDays.isEmpty()) {
+                Toast.makeText(this, "Select available days", Toast.LENGTH_SHORT).show()
+            } else if (fromTime.isNullOrBlank() || toTime.isNullOrBlank()) {
+                Toast.makeText(this, "Select from and to times", Toast.LENGTH_SHORT).show()
+            } else {
+                id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
+                basicDialog.dismiss()
+            }
         }
 
         dialogContainer.id_negative.setOnClickListener {
@@ -286,13 +293,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     (if (h >= 12) " PM" else " AM").toString()
 
             // TODO: compare times from and to, and do not allow continue unless from is before to
-
             when (view.id) {
                 dialogContainer.id_btnFromTime.id -> {
                     dialogContainer.id_btnFromTime.text = time
+                    fromTime = time
                 }
                 dialogContainer.id_btnToTime.id -> {
                     dialogContainer.id_btnToTime.text = time
+                    toTime = time
                 }
             }
 

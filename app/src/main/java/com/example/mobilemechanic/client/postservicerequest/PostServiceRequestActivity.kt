@@ -10,8 +10,10 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.model.Request
@@ -134,7 +136,10 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request)?.addOnSuccessListener {
-
+                            Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                        }?.addOnFailureListener {
+                            Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -298,7 +303,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         validateForm()
     }
 

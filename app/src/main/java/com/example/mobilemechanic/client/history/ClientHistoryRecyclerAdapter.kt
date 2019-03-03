@@ -3,13 +3,13 @@ package com.example.mobilemechanic.client.history
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.detail.ServiceDetailActivity
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
 import com.example.mobilemechanic.model.Receipt
 import com.example.mobilemechanic.model.Status
@@ -34,11 +34,11 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val receipt = dataset[position]
-
         var type = "${receipt.request.service?.serviceType}"
 
-        if (receipt.request.status == Status.Complete) holder.serviceProgress.text = "Service Completed"
-        else holder.serviceProgress.text = "Service in Progress"
+        if (receipt.request.status == Status.Complete) {
+            holder.serviceProgress.text = "Service Completed"
+        }
 
         holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName} ${receipt.request.mechanicInfo?.basicInfo?.lastName}"
         holder.description.text =
@@ -51,7 +51,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         }
 
         holder.detailsButton.setOnClickListener {
-
+            context.startActivity(Intent(context, ServiceDetailActivity::class.java))
         }
     }
 

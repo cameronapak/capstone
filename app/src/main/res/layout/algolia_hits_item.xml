@@ -39,7 +39,8 @@
                 android:textSize="12sp"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/id_select"
-                algolia:attribute='@{"service.description"}'/>
+                algolia:attribute='@{"service.description"}'
+                algolia:highlighted='@{true}'/>
         <TextView
                 android:text="Name"
                 android:layout_width="wrap_content"

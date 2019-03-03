@@ -149,5 +149,6 @@
     <string name="title_activity_mechanic_manage_job">Map</string>
     <string name="text_cancel_job">Cancel Job</string>
     <string name="text_contact">Contact</string>
+    <string name="text_status">Status:</string>
 
 </resources>

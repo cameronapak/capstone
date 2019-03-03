@@ -79,8 +79,8 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
 
 
         basicDialog = BasicDialog.Builder.apply {
-            title = "Add Service"
-            positive = "Add"
+            title = "Remove Service"
+            positive = "Remove"
             negative = "Cancel"
         }.build(context, dialogContainer, dialogBody)
         basicDialog.show()
@@ -92,6 +92,7 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
                 Toast.makeText(context, "Failed to remove service", Toast.LENGTH_LONG).show()
                 Log.w(MECHANIC_TAG, "Error deleting services", it)
             }
+            basicDialog.dismiss()
         }
         basicDialog.id_negative.setOnClickListener {
             basicDialog.dismiss()
@@ -120,8 +121,8 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
             val descriptionUpdate = basicDialog.label_comment.text.toString().trim()
 
             serviceRef.document("${serviceItem.objectID}")
-                .update("serviceType", serviceType, "price",
-                    parseDouble(priceUpdate), "description", descriptionUpdate)
+                .update("service.serviceType", serviceType, "service.price",
+                    parseDouble(priceUpdate), "service.description", descriptionUpdate)
                 .addOnSuccessListener {
                 Toast.makeText(context, "Service Update Successfully", Toast.LENGTH_LONG).show()
             }?.addOnFailureListener {

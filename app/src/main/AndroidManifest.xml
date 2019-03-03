@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.mobilemechanic">
-
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
@@ -19,9 +18,16 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".client.detail.ServiceDetailActivity">
+        </activity>
         <activity android:name=".client.garage.AddVechicleInfo">
         </activity>
 
+        <service android:name=".shared.utility.CustomFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
              (See the file "res/values/google_maps_api.xml").
@@ -75,6 +81,11 @@
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>
         <activity android:name=".client.ClientWelcomeActivity">
+            <intent-filter>
+                <action android:name="CLIENT_WELCOME_ACTIVITY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
         <activity android:name=".shared.SignInActivity">
         </activity>

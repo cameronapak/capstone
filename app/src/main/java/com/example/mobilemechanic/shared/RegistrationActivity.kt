@@ -2,15 +2,11 @@ package com.example.mobilemechanic.shared
 
 import android.content.Intent
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.app.AppCompatActivity
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.ClientWelcomeActivity
-import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
@@ -21,6 +17,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 
@@ -68,13 +65,25 @@ class RegistrationActivity : AppCompatActivity() {
         if(validateInformation(email, password, firstName, lastName, phoneNumber, street, city, state, zip)) {
             val address = Address(street, city, state, zip)
             val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
-            val user = User("", password, userType, basicInfo, address, 0f)
+            val user = User("", "", password, userType, basicInfo, address, 0f)
 
-            mAuth?.createUserWithEmailAndPassword(email, password)
+            // get Firebase token
+            FirebaseInstanceId.getInstance().instanceId
                 ?.addOnCompleteListener {
-                    user.uid = mAuth?.uid.toString()
-                    handleAccountCreationSuccess(it, user)
-            }
+                    if (!it.isSuccessful) {
+                        return@addOnCompleteListener
+                    }
+
+                    val token = it.result?.token
+
+                    mAuth?.createUserWithEmailAndPassword(email, password)
+                        ?.addOnCompleteListener {
+                            user.uid = mAuth?.uid.toString()
+                            user.fcmToken = token.toString()
+                            Toast.makeText(this, user.fcmToken, Toast.LENGTH_SHORT).show()
+                            handleAccountCreationSuccess(it, user)
+                        }
+                }
         }
     }
 

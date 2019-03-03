@@ -2,11 +2,11 @@ package com.example.mobilemechanic.mechanic.map
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.Toast
@@ -17,7 +17,6 @@ import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
-
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -27,7 +26,6 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_manage_job.*
-import kotlinx.android.synthetic.main.activity_mechanic_more_information.*
 import kotlinx.android.synthetic.main.card_vehicle_container.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
@@ -188,5 +186,10 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
             .addOnFailureListener {
                 Toast.makeText(this, getString(R.string.err_cancel_job_fail), Toast.LENGTH_SHORT).show()
             }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

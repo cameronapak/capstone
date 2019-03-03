@@ -5,7 +5,6 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.algolia.ServiceModel
@@ -32,7 +31,7 @@ class ClientHistoryActivity : AppCompatActivity() {
         setContentView(R.layout.activity_client_history)
         initFireStore()
 //        login()
-        mockLogin()
+//        mockLogin()
         setUpReceipt()
 //        mockClient()
         setUpAdapter()
@@ -44,6 +43,7 @@ class ClientHistoryActivity : AppCompatActivity() {
         receipts = ArrayList()
 
         requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
+        requestRef.whereEqualTo("status", Status.Complete)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
@@ -60,17 +60,17 @@ class ClientHistoryActivity : AppCompatActivity() {
             }
     }
 
-    private fun mockLogin() {
-        mAuth?.signInWithEmailAndPassword("dat@gmail.com", "123456")
-            ?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val user = mAuth?.currentUser
-                    Log.d("history", "Login ID: ${user?.uid}")
-                }
-            }?.addOnFailureListener {
-                Log.d("history", it.toString())
-            }
-    }
+//    private fun mockLogin() {
+//        mAuth?.signInWithEmailAndPassword("dat@gmail.com", "123456")
+//            ?.addOnCompleteListener {
+//                if (it.isSuccessful) {
+//                    val user = mAuth?.currentUser
+//                    Log.d("history", "Login ID: ${user?.uid}")
+//                }
+//            }?.addOnFailureListener {
+//                Log.d("history", it.toString())
+//            }
+//    }
 
     private fun login() {
 //        mAuth?.signInWithEmailAndPassword( )

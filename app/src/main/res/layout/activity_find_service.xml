@@ -7,7 +7,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        tools:context=".client.postservicerequest.PostServiceRequestActivity" android:id="@+id/id_frame_layout">
+        tools:context=".client.postservicerequest.PostServiceRequestActivity"
+        android:id="@+id/id_find_service_layout">
 
     <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
                                                  android:elevation="5dp"

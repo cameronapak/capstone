@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.StaggeredGridLayoutManager
@@ -37,6 +38,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
 import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -48,6 +50,7 @@ const val EXTRA_SERVICE = "extra_service"
 class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
     AlgoliaErrorListener, AlgoliaSearcherListener {
+
     private var remainingItemsBeforeLoading: Int
     var layoutId: Int = 0
         protected set
@@ -56,7 +59,7 @@ class HitsCustomized
     lateinit var searcher: Searcher
     private var imeManager: InputMethodManager
     private var gson: Gson
-    protected var infiniteScrollListener: InfiniteScrollListener?
+    private var infiniteScrollListener: InfiniteScrollListener?
     private var keyboardListener: RecyclerView.OnScrollListener? = null
     private var emptyView: View? = null
 
@@ -136,6 +139,7 @@ class HitsCustomized
             }
         }
         addOnScrollListener(keyboardListener!!)
+
     }
 
     fun disableKeyboardAutoHiding() {
@@ -359,6 +363,10 @@ class HitsCustomized
                 context.startActivity(intent)
             }
 
+            holder.hitItem.setOnClickListener {
+                ScreenManager.hideKeyBoard(context, it)
+            }
+
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
@@ -454,6 +462,7 @@ class HitsCustomized
             val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_client_name)
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
+            val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
 
             init {
                 var indexVariant: String? = defaultValue

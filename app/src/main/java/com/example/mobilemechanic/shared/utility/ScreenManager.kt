@@ -2,9 +2,11 @@ package com.example.mobilemechanic.shared.utility
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Context
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 
 object ScreenManager {
     fun hideStatusAndBottomNavigationBar(activity: Activity) {
@@ -40,5 +42,10 @@ object ScreenManager {
         val dialogWindowWidth = (displayWidth * proportion).toInt()
         layoutParams.width = dialogWindowWidth
         return layoutParams
+    }
+
+    fun hideKeyBoard(context: Context, view: View) {
+        val imm = context.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }

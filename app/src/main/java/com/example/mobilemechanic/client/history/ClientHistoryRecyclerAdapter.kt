@@ -11,10 +11,12 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.detail.ServiceDetailActivity
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
-import com.example.mobilemechanic.model.Receipt
+import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 
-class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Receipt>) :
+const val EXTRA_REQUEST_RATING = "extra_request_rating"
+
+class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
     RecyclerView.Adapter<ClientHistoryRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -28,25 +30,28 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientHistoryRecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recyclerview_client_history, parent, false)
+            .inflate(R.layout.recyclerview_item_client_history, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val receipt = dataset[position]
-        var type = "${receipt.request.service?.serviceType}"
-
-        if (receipt.request.status == Status.Complete) {
+        val request = dataset[position]
+        val receipt = request.receipt
+        var type = "${request.service?.serviceType}"
+        val mechanicFirstName = request.mechanicInfo?.basicInfo?.firstName
+        val mechanicLastName = request.mechanicInfo?.basicInfo?.lastName
+        val vehicle = request.vehicle
+        if (request.status == Status.Completed) {
             holder.serviceProgress.text = "Service Completed"
         }
 
-        holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName} ${receipt.request.mechanicInfo?.basicInfo?.lastName}"
+        holder.name.text = "$mechanicFirstName $mechanicLastName"
         holder.description.text =
-            "$type for ${receipt.request.vehicle?.year} ${receipt.request.vehicle?.make} ${receipt.request.vehicle?.model}"
+            "$type for ${vehicle?.year} ${vehicle?.make} ${vehicle?.model}."
 
         holder.rateButton.setOnClickListener {
             val intent = Intent(context, ServiceRatingActivity::class.java)
-            intent.putExtra("request", receipt.request)
+            intent.putExtra(EXTRA_REQUEST_RATING, request)
             context.startActivity(intent)
         }
 
@@ -56,6 +61,4 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
     }
 
     override fun getItemCount() = dataset.size
-
-
 }

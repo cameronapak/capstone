@@ -150,5 +150,6 @@
     <string name="cancel_button">Cancel</string>
     <string name="add_button">Add</string>
     <string name="err_cancel_job_fail">Failed to cancel job.</string>
+    <string name="text_review">Review</string>
 
 </resources>

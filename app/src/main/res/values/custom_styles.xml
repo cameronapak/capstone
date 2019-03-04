@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:app="http://schemas.android.com/apk/res-auto"
            xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="RadioTextBar">
+    <style name="AppCheckBoxRating" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <item name="android:paddingLeft">@dimen/sx</item>
         <item name="android:paddingRight">@dimen/sx</item>
-        <item name="android:fontFamily">@font/qualio_bold</item>
-        <item name="android:textSize">18sp</item>
-        <item name="android:background">@drawable/default_border</item>
+        <item name="android:fontFamily">@font/timeburnerbold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/default_checkbox</item>
         <item name="android:button">@null</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:layout_height">@dimen/radio_bar_height</item>
@@ -15,6 +15,7 @@
         <item name="android:layout_marginBottom">@dimen/x_sx</item>
         <item name="android:layout_marginRight">@dimen/x_sx</item>
         <item name="android:layout_marginLeft">@dimen/x_sx</item>
+        <item name="android:textColor">@color/colorPrimary3</item>
     </style>
 
     <style name="AppText">
@@ -87,13 +88,24 @@
         <item name="android:fontFamily">@font/timeburnernormal</item>
         <item name="android:textColor">@color/colorPrimary3</item>
     </style>
-    
+
+    <style name="AppRatingBarNormal">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:isIndicator">false</item>
+        <item name="android:numStars">@android:integer/config_shortAnimTime</item>
+        <item name="android:stepSize">0.1</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+        <item name="android:theme">@style/AppRatingBarTheme</item>
+    </style>
+
     <style name="AppRatingBarSmall" parent="Widget.AppCompat.RatingBar.Small">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:isIndicator">true</item>
         <item name="android:numStars">5</item>
-        <item name="android:stepSize">0.1</item>
+        <item name="android:stepSize">0.5</item>
         <item name="android:scaleX">0.8</item>
         <item name="android:scaleY">0.8</item>
         <item name="android:theme">@style/AppRatingBarTheme</item>

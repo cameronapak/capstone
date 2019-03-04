@@ -40,6 +40,8 @@ import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestAc
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
@@ -367,6 +369,13 @@ class HitsCustomized
                 ScreenManager.hideKeyBoard(context, it)
             }
 
+
+            if (!serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()) {
+                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
+            } else {
+                Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
+            }
+
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
@@ -459,10 +468,11 @@ class HitsCustomized
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val viewMap = HashMap<View, String>()
             private val defaultValue = "ADefaultValueForHitsVariant"
-            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_client_name)
+            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_mechanic_name)
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
             val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
+            val profileImage = itemView.findViewById<CircleImageView>(com.example.mobilemechanic.R.id.id_mechanic_profile_image)
 
             init {
                 var indexVariant: String? = defaultValue

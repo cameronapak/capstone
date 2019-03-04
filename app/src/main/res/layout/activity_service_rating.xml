@@ -28,104 +28,43 @@
                     android:layout_marginTop="296dp"
                     android:layout_marginStart="0dp">
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox1"
-                        android:fontFamily="@font/qualio_bold" android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
-                        android:layout_marginTop="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
-                        android:layout_alignParentTop="true" android:layout_marginRight="8dp"/>
+                        android:layout_alignParentTop="true"/>
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox2"
-                        android:fontFamily="@font/qualio_bold" android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
-                        android:layout_toRightOf="@+id/id_rating_checkbox1"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"/>
+                        android:layout_toRightOf="@+id/id_rating_checkbox1"/>
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection3"
-                        android:layout_width="wrap_content"
                         android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox3"
-                        android:fontFamily="@font/qualio_bold"
-                        android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
-                        android:layout_marginStart="0dp"
-                        android:layout_marginTop="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:layout_toRightOf="@+id/id_rating_checkbox2"/>
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox4"
-                        android:fontFamily="@font/qualio_bold" android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"
                         android:layout_below="@+id/id_rating_checkbox1"/>
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection5"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox5"
-                        android:fontFamily="@font/qualio_bold" android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
                         android:layout_toRightOf="@+id/id_rating_checkbox4"
-                        android:layout_below="@+id/id_rating_checkbox1"
-                        android:layout_marginTop="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"/>
+                        android:layout_below="@+id/id_rating_checkbox1"/>
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox6"
-                        android:fontFamily="@font/qualio_bold" android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
-                        android:layout_below="@id/id_rating_checkbox5"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"/>
+                        android:layout_below="@id/id_rating_checkbox5"/>
                 <CheckBox
+                        style="@style/RadioTextBar"
                         android:text="@string/text_selection7"
-                        android:layout_width="wrap_content"
-                        android:layout_height="25dp"
                         android:id="@+id/id_rating_checkbox7"
-                        android:fontFamily="@font/qualio_bold" android:textSize="18sp"
-                        android:textAllCaps="false"
-                        android:background="@drawable/default_border"
-                        android:button="@null"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginRight="8dp"
                         android:layout_below="@id/id_rating_checkbox4"
-                        android:layout_toRightOf="@+id/id_rating_checkbox6"
-                        android:paddingLeft="8dp"
-                        android:paddingRight="8dp"/>
+                        android:layout_toRightOf="@+id/id_rating_checkbox6"/>
             </RelativeLayout>
         </RadioGroup>
         <TextView
@@ -170,13 +109,9 @@
                 android:numStars="@android:integer/config_shortAnimTime"
                 style="@style/Widget.AppCompat.RatingBar"/>
         <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:background="@drawable/toolbar_bottom_border"
-                android:theme="?attr/actionBarTheme"
-                android:minHeight="@dimen/toolbar_height"
-                app:titleTextAppearance="@style/ToolbarTitleAppearance"
-                app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
+                style="@style/AppActionBar"
+                app:titleTextAppearance="@style/AppActionBarTitle"
+                app:subtitleTextAppearance="@style/AppActionBarSubtitle"
                 android:id="@+id/id_rating_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

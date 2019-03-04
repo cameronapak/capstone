@@ -9,13 +9,10 @@
 
     <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
         <android.support.v7.widget.Toolbar
-                android:id="@+id/id_manage_job_toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:minHeight="@dimen/toolbar_height"
-                app:titleTextAppearance="@style/ToolbarTitleAppearance"
-                app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-                android:background="@drawable/toolbar_bottom_border"/>
+                style="@style/AppActionBar"
+                app:titleTextAppearance="@style/AppActionBarTitle"
+                app:subtitleTextAppearance="@style/AppActionBarSubtitle"
+                android:id="@+id/id_manage_job_toolbar"/>
         <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

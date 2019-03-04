@@ -1,6 +1,5 @@
 package com.example.mobilemechanic.client.servicerating
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.ActionBar
@@ -9,8 +8,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.*
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.history.ClientHistoryActivity
-import com.example.mobilemechanic.model.Receipt
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Review
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -18,7 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
-import kotlinx.android.synthetic.main.activity_service_rating_activty.*
+import kotlinx.android.synthetic.main.activity_service_rating.*
 
 class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeListener {
 
@@ -29,7 +26,7 @@ class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeLi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_service_rating_activty)
+        setContentView(R.layout.activity_service_rating)
 
         setUpServiceRatingActivity()
 

@@ -27,14 +27,8 @@
                 android:layout_marginEnd="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"/>
         <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                android:background="@drawable/toolbar_bottom_border"
-                android:theme="?attr/actionBarTheme"
-                android:minHeight="@dimen/toolbar_height"
+                style="@style/AppActionBar"
                 android:id="@+id/id_client_history_toolbar"
-                app:titleTextAppearance="@style/ToolbarTitleAppearance"
-                app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>

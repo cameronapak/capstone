@@ -369,21 +369,24 @@ class HitsCustomized
                 ScreenManager.hideKeyBoard(context, it)
             }
 
+            holder.mechanicRating.rating
 
-            if (!serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()) {
-                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
-            } else {
+            if (serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()||
+                serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrBlank()) {
                 Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
+            } else {
+                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
             }
+
+            holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
 
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
             val hit = hits[position]
 
-            // For every AlgoliaHitView that is not bound, trigger onResults
+
             for (hitView in hitViews) {
-                //noinspection SuspiciousMethodCalls: With LayoutViews, we are sure to only find Views
                 if (mappedViews.contains(hitView as View)) {
                     continue
                 }
@@ -473,6 +476,7 @@ class HitsCustomized
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
             val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
             val profileImage = itemView.findViewById<CircleImageView>(com.example.mobilemechanic.R.id.id_mechanic_profile_image)
+            val mechanicRating = itemView.findViewById<RatingBar>(com.example.mobilemechanic.R.id.id_mechanic_rating)
 
             init {
                 var indexVariant: String? = defaultValue

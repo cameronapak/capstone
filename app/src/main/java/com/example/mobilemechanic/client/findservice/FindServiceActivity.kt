@@ -10,9 +10,6 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
 
-
-
-
 class FindServiceActivity : AppCompatActivity() {
 
     private lateinit var mFireStore: FirebaseStorage

@@ -25,6 +25,14 @@
     <string name="text_rating_subitle">Rate the service</string>
     <string name="text_service">Service</string>
     <string name="text_filter">Filter</string>
+    <string name="text_service_needed">Service Needed</string>
+    <string name="text_address">Address</string>
+    <string name="text_decline">Decline</string>
+    <string name="title_activity_mechanic_manage_job">Map</string>
+    <string name="text_cancel_job">Cancel Job</string>
+    <string name="text_contact">Contact</string>
+    <string name="text_status">Status:</string>
+    <string name="text_next">Next</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>
@@ -100,7 +108,6 @@
     <string name="label_cancel_add_service">Cancel</string>
     <string name="label_add_service">Add</string>
 
-    <!--recyclerview_item_request-->
     <string name="place_holder_client_name">Jackie Chan</string>
     <string name="request_on">Requested on %s</string>
     <string name="accept_on">Accepted on %s</string>
@@ -143,13 +150,5 @@
     <string name="cancel_button">Cancel</string>
     <string name="add_button">Add</string>
     <string name="err_cancel_job_fail">Failed to cancel job.</string>
-    <string name="text_service_needed">Service Needed</string>
-    <string name="text_address">Address</string>
-    <string name="text_decline">Decline</string>
-    <string name="title_activity_mechanic_manage_job">Map</string>
-    <string name="text_cancel_job">Cancel Job</string>
-    <string name="text_contact">Contact</string>
-    <string name="text_status">Status:</string>
-    <string name="text_next">Next</string>
 
 </resources>

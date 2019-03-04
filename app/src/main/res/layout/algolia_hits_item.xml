@@ -49,19 +49,10 @@
                 algolia:layout_constraintStart_toEndOf="@+id/id_mechanic_profile_image"
                 android:layout_marginStart="10dp"/>
         <RatingBar
+                style="@style/AppRatingBarSmall"
                 android:id="@+id/id_mechanic_rating"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:isIndicator="true"
-                android:numStars="5"
-                android:stepSize="0.1"
-                android:scaleX=".8"
-                android:scaleY=".8"
-                android:padding="0dp"
                 algolia:layout_constraintTop_toBottomOf="@+id/id_mechanic_name"
                 algolia:layout_constraintStart_toEndOf="@+id/id_mechanic_profile_image"
-                algolia:attribute='@{"mechanicInfo.rating"}'
         />
         <Button
                 style="@style/AppDefaultRecyclerItemButton"

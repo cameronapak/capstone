@@ -120,7 +120,7 @@ class HitsCustomized
         }
     }
 
-    fun clear() {
+    private fun clear() {
         adapter.clear()
     }
 
@@ -184,9 +184,6 @@ class HitsCustomized
         }
     }
 
-    /**
-     * Returns the attribute's value, [highlighted][RenderingHelper.shouldHighlight] and [snippetted][RenderingHelper.shouldSnippet] if required to.
-     */
     protected fun getFinalAttributeValue(
         hit: JSONObject,
         view: View,
@@ -247,10 +244,6 @@ class HitsCustomized
         addHits(null, true)
     }
 
-    /**
-     * Specify an empty View to display instead of these Hits when they are empty.
-     * By default, we will search for a view with id `@android:id/empty` and will use it if it exists.
-     */
     fun setEmptyView(emptyView: View?) {
         this.emptyView = emptyView
     }
@@ -498,7 +491,6 @@ class HitsCustomized
                     indexVariant = viewIndexVariant
                 }
 
-                // Store every annotated view for indexVariant with its attribute name
                 val attributes = BindingHelper.getBindings(indexVariant)
                 if (attributes != null) { // Ensure we have at least some bindings
                     for ((key, value) in attributes) {
@@ -512,10 +504,7 @@ class HitsCustomized
     }
 
     companion object {
-        /**
-         * Default amount of remaining results to display before loading a new page
-         */
-        val DEFAULT_REMAINING_ITEMS = 5
-        private val MISSING_VALUE = Integer.MIN_VALUE
+        const val DEFAULT_REMAINING_ITEMS = 5
+        private const val MISSING_VALUE = Integer.MIN_VALUE
     }
 }

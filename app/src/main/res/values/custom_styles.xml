@@ -87,4 +87,20 @@
         <item name="android:fontFamily">@font/timeburnernormal</item>
         <item name="android:textColor">@color/colorPrimary3</item>
     </style>
+    
+    <style name="AppRatingBarSmall" parent="Widget.AppCompat.RatingBar.Small">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:isIndicator">true</item>
+        <item name="android:numStars">5</item>
+        <item name="android:stepSize">0.1</item>
+        <item name="android:scaleX">0.8</item>
+        <item name="android:scaleY">0.8</item>
+        <item name="android:theme">@style/AppRatingBarTheme</item>
+    </style>
+
+    <style name="AppRatingBarTheme">
+        <item name="android:colorControlNormal">@color/colorGrayText</item>
+        <item name="android:colorControlActivated">@color/colorPrimary3</item>
+    </style>
 </resources>

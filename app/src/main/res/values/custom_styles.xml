@@ -15,7 +15,7 @@
         <item name="android:layout_marginBottom">@dimen/x_sx</item>
         <item name="android:layout_marginRight">@dimen/x_sx</item>
         <item name="android:layout_marginLeft">@dimen/x_sx</item>
-        <item name="android:textColor">@color/colorPrimary3</item>
+        <item name="android:textColor">@color/checkbox_color_selector</item>
     </style>
 
     <style name="AppText">

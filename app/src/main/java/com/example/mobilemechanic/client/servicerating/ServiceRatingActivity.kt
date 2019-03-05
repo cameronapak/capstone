@@ -77,7 +77,6 @@ class ServiceRatingActivity : AppCompatActivity() {
 
     private fun setUpCheckBoxes() {
         checkBoxGroup()
-        handleCheckBoxGroupOnClick()
     }
 
     private fun handleOnSubmit() {
@@ -124,18 +123,6 @@ class ServiceRatingActivity : AppCompatActivity() {
         checkBoxesOfWhatWentWrong.add(checkBox7)
     }
 
-    private fun handleCheckBoxGroupOnClick() {
-        checkBoxesOfWhatWentWrong.forEach { checkbox ->
-            checkbox.setOnCheckedChangeListener { _, isChecked ->
-                if (isChecked) {
-                    activateCheckbox(checkbox)
-                } else {
-                    deactivateCheckbox(checkbox)
-                }
-            }
-        }
-    }
-
     private fun addReview(review: Review) {
         reviewRef.document(review.requestID).set(review)
             .addOnSuccessListener {
@@ -144,14 +131,6 @@ class ServiceRatingActivity : AppCompatActivity() {
             }.addOnCompleteListener {
                 finish()
             }
-    }
-
-    private fun activateCheckbox(checkbox: CheckBox) {
-        checkbox.setTextColor(resources.getColor(R.color.colorPrimary, null))
-    }
-
-    private fun deactivateCheckbox(checkbox: CheckBox) {
-        checkbox.setTextColor(resources.getColor(R.color.colorPrimary3, null))
     }
 
     private fun hideKeyboard() {

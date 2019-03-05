@@ -122,7 +122,7 @@
                 android:fontFamily="@font/qualio"
                 android:textSize="24dp" android:textColor="@color/colorGrayText"
                 app:layout_constraintTop_toTopOf="@+id/id_calendar_icon"
-                app:layout_constraintStart_toStartOf="@+id/id_vehicle_spinner"/>
+                app:layout_constraintStart_toStartOf="@+id/id_vehicle_spinner" android:layout_marginStart="4dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -148,7 +148,7 @@
                 android:layout_marginEnd="8dp"
                 android:spinnerMode="dropdown"
                 android:backgroundTint="@color/colorGrayText" app:layout_constraintHorizontal_bias="0.496"
-                android:layout_marginTop="8dp"/>
+                android:layout_marginTop="32dp"/>
         <EditText
                 style="@style/AppEditText"
                 android:id="@+id/id_comment"
@@ -177,7 +177,7 @@
                 android:text="Your garage is empty." android:fontFamily="@font/qualio"
                 android:textSize="18sp"
                 app:layout_constraintTop_toTopOf="@+id/id_warning_icon"
-                app:layout_constraintStart_toStartOf="@+id/id_vehicle_spinner"/>
+                app:layout_constraintStart_toStartOf="@+id/id_vehicle_spinner" android:layout_marginStart="4dp"/>
         <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/id_warning_message_add"

@@ -6,9 +6,14 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.CheckBox
+import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.history.EXTRA_REQUEST_RATING
 import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Review
+import com.example.mobilemechanic.shared.utility.DateTimeManager
+import com.example.mobilemechanic.shared.utility.NumberManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -20,6 +25,7 @@ class ServiceRatingActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var reviewRef: CollectionReference
+    private lateinit var request: Request
     private var checkBoxesOfWhatWentWrong = ArrayList<CheckBox>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,12 +35,15 @@ class ServiceRatingActivity : AppCompatActivity() {
     }
 
     private fun setUpServiceRatingActivity() {
+        getRequestParcel()
         setUpToolBar()
         initFireStore()
-        setUpRating()
-        setUpCheckBoxes()
         setUpReview()
         hideKeyboard()
+    }
+
+    private fun getRequestParcel() {
+        request = intent.getParcelableExtra(EXTRA_REQUEST_RATING)
     }
 
     private fun setUpToolBar() {
@@ -47,17 +56,23 @@ class ServiceRatingActivity : AppCompatActivity() {
         }
     }
 
-    private fun setUpRating() {
+    private fun initFireStore() {
+        mAuth = FirebaseAuth.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+        reviewRef = mFirestore.collection("Reviews")
+    }
+
+    private fun setUpReview() {
+        setUpRatingBar()
+        setUpCheckBoxes()
+        handleOnSubmit()
+    }
+
+    private fun setUpRatingBar() {
+        id_rating_question.text = "How was ${request?.mechanicInfo?.basicInfo?.firstName}'s service?"
         id_rating_bar.setOnRatingBarChangeListener { ratingBar, _, _ ->
             id_rating_text.text = ratingBar.rating.toString()
         }
-    }
-
-    private fun initFireStore() {
-        val request: Request? = intent.getParcelableExtra("request")
-        mAuth = FirebaseAuth.getInstance()
-        mFirestore = FirebaseFirestore.getInstance()
-        reviewRef = mFirestore.collection("Requests")
     }
 
     private fun setUpCheckBoxes() {
@@ -65,16 +80,26 @@ class ServiceRatingActivity : AppCompatActivity() {
         handleCheckBoxGroupOnClick()
     }
 
-    private fun setUpReview() {
-        val request: Request? = intent.getParcelableExtra("request")
-        id_rating_question.text = "How was ${request?.mechanicInfo?.basicInfo?.firstName}'s service?"
+    private fun handleOnSubmit() {
         id_rating_submit.setOnClickListener {
             val listOfWhatWentWrong = ArrayList<String>()
-            checkBoxesOfWhatWentWrong.forEach {checkbox ->
-                if(checkbox.isChecked) {
+            checkBoxesOfWhatWentWrong.forEach { checkbox ->
+                if (checkbox.isChecked) {
                     listOfWhatWentWrong.add(checkbox.text.toString())
                 }
             }
+
+            val review = Review(
+                "",
+                NumberManager.round(id_rating_bar.rating, 2),
+                id_rating_comment.text.toString(),
+                listOfWhatWentWrong,
+                DateTimeManager.currentTimeMillis(),
+                request.objectID,
+                request.mechanicInfo
+            )
+
+            addReview(review)
 
             Log.d(CLIENT_TAG, "[ServiceRatingActivity] $listOfWhatWentWrong")
             Log.d(CLIENT_TAG, "[ServiceRatingActivity] requestID ${request?.objectID}")
@@ -100,7 +125,7 @@ class ServiceRatingActivity : AppCompatActivity() {
     }
 
     private fun handleCheckBoxGroupOnClick() {
-        checkBoxesOfWhatWentWrong.forEach {checkbox ->
+        checkBoxesOfWhatWentWrong.forEach { checkbox ->
             checkbox.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
                     activateCheckbox(checkbox)
@@ -109,6 +134,16 @@ class ServiceRatingActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun addReview(review: Review) {
+        reviewRef.document(review.requestID).set(review)
+            .addOnSuccessListener {
+                Log.d(CLIENT_TAG, "[ServiceRatingActivity] review added")
+                Toast.makeText(this, "Review submitted", Toast.LENGTH_LONG).show()
+            }.addOnCompleteListener {
+                finish()
+            }
     }
 
     private fun activateCheckbox(checkbox: CheckBox) {
@@ -123,12 +158,6 @@ class ServiceRatingActivity : AppCompatActivity() {
         id_service_rating_framelayout.setOnClickListener {
             ScreenManager.hideKeyBoard(this)
         }
-    }
-
-    private fun addRatingToFirestore(requestID: String) {
-//        reviewRef.document(requestID)?.set(review, SetOptions.merge())?.addOnSuccessListener {
-//            SetOptions.merge()
-//        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

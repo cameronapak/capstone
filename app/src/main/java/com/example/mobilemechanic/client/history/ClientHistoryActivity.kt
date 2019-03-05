@@ -27,32 +27,30 @@ class ClientHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_history)
-        initFireStore()
-        setUpReceipt()
-        setUpAdapter()
-        setUpToolBar()
+        setUpClientHistoryActivity()
     }
 
-    private fun setUpReceipt() {
-        requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
-        requestRef.whereEqualTo("status", Status.Completed)
-            ?.addSnapshotListener { querySnapshot, exception ->
-                if (exception != null) {
-                    return@addSnapshotListener
-                }
-                requestReceipt.clear()
-                for (doc in querySnapshot!!) {
-                    val request = doc.toObject(Request::class.java)
-                    requestReceipt.add(request)
-                }
-                    historyAdapter.notifyDataSetChanged()
-            }
+    private fun setUpClientHistoryActivity() {
+        initFireStore()
+        setUpToolBar()
+        setUpAdapter()
+        setUpHistoryRecyclerView()
     }
 
     private fun initFireStore() {
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         requestRef = mFirestore.collection("Requests")
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_client_history_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "History"
+            subtitle = "Previous services"
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     private fun setUpAdapter() {
@@ -66,14 +64,21 @@ class ClientHistoryActivity : AppCompatActivity() {
         historyAdapter.notifyDataSetChanged()
     }
 
-    private fun setUpToolBar() {
-        setSupportActionBar(id_client_history_toolbar as Toolbar)
-        val actionBar: ActionBar? = supportActionBar
-        actionBar?.apply {
-            title = "History"
-            subtitle = "Previous services"
-            setDisplayHomeAsUpEnabled(true)
-        }
+    private fun setUpHistoryRecyclerView() {
+        requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
+        requestRef.whereEqualTo("status", Status.Completed)
+            ?.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    return@addSnapshotListener
+                }
+                requestReceipt.clear()
+                for (doc in querySnapshot!!) {
+                    val request = doc.toObject(Request::class.java)
+                    request.objectID = doc.id
+                    requestReceipt.add(request)
+                }
+                    historyAdapter.notifyDataSetChanged()
+            }
     }
 
     override fun onSupportNavigateUp(): Boolean {

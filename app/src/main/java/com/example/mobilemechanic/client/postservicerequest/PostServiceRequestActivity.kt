@@ -36,9 +36,6 @@ import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-const val POST_SERVICE_TAG = "postservice"
-const val HINT_VEHICLE = "Vehicle"
-
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mAuth: FirebaseAuth
@@ -62,8 +59,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
 
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth?.currentUser?.uid}")
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth?.currentUser?.email}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
     }
 
@@ -115,7 +112,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val comment = id_comment.text.toString()
             val currentTime = System.currentTimeMillis()
 
-            accountRef.document(mAuth?.currentUser?.uid.toString())
+            accountRef.document(mAuth.currentUser?.uid.toString())
                 .addSnapshotListener { snapshot, exception ->
                     if (exception != null) {
                         return@addSnapshotListener
@@ -135,10 +132,10 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             .build()
 
                         Log.d(CLIENT_TAG, "$request)")
-                        requestsRef.document().set(request)?.addOnSuccessListener {
+                        requestsRef.document().set(request).addOnSuccessListener {
                             Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
                             startActivity(Intent(this, ClientWelcomeActivity::class.java))
-                        }?.addOnFailureListener {
+                        }.addOnFailureListener {
                             Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
                     }
@@ -151,13 +148,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         if (snapshot != null && snapshot.exists()) {
             val client = snapshot.toObject(User::class.java)
             if (client != null) {
-                val basicInfo = client.basicInfo
-                val address = client.address
                 return ClientInfo(
                     client.uid,
                     client.basicInfo,
                     availability,
-                    address
+                    client.address
                 )
             }
         }
@@ -282,7 +277,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
         val tpd = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { v, h, m ->
             val time = (if (h > 12) "${h % 12}:" else "${if (h == 0) "12" else h}:").toString() +
-                    (if (m < 10) "0${m}" else "${m}").toString() +
+                    (if (m < 10) "0$m" else "$m").toString() +
                     (if (h >= 12) " PM" else " AM").toString()
 
             // TODO: compare times from and to, and do not allow continue unless from is before to

@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.example.mobilemechanic.model.dto.ClientInfo
 import com.example.mobilemechanic.model.dto.MechanicInfo
+import com.example.mobilemechanic.model.dto.Receipt
 
 enum class Status {
     Pending, Request, Active, Accepted, Completed, Cancelled, Declined

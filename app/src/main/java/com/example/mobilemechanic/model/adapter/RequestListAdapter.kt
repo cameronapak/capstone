@@ -210,9 +210,9 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private fun completeRequest(request: Request) {
         val completedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
-            .update("status", Status.Complete, "completedOn", completedOn)
+            .update("status", Status.Completed, "completedOn", completedOn)
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Service Completed!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Service Completed!", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Toast.makeText(context, context.getString(R.string.err_complete_fail), Toast.LENGTH_SHORT).show()

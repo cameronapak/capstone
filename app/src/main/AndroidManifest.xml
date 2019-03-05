@@ -20,8 +20,6 @@
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".client.detail.ServiceDetailActivity">
         </activity>
-        <activity android:name=".client.garage.AddVechicleInfo">
-        </activity>
 
         <service android:name=".shared.utility.CustomFirebaseMessagingService">
             <intent-filter>
@@ -67,7 +65,8 @@
                 android:label="@string/title_activity_mechanic_welcome"
                 android:theme="@style/NoActionBar">
         </activity>
-        <activity android:name=".client.servicerating.ServiceRatingActivity">
+        <activity android:name=".client.servicerating.ServiceRatingActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity android:name=".client.findservice.FindServiceActivity"
                   android:windowSoftInputMode="stateAlwaysHidden">

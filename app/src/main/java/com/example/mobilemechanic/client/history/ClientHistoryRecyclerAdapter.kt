@@ -3,50 +3,60 @@ package com.example.mobilemechanic.client.history
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.detail.ServiceDetailActivity
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
-import com.example.mobilemechanic.model.Receipt
+import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.shared.utility.DateTimeManager
+import java.util.*
 
-class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Receipt>) :
+const val EXTRA_REQUEST_RATING = "extra_request_rating"
+
+class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
     RecyclerView.Adapter<ClientHistoryRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.id_history_name)
-        val serviceProgress = itemView.findViewById<TextView>(R.id.id_service_status)
+        val serviceCompletedOn = itemView.findViewById<TextView>(R.id.id_service_completed)
         val description = itemView.findViewById<TextView>(R.id.id_service_description)
-        val rateButton = itemView.findViewById<Button>(R.id.id_rate_button)
+        val reviewButton = itemView.findViewById<Button>(R.id.id_rate_button)
         val detailsButton = itemView.findViewById<Button>(R.id.id_details_button)
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientHistoryRecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recyclerview_client_history, parent, false)
+            .inflate(R.layout.recyclerview_item_client_history, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val receipt = dataset[position]
-        var type = "${receipt.request.service?.serviceType}"
+        val request = dataset[position]
+        var type = "${request.service?.serviceType}"
+        val mechanicFirstName = request.mechanicInfo?.basicInfo?.firstName
+        val mechanicLastName = request.mechanicInfo?.basicInfo?.lastName
+        val vehicle = request.vehicle
 
-        if (receipt.request.status == Status.Complete) {
-            holder.serviceProgress.text = "Service Completed"
+        if (request.status == Status.Completed) {
+            holder.serviceCompletedOn.text =
+                "Completed on ${DateTimeManager.millisToDate(request.completedOn, "MMM d, y")}"
         }
 
-        holder.name.text = "${receipt.request.mechanicInfo?.basicInfo?.firstName} ${receipt.request.mechanicInfo?.basicInfo?.lastName}"
+        holder.name.text = "$mechanicFirstName $mechanicLastName"
         holder.description.text =
-            "$type for ${receipt.request.vehicle?.year} ${receipt.request.vehicle?.make} ${receipt.request.vehicle?.model}"
+            "$type for ${vehicle?.year} ${vehicle?.make} ${vehicle?.model}."
 
-        holder.rateButton.setOnClickListener {
+        holder.reviewButton.setOnClickListener {
             val intent = Intent(context, ServiceRatingActivity::class.java)
-            intent.putExtra("request", receipt.request)
+            intent.putExtra(EXTRA_REQUEST_RATING, request)
+            Log.d(CLIENT_TAG, "[ClientHistoryRecyclerAdapter] requestID: ${request.objectID}")
             context.startActivity(intent)
         }
 
@@ -56,6 +66,4 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
     }
 
     override fun getItemCount() = dataset.size
-
-
 }

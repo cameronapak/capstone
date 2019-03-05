@@ -40,6 +40,8 @@ import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestAc
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
@@ -118,7 +120,7 @@ class HitsCustomized
         }
     }
 
-    fun clear() {
+    private fun clear() {
         adapter.clear()
     }
 
@@ -182,9 +184,6 @@ class HitsCustomized
         }
     }
 
-    /**
-     * Returns the attribute's value, [highlighted][RenderingHelper.shouldHighlight] and [snippetted][RenderingHelper.shouldSnippet] if required to.
-     */
     protected fun getFinalAttributeValue(
         hit: JSONObject,
         view: View,
@@ -245,10 +244,6 @@ class HitsCustomized
         addHits(null, true)
     }
 
-    /**
-     * Specify an empty View to display instead of these Hits when they are empty.
-     * By default, we will search for a view with id `@android:id/empty` and will use it if it exists.
-     */
     fun setEmptyView(emptyView: View?) {
         this.emptyView = emptyView
     }
@@ -367,14 +362,24 @@ class HitsCustomized
                 ScreenManager.hideKeyBoard(context, it)
             }
 
+            holder.mechanicRating.rating
+
+            if (serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()||
+                serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrBlank()) {
+                Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
+            } else {
+                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
+            }
+
+            holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
+
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
             val hit = hits[position]
 
-            // For every AlgoliaHitView that is not bound, trigger onResults
+
             for (hitView in hitViews) {
-                //noinspection SuspiciousMethodCalls: With LayoutViews, we are sure to only find Views
                 if (mappedViews.contains(hitView as View)) {
                     continue
                 }
@@ -459,10 +464,12 @@ class HitsCustomized
         inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
             val viewMap = HashMap<View, String>()
             private val defaultValue = "ADefaultValueForHitsVariant"
-            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_client_name)
+            val mechanicName = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_mechanic_name)
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
             val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
+            val profileImage = itemView.findViewById<CircleImageView>(com.example.mobilemechanic.R.id.id_mechanic_profile_image)
+            val mechanicRating = itemView.findViewById<RatingBar>(com.example.mobilemechanic.R.id.id_mechanic_rating)
 
             init {
                 var indexVariant: String? = defaultValue
@@ -484,7 +491,6 @@ class HitsCustomized
                     indexVariant = viewIndexVariant
                 }
 
-                // Store every annotated view for indexVariant with its attribute name
                 val attributes = BindingHelper.getBindings(indexVariant)
                 if (attributes != null) { // Ensure we have at least some bindings
                     for ((key, value) in attributes) {
@@ -498,10 +504,7 @@ class HitsCustomized
     }
 
     companion object {
-        /**
-         * Default amount of remaining results to display before loading a new page
-         */
-        val DEFAULT_REMAINING_ITEMS = 5
-        private val MISSING_VALUE = Integer.MIN_VALUE
+        const val DEFAULT_REMAINING_ITEMS = 5
+        private const val MISSING_VALUE = Integer.MIN_VALUE
     }
 }

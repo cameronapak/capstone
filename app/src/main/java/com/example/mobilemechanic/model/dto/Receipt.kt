@@ -1,30 +1,26 @@
-package com.example.mobilemechanic.model
+package com.example.mobilemechanic.model.dto
 
 import android.os.Parcel
 import android.os.Parcelable
 
 class Receipt(
-    var ojectID: String,
-    var request: Request,
+    var tips: Double,
     var subTotal: Double,
     var estimatedTax: Double,
     var grandTottal: Double
 ) : Parcelable {
 
-    constructor() : this("", Request(), 0.0, 0.0, 0.0)
+    constructor() : this(0.0, 0.0, 0.0, 0.0)
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readParcelable(Request::class.java.classLoader),
+        parcel.readDouble(),
         parcel.readDouble(),
         parcel.readDouble(),
         parcel.readDouble()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(ojectID)
-        parcel.writeParcelable(request, flags)
         parcel.writeDouble(subTotal)
+        parcel.writeDouble(tips)
         parcel.writeDouble(estimatedTax)
         parcel.writeDouble(grandTottal)
     }

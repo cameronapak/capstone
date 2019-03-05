@@ -67,4 +67,17 @@ object DataProviderManager {
             "Check Engine Light"
             )
     }
+
+    fun getAllVehicleMake() : ArrayList<String> {
+        return arrayListOf("Make",
+            "Toyota")
+    }
+
+    fun getToyotaModel() : ArrayList<String> {
+        return arrayListOf("Venza", "Camry", "Avalon")
+    }
+
+    fun getHondaModel() : ArrayList<String> {
+        return arrayListOf("Accord", "Civic", "Insight")
+    }
 }

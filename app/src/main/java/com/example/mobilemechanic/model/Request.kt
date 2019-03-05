@@ -4,9 +4,10 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.example.mobilemechanic.model.dto.ClientInfo
 import com.example.mobilemechanic.model.dto.MechanicInfo
+import com.example.mobilemechanic.model.dto.Receipt
 
 enum class Status {
-    Pending, Request, Active, Accepted, Complete, Cancelled, Declined
+    Pending, Request, Active, Accepted, Completed, Cancelled, Declined
 }
 
 data class Request(
@@ -19,7 +20,8 @@ data class Request(
     var status: Status?,
     var postedOn: Long?,
     var acceptedOn: Long?,
-    var completedOn: Long?
+    var completedOn: Long?,
+    var receipt: Receipt?
 ) : Parcelable {
     constructor() : this(
         "",
@@ -31,7 +33,8 @@ data class Request(
         Status.Request,
         Long.MIN_VALUE,
         Long.MIN_VALUE,
-        Long.MIN_VALUE
+        Long.MIN_VALUE,
+        Receipt()
     )
 
     constructor(parcel: Parcel) : this(
@@ -44,7 +47,8 @@ data class Request(
         Status.valueOf(parcel.readString()),
         parcel.readLong(),
         parcel.readLong(),
-        parcel.readLong()
+        parcel.readLong(),
+        parcel.readParcelable(Receipt::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -58,6 +62,7 @@ data class Request(
         postedOn?.let { parcel.writeLong(it) }
         acceptedOn?.let { parcel.writeLong(it) }
         completedOn?.let { parcel.writeLong(it) }
+        parcel.writeParcelable(receipt, flags)
     }
 
     override fun describeContents(): Int {
@@ -74,7 +79,6 @@ data class Request(
         }
     }
 
-
     data class Builder(
         var objectID: String? = null,
         var clientInfo: ClientInfo? = null,
@@ -85,7 +89,8 @@ data class Request(
         var status: Status? = null,
         var postedOn: Long? = Long.MIN_VALUE,
         var acceptedOn: Long? = Long.MIN_VALUE,
-        var completedOn: Long? = Long.MIN_VALUE
+        var completedOn: Long? = Long.MIN_VALUE,
+        var receipt: Receipt? = null
     ) {
         fun clientInfo(info: ClientInfo) = apply { this.clientInfo = info }
         fun mechanicInfo(info: MechanicInfo) = apply { this.mechanicInfo = info }
@@ -96,7 +101,20 @@ data class Request(
         fun postedOn(posted: Long) = apply { this.postedOn = posted }
         fun acceptedOn(accepted: Long) = apply { this.acceptedOn = accepted }
         fun completedOn(completed: Long) = apply { this.completedOn = completed }
+        fun receipt(receipt: Receipt) = apply { this.receipt = receipt }
         fun build() =
-            Request("", clientInfo, mechanicInfo, service, vehicle, comment, status, postedOn, acceptedOn, completedOn)
+            Request(
+                "",
+                clientInfo,
+                mechanicInfo,
+                service,
+                vehicle,
+                comment,
+                status,
+                postedOn,
+                acceptedOn,
+                completedOn,
+                receipt
+            )
     }
 }

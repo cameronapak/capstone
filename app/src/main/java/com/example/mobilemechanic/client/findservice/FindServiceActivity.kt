@@ -6,11 +6,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import com.algolia.instantsearch.core.helpers.Searcher
 import com.algolia.instantsearch.ui.helpers.InstantSearch
-import com.example.mobilemechanic.R
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
-
 
 class FindServiceActivity : AppCompatActivity() {
 
@@ -31,12 +29,14 @@ class FindServiceActivity : AppCompatActivity() {
     }
 
     private fun setUpAlgolia() {
-        searcher = Searcher.create(getString(R.string.algolia_app_id),
-            getString(R.string.algolia_api_key),
-            getString(R.string.algolia_services_index))
+        searcher = Searcher.create(
+            getString(com.example.mobilemechanic.R.string.algolia_app_id),
+            getString(com.example.mobilemechanic.R.string.algolia_api_key),
+            getString(com.example.mobilemechanic.R.string.algolia_services_index)
+        )
         helper = InstantSearch(this, searcher)
         helper.search()
-        val hits = findViewById<HitsCustomized>(R.id.id_hits_customized)
+        val hits = findViewById<HitsCustomized>(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
     }
 

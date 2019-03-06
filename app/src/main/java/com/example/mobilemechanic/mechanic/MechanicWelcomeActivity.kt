@@ -15,6 +15,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
+import com.example.mobilemechanic.shared.MessagesWelcome
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -142,7 +143,9 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                 R.id.nav_share -> {
                     true
                 }
-                R.id.nav_send -> {
+                R.id.nav_messages -> {
+                    val intent = Intent(this, MessagesWelcome::class.java)
+                    startActivity(intent)
                     true
                 }
                 else -> {

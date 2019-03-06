@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
             android:allowBackup="true"
@@ -19,6 +19,8 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".shared.MessagesWelcome">
+        </activity>
         <activity android:name=".client.detail.ServiceDetailActivity">
         </activity>
 
@@ -66,11 +68,13 @@
                 android:label="@string/title_activity_mechanic_welcome"
                 android:theme="@style/NoActionBar">
         </activity>
-        <activity android:name=".client.servicerating.ServiceRatingActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden">
+        <activity
+                android:name=".client.servicerating.ServiceRatingActivity"
+                android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
-        <activity android:name=".client.findservice.FindServiceActivity"
-                  android:windowSoftInputMode="stateAlwaysHidden">
+        <activity
+                android:name=".client.findservice.FindServiceActivity"
+                android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity android:name=".client.history.ClientHistoryActivity">
             <intent-filter>

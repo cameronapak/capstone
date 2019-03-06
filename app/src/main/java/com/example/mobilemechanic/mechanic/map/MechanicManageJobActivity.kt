@@ -140,7 +140,7 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
             }
             else//request permission
             {
-                //context, constant for access fine location value, permission request code
+                //context, constant for access call, permission request code
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
                     REQUEST_PHONE_CALL)
             }

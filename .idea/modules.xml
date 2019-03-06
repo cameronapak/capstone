@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/MMECHANIC.iml" filepath="$PROJECT_DIR$/MMECHANIC.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/capstone.iml" filepath="$PROJECT_DIR$/capstone.iml" />
     </modules>
   </component>
 </project>

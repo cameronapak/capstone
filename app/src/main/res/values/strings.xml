@@ -123,7 +123,7 @@
     <string name="label_choice_accept">Accept</string>
     <string name="label_choice_complete">Complete</string>
     <string name="label_choice_confirm">Confirm</string>
-    <string name="label_remove_service">Remove</string>
+    <string name="label_remove_service">Are you sure you want to remove?</string>
     <string name="label_update_service">Update</string>
     <string name="miles">%.2f mi</string>
 
@@ -151,5 +151,7 @@
     <string name="add_button">Add</string>
     <string name="err_cancel_job_fail">Failed to cancel job.</string>
     <string name="text_review">Review</string>
+    <string name="label_message_btn">Message</string>
+    <string name="label_call_btn">Call</string>
 
 </resources>

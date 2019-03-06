@@ -1,6 +1,8 @@
 package com.example.mobilemechanic.mechanic.map
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Dialog
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -27,15 +29,23 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_mechanic_manage_job.*
 import kotlinx.android.synthetic.main.card_vehicle_container.view.*
+import kotlinx.android.synthetic.main.dialog_body_contact.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
+import android.content.Intent
+import android.net.Uri
+import kotlinx.android.synthetic.main.dialog_body_contact.*
+
 
 class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private lateinit var mMap: GoogleMap
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var requestRef: CollectionReference
+    private lateinit var basicDialog: Dialog
 
     private lateinit var request: Request
+
+    val REQUEST_PHONE_CALL = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -88,12 +98,50 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         holder.id_positive.text = getString(R.string.text_contact)
         holder.id_positive.setOnClickListener {
             //TODO: Contact Customer Dialog
+            setUpContactServiceDialog()
         }
 
         holder.id_negative.text = getString(R.string.text_cancel_job)
         holder.id_negative.setOnClickListener {
             createCancelJobDialog()
         }
+    }
+
+
+    @SuppressLint("MissingPermission")
+    private fun setUpContactServiceDialog() {
+
+        val dialogContainer =
+            layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
+        val dialogBody = layoutInflater.
+            inflate(com.example.mobilemechanic.R.layout.dialog_body_contact, null)
+
+        basicDialog = BasicDialog.Builder.apply {
+            title = "Contact"
+            positive = "Call"
+            negative = "Cancel"
+        }.build(this, dialogContainer, dialogBody)
+
+        val showPhone= request.clientInfo!!.basicInfo!!.phoneNumber
+        basicDialog.id_phone_number.text = showPhone
+
+        basicDialog.show()
+
+        basicDialog.id_positive.setOnClickListener {
+                startCall()
+        }
+        basicDialog.id_negative.setOnClickListener {
+            basicDialog.dismiss()
+        }
+    }
+
+    @SuppressLint("MissingPermission")
+    fun startCall(){
+        val phoneNum = request.clientInfo?.basicInfo?.phoneNumber
+            ?.replace("[^0-9\\+]".toRegex(), "")
+
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum))
+        startActivity(intent)
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
@@ -145,6 +193,13 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
                         Log.d(TAG, ex.toString())
                     }
                 }
+            }
+
+            REQUEST_PHONE_CALL->{
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    startCall()
+                }
+
             }
         }
     }

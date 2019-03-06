@@ -33,6 +33,7 @@ import kotlinx.android.synthetic.main.dialog_body_contact.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import android.content.Intent
 import android.net.Uri
+import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import kotlinx.android.synthetic.main.dialog_body_contact.*
 
 
@@ -122,13 +123,27 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
             negative = "Cancel"
         }.build(this, dialogContainer, dialogBody)
 
-        val showPhone= request.clientInfo!!.basicInfo!!.phoneNumber
+        val basicInfo = request.clientInfo!!.basicInfo
+
+        val showPhone= basicInfo.phoneNumber
+        val showName = "${basicInfo.firstName}  ${basicInfo.lastName}"
         basicDialog.id_phone_number.text = showPhone
+        basicDialog.id_show_client_name.text = showName
 
         basicDialog.show()
 
         basicDialog.id_positive.setOnClickListener {
+            if(ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
+            {
                 startCall()
+            }
+            else//request permission
+            {
+                //context, constant for access fine location value, permission request code
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
+                    REQUEST_PHONE_CALL)
+            }
         }
         basicDialog.id_negative.setOnClickListener {
             basicDialog.dismiss()
@@ -146,7 +161,6 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
 
         //add zoom button
         mMap.uiSettings.isZoomControlsEnabled = true
@@ -197,6 +211,7 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
 
             REQUEST_PHONE_CALL->{
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Log.d(MECHANIC_TAG, grantResults.toString())
                     startCall()
                 }
 

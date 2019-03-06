@@ -43,11 +43,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/id_mechanic_name"
-                algolia:layout_constraintEnd_toEndOf="@+id/id_profile_image" android:fontFamily="@font/roboto_bold"
+                android:fontFamily="@font/roboto_bold"
                 android:textColor="@color/colorAccent"
-                algolia:layout_constraintTop_toTopOf="@+id/id_mechanic_profile_image"
-                algolia:layout_constraintStart_toEndOf="@+id/id_mechanic_profile_image"
-                android:layout_marginStart="10dp"/>
+                tools:layout_editor_absoluteY="16dp" tools:layout_editor_absoluteX="76dp"/>
         <RatingBar
                 style="@style/AppRatingBarSmall"
                 android:id="@+id/id_mechanic_rating"

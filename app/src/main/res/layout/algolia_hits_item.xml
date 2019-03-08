@@ -55,7 +55,7 @@
                 algolia:layout_constraintStart_toEndOf="@+id/id_mechanic_profile_image"
         />
         <Button
-                style="@style/AppDefaultRecyclerItemButton"
+                style="@style/AppPrimaryRecyclerItemButton"
                 android:text="@string/text_select"
                 android:id="@+id/id_select"
                 algolia:layout_constraintEnd_toEndOf="parent"

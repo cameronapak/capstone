@@ -18,8 +18,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="122dp"
                 android:background="@drawable/top_bg1"
-                android:theme="@style/ToolbarTheme"
-                android:minHeight="@dimen/toolbar_height"
                 android:id="@+id/id_find_service_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

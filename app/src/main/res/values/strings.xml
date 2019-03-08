@@ -151,5 +151,7 @@
     <string name="add_button">Add</string>
     <string name="err_cancel_job_fail">Failed to cancel job.</string>
     <string name="text_review">Review</string>
+    <string name="text_not_a_member">Not a member? Click here to get started!</string>
+    <string name="forgot_password">Forgot Password</string>
 
 </resources>

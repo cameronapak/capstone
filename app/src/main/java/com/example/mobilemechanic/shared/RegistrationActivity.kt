@@ -3,6 +3,7 @@ package com.example.mobilemechanic.shared
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.widget.Spinner
 import android.widget.Toast
@@ -40,13 +41,21 @@ class RegistrationActivity : AppCompatActivity() {
 
     private fun setUpRegistrationActivity() {
         setUpStateSpinner()
-        id_register_signIn.paintFlags = id_register_signIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        setUpToolBar()
         id_register_button.setOnClickListener {
             createUserAccount()
         }
 
         id_register_signIn.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
+        }
+    }
+
+    private fun setUpToolBar() {
+        setSupportActionBar(id_registration_toolbar as android.support.v7.widget.Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
         }
     }
 
@@ -67,7 +76,7 @@ class RegistrationActivity : AppCompatActivity() {
             val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
             val user = User("", "", password, userType, basicInfo, address, 0f)
 
-            // get Firebase token
+            // get Firebase FCM token
             FirebaseInstanceId.getInstance().instanceId
                 ?.addOnCompleteListener {
                     if (!it.isSuccessful) {
@@ -190,8 +199,14 @@ class RegistrationActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun onResume() {
         super.onResume()
+        id_register_signIn.paintFlags = id_register_signIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
         ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 }

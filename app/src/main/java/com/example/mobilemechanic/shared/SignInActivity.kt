@@ -1,7 +1,7 @@
 package com.example.mobilemechanic.shared
 
-import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -12,6 +12,7 @@ import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -31,8 +32,14 @@ class SignInActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
 
+        setUpSignInActivity()
+    }
+
+    private fun setUpSignInActivity() {
         id_login_button.setOnClickListener { login() }
         id_forgot_password.setOnClickListener { resetPassword() }
+        id_get_started.setOnClickListener { startRegistrationActivity() }
+        id_main_frame_layout.setOnClickListener { ScreenManager.hideKeyBoard(this) }
     }
 
     private fun login() {
@@ -86,11 +93,11 @@ class SignInActivity : AppCompatActivity() {
         FirebaseInstanceId.getInstance().instanceId
             .addOnCompleteListener(OnCompleteListener { task ->
                 if (!task.isSuccessful) {
-                    Log.w(CLIENT_TAG, "getInstanceId failed", task.exception)
+                    Log.w(CLIENT_TAG, "[SignInActivity] getInstanceId failed", task.exception)
                     return@OnCompleteListener
                 }
                 val token = task.result?.token
-                Log.d(CLIENT_TAG, "[SignInActvity] token: $token")
+                Log.d(CLIENT_TAG, "[SignInActivity] token: $token")
 
                 sendFcmTokenToFirestore(token)
             })
@@ -109,6 +116,16 @@ class SignInActivity : AppCompatActivity() {
             }?.addOnFailureListener {
                 Log.d(CLIENT_TAG, "[SignInActivity] update fcm token Failed: ${it.message}")
             }
+    }
+
+    private fun startRegistrationActivity() {
+        startActivity(Intent(this, RegistrationActivity::class.java))
+    }
+
+    override fun onResume() {
+        id_forgot_password.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        super.onResume()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 }
 

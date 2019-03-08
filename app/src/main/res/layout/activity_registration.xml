@@ -24,39 +24,8 @@
                         android:id="@+id/id_registration_toolbar"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
-                <TextView
-                        android:text="Registration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text_registration"
-                        app:layout_constraintTop_toTopOf="@+id/id_registration_toolbar"
-                        app:layout_constraintStart_toStartOf="@+id/id_registration_toolbar"
-                        android:layout_marginStart="72dp"
-                        android:fontFamily="@font/qualio_bold"
-                        android:textSize="28sp"
-                        android:textColor="@color/colorHeaderDark"
-                        app:layout_constraintBottom_toBottomOf="@+id/id_registration_toolbar"
-                        android:layout_marginTop="8dp" app:layout_constraintVertical_bias="0.263"/>
-                <TextView
-                        android:text="Form"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text_form"
-                        app:layout_constraintTop_toTopOf="@+id/text_registration"
-                        app:layout_constraintStart_toEndOf="@+id/text_registration"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0" android:textSize="28sp"
-                        android:fontFamily="@font/qualio_bold" android:layout_marginStart="5dp"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text_registration_subtitle"
-                        app:layout_constraintStart_toStartOf="@+id/text_registration"
-                        app:layout_constraintTop_toBottomOf="@+id/text_registration"
-                        android:text="@string/text_registration_subtitle" android:textSize="12sp"
-                        android:fontFamily="@font/qualio"/>
 
-               <EditText
+            <EditText
                         android:layout_width="300dp"
                         android:layout_height="wrap_content"
                         android:ems="10"

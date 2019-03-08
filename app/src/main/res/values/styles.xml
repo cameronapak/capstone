@@ -8,6 +8,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
         <item name="colorControlActivated">@color/colorPrimary1</item>
+        <item name="android:fontFamily">@font/roboto</item>
     </style>
 
     <style name="ToolbarTheme" parent="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
@@ -34,6 +35,7 @@
     <style name="SpinnerItemStyle">
         <item name="android:textSize">14dp</item>
     </style>
+
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>

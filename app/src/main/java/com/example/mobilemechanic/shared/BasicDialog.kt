@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 class BasicDialog(parentActivity: Activity, container: View, bodyView: View)
     : Dialog(parentActivity)
 {
+
     class Builder
     {
         companion object {

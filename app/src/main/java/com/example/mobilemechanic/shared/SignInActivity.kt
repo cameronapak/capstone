@@ -1,5 +1,6 @@
 package com.example.mobilemechanic.shared
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
@@ -19,11 +20,14 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_sign_in.*
+import kotlinx.android.synthetic.main.dialog_body_reset_password.*
+import kotlinx.android.synthetic.main.dialog_container_basic.*
 
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var basicDialog: Dialog
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,7 +35,8 @@ class SignInActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
-
+        Log.d(CLIENT_TAG, "[SignInActivity] mAuth.currentUser.email: ${mAuth.currentUser?.email}")
+        Log.d(CLIENT_TAG, "[SignInActivity] mAuth.currentUser.email: ${mAuth.currentUser?.uid}")
         setUpSignInActivity()
     }
 
@@ -85,8 +90,17 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun resetPassword() {
-        val i = Intent(this, ForgotPasswordActivity::class.java)
-        startActivity(i)
+        val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)
+        val body = layoutInflater.inflate(R.layout.dialog_body_reset_password, null)
+
+        basicDialog = BasicDialog.Builder.apply {
+            title = "Reset"
+            negative = "Cancel"
+            positive = "Reset"
+        }.build(this, container, body)
+        basicDialog.show()
+
+        handleDialogOnClick(basicDialog)
     }
 
     private fun retrieveFcmToken() {
@@ -122,9 +136,39 @@ class SignInActivity : AppCompatActivity() {
         startActivity(Intent(this, RegistrationActivity::class.java))
     }
 
+    private fun handleDialogOnClick(basicDialog: Dialog) {
+        basicDialog.id_negative.setOnClickListener {
+            basicDialog.dismiss()
+        }
+
+        basicDialog.id_positive.setOnClickListener {
+            val email = basicDialog.id_email_password_reset.text.toString().trim()
+            Log.d(CLIENT_TAG, "[SignInActivity]: email to reset password: $email")
+
+            if (email.isNullOrEmpty() || email.isBlank()) {
+                Toast.makeText(this, "Please enter in a valid email.", Toast.LENGTH_LONG).show()
+                return@setOnClickListener
+            }
+
+            sendResetEmail(email)
+            basicDialog.dismiss()
+        }
+    }
+
+    private fun sendResetEmail(email: String) {
+        mAuth?.sendPasswordResetEmail(email)?.addOnCompleteListener(this) {
+            if (it.isSuccessful) {
+                Toast.makeText(this, "Reset password email sent success", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this, SignInActivity::class.java))
+            } else {
+                Toast.makeText(this, "Incorrectly email address", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
     override fun onResume() {
-        id_forgot_password.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         super.onResume()
+        id_forgot_password.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 }

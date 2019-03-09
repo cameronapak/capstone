@@ -153,5 +153,6 @@
     <string name="text_review">Review</string>
     <string name="text_not_a_member">Not a member? Click here to get started!</string>
     <string name="forgot_password">Forgot Password</string>
+    <string name="text_remove_service_question">Are you sure you want to remove this service?</string>
 
 </resources>

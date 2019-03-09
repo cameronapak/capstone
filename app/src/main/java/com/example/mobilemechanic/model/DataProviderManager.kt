@@ -80,4 +80,12 @@ object DataProviderManager {
     fun getHondaModel() : ArrayList<String> {
         return arrayListOf("Accord", "Civic", "Insight")
     }
+
+    fun getServicePriceLabel(): ArrayList<String> {
+        return arrayListOf("Price", "< 10", "< 20", "< 50", "< 100", "< 500")
+    }
+
+    fun getServicePriceValue(): ArrayList<Double> {
+        return arrayListOf(0.0, 10.0, 20.0, 50.0, 100.0, 500.0)
+    }
 }

@@ -57,6 +57,10 @@
         <item name="android:layout_height">48dp</item>
     </style>
 
+    <style name="AppSecondarySpinner" parent="AppPrimarySpinner">
+        <item name="android:layout_width">220dp</item>
+    </style>
+
     <style name="AppActionBar">
         <item name="android:theme">?attr/actionBarTheme</item>
         <item name="android:layout_width">match_parent</item>

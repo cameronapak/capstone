@@ -1,20 +1,39 @@
 package com.example.mobilemechanic.client.findservice
 
+import android.app.Dialog
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
 import com.algolia.instantsearch.core.helpers.Searcher
+import com.algolia.instantsearch.core.model.NumericRefinement
 import com.algolia.instantsearch.ui.helpers.InstantSearch
+import com.algolia.search.saas.Client
+import com.algolia.search.saas.Index
+import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.model.DataProviderManager
+import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_find_service.*
+import kotlinx.android.synthetic.main.dialog_body_algolia_filter.*
+import kotlinx.android.synthetic.main.dialog_container_basic.*
 
-class FindServiceActivity : AppCompatActivity() {
+class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mFireStore: FirebaseStorage
     private lateinit var searcher: Searcher
+    private lateinit var index: Index
+    private lateinit var client: Client
     private lateinit var helper: InstantSearch
+    private var currentRefinement: NumericRefinement? = null
+    private var operatorLessThanOrEqual = NumericRefinement.OPERATOR_LE
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,9 +45,15 @@ class FindServiceActivity : AppCompatActivity() {
     private fun setUpFindServiceActivity() {
         setUpAlgolia()
         setUpToolBar()
+        setUpFilterDialog()
     }
 
     private fun setUpAlgolia() {
+        client = Client(getString(com.example.mobilemechanic.R.string.algolia_app_id),getString(com.example.mobilemechanic.R.string.algolia_api_key))
+        client.getIndex(getString(com.example.mobilemechanic.R.string.algolia_services_index))
+
+        index = client.getIndex(getString(com.example.mobilemechanic.R.string.algolia_services_index))
+
         searcher = Searcher.create(
             getString(com.example.mobilemechanic.R.string.algolia_app_id),
             getString(com.example.mobilemechanic.R.string.algolia_api_key),
@@ -41,11 +66,54 @@ class FindServiceActivity : AppCompatActivity() {
     }
 
     private fun setUpToolBar() {
+        val arrow = resources.getDrawable(R.drawable.abc_ic_ab_back_material, null)
+        arrow.setColorFilter(resources.getColor(R.color.colorPrimary), PorterDuff.Mode.SRC_ATOP)
         setSupportActionBar(id_find_service_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(arrow)
         }
+    }
+
+    private fun setUpFilterDialog() {
+        id_filter.setOnClickListener {
+            val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)
+            val body = layoutInflater.inflate(R.layout.dialog_body_algolia_filter, null)
+            val basicDialog = BasicDialog.Builder.apply {
+                title = "Filter"
+                positive = "Save"
+                negative = "Cancel"
+            }.build(this, container, body)
+            basicDialog.show()
+
+            setUpDialogSpinner(basicDialog)
+            handleDialogOnClick(basicDialog)
+
+        }
+    }
+
+    private fun setUpDialogSpinner(basicDialog: Dialog) {
+        basicDialog.id_algolia_filter_price_spinner.adapter = HintSpinnerAdapter(
+            this,
+            R.layout.support_simple_spinner_dropdown_item,
+            DataProviderManager.getServicePriceLabel()
+        )
+
+        basicDialog.id_algolia_filter_price_spinner.onItemSelectedListener = this
+    }
+
+    private fun handleDialogOnClick(basicDialog: Dialog) {
+        basicDialog.id_negative.setOnClickListener {
+            basicDialog.dismiss()
+        }
+
+        basicDialog.id_positive.setOnClickListener {
+
+
+            basicDialog.dismiss()
+        }
+
     }
 
     override fun onResume() {
@@ -61,5 +129,17 @@ class FindServiceActivity : AppCompatActivity() {
     override fun onDestroy() {
         searcher.destroy()
         super.onDestroy()
+    }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        val selectedValue = DataProviderManager.getServicePriceValue()[position]
+
+        Log.d(CLIENT_TAG, "[FindServiceActivity] price spinner position: $position")
+        Log.d(CLIENT_TAG, "[FindServiceActivity] selectedValue price: $selectedValue")
+        currentRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, selectedValue)
+        searcher.addNumericRefinement(currentRefinement as NumericRefinement)
+        searcher.search()
     }
 }

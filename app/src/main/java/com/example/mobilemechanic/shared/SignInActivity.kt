@@ -44,7 +44,7 @@ class SignInActivity : AppCompatActivity() {
         id_login_button.setOnClickListener { login() }
         id_forgot_password.setOnClickListener { resetPassword() }
         id_get_started.setOnClickListener { startRegistrationActivity() }
-        id_main_frame_layout.setOnClickListener { ScreenManager.hideKeyBoard(this) }
+        enableHideKeyboard()
     }
 
     private fun login() {
@@ -163,6 +163,12 @@ class SignInActivity : AppCompatActivity() {
             } else {
                 Toast.makeText(this, "Incorrectly email address", Toast.LENGTH_SHORT).show()
             }
+        }
+    }
+
+    private fun enableHideKeyboard() {
+        id_main_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
         }
     }
 

@@ -49,12 +49,16 @@ class RegistrationActivity : AppCompatActivity() {
         id_register_signIn.setOnClickListener {
             startActivity(Intent(this, SignInActivity::class.java))
         }
+
+        enableHideKeyboard()
     }
 
     private fun setUpToolBar() {
         setSupportActionBar(id_registration_toolbar as android.support.v7.widget.Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
+            title = "Registration Form"
+            subtitle = "Create a new account today"
             setDisplayHomeAsUpEnabled(true)
         }
     }
@@ -197,6 +201,12 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun enableHideKeyboard() {
+        id_registration_main_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

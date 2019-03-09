@@ -46,24 +46,24 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setUpMechanicWelcomeActivity() {
-//        mockLogin()       // Replace with real login later
+        mockLogin()       // Replace with real login later
         setUpToolBar()
         setUpDrawerMenu()
         setUpNavigationListener()
         setUpRequestRecyclerView()
     }
 
-//    private fun mockLogin() {
-//        mAuth?.signInWithEmailAndPassword("dpham9@uco.edu", "123456")
-//            ?.addOnCompleteListener {
-//                if (it.isSuccessful) {
-//                    val user = mAuth?.currentUser
-//                    Log.d(MECHANIC_TAG, "you is logged in ${user?.uid}")
-//                }
-//            }?.addOnFailureListener {
-//                Log.d(MECHANIC_TAG, it.toString())
-//            }
-//    }
+    private fun mockLogin() {
+        mAuth?.signInWithEmailAndPassword("statham@gmail.com", "123456")
+            ?.addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val user = mAuth?.currentUser
+                    Log.d(MECHANIC_TAG, "you is logged in ${user?.uid}")
+                }
+            }?.addOnFailureListener {
+                Log.d(MECHANIC_TAG, it.toString())
+            }
+    }
 
     private fun setUpRequestRecyclerView() {
         viewManager = LinearLayoutManager(this)

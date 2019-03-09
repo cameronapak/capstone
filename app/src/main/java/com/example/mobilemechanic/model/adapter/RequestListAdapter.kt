@@ -24,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.support.v4.content.ContextCompat.startActivity
+
+
 
 
 class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>) :
@@ -138,16 +141,16 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         val address = AddressManager.getFullAddress(request.clientInfo!!.address)
         val latLong = AddressManager.convertAddress(context, address)
 
-        // Create a Uri from an intent string. Use the result to create an Intent.
-        val gmmIntentUri = Uri.parse("google.streetview:cbll=${latLong.latitude},${latLong.longitude}")
-
-        // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-        val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
-
-        // Make the Intent explicit by setting the Google Maps package
-        mapIntent.setPackage("com.google.android.apps.maps")
-
-        context.startActivity(mapIntent)
+        val uri = String.format(
+            Locale.ENGLISH,
+            "http://maps.google.com/maps?daddr=%f,%f (%s)",
+            latLong.latitude,
+            latLong.longitude,
+            address
+        )
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        intent.setPackage("com.google.android.apps.maps")
+        context.startActivity(intent)
     }
 
     private fun createAcceptDialog(request: Request)
@@ -210,9 +213,9 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private fun completeRequest(request: Request) {
         val completedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
-            .update("status", Status.Complete, "completedOn", completedOn)
+            .update("status", Status.Completed, "completedOn", completedOn)
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Service Completed!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Service Completed!", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Toast.makeText(context, context.getString(R.string.err_complete_fail), Toast.LENGTH_SHORT).show()

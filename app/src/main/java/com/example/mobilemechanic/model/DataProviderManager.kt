@@ -82,7 +82,7 @@ object DataProviderManager {
     }
 
     fun getServicePriceLabel(): ArrayList<String> {
-        return arrayListOf("Price", "Any", "<= 10", "<= 20", "<= 50", "<= 100", "<= 500")
+        return arrayListOf("Price", "All", "Under $10", "Under $20", "Under $50", "Under $100", "Under $500")
     }
 
     fun getServicePriceValue(): ArrayList<Double> {

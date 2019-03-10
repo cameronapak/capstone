@@ -36,6 +36,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     private var ratingRefinement: NumericRefinement? = null
     private var operatorLessThanOrEqual = NumericRefinement.OPERATOR_LE
     private var priceBelow = Double.MAX_VALUE
+    private var spinnerSelectedPosition = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +103,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         )
 
         basicDialog.id_algolia_filter_price_spinner.onItemSelectedListener = this
+        basicDialog.id_algolia_filter_price_spinner.setSelection(spinnerSelectedPosition)
     }
 
     private fun handleDialogOnClick(basicDialog: Dialog) {
@@ -141,6 +143,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         val selectedValue = DataProviderManager.getServicePriceValue()[position]
         priceBelow = selectedValue
+        spinnerSelectedPosition = position
         Log.d(CLIENT_TAG, "[FindServiceActivity] price spinner position: $position")
         Log.d(CLIENT_TAG, "[FindServiceActivity] selectedValue price: $selectedValue")
     }

@@ -51,9 +51,11 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     }
 
     private fun setUpAlgolia() {
-        searcher = Searcher.create(getString(com.example.mobilemechanic.R.string.algolia_app_id),
+        searcher = Searcher.create(
+            getString(com.example.mobilemechanic.R.string.algolia_app_id),
             getString(com.example.mobilemechanic.R.string.algolia_api_key),
-            getString(com.example.mobilemechanic.R.string.algolia_services_index))
+            getString(com.example.mobilemechanic.R.string.algolia_services_index)
+        )
 
         helper = InstantSearch(this, searcher)
         helper.search()
@@ -108,29 +110,12 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         }
 
         basicDialog.id_positive.setOnClickListener {
-
-            checkRating(basicDialog)
-            checkPrice()
+            filterPrice()
             basicDialog.dismiss()
         }
     }
 
-    private fun checkRating(basicDialog: Dialog) {
-        Log.d(CLIENT_TAG, "[FindServiceActivity] rating ${basicDialog.id_algolia_filter_rating.isChecked}")
-//        if (basicDialog.id_algolia_filter_rating.isChecked) {
-//            Log.d(CLIENT_TAG, "[FindServiceActivity] rank by rating")
-//            searcher.removeNumericRefinement("service.price")
-//            ratingRefinement = NumericRefinement("mechanicInfo.rating", NumericRefinement.OPERATOR_GT, 1.0)
-//
-//            searcher.addNumericRefinement(ratingRefinement as NumericRefinement)
-//            searcher.search()
-//        } else {
-//            searcher.removeNumericRefinement("mechanicInfo.rating")
-//            searcher.search()
-//        }
-    }
-
-    private fun checkPrice() {
+    private fun filterPrice() {
         priceRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, priceBelow)
         searcher.addNumericRefinement(priceRefinement as NumericRefinement)
         searcher.search()
@@ -158,8 +143,5 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         priceBelow = selectedValue
         Log.d(CLIENT_TAG, "[FindServiceActivity] price spinner position: $position")
         Log.d(CLIENT_TAG, "[FindServiceActivity] selectedValue price: $selectedValue")
-//        priceRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, selectedValue)
-//        searcher.addNumericRefinement(priceRefinement as NumericRefinement)
-//        searcher.search()
     }
 }

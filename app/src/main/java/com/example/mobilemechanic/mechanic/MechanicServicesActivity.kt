@@ -38,7 +38,6 @@ class MechanicServicesActivity : AppCompatActivity() {
     private lateinit var basicDialog: Dialog
     private var services = ArrayList<ServiceModel>()
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_mechanic_services)

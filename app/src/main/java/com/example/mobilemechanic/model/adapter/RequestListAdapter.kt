@@ -41,7 +41,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
         val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
-        val status = itemView.findViewById<TextView>(R.id.id_request_status)
+        val status = itemView.findViewById<TextView>(R.id.id_status)
         val distance = itemView.findViewById<TextView>(R.id.id_distance)
         val directionsButton = itemView.findViewById<ImageButton>(R.id.id_directions_btn)
         val primaryButton = itemView.findViewById<Button>(R.id.id_primary_btn)

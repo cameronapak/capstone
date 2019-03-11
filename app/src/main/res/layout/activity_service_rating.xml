@@ -37,7 +37,7 @@
                     style="@style/AppCheckBoxRating"
                     android:text="@string/text_selection1"
                     android:id="@+id/id_rating_checkbox1"
-                    android:layout_alignParentTop="true"/>
+                    android:layout_alignParentTop="true" android:checked="false"/>
             <CheckBox
                     style="@style/AppCheckBoxRating"
                     android:text="@string/text_selection2"

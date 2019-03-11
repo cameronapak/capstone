@@ -33,6 +33,9 @@
     <string name="text_contact">Contact</string>
     <string name="text_status">Status:</string>
     <string name="text_next">Next</string>
+    <string name="text_summary">Summary</string>
+    <string name="text_mechanic">Mechanic</string>
+    <string name="text_service_completed">Service Completed</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>

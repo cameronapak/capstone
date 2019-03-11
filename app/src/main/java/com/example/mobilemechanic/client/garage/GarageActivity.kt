@@ -193,13 +193,15 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun updateVehicleModelSpinner(brand: String) {
+        var selectedMake = VehicleMake()
         allVehicleMaker.forEach {
             if (it.brand == brand) {
-                allVehicleModel.clear()
-                allVehicleModel.add("Model")
-                allVehicleModel = it.models
+                selectedMake = it
             }
         }
+        allVehicleModel.clear()
+        allVehicleModel.add("Model")
+        allVehicleModel.addAll(selectedMake.models)
         vehicleModelAdapter = HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, allVehicleModel)
         vehicleModelSpinner.adapter = vehicleModelAdapter
         Log.d(CLIENT_TAG, "[GarageActivity] models $allVehicleModel")

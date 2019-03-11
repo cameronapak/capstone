@@ -14,7 +14,7 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".shared.ProfilePictureActivity">
+        <activity android:name=".shared.Registration.ProfilePictureActivity">
         </activity>
         <activity android:name=".client.garage.GarageActivity">
         </activity>
@@ -49,7 +49,7 @@
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.RegistrationActivity">
+        <activity android:name=".shared.Registration.RegistrationActivity">
         </activity>
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>

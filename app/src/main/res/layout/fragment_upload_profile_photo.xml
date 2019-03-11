@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context=".shared.Registration.fragments.UploadProfilePhotoFragment">
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <com.theartofdev.edmodo.cropper.CropImageView
+                android:id="@+id/img_registrationProfilePicture"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_weight="1"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                android:layout_marginTop="30dp" app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" app:srcCompat="@android:drawable/sym_def_app_icon"
+                    android:id="@+id/id_tempRegistrationProfile" android:cropToPadding="false"/>
+        </com.theartofdev.edmodo.cropper.CropImageView>
+        <TextView
+                android:text="SKIP"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_skipProfilePicture" android:layout_marginTop="20dp"
+                app:layout_constraintTop_toBottomOf="@+id/img_registrationProfilePicture"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp" android:textSize="14sp"/>
+        <Button
+                android:text="Next"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_addressInfo" android:layout_marginTop="50dp"
+                app:layout_constraintTop_toBottomOf="@+id/btn_skipProfilePicture"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+        <TextView
+                android:text="Back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_backToInfo" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/btn_addressInfo" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"/>
+
+    </android.support.constraint.ConstraintLayout>
+</FrameLayout>

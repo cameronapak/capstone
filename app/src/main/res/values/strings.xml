@@ -139,4 +139,7 @@
     <string name="err_accept_fail">Failed to accept request.</string>
     <string name="err_complete_fail">Failed to complete service.</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

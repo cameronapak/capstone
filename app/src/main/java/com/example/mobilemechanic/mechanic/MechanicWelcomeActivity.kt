@@ -11,7 +11,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.widget.TextView
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
@@ -19,6 +21,8 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
@@ -114,10 +118,31 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     private fun setUpDrawerMenu() {
         mDrawerLayout = findViewById(R.id.mechanic_drawer_layout)
         val clientNavigationView = findViewById<NavigationView>(R.id.id_mechanic_nav_view)
+        val drawerHeader = clientNavigationView.getHeaderView(0)
+
+        val drawerProfileImage = drawerHeader.findViewById<CircleImageView>(R.id.id_drawer_profile_image)
+        var drawerDisplayName = drawerHeader.findViewById<TextView>(R.id.id_drawer_header_name)
+        var drawerEmail = drawerHeader.findViewById<TextView>(R.id.id_drawer_header_email)
+
+        drawerDisplayName.text = mAuth?.currentUser?.displayName
+        drawerEmail.text = mAuth?.currentUser?.email
+
+        displayProfileImage(drawerProfileImage)
+
         clientNavigationView.setNavigationItemSelectedListener { menuItem ->
             menuItem.isChecked = true
             mDrawerLayout.closeDrawers()
             true
+        }
+    }
+
+    private fun displayProfileImage(drawerProfileImage: CircleImageView) {
+        val userProfileUri = mAuth?.currentUser?.photoUrl
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] photoUrl ${mAuth?.currentUser?.photoUrl}")
+        if (userProfileUri != null) {
+            Picasso.get().load(userProfileUri).into(drawerProfileImage)
+        } else {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
         }
     }
 
@@ -163,5 +188,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        setUpDrawerMenu()
     }
 }

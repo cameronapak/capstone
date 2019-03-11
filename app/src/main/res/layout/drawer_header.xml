@@ -13,8 +13,8 @@
         android:gravity="bottom">
     <de.hdodenhof.circleimageview.CircleImageView
             style="@style/AppCircleImageViewSmall"
-            civ:civ_border_width="1dp"
-            civ:civ_border_color="@color/colorPrimary3"
+            civ:civ_border_width="2dp"
+            civ:civ_border_color="@color/colorPrimary"
             android:src="@drawable/chan_profile_cropped"
             android:id="@+id/id_drawer_profile_image"
             android:layout_alignParentTop="true"

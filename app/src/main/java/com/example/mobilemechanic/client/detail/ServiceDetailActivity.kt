@@ -162,7 +162,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         basicDialog = BasicDialog.Builder.apply {
             title = "Contact"
             positive = "Call"
-            negative = "Cancel"
+            negative = "Message"
         }.build(this, dialogContainer, dialogBody)
 
         val basicInfo = request.mechanicInfo!!.basicInfo
@@ -188,7 +188,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         basicDialog.id_negative.setOnClickListener {
-            basicDialog.dismiss()
+
         }
     }
 

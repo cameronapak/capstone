@@ -128,21 +128,18 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     // Handle the camera action
                     true
                 }
+                R.id.nav_messages -> {
+
+                    true
+                }
                 R.id.nav_services -> {
-                    val i = Intent(this, MechanicServicesActivity::class.java)
-                    startActivity(i)
+                    startActivity(Intent(this, MechanicServicesActivity::class.java))
                     true
                 }
                 R.id.nav_history -> {
                     true
                 }
                 R.id.nav_settings -> {
-                    true
-                }
-                R.id.nav_share -> {
-                    true
-                }
-                R.id.nav_send -> {
                     true
                 }
                 else -> {
@@ -164,7 +161,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 }

@@ -3,6 +3,7 @@ package com.example.mobilemechanic.shared
 import android.app.Dialog
 import android.content.Intent
 import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
@@ -16,6 +17,7 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
@@ -71,13 +73,36 @@ class SignInActivity : AppCompatActivity() {
             ?.addOnSuccessListener {
                 retrieveFcmToken()
                 redirectToWelcomePageByUserType(it)
+
                 val user = it.toObject(User::class.java)
+                if (user != null) {
+                    updateUserProfile(user)
+                }
+
                 if (user?.userType == UserType.CLIENT) {
                     startActivity(Intent(this, ClientWelcomeActivity::class.java))
                 } else {
                     startActivity(Intent(this, MechanicWelcomeActivity::class.java))
                 }
             }
+    }
+
+    private fun updateUserProfile(userInfo: User) {
+        val user = mAuth?.currentUser
+        if (user != null) {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("${userInfo.basicInfo.firstName} ${userInfo.basicInfo.lastName}")
+                .setPhotoUri(Uri.parse("${userInfo.basicInfo.photoUrl}"))
+                .build()
+
+            user.updateProfile((profileUpdates))
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.d(CLIENT_TAG, "[SignInActivity] updateUserProfile completed")
+                        Log.d(CLIENT_TAG, "[SignInActivity] photoUri ${userInfo.basicInfo.photoUrl}")
+                    }
+                }
+        }
     }
 
     private fun redirectToWelcomePageByUserType(it: DocumentSnapshot) {

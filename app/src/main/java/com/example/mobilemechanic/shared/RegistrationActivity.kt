@@ -5,9 +5,11 @@ import android.graphics.Paint
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
@@ -17,6 +19,7 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
@@ -35,7 +38,6 @@ class RegistrationActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
-
         setUpRegistrationActivity()
     }
 
@@ -103,9 +105,26 @@ class RegistrationActivity : AppCompatActivity() {
     private fun handleAccountCreationSuccess(it: Task<AuthResult>, user: User) {
         if(it.isSuccessful) {
             Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
+            updateUserProfile(user)
             saveUser(user)
         } else {
             Toast.makeText(this, "Account created failed!\n${it.exception.toString()}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun updateUserProfile(userInfo: User) {
+        val user = mAuth?.currentUser
+        if (user != null) {
+            Log.d(CLIENT_TAG, "[RegistrationActivity] user name ${userInfo.basicInfo.firstName}")
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("${userInfo.basicInfo.firstName} ${userInfo.basicInfo.lastName}")
+                .build()
+            user.updateProfile((profileUpdates))
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        Log.d(CLIENT_TAG, "[RegistrationActivity] updateUserProfile completed")
+                    }
+                }
         }
     }
 

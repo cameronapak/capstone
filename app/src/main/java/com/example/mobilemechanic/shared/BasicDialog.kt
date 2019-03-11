@@ -18,29 +18,11 @@ class BasicDialog(parentActivity: Activity, container: View, bodyView: View)
 
     class Builder
     {
-
         companion object {
 
             var title = "Title"
             var positive = "Yes"
             var negative = "No"
-
-            fun buildWithSearcher(parentActivity: Activity, container: View, bodyView: View, searcher: Searcher): BasicDialog {
-                var dialog = BasicDialog(parentActivity, container, bodyView)
-                dialog.searcher = searcher
-                dialog.setContentView(container)
-
-                val body = container.id_body as LinearLayout
-                container.apply {
-                    id_service_type.text = title
-                    id_positive.text = positive
-                    id_negative.text = negative
-                }
-                body.addView(bodyView)
-                dialog.window.attributes =
-                    ScreenManager.setBasicDialogWidth(parentActivity, dialog, 0.9f)
-                return dialog
-            }
 
             fun build(parentActivity: Activity, container: View, bodyView: View) : BasicDialog{
                 var dialog = BasicDialog(parentActivity, container, bodyView)

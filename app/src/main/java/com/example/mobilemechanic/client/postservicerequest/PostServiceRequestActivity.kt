@@ -95,12 +95,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_client_name.text =
+            id_mechanic_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
             id_price.text = "$${serviceModel.service.price.toInt()}"
-            id_mechanic_rating.text = serviceModel.mechanicInfo.rating.toString()
+            id_mechanic_rating.rating = serviceModel.mechanicInfo.rating
         }
     }
 
@@ -296,6 +296,9 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         super.onResume()
         hideWarningIconAndMessage()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        id_post_service_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

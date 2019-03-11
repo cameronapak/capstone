@@ -40,7 +40,6 @@ import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestAc
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
-import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -365,12 +364,12 @@ class HitsCustomized
 
             holder.mechanicRating.rating
 
-            if (serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()||
-                serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrBlank()) {
-                Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
-            } else {
-                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
-            }
+//            if (serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()||
+//                serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrBlank()) {
+//                Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
+//            } else {
+//                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
+//            }
 
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
 

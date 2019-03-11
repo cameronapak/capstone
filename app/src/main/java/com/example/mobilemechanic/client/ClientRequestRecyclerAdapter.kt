@@ -1,7 +1,10 @@
 package com.example.mobilemechanic.client
 
-import android.content.Context
+import android.app.Activity
+import android.app.Dialog
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,12 +13,14 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.util.*
 
-class ClientRequestRecyclerAdapter(val context: Context, val dataset: ArrayList<Request>) :
+class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList<Request>) :
     RecyclerView.Adapter<ClientRequestRecyclerAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -54,20 +59,77 @@ class ClientRequestRecyclerAdapter(val context: Context, val dataset: ArrayList<
         val mechanicPhoto = request.mechanicInfo?.basicInfo?.photoUrl
         if (mechanicPhoto.isNullOrEmpty() || mechanicPhoto.isNullOrEmpty()) {
             Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profileImage)
+            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] no photoUrl")
         } else {
-            Picasso.get().load(mechanicPhoto).into(holder.profileImage)
+            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] photoUrl $mechanicPhoto")
+            Picasso.get().load(Uri.parse(mechanicPhoto)).into(holder.profileImage)
         }
 
         if (request.status == Status.Request) {
             holder.requestStatus.text = "Pending"
             holder.primaryButton.text = "Cancel"
-            holder.secondaryButton.visibility = View.VISIBLE 
-            holder.secondaryButton.text = "Contact"
+            holder.secondaryButton.visibility = View.GONE
 
         } else if (request.status == Status.Active) {
             holder.requestStatus.text = "Active"
             holder.primaryButton.text = "Pay"
-            holder.secondaryButton.visibility = View.GONE
+            holder.secondaryButton.text = "Cancel"
+            holder.secondaryButton.visibility = View.VISIBLE
+        }
+
+        holder.primaryButton.setOnClickListener {
+            handlePrimaryButtonClick(request)
+        }
+
+        holder.secondaryButton.setOnClickListener {
+            handleSecondaryButtonClick(request)
+        }
+    }
+
+    private fun handlePrimaryButtonClick(request: Request) {
+        if (request.status == Status.Request) {
+            val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
+            val body = context.layoutInflater.inflate(R.layout.dialog_body_confirmation, null)
+            val basicDialog = BasicDialog.Builder.apply {
+                title = "Cancel Request"
+                positive = "Confirm"
+                negative = "Cancel"
+            }.build(context, container, body)
+            basicDialog.show()
+
+            handleDialogClick(basicDialog)
+        }
+
+        if (request.status == Status.Active) {
+            // TODO: Go to payment activity
+
+        }
+
+    }
+
+    private fun handleSecondaryButtonClick(request: Request) {
+        if (request.status == Status.Active) {
+            val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
+            val body = context.layoutInflater.inflate(R.layout.dialog_body_confirmation, null)
+            val basicDialog = BasicDialog.Builder.apply {
+                title = "Cancel Request"
+                positive = "Confirm"
+                negative = "Cancel"
+            }.build(context, container, body)
+            basicDialog.show()
+        }
+    }
+
+    private fun handleDialogClick(basicDialog: Dialog) {
+        basicDialog.id_positive.setOnClickListener {
+            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] confirm cancel request")
+            // TODO: cancel request
+
+            basicDialog.dismiss()
+        }
+
+        basicDialog.id_negative.setOnClickListener {
+            basicDialog.dismiss()
         }
     }
 

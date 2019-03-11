@@ -28,6 +28,7 @@
 
     <style name="AppEditText" parent="AppText">
         <item name="android:layout_width">300dp</item>
+        <item name="android:fontFamily">@font/qualio</item>
     </style>
 
     <style name="AppIconSize">
@@ -49,9 +50,15 @@
         <item name="android:textSize">16dp</item>
     </style>
 
+
+
     <style name="AppPrimarySpinner" parent="Widget.AppCompat.Spinner.Underlined">
         <item name="android:layout_width">300dp</item>
         <item name="android:layout_height">48dp</item>
+    </style>
+
+    <style name="AppSecondarySpinner" parent="AppPrimarySpinner">
+        <item name="android:layout_width">220dp</item>
     </style>
 
     <style name="AppActionBar">
@@ -80,13 +87,19 @@
         <item name="android:layout_height">50dp</item>
     </style>
 
-    <style name="AppDefaultRecyclerItemButton" parent="Base.Widget.AppCompat.Button.Borderless">
+    <style name="AppPrimaryRecyclerItemButton" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">82dp</item>
         <item name="android:layout_height">36dp</item>
         <item name="android:background">@drawable/default_border</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:fontFamily">@font/timeburnernormal</item>
         <item name="android:textColor">@color/colorPrimary3</item>
+    </style>
+
+    <style name="AppFocusRecyclerItemButton" parent="AppPrimaryRecyclerItemButton">
+        <item name="android:background">@drawable/default_border_focus</item>
+        <item name="android:textColor">@color/colorFocus</item>
     </style>
 
     <style name="AppRatingBarNormal">

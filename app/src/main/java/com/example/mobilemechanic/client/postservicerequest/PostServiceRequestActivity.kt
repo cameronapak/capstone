@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -96,12 +95,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_client_name.text =
+            id_mechanic_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
             id_price.text = "$${serviceModel.service.price.toInt()}"
-            id_mechanic_rating.text = serviceModel.mechanicInfo.rating.toString()
+            id_mechanic_rating.rating = serviceModel.mechanicInfo.rating
         }
     }
 
@@ -129,7 +128,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             .comment(comment)
                             .status(Status.Request)
                             .postedOn(currentTime)
-                            .acceptedOn(-1)
                             .build()
 
                         Log.d(CLIENT_TAG, "$request)")
@@ -167,11 +165,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun validateForm() {
-        if ((id_vehicle_spinner.selectedItemPosition == 0)) {
-            disableSubmitButton()
-        } else {
-            enableSubmitButton()
-        }
+        id_submit.isEnabled = (id_vehicle_spinner.selectedItemPosition != 0)
     }
 
     private fun setUpVehicleSpinner() {
@@ -230,8 +224,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
 
             daysOfWeekString = availableDays.joinToString(separator = ", ")
-//            fromTime = dialogContainer.id_btnFromTime.text.toString()
-//            toTime = dialogContainer.id_btnToTime.text.toString()
             if (availableDays.isEmpty()) {
                 Toast.makeText(this, "Select available days", Toast.LENGTH_SHORT).show()
             } else if (fromTime.isNullOrBlank() || toTime.isNullOrBlank()) {
@@ -257,16 +249,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_warning_icon.visibility = View.VISIBLE
         id_warning_message.visibility = View.VISIBLE
         id_warning_message_add.visibility = View.VISIBLE
-    }
-
-    private fun disableSubmitButton() {
-        id_submit.isEnabled = false
-        id_submit.setBackgroundResource(R.drawable.button_round_corner_disabled)
-    }
-
-    private fun enableSubmitButton() {
-        id_submit.isEnabled = true
-        id_submit.setBackgroundResource(R.drawable.button_round_corner)
     }
 
     private fun checkIfGarageIsEmpty(vehicles: ArrayList<Vehicle>) {
@@ -314,6 +296,9 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         super.onResume()
         hideWarningIconAndMessage()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        id_post_service_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {

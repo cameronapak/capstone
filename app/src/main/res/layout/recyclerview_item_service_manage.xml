@@ -32,35 +32,23 @@
             android:layout_marginEnd="8dp"/>
 
     <Button
+            style="@style/AppFocusRecyclerItemButton"
             android:text="@string/text_remove"
-            android:layout_width="82dp"
-            android:layout_height="36dp"
-            android:textAllCaps="false"
-            android:background="@drawable/default_border_focus"
             android:id="@+id/id_button_remove"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            android:fontFamily="@font/timeburnernormal"
-            android:textColor="@color/colorFocus"
-            style="?android:attr/borderlessButtonStyle"
             app:layout_constraintEnd_toStartOf="@+id/id_select"
             app:layout_constraintTop_toTopOf="@+id/id_select"/>
 
     <Button
+            style="@style/AppPrimaryRecyclerItemButton"
             android:text="@string/text_update"
-            android:layout_width="82dp"
-            android:layout_height="36dp"
-            android:textAllCaps="false"
-            android:background="@drawable/default_border"
             android:id="@+id/id_select"
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="12dp"
             android:layout_marginBottom="8dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:fontFamily="@font/timeburnernormal"
-            android:textColor="@color/colorPrimary3"
-            style="?android:attr/borderlessButtonStyle"/>
+            app:layout_constraintBottom_toBottomOf="parent"/>
     <TextView
             android:text="id_price"
             android:layout_width="wrap_content"

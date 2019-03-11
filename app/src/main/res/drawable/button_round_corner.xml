@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item>
+    <item android:state_enabled="true">
         <shape
             android:shape="rectangle">
             <corners
@@ -27,9 +27,21 @@
                     android:topRightRadius="20dp"
                     android:radius="10dp"
             />
-
-            <solid android:color="@color/colorPrimary3"/>
+            <solid android:color="@color/colorPrimary2"/>
         </shape>
+    </item>
 
+    <item android:state_enabled="false">
+        <shape
+                android:shape="rectangle">
+            <corners
+                    android:bottomLeftRadius="20dp"
+                    android:bottomRightRadius="20dp"
+                    android:topLeftRadius="20dp"
+                    android:topRightRadius="20dp"
+                    android:radius="10dp"
+            />
+            <solid android:color="@color/colorGrayText"/>
+        </shape>
     </item>
 </selector>

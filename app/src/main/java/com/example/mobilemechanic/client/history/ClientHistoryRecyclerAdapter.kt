@@ -13,6 +13,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.detail.ServiceDetailActivity
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
+import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.utility.DateTimeManager
@@ -61,7 +62,10 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         }
 
         holder.detailsButton.setOnClickListener {
-            context.startActivity(Intent(context, ServiceDetailActivity::class.java))
+            val intent = Intent(context, ServiceDetailActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, request)
+            Log.d(CLIENT_TAG, "[ClientHistoryRecyclerAdapter] requestID: ${request.objectID}")
+            context.startActivity(intent)
         }
     }
 

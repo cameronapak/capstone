@@ -34,17 +34,14 @@
                 app:layout_constraintTop_toTopOf="parent"/>
     </android.support.constraint.ConstraintLayout>
 
-    <RelativeLayout
-            android:layout_width="match_parent" android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal">
-
         <ImageView
                 android:src="@drawable/bottom_bg2"
+
+                android:layout_gravity="bottom|center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" android:id="@+id/id_history_imageView"
                 app:layout_constraintBottom_toBottomOf="parent" tools:layout_editor_absoluteX="0dp"
                 android:background="@drawable/bottom_bg2"
                 android:contentDescription="bottom @string/bottom_sheet_behavior"/>
-    </RelativeLayout>
 
 </FrameLayout>

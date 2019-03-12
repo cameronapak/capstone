@@ -171,7 +171,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun handleDialogClick(basicDialog: BasicDialog) {
         basicDialog.id_positive.setOnClickListener {
-            addVehicleToFirestore(basicDialog)
+            retrieveVehicleImageUrlAndSaveToFirestore(basicDialog)
         }
 
         basicDialog.id_negative.setOnClickListener {
@@ -179,23 +179,15 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun addVehicleToFirestore(basicDialog: BasicDialog) {
+    private fun retrieveVehicleImageUrlAndSaveToFirestore(basicDialog: BasicDialog) {
         val year = basicDialog.id_vehicle_year.selectedItem.toString()
         val make = basicDialog.id_vehicle_make.selectedItem.toString()
         val model = basicDialog.id_vehicle_model.selectedItem.toString()
         val vehicle = Vehicle("", year, make, model, "")
+        retrieveVehicleImageUrl(vehicle)
 
         if (isFilled(basicDialog)) {
-            val vehicleDoc = vehicleRef.document()
-            vehicle.objectID = vehicleDoc.id
-            Log.d(CLIENT_TAG, "[GarageActivity] vehicle docId ${vehicle.objectID}")
-            vehicleDoc.set(vehicle)
-                ?.addOnSuccessListener {
-                    Toast.makeText(this, "Vehicle added successfuly", Toast.LENGTH_LONG).show()
-                    uploadVehiclePhotoUrl(vehicle)
-                }?.addOnFailureListener {
-                    Toast.makeText(this, "Unable to add vehicle", Toast.LENGTH_LONG).show()
-                }
+            retrieveVehicleImageUrl(vehicle)
             basicDialog.dismiss()
         } else {
             Toast.makeText(this, "Please fill all information", Toast.LENGTH_LONG).show()
@@ -203,16 +195,27 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     }
 
-    private fun uploadVehiclePhotoUrl(vehicle: Vehicle) {
+    private fun retrieveVehicleImageUrl(vehicle: Vehicle) {
         storageBrandsRef.child("Brands/${vehicle.make}/${vehicle.model}.png")
             .downloadUrl.addOnSuccessListener {
-            mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
-                .document(vehicle.objectID)
-                .update("photoUrl", it.toString())
+            vehicle.photoUrl = it.toString()
             Log.d(CLIENT_TAG, "[GarageActivity] vehicle image uri $it")
+            saveVehicleToFirestore(vehicle)
         }.addOnFailureListener {
             Toast.makeText(this, "No image exist.", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun saveVehicleToFirestore(vehicle: Vehicle) {
+            val vehicleDoc = vehicleRef.document()
+            vehicle.objectID = vehicleDoc.id
+            Log.d(CLIENT_TAG, "[GarageActivity] vehicle docId ${vehicle.objectID}")
+            vehicleDoc.set(vehicle)
+                ?.addOnSuccessListener {
+                    Toast.makeText(this, "Vehicle added successfuly", Toast.LENGTH_LONG).show()
+                }?.addOnFailureListener {
+                    Toast.makeText(this, "Unable to add vehicle", Toast.LENGTH_LONG).show()
+                }
     }
 
     private fun loadVehicleDataJSONFromAssets(): ArrayList<VehicleBrand> {

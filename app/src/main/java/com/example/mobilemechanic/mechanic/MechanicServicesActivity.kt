@@ -75,6 +75,7 @@ class MechanicServicesActivity : AppCompatActivity() {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = mechanicServiceAdapter
+            isNestedScrollingEnabled = false
         }
         reactiveServiceRecyclerView()
     }

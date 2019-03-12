@@ -111,7 +111,6 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     Log.w(CLIENT_TAG, exception.message)
                     return@addSnapshotListener
                 }
-
                 ownedVehicles.clear()
                 for (doc in querySnapshot!!) {
                     val vehicle = doc.toObject(Vehicle::class.java)

@@ -3,6 +3,7 @@ package com.example.mobilemechanic.client.garage
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
@@ -46,6 +47,10 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var vehicleModelSpinner: Spinner
     private var allVehicleModel: ArrayList<String> = ArrayList()
 
+    private lateinit var viewManager: LinearLayoutManager
+    private lateinit var garageRecyclerAdapter: ClientGarageRecyclerAdapter
+    private var ownedVehicles = ArrayList<Vehicle>()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,6 +70,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         allVehicleMaker = loadVehicleJSONFromAssets()
         setUpActionBar()
         setUpOnAddVehicle()
+        setUpRecyclerVehicle()
     }
 
     private fun setUpActionBar() {
@@ -81,6 +87,35 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         id_add_vehicle.setOnClickListener {
             openAddVehicleDialog()
         }
+    }
+
+    private fun setUpRecyclerVehicle() {
+        viewManager = LinearLayoutManager(this)
+        garageRecyclerAdapter = ClientGarageRecyclerAdapter(this, ownedVehicles)
+        id_garage_recyclerview.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = garageRecyclerAdapter
+        }
+
+        reactiveGarageRecyclerView()
+    }
+
+    private fun reactiveGarageRecyclerView() {
+        mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+            .addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    Log.w(CLIENT_TAG, exception.message)
+                    return@addSnapshotListener
+                }
+
+                for (doc in querySnapshot!!) {
+                    val vehicle = doc.toObject(Vehicle::class.java)
+                    Log.d(CLIENT_TAG, "[GarageActivity] owned vehicle $vehicle")
+                    ownedVehicles.add(vehicle)
+                }
+                garageRecyclerAdapter.notifyDataSetChanged()
+            }
     }
 
     private fun openAddVehicleDialog() {

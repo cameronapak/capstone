@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:elevation="5dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/round_corner"
+        android:layout_width="match_parent"
+        android:layout_height="250dp">
+
+    <TextView
+            android:text="2011 Toyota Venza"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_vehicle_title"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="32dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="32dp" app:layout_constraintHorizontal_bias="0.498" android:textSize="24sp"
+            android:textAlignment="center" android:fontFamily="@font/qualio"
+            android:textColor="@color/colorGrayTextDark" android:layout_marginTop="8dp"/>
+    <ImageView
+            android:layout_width="227dp"
+            android:layout_height="150dp" app:srcCompat="@drawable/toyota_venza"
+            android:id="@+id/id_vehicle_image" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/id_vehicle_title" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp"/>
+
+    <Button
+            style="@style/AppPrimaryRecyclerItemButton"
+            android:text="@string/text_update"
+            android:id="@+id/id_update"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="16dp"
+            android:layout_height="34dp"
+            app:layout_constraintTop_toTopOf="@+id/id_remove"/>
+    <Button
+            style="@style/AppFocusRecyclerItemButton"
+            android:text="@string/text_remove"
+            android:id="@+id/id_remove"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toStartOf="@+id/id_update"
+            android:layout_marginBottom="16dp" app:layout_constraintBottom_toBottomOf="parent"/>
+</android.support.constraint.ConstraintLayout>

@@ -188,7 +188,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             spinnerAdapter.notifyDataSetChanged()
             checkIfGarageIsEmpty(vehicles)
         }
-
         id_vehicle_spinner.adapter = spinnerAdapter
     }
 

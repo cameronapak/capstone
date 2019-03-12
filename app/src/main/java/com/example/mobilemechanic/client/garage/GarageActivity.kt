@@ -95,6 +95,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = garageRecyclerAdapter
+            isNestedScrollingEnabled = false
         }
         reactiveGarageRecyclerView()
     }
@@ -111,6 +112,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     return@addSnapshotListener
                 }
 
+                ownedVehicles.clear()
                 for (doc in querySnapshot!!) {
                     val vehicle = doc.toObject(Vehicle::class.java)
                     Log.d(CLIENT_TAG, "[GarageActivity] owned vehicle $vehicle")

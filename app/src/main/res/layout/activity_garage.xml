@@ -24,12 +24,12 @@
                 app:layout_constraintTop_toTopOf="@+id/id_garage_toolbar"
                 app:layout_constraintVertical_bias="0.32"
                 android:layout_marginTop="8dp"/>
-        <android.support.v7.widget.RecyclerView
-                android:layout_width="350dp"
-                android:layout_height="637dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                android:layout_marginTop="16dp" app:layout_constraintTop_toBottomOf="@+id/id_garage_toolbar"
-                android:id="@+id/id_garage_recyclerview"/>
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="350dp"
+            android:layout_height="0dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/id_garage_toolbar"
+            android:id="@+id/id_garage_recyclerview"/>
 </android.support.constraint.ConstraintLayout>

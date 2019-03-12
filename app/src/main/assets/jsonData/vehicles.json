@@ -1,7 +1,7 @@
 [
   {
     "brand": "Honda",
-    "models": ["Accord", "Accord Coupé", "Accord Tourer", "City", "Civic", "Civic Aerodeck", "Civic Coupé", "Civic Tourer", "Civic Type R", "CR-V", "CR-X", "CR-Z", "FR-V", "HR-V", "Insight", "Integra", "Jazz", "Legend", "Prelude"]
+    "models": ["Accord", "Accord Tourer", "City", "Civic", "Civic Tourer", "Civic Type R", "CR-V", "CR-X", "CR-Z", "FR-V", "HR-V", "Insight", "Integra", "Jazz", "Legend", "Prelude"]
   },
   {
     "brand": "Lexus",
@@ -9,6 +9,6 @@
   },
   {
     "brand": "Toyota",
-    "models": ["4-Runner", "Auris", "Avensis", "Avensis Combi", "Avensis Van Verso", "Aygo", "Camry", "Carina", "Celica", "Corolla", "Corolla Combi", "Corolla sedan", "Corolla Verso", "FJ Cruiser", "GT86", "Hiace", "Hiace Van", "Highlander", "Hilux", "Land Cruiser", "MR2", "Paseo", "Picnic", "Prius", "RAV4", "Sequoia", "Starlet", "Supra", "Tundra", "Urban Cruiser", "Verso", "Yaris", "Yaris Verso"]
+    "models": ["4-Runner", "Camry", "Avalon", "Highlander", "Hilux", "Land Cruiser", "Prius", "RAV4", "Tundra"]
   }
 ]

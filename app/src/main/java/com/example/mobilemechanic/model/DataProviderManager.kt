@@ -65,6 +65,9 @@ object DataProviderManager {
         return arrayListOf(
             "Oil Change",
             "Tire Change",
+            "Change Brake Pads",
+            "Change Air Filter",
+            "Change Car Battery",
             "Check Engine Light"
         )
     }

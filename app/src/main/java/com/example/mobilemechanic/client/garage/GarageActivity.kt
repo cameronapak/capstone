@@ -19,6 +19,8 @@ import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_garage.*
@@ -35,6 +37,9 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var mFirestorage: FirebaseStorage
+    private lateinit var storageBrandsRef: StorageReference
+
     private lateinit var vehicleRef: CollectionReference
     private lateinit var allVehicleMaker: ArrayList<VehicleMake>
     private lateinit var vehicleModelAdapter: HintSpinnerAdapter
@@ -46,6 +51,9 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         super.onCreate(savedInstanceState)
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
+        mFirestorage = FirebaseStorage.getInstance()
+        storageBrandsRef = mFirestorage.reference
+
         vehicleRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         Log.d(CLIENT_TAG, "[GarageActivity] User uid: ${mAuth?.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[GarageActivity] User email: ${mAuth?.currentUser?.email}")
@@ -141,9 +149,13 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val vehicle = Vehicle("", year, make, model, "")
 
         if (isFilled(basicDialog)) {
-            vehicleRef.document().set(vehicle)
+            val vehicleDoc = vehicleRef.document()
+            vehicle.objectID = vehicleDoc.id
+            Log.d(CLIENT_TAG, "[GarageActivity] vehicle docId ${vehicle.objectID}")
+            vehicleDoc.set(vehicle)
                 ?.addOnSuccessListener {
                     Toast.makeText(this, "Vehicle added successfuly", Toast.LENGTH_LONG).show()
+                    uploadVehiclePhotoUrl(vehicle)
                 }?.addOnFailureListener {
                     Toast.makeText(this, "Unable to add vehicle", Toast.LENGTH_LONG).show()
                 }
@@ -152,6 +164,18 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             Toast.makeText(this, "Please fill all information", Toast.LENGTH_LONG).show()
         }
 
+    }
+
+    private fun uploadVehiclePhotoUrl(vehicle: Vehicle) {
+        storageBrandsRef.child("Brands/${vehicle.make}/${vehicle.model}.png")
+            .downloadUrl.addOnSuccessListener {
+            mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+                .document(vehicle.objectID)
+                .update("photoUrl", it.toString())
+            Log.d(CLIENT_TAG, "[GarageActivity] vehicle image uri $it")
+        }.addOnFailureListener {
+            Toast.makeText(this, "No image exist.", Toast.LENGTH_LONG).show()
+        }
     }
 
     private fun loadVehicleJSONFromAssets(): ArrayList<VehicleMake> {

@@ -2,11 +2,9 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.app.Dialog
-import android.app.Service
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
-
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
@@ -16,10 +14,10 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.algolia.ServiceModel
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_body_add_service.*
 import kotlinx.android.synthetic.main.dialog_body_add_service.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
@@ -108,7 +106,7 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
 
         val service = DataProviderManager.getAllServices()
         dialogBody.add_service_spinner.adapter =
-            HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, service)
+            HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, service, "Service")
         this.basicDialog = BasicDialog.Builder.apply {
             title = "Update Service"
             positive = "Update"

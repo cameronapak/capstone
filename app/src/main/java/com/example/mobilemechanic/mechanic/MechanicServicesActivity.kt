@@ -103,7 +103,7 @@ class MechanicServicesActivity : AppCompatActivity() {
             val dialogBody = layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_body_add_service, null)
             val service = DataProviderManager.getAllServices()
             dialogBody.add_service_spinner.adapter =
-                HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service)
+                HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, service, "Service")
 
             basicDialog = BasicDialog.Builder.apply {
                 title = "Add Service"

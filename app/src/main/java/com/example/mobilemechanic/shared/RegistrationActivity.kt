@@ -160,7 +160,8 @@ class RegistrationActivity : AppCompatActivity() {
             HintSpinnerAdapter(
                 this,
                 android.R.layout.simple_spinner_dropdown_item,
-                states
+                states,
+                "State"
             )
     }
 

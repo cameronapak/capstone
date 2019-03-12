@@ -30,6 +30,7 @@ import kotlinx.android.synthetic.main.dialog_container_basic.*
 import org.json.JSONArray
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 const val MIN_YEAR = 1950
@@ -46,6 +47,8 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var vehicleModelAdapter: HintSpinnerAdapter
     private lateinit var vehicleModelSpinner: Spinner
     private var allVehicleModel: ArrayList<String> = ArrayList()
+    private lateinit var brands: HashMap<String, ArrayList<String>>
+
 
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var garageRecyclerAdapter: ClientGarageRecyclerAdapter
@@ -67,6 +70,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setUpGarageActivity() {
+        brands = HashMap()
         allVehicleMaker = loadVehicleJSONFromAssets()
         setUpActionBar()
         setUpOnAddVehicle()
@@ -97,7 +101,6 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             layoutManager = viewManager
             adapter = garageRecyclerAdapter
         }
-
         reactiveGarageRecyclerView()
     }
 
@@ -141,12 +144,11 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun yearSpinner(basicDialog: BasicDialog) {
         val years = ArrayList<String>()
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-        years.add("Year")
         for (year in currentYear downTo MIN_YEAR) {
             years.add(year.toString())
         }
         basicDialog.id_vehicle_year.adapter =
-            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, years)
+            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, years, "Year")
     }
 
     private fun makeSpinner(basicDialog: BasicDialog) {
@@ -157,12 +159,12 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             makes.add(it.brand)
         }
         basicDialog.id_vehicle_make.adapter =
-            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, makes)
+            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, makes, "Make")
     }
 
     private fun modelSpinner(basicDialog: BasicDialog) {
-        allVehicleModel.add("Model")
-        vehicleModelAdapter = HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, allVehicleModel)
+        vehicleModelAdapter =
+            HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, allVehicleModel, "Model")
         vehicleModelSpinner = basicDialog.findViewById(R.id.id_vehicle_model)
         vehicleModelSpinner.adapter = vehicleModelAdapter
     }
@@ -259,9 +261,8 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             }
         }
         allVehicleModel.clear()
-        allVehicleModel.add("Model")
         allVehicleModel.addAll(selectedMake.models)
-        vehicleModelAdapter = HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, allVehicleModel)
+        vehicleModelAdapter = HintSpinnerAdapter(this, android.R.layout.simple_spinner_dropdown_item, allVehicleModel, "Model")
         vehicleModelSpinner.adapter = vehicleModelAdapter
         Log.d(CLIENT_TAG, "[GarageActivity] models $allVehicleModel")
     }

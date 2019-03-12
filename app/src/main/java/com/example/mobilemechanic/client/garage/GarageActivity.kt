@@ -13,7 +13,7 @@ import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.Vehicle
-import com.example.mobilemechanic.model.dto.VehicleMake
+import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -30,8 +30,6 @@ import kotlinx.android.synthetic.main.dialog_container_basic.*
 import org.json.JSONArray
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-
 
 const val MIN_YEAR = 1950
 
@@ -43,12 +41,10 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var storageBrandsRef: StorageReference
 
     private lateinit var vehicleRef: CollectionReference
-    private lateinit var allVehicleMaker: ArrayList<VehicleMake>
+    private lateinit var vehicleBrands: ArrayList<VehicleBrand>
     private lateinit var vehicleModelAdapter: HintSpinnerAdapter
     private lateinit var vehicleModelSpinner: Spinner
     private var allVehicleModel: ArrayList<String> = ArrayList()
-    private lateinit var brands: HashMap<String, ArrayList<String>>
-
 
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var garageRecyclerAdapter: ClientGarageRecyclerAdapter
@@ -70,8 +66,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun setUpGarageActivity() {
-        brands = HashMap()
-        allVehicleMaker = loadVehicleJSONFromAssets()
+        loadVehicleBrandsFromJSONAsset()
         setUpActionBar()
         setUpOnAddVehicle()
         setUpRecyclerVehicle()
@@ -102,6 +97,10 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             adapter = garageRecyclerAdapter
         }
         reactiveGarageRecyclerView()
+    }
+
+    private fun loadVehicleBrandsFromJSONAsset() {
+        vehicleBrands = loadVehicleDataJSONFromAssets()
     }
 
     private fun reactiveGarageRecyclerView() {
@@ -154,8 +153,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private fun makeSpinner(basicDialog: BasicDialog) {
         basicDialog.id_vehicle_make.onItemSelectedListener = this
         val makes = ArrayList<String>()
-        makes.add("Make")
-        allVehicleMaker.forEach {
+        vehicleBrands.forEach {
             makes.add(it.brand)
         }
         basicDialog.id_vehicle_make.adapter =
@@ -215,8 +213,8 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         }
     }
 
-    private fun loadVehicleJSONFromAssets(): ArrayList<VehicleMake> {
-        var vehicleMakes = ArrayList<VehicleMake>()
+    private fun loadVehicleDataJSONFromAssets(): ArrayList<VehicleBrand> {
+        var vehicleMakes = ArrayList<VehicleBrand>()
         val gson = Gson()
         try {
             val inputStream = assets.open("jsonData/vehicles.json")
@@ -226,9 +224,8 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
             val text = String(buffer)
             val jsonArray = JSONArray(text)
-            val type = object : TypeToken<ArrayList<VehicleMake>>() {}.type
+            val type = object : TypeToken<ArrayList<VehicleBrand>>() {}.type
             vehicleMakes = gson.fromJson(jsonArray.toString(), type)
-
             Log.d(CLIENT_TAG, "[GarageActivity] jsonObj $vehicleMakes")
         } catch (ex: Exception) {
             Log.d(CLIENT_TAG, "[GarageActivity] exception ${ex.message}")
@@ -254,8 +251,8 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     }
 
     private fun updateVehicleModelSpinner(brand: String) {
-        var selectedMake = VehicleMake()
-        allVehicleMaker.forEach {
+        var selectedMake = VehicleBrand()
+        vehicleBrands.forEach {
             if (it.brand == brand) {
                 selectedMake = it
             }

@@ -10,7 +10,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.activity_service_rating_activty.*
 
-class ServiceRatingActivity : AppCompatActivity(), RatingBar.OnRatingBarChangeListener {
+class ServiceRatingActivty : AppCompatActivity(), RatingBar.OnRatingBarChangeListener {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

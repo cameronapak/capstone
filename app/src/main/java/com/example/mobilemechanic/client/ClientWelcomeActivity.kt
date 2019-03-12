@@ -10,22 +10,27 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.widget.Toast
+import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
+import com.example.mobilemechanic.shared.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_client_welcome.*
 
 const val CLIENT_TAG = "client"
 class ClientWelcomeActivity : AppCompatActivity() {
 
     private lateinit var mDrawerLayout: DrawerLayout
+    var mAuth: FirebaseAuth? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_welcome)
-
+        mAuth = FirebaseAuth.getInstance()
         setUpClientWelcomeActivity()
     }
 
@@ -83,6 +88,15 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, GarageActivity::class.java))
                     true
                 }
+                R.id.id_sign_out -> {
+                    mAuth?.signOut()
+                    Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT ).show()
+                    val i = Intent(this, MainActivity::class.java )
+                    startActivity(i)
+                    true
+                }
+
+
                 else -> {
                     mDrawerLayout.closeDrawers()
                     true
@@ -91,7 +105,18 @@ class ClientWelcomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkIfUserIsSignedIn() {
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] checkIfUserIsSignedIn() User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User email: ${mAuth?.currentUser?.email}")
+        val user = mAuth?.currentUser
+        if (user == null) {
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }
+    }
+
     override fun onResume() {
+        checkIfUserIsSignedIn()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
     }

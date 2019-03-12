@@ -6,79 +6,41 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.*
-import com.example.mobilemechanic.model.algolia.ServiceModel
-import com.example.mobilemechanic.model.dto.*
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_client_history.*
-
 
 class ClientHistoryActivity : AppCompatActivity() {
 
-    private lateinit var receipts: ArrayList<Receipt>
+
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var requestRef: CollectionReference
+
+    private var requestReceipt: ArrayList<Request> = ArrayList()
+    private lateinit var historyAdapter: ClientHistoryRecyclerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_history)
+        setUpClientHistoryActivity()
+    }
 
-        receipts = ArrayList()
-
-        val viewManager = LinearLayoutManager(this)
-
-        // mocked data
-
-        // create client information
-        val availableDays = arrayListOf("mon", "tues")
-        val clientBasicInfo = BasicInfo("Jackie", "Chan", "jackie@gmail.com", "1231231234", "")
-        val clientAddress = Address("119 Somestreet", "Edmond", "OK", "73161")
-        val clientAvailability = Availability("9:00 AM", "5:00 PM", availableDays)
-        val clientInfo = ClientInfo("clientID", clientBasicInfo, clientAvailability, clientAddress)
-
-
-        // create mechanic information
-        val mechanicBasicInfo = BasicInfo("Jason", "Statham", "statham@gmail.com", "3123213214", "")
-        val mechanicAddress = Address("666 Chick road", "Boston", "MA", "02125")
-        val mechanicInfo = MechanicInfo("mechanicID", mechanicBasicInfo, mechanicAddress, 0f)
-
-        // create service
-        val service = Service("Oil Change", "quick and fast", 30.0)
-
-        // create service that include mechanic info
-        val serviceModel = ServiceModel("serviceID", mechanicInfo, service)
-
-        // create vehicle
-        val vehicle = Vehicle("vehicleID", "2011", "Toyota", "Venza", "vehiclePhotoUrl")
-
-        val currentTime = System.currentTimeMillis() / 1000
-
-
-        val request = Request.Builder()
-            .clientInfo(clientInfo)
-            .mechanicInfo(mechanicInfo)
-            .service(serviceModel.service)
-            .vehicle(vehicle)
-            .comment("Client comment")
-            .status(Status.Request)
-            .postedOn(currentTime)
-            .acceptedOn(-1)
-            .completedOn(-1)
-            .build()
-
-        val mockedReceipt = Receipt("receiptID", request, 30.0, 1.5, 31.5)
-
-        receipts.add(mockedReceipt)
-        receipts.add(mockedReceipt)
-        receipts.add(mockedReceipt)
-
-        val historyAdapter = ClientHistoryRecyclerAdapter(this, receipts)
-        id_recyclerview_history.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = historyAdapter
-        }
-
-        historyAdapter.notifyDataSetChanged()
+    private fun setUpClientHistoryActivity() {
+        initFireStore()
         setUpToolBar()
+        setUpAdapter()
+        setUpHistoryRecyclerView()
+    }
+
+    private fun initFireStore() {
+        mAuth = FirebaseAuth.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+        requestRef = mFirestore.collection("Requests")
     }
 
     private fun setUpToolBar() {
@@ -89,6 +51,39 @@ class ClientHistoryActivity : AppCompatActivity() {
             subtitle = "Previous services"
             setDisplayHomeAsUpEnabled(true)
         }
+    }
+
+    private fun setUpAdapter() {
+        val viewManager = LinearLayoutManager(this)
+        historyAdapter = ClientHistoryRecyclerAdapter(this, requestReceipt)
+        id_recyclerview_history.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = historyAdapter
+        }
+        historyAdapter.notifyDataSetChanged()
+    }
+
+    private fun setUpHistoryRecyclerView() {
+        requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
+        requestRef.whereEqualTo("status", Status.Completed)
+            ?.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    return@addSnapshotListener
+                }
+                requestReceipt.clear()
+                for (doc in querySnapshot!!) {
+                    val request = doc.toObject(Request::class.java)
+                    request.objectID = doc.id
+                    requestReceipt.add(request)
+                }
+                    historyAdapter.notifyDataSetChanged()
+            }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 
     override fun onResume() {

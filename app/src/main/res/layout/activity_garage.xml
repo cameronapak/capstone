@@ -8,22 +8,20 @@
         tools:context=".client.garage.GarageActivity" android:id="@+id/id_frame_layout">
 
         <android.support.v7.widget.Toolbar
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/toolbar_height"
-                app:titleTextAppearance="@style/ToolbarTitleAppearance"
-                app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
-                android:background="@drawable/toolbar_bottom_border"
-                android:theme="?attr/actionBarTheme"
-                android:minHeight="@dimen/toolbar_height"
+                style="@style/AppActionBar"
+                app:titleTextAppearance="@style/AppActionBarTitle"
+                app:subtitleTextAppearance="@style/AppActionBarSubtitle"
                 android:id="@+id/id_garage_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
         <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp" app:srcCompat="@drawable/ic_add_primary3_24dp"
+                style="@style/AppIconButtonSize"
+                app:srcCompat="@drawable/ic_add_primary3_24dp"
                 android:id="@+id/id_add_vehicle"
-                app:layout_constraintEnd_toEndOf="@+id/id_garage_toolbar" android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/id_garage_toolbar"
+                android:layout_marginEnd="16dp"
                 app:layout_constraintBottom_toBottomOf="@+id/id_garage_toolbar"
                 app:layout_constraintTop_toTopOf="@+id/id_garage_toolbar"
-                app:layout_constraintVertical_bias="0.32" android:layout_marginTop="8dp"/>
+                app:layout_constraintVertical_bias="0.32"
+                android:layout_marginTop="8dp"/>
 </android.support.constraint.ConstraintLayout>

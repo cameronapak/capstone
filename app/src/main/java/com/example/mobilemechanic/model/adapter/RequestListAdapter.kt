@@ -2,25 +2,32 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
-import com.example.mobilemechanic.mechanic.REQ_CODE_MORE_INFO
+import com.example.mobilemechanic.mechanic.map.MechanicManageJobActivity
 import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.support.v4.content.ContextCompat.startActivity
+
+
+
 
 class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>) :
     RecyclerView.Adapter<RequestListAdapter.ViewHolder>() {
@@ -29,15 +36,16 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private lateinit var requestRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val price = itemView.findViewById<TextView>(R.id.id_price)
+//        val price = itemView.findViewById<TextView>(R.id.id_price)
         val name = itemView.findViewById<TextView>(R.id.id_client_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
-        val status = itemView.findViewById<TextView>(R.id.id_service_type)
-        //val location = itemView.findViewById<TextView>(R.id.text_distance)
+        val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
+        val status = itemView.findViewById<TextView>(R.id.id_request_status)
+        val distance = itemView.findViewById<TextView>(R.id.id_distance)
+        val directionsButton = itemView.findViewById<ImageButton>(R.id.id_directions_btn)
         val primaryButton = itemView.findViewById<Button>(R.id.id_primary_btn)
         val secondaryButton = itemView.findViewById<Button>(R.id.id_secondary_btn)
-//        val choiceButton = itemView.findViewById<Button>(R.id.id_select)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RequestListAdapter.ViewHolder {
@@ -45,7 +53,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             .inflate(R.layout.recyclerview_item_request, parent, false)
 
         mFirestore = FirebaseFirestore.getInstance()
-        requestRef = mFirestore.collection("Requests")
+        requestRef = mFirestore.collection(context.getString(R.string.ref_requests))
         return ViewHolder(view)
     }
 
@@ -58,17 +66,13 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         handleRequestViewType(request, holder)
 
         //fill card view
-        holder.price.text = context.getString(R.string.price, request?.service?.price)
+        // TODO: profile photo url downloads photo into image container
+//        holder.price.text = context.getString(R.string.price, request?.service?.price)
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
         holder.description.text = request.comment
-        //location.text = "0 mi"
-        /*TO DO
-        Add: - profile photo url downloads photo into image container
-             - location calculation
-         */
-
+        holder.distance.text = context.getString(R.string.miles, getDistance(request))
         holder.timeStamp.text = if (request.acceptedOn!! > 0) {
             val time = Date(request.acceptedOn!!)
             val dateFormat = SimpleDateFormat("MMM d, y")
@@ -88,17 +92,23 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         holder.primaryButton.setOnClickListener {
             handlePrimaryOnClick(request)
         }
+
+        holder.directionsButton.setOnClickListener{
+            handleDirectionsOnClick(request)
+        }
     }
 
     private fun handleRequestViewType(request: Request, holder: RequestListAdapter.ViewHolder) {
         if (request.status == Status.Request) {
-            holder.primaryButton.text = "Accept"
-            holder.secondaryButton.text = "More"
+            holder.primaryButton.text = context.getString(R.string.label_choice_accept)
+            holder.secondaryButton.text = context.getString(R.string.label_button_info_more)
+            holder.directionsButton.visibility = View.GONE
         }
 
         if (request.status == Status.Active){
-            holder.primaryButton.text = "Complete"
-            holder.secondaryButton.text = "Manage"
+            holder.primaryButton.text = context.getString(R.string.label_choice_complete)
+            holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
+            holder.directionsButton.visibility = View.VISIBLE
         }
     }
 
@@ -116,16 +126,32 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         if (request.status == Status.Request) {
             val intent = Intent(context, MechanicMoreInformationActivity::class.java)
             intent.putExtra(EXTRA_REQUEST, request)
-            context.startActivityForResult(intent, REQ_CODE_MORE_INFO)
+            context.startActivity(intent)
         }
 
         if (request.status == Status.Active) {
-            // TODO: Go to ManageRequest Activity
-
-
+            val intent = Intent(context, MechanicManageJobActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, request)
+            context.startActivity(intent)
         }
     }
 
+    private fun handleDirectionsOnClick(request: Request)
+    {
+        val address = AddressManager.getFullAddress(request.clientInfo!!.address)
+        val latLong = AddressManager.convertAddress(context, address)
+
+        val uri = String.format(
+            Locale.ENGLISH,
+            "http://maps.google.com/maps?daddr=%f,%f (%s)",
+            latLong.latitude,
+            latLong.longitude,
+            address
+        )
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
+        intent.setPackage("com.google.android.apps.maps")
+        context.startActivity(intent)
+    }
 
     private fun createAcceptDialog(request: Request)
     {
@@ -156,7 +182,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         val completeDialog = BasicDialog.Builder.apply{
             title = context.getString(R.string.label_choice_complete)
             positive = context.getString(R.string.label_choice_confirm)
-            negative = context.getString(R.string.label_cancel_add_service)
+            negative = context.getString(R.string.text_cancel)
         }.build(context, container, dialogBody)
 
         completeDialog.show()
@@ -187,12 +213,21 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private fun completeRequest(request: Request) {
         val completedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
-            .update("status", Status.Complete, "completedOn", completedOn)
+            .update("status", Status.Completed, "completedOn", completedOn)
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Service Completed!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "Service Completed!", Toast.LENGTH_SHORT).show()
             }
             .addOnFailureListener {
                 Toast.makeText(context, context.getString(R.string.err_complete_fail), Toast.LENGTH_SHORT).show()
             }
+    }
+
+    private fun getDistance(request: Request) : Double
+    {
+        val clientAddress = AddressManager.getFullAddress(request.clientInfo!!.address)
+        val mechanicAddress = AddressManager.getFullAddress(request.mechanicInfo!!.address)
+        val clientLatLng = AddressManager.convertAddress(context, clientAddress)
+        val mechanicLatLng = AddressManager.convertAddress(context, mechanicAddress)
+        return AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
     }
 }

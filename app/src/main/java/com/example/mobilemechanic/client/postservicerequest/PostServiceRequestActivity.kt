@@ -10,8 +10,11 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.Toast
+import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.model.Request
@@ -34,9 +37,6 @@ import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-const val POST_SERVICE_TAG = "postservice"
-const val HINT_VEHICLE = "Vehicle"
-
 class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mAuth: FirebaseAuth
@@ -48,8 +48,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
     private lateinit var daysOfWeekString: String
-    private lateinit var fromTime: String
-    private lateinit var toTime: String
+    private var fromTime: String = ""
+    private var toTime: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,8 +60,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
 
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth?.currentUser?.uid}")
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth?.currentUser?.email}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
     }
 
@@ -113,7 +113,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             val comment = id_comment.text.toString()
             val currentTime = System.currentTimeMillis()
 
-            accountRef.document(mAuth?.currentUser?.uid.toString())
+            accountRef.document(mAuth.currentUser?.uid.toString())
                 .addSnapshotListener { snapshot, exception ->
                     if (exception != null) {
                         return@addSnapshotListener
@@ -133,8 +133,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             .build()
 
                         Log.d(CLIENT_TAG, "$request)")
-                        requestsRef.document().set(request)?.addOnSuccessListener {
-
+                        requestsRef.document().set(request).addOnSuccessListener {
+                            Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
+                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                        }.addOnFailureListener {
+                            Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
                     }
                 }
@@ -146,13 +149,11 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         if (snapshot != null && snapshot.exists()) {
             val client = snapshot.toObject(User::class.java)
             if (client != null) {
-                val basicInfo = client.basicInfo
-                val address = client.address
                 return ClientInfo(
                     client.uid,
                     client.basicInfo,
                     availability,
-                    address
+                    client.address
                 )
             }
         }
@@ -229,10 +230,16 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
 
             daysOfWeekString = availableDays.joinToString(separator = ", ")
-            fromTime = dialogContainer.id_btnFromTime.text.toString()
-            toTime = dialogContainer.id_btnToTime.text.toString()
-            id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
-            basicDialog.dismiss()
+//            fromTime = dialogContainer.id_btnFromTime.text.toString()
+//            toTime = dialogContainer.id_btnToTime.text.toString()
+            if (availableDays.isEmpty()) {
+                Toast.makeText(this, "Select available days", Toast.LENGTH_SHORT).show()
+            } else if (fromTime.isNullOrBlank() || toTime.isNullOrBlank()) {
+                Toast.makeText(this, "Select from and to times", Toast.LENGTH_SHORT).show()
+            } else {
+                id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
+                basicDialog.dismiss()
+            }
         }
 
         dialogContainer.id_negative.setOnClickListener {
@@ -277,17 +284,18 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
         val tpd = TimePickerDialog(this, TimePickerDialog.OnTimeSetListener { v, h, m ->
             val time = (if (h > 12) "${h % 12}:" else "${if (h == 0) "12" else h}:").toString() +
-                    (if (m < 10) "0${m}" else "${m}").toString() +
+                    (if (m < 10) "0$m" else "$m").toString() +
                     (if (h >= 12) " PM" else " AM").toString()
 
             // TODO: compare times from and to, and do not allow continue unless from is before to
-
             when (view.id) {
                 dialogContainer.id_btnFromTime.id -> {
                     dialogContainer.id_btnFromTime.text = time
+                    fromTime = time
                 }
                 dialogContainer.id_btnToTime.id -> {
                     dialogContainer.id_btnToTime.text = time
+                    toTime = time
                 }
             }
 
@@ -298,7 +306,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
-    override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
         validateForm()
     }
 

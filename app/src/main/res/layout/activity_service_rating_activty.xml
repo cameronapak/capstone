@@ -175,8 +175,6 @@
                 android:background="@drawable/toolbar_bottom_border"
                 android:theme="?attr/actionBarTheme"
                 android:minHeight="@dimen/toolbar_height"
-                app:titleTextAppearance="@style/ToolbarTitleAppearance"
-                app:subtitleTextAppearance="@style/ToolbarSubtitleAppearance"
                 android:id="@+id/id_rating_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>

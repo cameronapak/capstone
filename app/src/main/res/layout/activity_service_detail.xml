@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             xmlns:app="http://schemas.android.com/apk/res-auto"
+             xmlns:map="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             android:orientation="vertical">
+
+    <RelativeLayout android:layout_width="match_parent" android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+                style="@style/AppActionBar"
+                app:titleTextAppearance="@style/AppActionBarTitle"
+                app:subtitleTextAppearance="@style/AppActionBarSubtitle"
+                android:id="@+id/id_service_detail_toolbar"/>
+        <ImageView
+                android:layout_marginTop="79dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/id_more_toolbar"
+                map:srcCompat="@drawable/bg_more"
+                android:id="@+id/bg_more"/>
+        <fragment
+                android:layout_width="match_parent"
+                android:layout_height="284dp"
+                android:layout_below="@id/bg_more"
+                android:id="@+id/map"
+                tools:context=".mechanic.map.MechanicMoreInformationActivity"
+                android:name="com.google.android.gms.maps.SupportMapFragment" android:layout_marginTop="1dp"/>
+        <include layout="@layout/client_card_vehicle_container"
+                 android:layout_marginTop="95dp"
+                 android:layout_width="347dp"
+                 android:layout_height="342dp"
+                 android:layout_gravity="center"
+                 android:layout_centerHorizontal="true"
+                 android:layout_below="@+id/id_more_toolbar"
+                 android:id="@+id/id_client_more_info_card"></include>
+    </RelativeLayout>
+
+</FrameLayout>

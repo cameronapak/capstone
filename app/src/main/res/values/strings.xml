@@ -25,6 +25,17 @@
     <string name="text_rating_subitle">Rate the service</string>
     <string name="text_service">Service</string>
     <string name="text_filter">Filter</string>
+    <string name="text_service_needed">Service Needed</string>
+    <string name="text_address">Address</string>
+    <string name="text_decline">Decline</string>
+    <string name="title_activity_mechanic_manage_job">Map</string>
+    <string name="text_cancel_job">Cancel Job</string>
+    <string name="text_contact">Contact</string>
+    <string name="text_status">Status:</string>
+    <string name="text_next">Next</string>
+    <string name="text_summary">Summary</string>
+    <string name="text_mechanic">Mechanic</string>
+    <string name="text_service_completed">Service Completed</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>
@@ -100,7 +111,6 @@
     <string name="label_cancel_add_service">Cancel</string>
     <string name="label_add_service">Add</string>
 
-    <!--recyclerview_item_request-->
     <string name="place_holder_client_name">Jackie Chan</string>
     <string name="request_on">Requested on %s</string>
     <string name="accept_on">Accepted on %s</string>
@@ -116,8 +126,9 @@
     <string name="label_choice_accept">Accept</string>
     <string name="label_choice_complete">Complete</string>
     <string name="label_choice_confirm">Confirm</string>
-    <string name="label_remove_service">Remove</string>
+    <string name="label_remove_service">Are you sure you want to remove?</string>
     <string name="label_update_service">Update</string>
+    <string name="miles">%.2f mi</string>
 
     <string name="price">$%.2f</string>
     <string name="are_you_sure">Are you sure?</string>
@@ -137,7 +148,14 @@
     <string name="ref_requests">Requests</string>
 
     <string name="err_accept_fail">Failed to accept request.</string>
+    <string name="err_decline_fail">Failed to decline request.</string>
     <string name="err_complete_fail">Failed to complete service.</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="add_button">Add</string>
+    <string name="err_cancel_job_fail">Failed to cancel job.</string>
+    <string name="text_review">Review</string>
+    <string name="label_message_btn">Message</string>
+    <string name="label_call_btn">Call</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="com.example.mobilemechanic">
-    <!-- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/> -->
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/>
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.CALL_PHONE" />
 
     <application
             android:allowBackup="true"
@@ -14,14 +19,35 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".client.detail.ServiceDetailActivity">
+        </activity>
+
+        <service android:name=".shared.utility.CustomFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/.
+        -->
+        <meta-data
+                android:name="com.google.android.geo.API_KEY"
+                android:value="@string/google_maps_key"/>
+
+        <activity
+                android:name=".mechanic.map.MechanicManageJobActivity"
+                android:label="@string/title_activity_mechanic_manage_job">
+        </activity>
         <activity android:name=".shared.Registration.ProfilePictureActivity">
         </activity>
         <activity android:name=".client.garage.GarageActivity">
         </activity>
 
-        <meta-data
-                android:name="com.google.android.geo.API_KEY"
-                android:value="AIzaSyC_DQTYyo0CagoAgYat5YNYxsK_RGbzAVc"/>
         <meta-data
                 android:name="com.google.android.gms.version"
                 android:value="@integer/google_play_services_version"/>
@@ -40,9 +66,11 @@
                 android:label="@string/title_activity_mechanic_welcome"
                 android:theme="@style/NoActionBar">
         </activity>
-        <activity android:name=".client.servicerating.ServiceRatingActivity">
+        <activity android:name=".client.servicerating.ServiceRatingActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
-        <activity android:name=".client.findservice.FindServiceActivity">
+        <activity android:name=".client.findservice.FindServiceActivity"
+                  android:windowSoftInputMode="stateAlwaysHidden">
         </activity>
         <activity android:name=".client.history.ClientHistoryActivity">
             <intent-filter>
@@ -54,6 +82,11 @@
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>
         <activity android:name=".client.ClientWelcomeActivity">
+            <intent-filter>
+                <action android:name="CLIENT_WELCOME_ACTIVITY"/>
+
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
         </activity>
         <activity android:name=".shared.SignInActivity">
         </activity>

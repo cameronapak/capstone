@@ -157,4 +157,7 @@
     <string name="label_message_btn">Message</string>
     <string name="label_call_btn">Call</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

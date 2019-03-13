@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared
+package com.example.mobilemechanic.shared.Registration
 
 import android.app.Activity
 import android.content.Intent

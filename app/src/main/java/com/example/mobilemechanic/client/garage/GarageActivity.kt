@@ -144,6 +144,7 @@ class GarageActivity : AppCompatActivity(),  AdapterView.OnItemSelectedListener 
         return true
     }
 
+
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {

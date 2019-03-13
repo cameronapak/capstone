@@ -117,8 +117,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
     private fun setUpDrawerMenu() {
         mDrawerLayout = findViewById(R.id.mechanic_drawer_layout)
-        val clientNavigationView = findViewById<NavigationView>(R.id.id_mechanic_nav_view)
-        val drawerHeader = clientNavigationView.getHeaderView(0)
+        val mechanicNavigationView = findViewById<NavigationView>(R.id.id_mechanic_nav_view)
+        val drawerHeader = mechanicNavigationView.getHeaderView(0)
 
         val drawerProfileImage = drawerHeader.findViewById<CircleImageView>(R.id.id_drawer_profile_image)
         var drawerDisplayName = drawerHeader.findViewById<TextView>(R.id.id_drawer_header_name)
@@ -129,7 +129,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
         displayProfileImage(drawerProfileImage)
 
-        clientNavigationView.setNavigationItemSelectedListener { menuItem ->
+        mechanicNavigationView.setNavigationItemSelectedListener { menuItem ->
             menuItem.isChecked = true
             mDrawerLayout.closeDrawers()
             true
@@ -158,6 +158,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_services -> {
+                    Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] my services")
                     startActivity(Intent(this, MechanicServicesActivity::class.java))
                     true
                 }

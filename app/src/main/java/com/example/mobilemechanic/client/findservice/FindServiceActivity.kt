@@ -99,7 +99,8 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         basicDialog.id_algolia_filter_price_spinner.adapter = HintSpinnerAdapter(
             this,
             com.example.mobilemechanic.R.layout.support_simple_spinner_dropdown_item,
-            DataProviderManager.getServicePriceLabel()
+            DataProviderManager.getServicePriceLabel(),
+            "Price"
         )
 
         basicDialog.id_algolia_filter_price_spinner.onItemSelectedListener = this

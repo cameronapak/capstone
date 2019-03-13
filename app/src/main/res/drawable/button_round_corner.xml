@@ -8,7 +8,7 @@
                 android:bottomRightRadius="20dp"
                 android:topLeftRadius="20dp"
                 android:topRightRadius="20dp"
-                android:radius="10dp"
+                android:radius="15dp"
             />
 
             <solid
@@ -25,7 +25,7 @@
                     android:bottomRightRadius="20dp"
                     android:topLeftRadius="20dp"
                     android:topRightRadius="20dp"
-                    android:radius="10dp"
+                    android:radius="15dp"
             />
             <solid android:color="@color/colorPrimary2"/>
         </shape>

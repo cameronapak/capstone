@@ -89,17 +89,17 @@ class UploadProfilePhotoFragment : Fragment() {
 
     private fun showSelectedProfileImage(imageUri: Uri) {
         if (imageUri != null) {
-            id_tempRegistrationProfile.setImageDrawable(null)
+            img_registrationProfilePicture.setImageDrawable(null)
             selectedImageUri = imageUri
             Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
             val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImageUri)
-            id_tempRegistrationProfile.setImageBitmap(bitmap)
+            img_registrationProfilePicture.setImageBitmap(bitmap)
         }
     }
 
     private fun isImageUriExist(registrationModel: RegistrationViewModel): Boolean {
         if (selectedImageUri != null) {
-            registrationModel.imageUri.value = selectedImageUri
+            registrationModel.photoUrl.value = selectedImageUri
 
             return true
         }

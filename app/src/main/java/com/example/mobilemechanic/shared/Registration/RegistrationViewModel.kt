@@ -12,7 +12,7 @@ class RegistrationViewModel : ViewModel() {
     var firstName = MutableLiveData<String>()
     var lastName = MutableLiveData<String>()
     var phoneNumber = MutableLiveData<String>()
-    var imageUri = MutableLiveData<Uri>()
+    var photoUrl = MutableLiveData<Uri>()
     var streetAddress = MutableLiveData<String>()
     var city = MutableLiveData<String>()
     var state = MutableLiveData<String>()

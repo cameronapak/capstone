@@ -90,6 +90,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private fun setUpRecyclerVehicle() {
         viewManager = LinearLayoutManager(this)
+        viewManager.stackFromEnd = true
         garageRecyclerAdapter = ClientGarageRecyclerAdapter(this, ownedVehicles)
         id_garage_recyclerview.apply {
             setHasFixedSize(true)

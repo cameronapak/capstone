@@ -1,11 +1,11 @@
 [
   {
     "brand": "Honda",
-    "models": ["Accord", "Accord Tourer", "City", "Civic", "Civic Tourer", "Civic Type R", "CR-V", "CR-X", "CR-Z", "FR-V", "HR-V", "Insight", "Integra", "Jazz", "Legend", "Prelude"]
+    "models": ["Accord", "Civic", "CR-V", "Passport", "Pilot", "Insight"]
   },
   {
     "brand": "Lexus",
-    "models": ["CT", "GS", "GS 300", "GX", "IS", "IS 200", "IS 250 C", "IS-F", "LS", "LX", "NX", "RC F", "RX", "RX 300", "RX 400h", "RX 450h", "SC 430"]
+    "models": ["CT", "GS", "GS 300", "GX", "IS", "IS 200", "IS-F", "LS", "LX"]
   },
   {
     "brand": "Toyota",

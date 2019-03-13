@@ -1,20 +1,20 @@
 package com.example.mobilemechanic.shared.Registration
 
 import android.arch.lifecycle.Observer
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
-import com.example.mobilemechanic.R
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import android.arch.lifecycle.ViewModelProviders
+import android.os.Bundle
 import android.support.v4.view.ViewPager
-import com.example.mobilemechanic.model.RegistrationViewModel
+import android.support.v7.app.AppCompatActivity
 import com.badoualy.stepperindicator.StepperIndicator
+import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.RegistrationViewModel
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_registration.*
 import kotlinx.android.synthetic.main.fragment_credentials.*
 
@@ -36,7 +36,6 @@ class RegistrationActivity : AppCompatActivity() {
         mStorage = FirebaseStorage.getInstance()
 
         val registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel::class.java)
-
         setUpRegistrationResults(registrationViewModel)
         setUpStepperIndicator()
     }

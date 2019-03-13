@@ -1,7 +1,6 @@
 package com.example.mobilemechanic.shared.Registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -14,27 +13,25 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
-
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.RegistrationViewModel
+import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.android.synthetic.main.fragment_address_info.*
-
-import com.example.mobilemechanic.model.User
-import com.example.mobilemechanic.model.dto.Address
-import com.example.mobilemechanic.model.dto.BasicInfo
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.AuthResult
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import kotlinx.android.synthetic.main.fragment_address_info.*
 
 const val ACCOUNT_DOC_PATH = "Accounts"
 

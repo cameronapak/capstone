@@ -14,6 +14,7 @@ import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.shared.Registration.RegistrationActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth

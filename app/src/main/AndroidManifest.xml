@@ -76,7 +76,7 @@
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.RegistrationActivity">
+        <activity android:name=".shared.Registration.RegistrationActivity">
         </activity>
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>
@@ -88,8 +88,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".shared.SignInActivity">
-        </activity>
-        <activity android:name=".shared.ForgotPasswordActivity">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

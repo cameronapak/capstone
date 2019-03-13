@@ -129,8 +129,7 @@ class ProfilePictureActivity : AppCompatActivity() {
             ?.document(uid)
             ?.get()
             ?.addOnSuccessListener {
-                val user = it.toObject(User::class.java)
-                if (user == null) return@addOnSuccessListener
+                val user = it.toObject(User::class.java) ?: return@addOnSuccessListener
 
                 val userType = user.userType
                 var intent = Intent()

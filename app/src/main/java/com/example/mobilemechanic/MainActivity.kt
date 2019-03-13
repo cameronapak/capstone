@@ -7,8 +7,8 @@ import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
-import com.example.mobilemechanic.shared.ProfilePictureActivity
-import com.example.mobilemechanic.shared.RegistrationActivity
+import com.example.mobilemechanic.shared.Registration.ProfilePictureActivity
+import com.example.mobilemechanic.shared.Registration.RegistrationActivity
 import com.example.mobilemechanic.shared.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth

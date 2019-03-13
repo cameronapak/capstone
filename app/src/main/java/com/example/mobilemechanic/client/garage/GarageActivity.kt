@@ -183,7 +183,6 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         val make = basicDialog.id_vehicle_make.selectedItem.toString()
         val model = basicDialog.id_vehicle_model.selectedItem.toString()
         val vehicle = Vehicle("", year, make, model, "")
-        retrieveVehicleImageUrl(vehicle)
 
         if (isFilled(basicDialog)) {
             retrieveVehicleImageUrl(vehicle)

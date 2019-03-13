@@ -10,5 +10,9 @@
   {
     "brand": "Toyota",
     "models": ["4-Runner", "Camry", "Avalon", "Corolla", "Highlander", "Hilux", "Land Cruiser", "Prius", "RAV4", "Tundra"]
+  },
+  {
+    "brand": "GDLS",
+    "models": ["M1 Abrams"]
   }
 ]

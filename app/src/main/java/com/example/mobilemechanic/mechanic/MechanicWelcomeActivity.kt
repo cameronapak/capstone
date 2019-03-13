@@ -188,6 +188,5 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
-        setUpDrawerMenu()
     }
 }

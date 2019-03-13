@@ -17,10 +17,7 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
-import com.example.mobilemechanic.model.User
-import com.example.mobilemechanic.model.Vehicle
+import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
@@ -44,6 +41,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private lateinit var accountRef: CollectionReference
     private lateinit var requestsRef: CollectionReference
     private lateinit var vehiclesRef: CollectionReference
+    private lateinit var messagesRef: CollectionReference
     private lateinit var spinnerAdapter: HintVehicleSpinnerAdapter
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
@@ -59,6 +57,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         mAuth = FirebaseAuth.getInstance()
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
+        messagesRef = mFirestore.collection("Messages")
 
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
@@ -135,7 +134,22 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request).addOnSuccessListener {
                             Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+
+                            //new model for message- chat room
+                            messagesRef.document("${mAuth.currentUser?.uid}")
+                                .collection("${serviceModel.mechanicInfo.uid}")
+                                .document()
+                                .set(Message())
+                                .addOnSuccessListener {
+                                    messagesRef.document("${serviceModel.mechanicInfo.uid}")
+                                        .collection("${mAuth.currentUser?.uid}")
+                                        .document()
+                                        .set(Message())
+                                        .addOnSuccessListener {
+                                            //go back to client main page when done
+                                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                                        }
+                                }
                         }.addOnFailureListener {
                             Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }

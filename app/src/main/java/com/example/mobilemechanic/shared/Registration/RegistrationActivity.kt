@@ -7,7 +7,6 @@ import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
 import com.badoualy.stepperindicator.StepperIndicator
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.RegistrationViewModel
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
@@ -24,8 +23,6 @@ class RegistrationActivity : AppCompatActivity() {
     private var mAuth: FirebaseAuth?= null
     private var mFireStore: FirebaseFirestore? = null
     private var mStorage: FirebaseStorage? = null
-
-    private var currentStep = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,6 +46,7 @@ class RegistrationActivity : AppCompatActivity() {
             stepCount = 4
             currentStep = 0
             setViewPager(pager, false)
+            setAnimIndicatorRadius(1f)
             //addOnStepClickListener { step -> pager.setCurrentItem(step, true) }
         }
     }

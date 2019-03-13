@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.RegistrationViewModel
+import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.SignInActivity
 import kotlinx.android.synthetic.main.fragment_credentials.*

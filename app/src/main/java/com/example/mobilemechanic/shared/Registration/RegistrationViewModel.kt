@@ -1,8 +1,9 @@
-package com.example.mobilemechanic.model
+package com.example.mobilemechanic.shared.Registration
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.net.Uri
+import com.example.mobilemechanic.model.UserType
 
 class RegistrationViewModel : ViewModel() {
     var userType = MutableLiveData<UserType>()

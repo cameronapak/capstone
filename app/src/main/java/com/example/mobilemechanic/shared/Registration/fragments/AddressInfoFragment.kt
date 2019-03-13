@@ -18,7 +18,7 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
-import com.example.mobilemechanic.model.RegistrationViewModel
+import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address

@@ -27,10 +27,10 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val request = dataset[position]
-        holder.vehicleTitle.text = "${request.year} ${request.make} ${request.model}"
-        if (!request.photoUrl.isNullOrEmpty()) {
-            Picasso.get().load(request.photoUrl).into(holder.vehicleImage)
+        val vehicle = dataset[position]
+        holder.vehicleTitle.text = "${vehicle.year} ${vehicle.make} ${vehicle.model}"
+        if (!vehicle.photoUrl.isNullOrEmpty()) {
+            Picasso.get().load(vehicle.photoUrl).into(holder.vehicleImage)
         }
     }
 

@@ -95,7 +95,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
         val spinner = view.findViewById<Spinner>(R.id.id_registrationStateSpinner)
         spinner.onItemSelectedListener = this
         val states = DataProviderManager.getAllStates()
-        val spinnerAdapter = HintSpinnerAdapter(context!!, android.R.layout.simple_spinner_item, states)
+        val spinnerAdapter = HintSpinnerAdapter(context!!, android.R.layout.simple_spinner_item, states, "States")
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = spinnerAdapter
     }

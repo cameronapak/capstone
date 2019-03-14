@@ -57,13 +57,8 @@ class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList
         holder.requestStatus.text = request.status?.name
 
         val mechanicPhoto = request.mechanicInfo?.basicInfo?.photoUrl
-        if (mechanicPhoto.isNullOrEmpty() || mechanicPhoto.isNullOrEmpty()) {
-            Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profileImage)
-            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] no photoUrl")
-        } else {
-            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] photoUrl $mechanicPhoto")
-            Picasso.get().load(Uri.parse(mechanicPhoto)).into(holder.profileImage)
-        }
+        Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] photoUrl $mechanicPhoto")
+        Picasso.get().load(Uri.parse(mechanicPhoto)).into(holder.profileImage)
 
         if (request.status == Status.Request) {
             holder.requestStatus.text = "Pending"

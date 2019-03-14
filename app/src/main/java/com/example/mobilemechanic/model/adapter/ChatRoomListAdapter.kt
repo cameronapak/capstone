@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.ChatRoom
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 

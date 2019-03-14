@@ -3,6 +3,7 @@ package com.example.mobilemechanic.shared.Registration.fragments
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -105,5 +106,10 @@ class UploadProfilePhotoFragment : Fragment() {
         }
 
         return false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        btn_backToInfo.paintFlags = btn_backToInfo.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 }

@@ -39,10 +39,22 @@ class MechanicChatRooms : AppCompatActivity()
             layoutManager = viewManager
             adapter = chatRoomListAdapter
         }
-        reactiveServiceRecyclerView()
+        reactiveChatRoomRecyclerView()
     }
 
-    private fun reactiveServiceRecyclerView() {
+    private fun reactiveChatRoomRecyclerView() {
+        chatRoomsRef.whereEqualTo("mechanicInfo.uid", mAuth?.currentUser?.uid.toString())
+            ?.addSnapshotListener { querySnapshot, exception ->
+                if (exception != null) {
+                    return@addSnapshotListener
+                }
 
+                chatRooms.clear()
+                for (doc in querySnapshot!!) {
+                    val chatRoom = doc.toObject(ChatRoom::class.java)
+                    chatRooms.add(chatRoom)
+                }
+                chatRoomListAdapter.notifyDataSetChanged()
+            }
     }
 }

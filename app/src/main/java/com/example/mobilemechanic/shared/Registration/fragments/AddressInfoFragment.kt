@@ -2,6 +2,7 @@ package com.example.mobilemechanic.shared.Registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.graphics.Paint
 import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -254,5 +255,10 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
                     }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        btn_backToUploadProfilePicture.paintFlags = btn_backToUploadProfilePicture.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 }

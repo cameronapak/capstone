@@ -2,9 +2,12 @@ package com.example.mobilemechanic.shared.Registration
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.support.v4.view.ViewPager
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.badoualy.stepperindicator.StepperIndicator
 import com.example.mobilemechanic.R
@@ -41,6 +44,7 @@ class RegistrationActivity : AppCompatActivity() {
         val registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel::class.java)
         setUpRegistrationResults(registrationViewModel)
         setUpStepperIndicator()
+        setUpToolBar()
         enableHideKeyboard()
     }
 
@@ -55,6 +59,20 @@ class RegistrationActivity : AppCompatActivity() {
             currentStep = 0
             setViewPager(pager, false)
             addOnStepClickListener { step -> pager.setCurrentItem(step, true) }
+        }
+    }
+
+    private fun setUpToolBar() {
+        val arrow = resources.getDrawable(com.example.mobilemechanic.R.drawable.abc_ic_ab_back_material, null)
+        arrow.setColorFilter(
+            resources.getColor(com.example.mobilemechanic.R.color.colorPrimaryDark),
+            PorterDuff.Mode.SRC_ATOP
+        )
+        setSupportActionBar(id_registration_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeAsUpIndicator(arrow)
         }
     }
 
@@ -170,6 +188,12 @@ class RegistrationActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun onResume() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)

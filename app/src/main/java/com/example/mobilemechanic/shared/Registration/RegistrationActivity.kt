@@ -5,13 +5,15 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.badoualy.stepperindicator.StepperIndicator
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.RegistrationViewModel
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
+import com.example.mobilemechanic.shared.USER_TAG
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -25,8 +27,6 @@ class RegistrationActivity : AppCompatActivity() {
     private var mFireStore: FirebaseFirestore? = null
     private var mStorage: FirebaseStorage? = null
 
-    private var currentStep = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
@@ -34,11 +34,16 @@ class RegistrationActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
+        setUpRegistrationActivity()
+    }
 
+    private fun setUpRegistrationActivity() {
         val registrationViewModel = ViewModelProviders.of(this).get(RegistrationViewModel::class.java)
         setUpRegistrationResults(registrationViewModel)
         setUpStepperIndicator()
+        enableHideKeyboard()
     }
+
 
     private fun setUpStepperIndicator() {
         val pager = findViewById<ViewPager>(R.id.id_registrationPager)
@@ -49,7 +54,7 @@ class RegistrationActivity : AppCompatActivity() {
             stepCount = 4
             currentStep = 0
             setViewPager(pager, false)
-            //addOnStepClickListener { step -> pager.setCurrentItem(step, true) }
+            addOnStepClickListener { step -> pager.setCurrentItem(step, true) }
         }
     }
 
@@ -61,7 +66,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.userType.observe(this, Observer {
             it?.let {
                 user.userType = getUserType(id_clientType.isChecked)
-
                 printResults(user, info, address)
             }
         })
@@ -69,7 +73,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.emailAddress.observe(this, Observer {
             it?.let {
                 info.email = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -85,7 +88,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.firstName.observe(this, Observer {
             it?.let {
                 info.firstName = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -93,7 +95,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.lastName.observe(this, Observer {
             it?.let {
                 info.lastName = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -101,15 +102,13 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.phoneNumber.observe(this, Observer {
             it?.let {
                 info.phoneNumber = "$it"
-
                 printResults(user, info, address)
             }
         })
 
-        registrationViewModel.imageUri.observe(this, Observer {
+        registrationViewModel.photoUrl.observe(this, Observer {
             it?.let {
                 info.photoUrl = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -125,7 +124,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.city.observe(this, Observer {
             it?.let {
                 address.city = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -133,7 +131,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.state.observe(this, Observer {
             it?.let {
                 address.state = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -141,7 +138,6 @@ class RegistrationActivity : AppCompatActivity() {
         registrationViewModel.zipcode.observe(this, Observer {
             it?.let {
                 address.zipCode = "$it"
-
                 printResults(user, info, address)
             }
         })
@@ -153,7 +149,7 @@ class RegistrationActivity : AppCompatActivity() {
     }
 
     private fun printResults(user: User, info: BasicInfo, address: Address) {
-        id_registrationResults.text = "${user.userType}\t" +
+        val result = "${user.userType}\t" +
                 "${info.email}\t" +
                 "${user.password}\t" +
                 "${info.firstName}\t" +
@@ -164,58 +160,18 @@ class RegistrationActivity : AppCompatActivity() {
                 "${address.city}\t" +
                 "${address.state}\t" +
                 "${address.zipCode}"
+
+        Log.d(USER_TAG, "[RegistrationActivity] current form data $result")
     }
 
-    /*private fun createUserAccount() {
-        val userType = getUserType(id_registration_client.isChecked)
-        val email = id_registration_email.text.toString().trim()
-        val password = id_registration_password.text.toString().trim()
-        val firstName = id_registration_firstName.text.toString().trim()
-        val lastName = id_registration_lastName.text.toString().trim()
-        val phoneNumber = id_registration_phoneNumber.text.toString().trim()
-        val street = id_registration_address.text.toString().trim()
-        val city = id_registration_city.text.toString().trim()
-        val state = findViewById<Spinner>(R.id.id_registration_state).selectedItem.toString().trim()
-        val zip = id_registration_zipcode.text.toString().trim()
-
-        if(validateInformation(email, password, firstName, lastName, phoneNumber, street, city, state, zip)) {
-            val address = Address(street, city, state, zip)
-            val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
-            val user = User("", password, userType, basicInfo, address, 0f)
-
-            mAuth?.createUserWithEmailAndPassword(email, password)
-                ?.addOnCompleteListener {
-                    user.uid = mAuth?.uid.toString()
-                    handleAccountCreationSuccess(it, user)
-            }
+    private fun enableHideKeyboard() {
+        id_registration_form_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
         }
+
     }
-
-    private fun handleAccountCreationSuccess(it: Task<AuthResult>, user: User) {
-        if(it.isSuccessful) {
-            Toast.makeText(this, "Account created successfully!", Toast.LENGTH_SHORT).show()
-            saveUser(user)
-        } else {
-            Toast.makeText(this, "Account created failed!\n${it.exception.toString()}", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-    private fun saveUser(userInfo: User) {
-        mFireStore?.collection(ACCOUNT_DOC_PATH)
-            ?.document(userInfo.uid)
-            ?.set(userInfo)
-            ?.addOnSuccessListener {
-                Toast.makeText(this, "Account info added!", Toast.LENGTH_SHORT).show()
-
-                goToUploadPictureActivity(userInfo.userType)
-            }
-            ?.addOnFailureListener {
-                Toast.makeText(this, "${it.message}", Toast.LENGTH_SHORT).show()
-            }
-    }
-
     override fun onResume() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }*/
+    }
 }

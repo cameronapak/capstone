@@ -26,6 +26,7 @@ import kotlinx.android.synthetic.main.activity_sign_in.*
 import kotlinx.android.synthetic.main.dialog_body_reset_password.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
+const val USER_TAG = "user"
 class SignInActivity : AppCompatActivity() {
 
     private lateinit var mAuth: FirebaseAuth
@@ -79,12 +80,6 @@ class SignInActivity : AppCompatActivity() {
                 if (user != null) {
                     updateUserProfile(user)
                 }
-
-                if (user?.userType == UserType.CLIENT) {
-                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
-                } else {
-                    startActivity(Intent(this, MechanicWelcomeActivity::class.java))
-                }
             }
     }
 
@@ -101,6 +96,12 @@ class SignInActivity : AppCompatActivity() {
                     if (it.isSuccessful) {
                         Log.d(CLIENT_TAG, "[SignInActivity] updateUserProfile completed")
                         Log.d(CLIENT_TAG, "[SignInActivity] photoUri ${userInfo.basicInfo.photoUrl}")
+                    }
+
+                    if (userInfo.userType == UserType.CLIENT) {
+                        startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                    } else {
+                        startActivity(Intent(this, MechanicWelcomeActivity::class.java))
                     }
                 }
         }

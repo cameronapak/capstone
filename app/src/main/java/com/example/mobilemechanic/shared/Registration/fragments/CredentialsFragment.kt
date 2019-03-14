@@ -2,18 +2,20 @@ package com.example.mobilemechanic.shared.Registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.graphics.Paint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.RegistrationViewModel
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
 import com.example.mobilemechanic.shared.SignInActivity
+import com.example.mobilemechanic.shared.USER_TAG
 import kotlinx.android.synthetic.main.fragment_credentials.*
 
 class CredentialsFragment : Fragment() {
@@ -38,13 +40,14 @@ class CredentialsFragment : Fragment() {
         val pager = activity?.findViewById<ViewPager>(R.id.id_registrationPager)
 
         btn_personalInfo.setOnClickListener {
-
             if (validateCredentials(registrationModel)) {
                 pager?.setCurrentItem(1, true)
             }
         }
+
         btn_backToSignIn.setOnClickListener {
             startActivity(Intent(activity, SignInActivity::class.java))
+            activity?.finish()
         }
     }
 
@@ -72,7 +75,12 @@ class CredentialsFragment : Fragment() {
         registrationModel.emailAddress.value = email
         registrationModel.password.value = password
 
+        Log.d(USER_TAG, "[CredentialsFragment] $registrationModel")
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        btn_backToSignIn.paintFlags = btn_backToSignIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+    }
 }

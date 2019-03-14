@@ -2,7 +2,6 @@ package com.example.mobilemechanic.shared.Registration.fragments
 
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -17,11 +16,9 @@ import android.widget.Toast
 
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
-import com.example.mobilemechanic.model.RegistrationViewModel
+import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.activity_profile_picture.*
-import kotlinx.android.synthetic.main.fragment_info.*
 import kotlinx.android.synthetic.main.fragment_upload_profile_photo.*
 
 class UploadProfilePhotoFragment : Fragment() {
@@ -92,17 +89,17 @@ class UploadProfilePhotoFragment : Fragment() {
 
     private fun showSelectedProfileImage(imageUri: Uri) {
         if (imageUri != null) {
-            id_tempRegistrationProfile.setImageDrawable(null)
+            img_registrationProfilePicture.setImageDrawable(null)
             selectedImageUri = imageUri
             Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
             val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImageUri)
-            id_tempRegistrationProfile.setImageBitmap(bitmap)
+            img_registrationProfilePicture.setImageBitmap(bitmap)
         }
     }
 
     private fun isImageUriExist(registrationModel: RegistrationViewModel): Boolean {
         if (selectedImageUri != null) {
-            registrationModel.imageUri.value = selectedImageUri
+            registrationModel.photoUrl.value = selectedImageUri
 
             return true
         }

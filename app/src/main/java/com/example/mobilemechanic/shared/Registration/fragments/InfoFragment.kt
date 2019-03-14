@@ -1,6 +1,7 @@
 package com.example.mobilemechanic.shared.Registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
+import android.graphics.Paint
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
@@ -10,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.RegistrationViewModel
+import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : Fragment() {
@@ -70,5 +71,10 @@ class InfoFragment : Fragment() {
         registrationModel.phoneNumber.value = phoneNumber
 
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        btn_backToCredentials.paintFlags = btn_backToCredentials.paintFlags or Paint.UNDERLINE_TEXT_FLAG
     }
 }

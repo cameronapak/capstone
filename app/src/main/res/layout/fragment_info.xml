@@ -9,48 +9,48 @@
             android:layout_height="match_parent">
 
         <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                style="@style/AppEditText"
                 android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/id_registrationFirstName" android:layout_marginEnd="8dp"
+                android:id="@+id/id_registrationFirstName"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="30dp" android:hint="First Name"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:hint="First Name" android:layout_marginTop="100dp"/>
         <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                style="@style/AppEditText"
                 android:inputType="textPersonName"
-                android:ems="10"
-                android:id="@+id/id_registrationLastName" android:layout_marginEnd="8dp"
+                android:id="@+id/id_registrationLastName"
                 app:layout_constraintEnd_toEndOf="parent"
-                android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/id_registrationFirstName" android:hint="Last Name"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/id_registrationFirstName"
+                android:hint="Last Name" android:layout_marginTop="8dp"/>
         <EditText
-                android:layout_width="300dp"
-                android:layout_height="wrap_content"
+                style="@style/AppEditText"
                 android:inputType="phone"
-                android:ems="10"
-                android:id="@+id/id_registrationPhoneNumber" android:layout_marginTop="8dp"
-                app:layout_constraintTop_toBottomOf="@+id/id_registrationLastName" android:layout_marginStart="8dp"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:hint="Phone Number"/>
+                android:id="@+id/id_registrationPhoneNumber"
+                app:layout_constraintTop_toBottomOf="@+id/id_registrationLastName"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:hint="Phone Number" android:layout_marginTop="8dp"/>
         <Button
+                style="@style/AppPrimaryButton"
                 android:text="Next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_profilePicture" android:layout_marginTop="50dp"
-                app:layout_constraintTop_toBottomOf="@+id/id_registrationPhoneNumber"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+                android:id="@+id/btn_profilePicture"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="340dp" app:layout_constraintHorizontal_bias="0.497"/>
         <TextView
                 android:text="Back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_backToCredentials" android:layout_marginTop="8dp"
+                android:id="@+id/btn_backToCredentials"
+                android:layout_marginTop="8dp"
                 app:layout_constraintTop_toBottomOf="@+id/btn_profilePicture"
-                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp"/>
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

@@ -18,6 +18,23 @@
         <item name="android:textColor">@color/checkbox_color_selector</item>
     </style>
 
+    <style name="AppRadioButton" parent="Widget.AppCompat.CompoundButton.RadioButton">
+        <item name="android:paddingLeft">@dimen/md</item>
+        <item name="android:paddingRight">@dimen/md</item>
+        <item name="android:fontFamily">@font/timeburnerbold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:background">@drawable/default_checkbox</item>
+        <item name="android:button">@null</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">90dp</item>
+        <item name="android:textAlignment">center</item>
+        <item name="android:layout_marginLeft">@dimen/md</item>
+        <item name="android:layout_marginRight">@dimen/md</item>
+        <item name="android:textColor">@color/checkbox_color_selector</item>
+    </style>
+
     <style name="AppText">
         <item name="android:backgroundTint">@color/colorGrayText</item>
         <item name="android:drawableTint">@color/colorPrimaryDark</item>
@@ -55,6 +72,7 @@
     <style name="AppPrimarySpinner" parent="Widget.AppCompat.Spinner.Underlined">
         <item name="android:layout_width">300dp</item>
         <item name="android:layout_height">48dp</item>
+        <item name="colorControlNormal">@color/colorGrayText</item>
     </style>
 
     <style name="AppSecondarySpinner" parent="AppPrimarySpinner">

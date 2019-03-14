@@ -1,8 +1,9 @@
-package com.example.mobilemechanic.model
+package com.example.mobilemechanic.shared.Registration
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.net.Uri
+import com.example.mobilemechanic.model.UserType
 
 class RegistrationViewModel : ViewModel() {
     var userType = MutableLiveData<UserType>()
@@ -11,7 +12,7 @@ class RegistrationViewModel : ViewModel() {
     var firstName = MutableLiveData<String>()
     var lastName = MutableLiveData<String>()
     var phoneNumber = MutableLiveData<String>()
-    var imageUri = MutableLiveData<Uri>()
+    var photoUrl = MutableLiveData<Uri>()
     var streetAddress = MutableLiveData<String>()
     var city = MutableLiveData<String>()
     var state = MutableLiveData<String>()

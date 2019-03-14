@@ -14,7 +14,9 @@ import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
@@ -26,6 +28,8 @@ import java.util.*
 class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<Vehicle>) :
     RecyclerView.Adapter<ClientGarageRecyclerAdapter.ViewHolder>(), AdapterView.OnItemSelectedListener {
 
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
     private lateinit var basicDialog: Dialog
     private lateinit var vehicleRef: CollectionReference
     private var vehicleBrands: ArrayList<VehicleBrand> = loadVehicleDataJSONFromAssets()
@@ -43,6 +47,10 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ClientGarageRecyclerAdapter.ViewHolder {
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.card_vehicle, parent, false)
+
+        mAuth = FirebaseAuth.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+
         return ViewHolder(view)
     }
 
@@ -58,8 +66,7 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             // TODO: Remove vehicle here.
             // use document(vehicle.objectID) to tell firestore what document to remove
 
-
-
+            removeItem(vehicle)
 
         }
 
@@ -75,8 +82,20 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             handleDialogOnClick(basicDialog, vehicle)
             setUpSpinners(basicDialog)
             basicDialog.show()
+
         }
     }
+
+    // function to remove vehicle
+    private fun removeItem(vehicle: Vehicle){
+        mFirestore?.collection("Accounts").document("${vehicle.objectID}" )
+            .delete().addOnSuccessListener {
+                Toast.makeText(context, "Removed Successfully", Toast.LENGTH_LONG).show()
+            }.addOnFailureListener {
+                Toast.makeText(context, "Removed Failed", Toast.LENGTH_LONG).show()
+            }
+    }
+
 
     private fun handleDialogOnClick(basicDialog: BasicDialog, vehicle: Vehicle) {
 
@@ -89,11 +108,15 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             val make = basicDialog.id_vehicle_make.selectedItem.toString()
             val model = basicDialog.id_vehicle_model.selectedItem.toString()
             Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] update dialog $year, $make, $model")
+
             // TODO: Update vehicle to firestore here.
-
-
-
-
+            mFirestore?.document("${vehicle.objectID}")
+                .update(vehicle.year, year, vehicle.make, make, vehicle.model, model)
+                .addOnSuccessListener {
+                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Update Failed", Toast.LENGTH_SHORT).show()
+                }
 
             basicDialog.dismiss()
         }

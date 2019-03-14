@@ -1,32 +1,32 @@
-package com.example.mobilemechanic.shared
+package com.example.mobilemechanic.mechanic.messaging
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.Message
+import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.model.adapter.MessageListAdapter
-import kotlinx.android.synthetic.main.activity_messages_welcome.*
+import kotlinx.android.synthetic.main.activity_mechanic_messages.*
 
-class MessagesWelcome : AppCompatActivity() {
+class MechanicMessages : AppCompatActivity() {
 
     private lateinit var viewManager: LinearLayoutManager
-    private lateinit var mechanicMsgListAdapter: MessageListAdapter
+    private lateinit var messageListAdapter: MessageListAdapter
     private var messages = ArrayList<Message>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_messages_welcome)
-        setUpMsgRecyclerView()
+        setContentView(R.layout.activity_mechanic_messages)
+        setUpMessagesRecyclerView()
     }
 
-    private fun setUpMsgRecyclerView(){
+    private fun setUpMessagesRecyclerView(){
         viewManager = LinearLayoutManager(this)
-        mechanicMsgListAdapter = MessageListAdapter(this, messages)
-        id_msg_welcome_recyl.apply {
+        messageListAdapter = MessageListAdapter(this, messages)
+        id_mechanic_messages_recyclerview.apply {
             setHasFixedSize(true)
             layoutManager = viewManager
-            adapter = mechanicMsgListAdapter
+            adapter = messageListAdapter
         }
         mockData()
         reactiveServiceRecyclerView()

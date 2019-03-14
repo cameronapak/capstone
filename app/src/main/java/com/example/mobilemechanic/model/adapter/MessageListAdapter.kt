@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.Message
+import com.example.mobilemechanic.model.messaging.Message
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -16,13 +16,13 @@ import com.google.firebase.firestore.FirebaseFirestore
 class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>) :
     RecyclerView.Adapter<MessageListAdapter.ViewHolder>() {
     private lateinit var mFirestore: FirebaseFirestore
-    private lateinit var serviceRef: CollectionReference
+    private lateinit var chatRoomsRef: CollectionReference
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageListAdapter.ViewHolder {
         val view = LayoutInflater.from(context)
-            .inflate(R.layout.recyclerview_item_mesg_welcome, parent, false)
+            .inflate(R.layout.recyclerview_item_chat_room, parent, false)
         mFirestore = FirebaseFirestore.getInstance()
-        serviceRef = mFirestore?.collection("Messages")
+        chatRoomsRef = mFirestore?.collection(context.getString(R.string.ref_chatRooms))
         return ViewHolder(view)
     }
 
@@ -31,12 +31,11 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
     }
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-            val name = itemView.findViewById<TextView>(R.id.id_client_name)
+        val name = itemView.findViewById<TextView>(R.id.id_name)
     }
 
     override fun onBindViewHolder(holder: MessageListAdapter.ViewHolder, position: Int) {
-        val basicInfo = messages[position].theirInfo
-        holder.name.text = basicInfo.firstName
+
     }
 
 }

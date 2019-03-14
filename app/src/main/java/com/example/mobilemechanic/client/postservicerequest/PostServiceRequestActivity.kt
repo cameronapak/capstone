@@ -11,7 +11,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -21,6 +20,9 @@ import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
+import com.example.mobilemechanic.model.dto.MechanicInfo
+import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.model.messaging.ChatUserInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -41,13 +43,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private lateinit var accountRef: CollectionReference
     private lateinit var requestsRef: CollectionReference
     private lateinit var vehiclesRef: CollectionReference
-    private lateinit var messagesRef: CollectionReference
+    private lateinit var chatRoomsRef: CollectionReference
     private lateinit var spinnerAdapter: HintVehicleSpinnerAdapter
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
     private lateinit var daysOfWeekString: String
     private var fromTime: String = ""
     private var toTime: String = ""
+    private var clientInfo: ClientInfo? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,7 +60,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         mAuth = FirebaseAuth.getInstance()
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
-        messagesRef = mFirestore.collection("Messages")
+        chatRoomsRef = mFirestore.collection("ChatRooms")
 
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
@@ -95,7 +98,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_client_name.text =
+            id_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
@@ -118,10 +121,10 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         return@addSnapshotListener
                     }
 
-                    var clientInfo = extractUserInfo(snapshot)
+                    clientInfo = extractUserInfo(snapshot)
                     if (clientInfo != null) {
                         val request = Request.Builder()
-                            .clientInfo(clientInfo)
+                            .clientInfo(clientInfo!!)
                             .mechanicInfo(serviceModel.mechanicInfo)
                             .service(serviceModel.service)
                             .vehicle(vehicle)
@@ -135,21 +138,13 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         requestsRef.document().set(request).addOnSuccessListener {
                             Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
 
-                            //new model for message- chat room
-                            messagesRef.document("${mAuth.currentUser?.uid}")
-                                .collection("${serviceModel.mechanicInfo.uid}")
-                                .document()
-                                .set(Message())
-                                .addOnSuccessListener {
-                                    messagesRef.document("${serviceModel.mechanicInfo.uid}")
-                                        .collection("${mAuth.currentUser?.uid}")
-                                        .document()
-                                        .set(Message())
-                                        .addOnSuccessListener {
-                                            //go back to client main page when done
-                                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
-                                        }
-                                }
+                            val chatRoom = createChatRoom(clientInfo!!, serviceModel.mechanicInfo)
+                            chatRoomsRef.document().set(chatRoom).addOnSuccessListener {
+                                startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                            }.addOnFailureListener {
+                                    Toast.makeText(this, "Chat room creation failed.", Toast.LENGTH_LONG).show()
+                            }
+
                         }.addOnFailureListener {
                             Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
@@ -172,6 +167,23 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
         }
         return null
+    }
+
+    private fun createChatRoom(clientInfo: ClientInfo, mechanicInfo: MechanicInfo) : ChatRoom
+    {
+        val clientChatUser = ChatUserInfo(clientInfo.uid,
+            clientInfo.basicInfo.firstName,
+            clientInfo.basicInfo.lastName,
+            clientInfo.basicInfo.photoUrl
+        )
+
+        val mechanicChatUser = ChatUserInfo(mechanicInfo.uid,
+            mechanicInfo.basicInfo.firstName,
+            mechanicInfo.basicInfo.lastName,
+            mechanicInfo.basicInfo.photoUrl
+        )
+
+        return ChatRoom(clientChatUser, mechanicChatUser)
     }
 
     private fun setUpOnAddVehicle() {

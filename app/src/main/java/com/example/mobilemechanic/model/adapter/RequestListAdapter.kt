@@ -24,9 +24,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.support.v4.content.ContextCompat.startActivity
-
-
 
 
 class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>) :
@@ -37,10 +34,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 //        val price = itemView.findViewById<TextView>(R.id.id_price)
-        val name = itemView.findViewById<TextView>(R.id.id_client_name)
+        val name = itemView.findViewById<TextView>(R.id.id_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
-        val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
+//        val serviceType = itemView.findViewById<TextView>(R.id.id_service_type)
         val status = itemView.findViewById<TextView>(R.id.id_request_status)
         val distance = itemView.findViewById<TextView>(R.id.id_distance)
         val directionsButton = itemView.findViewById<ImageButton>(R.id.id_directions_btn)

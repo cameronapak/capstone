@@ -12,10 +12,10 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.mechanic.messaging.MechanicChatRooms
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
-import com.example.mobilemechanic.shared.MessagesWelcome
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -144,7 +144,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_messages -> {
-                    val intent = Intent(this, MessagesWelcome::class.java)
+                    val intent = Intent(this, MechanicChatRooms::class.java)
                     startActivity(intent)
                     true
                 }

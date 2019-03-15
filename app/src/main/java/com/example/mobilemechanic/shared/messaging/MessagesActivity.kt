@@ -91,6 +91,7 @@ class MessagesActivity : AppCompatActivity()
                     messages.add(message)
                 }
                 messageListAdapter.notifyDataSetChanged()
+                viewManager.scrollToPosition(messageListAdapter.itemCount - 1)
             }
     }
 

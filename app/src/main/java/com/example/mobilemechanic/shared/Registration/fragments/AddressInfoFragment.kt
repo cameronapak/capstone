@@ -45,7 +45,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
     private lateinit var mFireStore: FirebaseFirestore
     private lateinit var mStorage: FirebaseStorage
     private lateinit var profileImageStorageRef: StorageReference
-    private lateinit var selectedImageUri: Uri
+    private var selectedImageUri: Uri = Uri.EMPTY
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -193,18 +193,18 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun saveUserToFirestore(user: User) {
-        mFireStore?.collection(ACCOUNT_DOC_PATH).document(user.uid)
+        mFireStore.collection(ACCOUNT_DOC_PATH).document(user.uid)
             .set(user)
             .addOnSuccessListener {
                 Log.d(USER_TAG, "[AddressInfoFragment] Account information saved to firestore")
                 Toast.makeText(activity, "Account saved.", Toast.LENGTH_SHORT).show()
-                if (selectedImageUri != null) {
+                if (!Uri.EMPTY.equals(selectedImageUri)) {
                     saveImageToFireStorage(user)
                 } else {
                     redirectUserToWelcomePage()
                 }
             }
-            ?.addOnFailureListener {
+            .addOnFailureListener {
                 Log.d(USER_TAG, "[AddressInfoFragment] ${it.message}")
             }
     }
@@ -218,6 +218,8 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             Log.d(USER_TAG, "[AddressInfoFragment] Redirect to client welcome page")
             startActivity(Intent(activity, ClientWelcomeActivity::class.java))
         }
+
+        activity!!.finish()
     }
 
     private fun saveImageToFireStorage(user: User) {

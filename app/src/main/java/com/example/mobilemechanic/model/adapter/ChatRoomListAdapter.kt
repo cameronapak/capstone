@@ -1,14 +1,17 @@
 package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.shared.messaging.MessagesActivity
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 
@@ -43,6 +46,13 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
             UserType.MECHANIC -> {
                 setUpMechanicDisplay(holder, chatRoom)
             }
+        }
+
+        //open MessagesActivity by tapping on a chatroom in the recyclerview
+        holder.itemView.setOnClickListener {
+            val intent = Intent(context, MessagesActivity::class.java)
+            intent.putExtra(EXTRA_USER_TYPE, userType.name)
+            context.startActivity(intent)
         }
     }
 

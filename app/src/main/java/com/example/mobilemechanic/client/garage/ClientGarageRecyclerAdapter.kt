@@ -37,8 +37,8 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
     private var vehicleBrands: ArrayList<VehicleBrand> = loadVehicleDataJSONFromAssets()
     private lateinit var vehicleYearAdapter: HintSpinnerAdapter
     private lateinit var vehicleMakeAdapter: HintSpinnerAdapter
-    private lateinit var vehicleModelAdapter: HintSpinnerAdapter
     private lateinit var vehicleModelSpinner: Spinner
+    private var vehicleModelAdapter: HintSpinnerAdapter
     private var allVehicleModel: ArrayList<String> = ArrayList()
 
     init {
@@ -72,7 +72,6 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         }
 
         holder.removeButton.setOnClickListener {
-            Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] remove vehicle")
             removeVehicleDialog(vehicle)
         }
 
@@ -139,9 +138,9 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             val make = basicDialog.id_vehicle_make.selectedItem.toString()
             val model = basicDialog.id_vehicle_model.selectedItem.toString()
             Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] update dialog $year, $make, $model")
-            val newVehicle = Vehicle("", year, make, model, "")
-            retrieveVehicleImageUrl(newVehicle)
+            val newVehicle = Vehicle(vehicle.objectID, year, make, model, "")
 
+            retrieveVehicleImageUrl(newVehicle)
             basicDialog.dismiss()
         }
     }
@@ -150,7 +149,7 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         storageBrandsRef.child("Brands/${newVehicle.make}/${newVehicle.model}.png")
             .downloadUrl.addOnSuccessListener {
             newVehicle.photoUrl = it.toString()
-            Log.d(CLIENT_TAG, "[GarageActivity] newVehicle image uri $it")
+            Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] newVehicle image uri $it")
             saveVehicleToFirestore(newVehicle)
         }.addOnFailureListener {
             Toast.makeText(context, "No image exist.", Toast.LENGTH_LONG).show()
@@ -210,16 +209,7 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
     }
 
     private fun modelSpinner(basicDialog: BasicDialog, vehicle: Vehicle) {
-        var selectedMake = VehicleBrand()
-        vehicleBrands.forEach {
-            if (it.brand == vehicle.make) {
-                selectedMake = it
-            }
-        }
-        allVehicleModel.clear()
-        allVehicleModel.add("Models")
-        allVehicleModel.addAll(selectedMake.models)
-
+        updateModelByBrandName(vehicle.make)
         vehicleModelSpinner = basicDialog.findViewById(R.id.id_vehicle_model)
         vehicleModelSpinner.adapter = vehicleModelAdapter
         var modelPosition = vehicleModelAdapter.getPosition(vehicle.model)
@@ -240,9 +230,9 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             val jsonArray = JSONArray(text)
             val type = object : TypeToken<ArrayList<VehicleBrand>>() {}.type
             vehicleMakes = gson.fromJson(jsonArray.toString(), type)
-            Log.d(CLIENT_TAG, "[GarageActivity] jsonObj $vehicleMakes")
+            Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] jsonObj $vehicleMakes")
         } catch (ex: Exception) {
-            Log.d(CLIENT_TAG, "[GarageActivity] exception ${ex.message}")
+            Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] exception ${ex.message}")
         }
         return vehicleMakes
     }
@@ -252,21 +242,24 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
     private fun updateVehicleModelSpinner(brand: String) {
-        var selectedMake = VehicleBrand()
+        updateModelByBrandName(brand)
+        vehicleModelAdapter.notifyDataSetChanged()
+        Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] models $allVehicleModel")
+    }
+
+    private fun updateModelByBrandName(brand: String) {
         vehicleBrands.forEach {
             if (it.brand == brand) {
-                selectedMake = it
+                allVehicleModel.clear()
+                allVehicleModel.add("Models")
+                allVehicleModel.addAll(it.models)
+                return@forEach
             }
         }
-        allVehicleModel.clear()
-        allVehicleModel.add("Models")
-        allVehicleModel.addAll(selectedMake.models)
-        vehicleModelAdapter.notifyDataSetChanged()
-        Log.d(CLIENT_TAG, "[GarageActivity] models $allVehicleModel")
     }
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
-        Log.d(CLIENT_TAG, "[GarageActivity] make spinner ${parent.selectedItem}")
+        Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] make spinner ${parent.selectedItem}")
         updateVehicleModelSpinner(parent.selectedItem.toString())
     }
 }

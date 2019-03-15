@@ -19,6 +19,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.dialog_body_add_vehicle.*
+import kotlinx.android.synthetic.main.dialog_body_confirmation.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import org.json.JSONArray
 import java.util.*
@@ -61,37 +62,62 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
         holder.removeButton.setOnClickListener {
             Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] remove vehicle")
-            removeItem(vehicle)
+            removeVehicleDialog(vehicle)
         }
 
         holder.updateButton.setOnClickListener {
-            val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
-            val body = context.layoutInflater.inflate(R.layout.dialog_body_add_vehicle, null)
-            val basicDialog = BasicDialog.Builder.apply {
-                title = "Update Vehicle"
-                positive = "Save"
-                negative = "Cancel"
-            }.build(context, container, body)
-
-            handleDialogOnClick(basicDialog, vehicle)
-            setUpSpinners(basicDialog, vehicle)
-            basicDialog.show()
-
+            updateVehicleDialog(vehicle)
         }
     }
 
-    private fun removeItem(vehicle: Vehicle){
-        mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
-            .document(vehicle.objectID)
-            .delete().addOnSuccessListener {
-                Toast.makeText(context, "Removed successfully", Toast.LENGTH_LONG).show()
-            }.addOnFailureListener {
-                Toast.makeText(context, "Removed failed", Toast.LENGTH_LONG).show()
-            }
+    private fun removeVehicleDialog(vehicle: Vehicle){
+        val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
+        val body = context.layoutInflater.inflate(R.layout.dialog_body_confirmation, null)
+        val basicDialog = BasicDialog.Builder.apply {
+            title = "Remove Vehicle"
+            positive = "Confirm"
+            negative = "Cancel"
+        }.build(context, container, body)
+
+        basicDialog.id_confirmation_text.text = "Are you sure you want to remove this vehicle?"
+        basicDialog.id_target_item.text = "$vehicle"
+        handleRemoveDialogOnClick(basicDialog, vehicle)
+        basicDialog.show()
+    }
+
+    private fun updateVehicleDialog(vehicle: Vehicle) {
+        val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
+        val body = context.layoutInflater.inflate(R.layout.dialog_body_add_vehicle, null)
+        val basicDialog = BasicDialog.Builder.apply {
+            title = "Update Vehicle"
+            positive = "Save"
+            negative = "Cancel"
+        }.build(context, container, body)
+
+        handleUpdateDialogOnClick(basicDialog, vehicle)
+        basicDialog.show()
+    }
+
+    private fun handleRemoveDialogOnClick(basicDialog: BasicDialog, vehicle: Vehicle) {
+        basicDialog.id_negative.setOnClickListener {
+            basicDialog.dismiss()
+        }
+
+        basicDialog.id_positive.setOnClickListener {
+            mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+                .document(vehicle.objectID)
+                .delete().addOnSuccessListener {
+                    Toast.makeText(context, "Removed successfully", Toast.LENGTH_LONG).show()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Removed failed", Toast.LENGTH_LONG).show()
+                }
+            basicDialog.dismiss()
+        }
     }
 
 
-    private fun handleDialogOnClick(basicDialog: BasicDialog, vehicle: Vehicle) {
+    private fun handleUpdateDialogOnClick(basicDialog: BasicDialog, vehicle: Vehicle) {
+        setUpSpinners(basicDialog, vehicle)
 
         basicDialog.id_negative.setOnClickListener {
             basicDialog.dismiss()
@@ -116,7 +142,6 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
                     Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] updated vehicle fail")
                     Toast.makeText(context, "Updated fail", Toast.LENGTH_LONG).show()
                 }
-
             basicDialog.dismiss()
         }
     }

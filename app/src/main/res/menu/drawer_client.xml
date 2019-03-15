@@ -22,6 +22,13 @@
               android:title="@string/text_settings" android:icon="@drawable/ic_settings_gray_24dp"/>
 
     </group>
+    <item android:title="Communicate">
+            <item
+                    android:id="@+id/id_messages"
+                    android:icon="@drawable/ic_people_black_24dp"
+                    android:title="Messages"/>
+    </item>
+
     <group android:id="@+id/client_access_control">
         <item android:id="@+id/id_sign_out"
               android:layout_centerVertical="true"

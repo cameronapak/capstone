@@ -16,6 +16,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
+import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.shared.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -88,6 +89,10 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, GarageActivity::class.java))
                     true
                 }
+//                R.id.id_messages ->{
+//                    val intent = Intent(this, ChatRoom)
+//                    true
+//                }
                 R.id.id_sign_out -> {
                     mAuth?.signOut()
                     Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT ).show()
@@ -95,8 +100,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     startActivity(i)
                     true
                 }
-
-
                 else -> {
                     mDrawerLayout.closeDrawers()
                     true

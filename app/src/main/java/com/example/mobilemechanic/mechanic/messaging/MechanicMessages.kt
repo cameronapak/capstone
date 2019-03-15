@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.model.adapter.MessageListAdapter
 import kotlinx.android.synthetic.main.activity_mechanic_messages.*
@@ -22,7 +23,7 @@ class MechanicMessages : AppCompatActivity() {
 
     private fun setUpMessagesRecyclerView(){
         viewManager = LinearLayoutManager(this)
-        messageListAdapter = MessageListAdapter(this, messages)
+        messageListAdapter = MessageListAdapter(this, messages, UserType.MECHANIC)
         id_mechanic_messages_recyclerview.apply {
             setHasFixedSize(true)
             layoutManager = viewManager

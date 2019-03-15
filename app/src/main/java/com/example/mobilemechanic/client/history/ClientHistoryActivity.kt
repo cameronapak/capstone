@@ -65,7 +65,7 @@ class ClientHistoryActivity : AppCompatActivity() {
     }
 
     private fun setUpHistoryRecyclerView() {
-        requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
+        requestRef.whereEqualTo("chatUserInfo.uid", mAuth?.currentUser?.uid.toString())
         requestRef.whereEqualTo("status", Status.Completed)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {

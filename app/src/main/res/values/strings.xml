@@ -126,7 +126,7 @@
     <string name="label_choice_accept">Accept</string>
     <string name="label_choice_complete">Complete</string>
     <string name="label_choice_confirm">Confirm</string>
-    <string name="label_remove_service">Remove</string>
+    <string name="label_remove_service">Are you sure you want to remove?</string>
     <string name="label_update_service">Update</string>
     <string name="miles">%.2f mi</string>
 
@@ -146,6 +146,7 @@
     <string name="ref_accounts">Accounts</string>
     <string name="ref_services">Services</string>
     <string name="ref_requests">Requests</string>
+    <string name="ref_chatRooms">ChatRooms</string>
 
     <string name="err_accept_fail">Failed to accept request.</string>
     <string name="err_decline_fail">Failed to decline request.</string>
@@ -159,5 +160,9 @@
     <string name="text_remove_service_question">Are you sure you want to remove this service?</string>
     <string name="text_distance">Distance</string>
     <string name="text_messages">Messages</string>
+    <string name="label_message_btn">Message</string>
+    <string name="label_call_btn">Call</string>
+    <string name="label_chatlog">Enter Message</string>
+    <string name="label_send_msg_btn">Send</string>
 
 </resources>

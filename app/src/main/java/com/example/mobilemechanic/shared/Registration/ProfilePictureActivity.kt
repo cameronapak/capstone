@@ -115,7 +115,7 @@ class ProfilePictureActivity : AppCompatActivity() {
                 val downloadUrl = it.toString()
                 mFireStore?.collection("$ACCOUNT_DOC_PATH")
                     ?.document(uid)
-                    ?.update("basicInfo.photoUrl", "$downloadUrl")
+                    ?.update("chatUserInfo.photoUrl", "$downloadUrl")
                     ?.addOnSuccessListener {
                         Toast.makeText(this, "photoUrl saved successfully", Toast.LENGTH_LONG).show()
                         goToMainActivity(uid)

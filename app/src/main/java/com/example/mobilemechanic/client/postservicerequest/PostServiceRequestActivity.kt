@@ -16,13 +16,13 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
-import com.example.mobilemechanic.model.User
-import com.example.mobilemechanic.model.Vehicle
+import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
+import com.example.mobilemechanic.model.dto.MechanicInfo
+import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.model.messaging.ChatUserInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -43,12 +43,16 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private lateinit var accountRef: CollectionReference
     private lateinit var requestsRef: CollectionReference
     private lateinit var vehiclesRef: CollectionReference
+    private lateinit var chatRoomsRef: CollectionReference
     private lateinit var spinnerAdapter: HintVehicleSpinnerAdapter
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
     private lateinit var daysOfWeekString: String
     private var fromTime: String = ""
     private var toTime: String = ""
+    private var clientInfo: ClientInfo? = null
+    private lateinit var serviceModel: ServiceModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +62,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         mAuth = FirebaseAuth.getInstance()
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
-
+        chatRoomsRef = mFirestore.collection("ChatRooms")
+        serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
@@ -133,7 +138,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request).addOnSuccessListener {
                             Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                            setUpChatRoom()
                         }.addOnFailureListener {
                             Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
@@ -156,6 +161,43 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
         }
         return null
+    }
+
+    private fun setUpChatRoom()
+    {
+        if(clientInfo == null) return
+
+        chatRoomsRef.whereEqualTo("chatUserInfo.uid", mAuth.currentUser!!.uid)
+            .whereEqualTo("mechanicInfo.uid", serviceModel.mechanicInfo.uid)
+            .get()
+            .addOnSuccessListener {
+                if(it.isEmpty)
+                {
+                    val chatRoom = createNewChatRoom(clientInfo!!, serviceModel.mechanicInfo)
+                    chatRoomsRef.document().set(chatRoom).addOnSuccessListener {
+                        startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                    }
+                }
+                else
+                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
+            }
+    }
+
+    private fun createNewChatRoom(clientInfo: ClientInfo, mechanicInfo: MechanicInfo) : ChatRoom
+    {
+        val clientChatUser = ChatUserInfo(clientInfo.uid,
+            clientInfo.basicInfo.firstName,
+            clientInfo.basicInfo.lastName,
+            clientInfo.basicInfo.photoUrl
+        )
+
+        val mechanicChatUser = ChatUserInfo(mechanicInfo.uid,
+            mechanicInfo.basicInfo.firstName,
+            mechanicInfo.basicInfo.lastName,
+            mechanicInfo.basicInfo.photoUrl
+        )
+
+        return ChatRoom(clientChatUser, mechanicChatUser)
     }
 
     private fun setUpOnAddVehicle() {
@@ -285,6 +327,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         tpd.show()
     }
 
+    private fun enableHideKeyboard() {
+        id_post_service_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
+    }
+
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -295,9 +343,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         super.onResume()
         hideWarningIconAndMessage()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
-        id_post_service_frame_layout.setOnClickListener {
-            ScreenManager.hideKeyBoard(this)
-        }
+        enableHideKeyboard()
     }
 
     override fun onSupportNavigateUp(): Boolean {

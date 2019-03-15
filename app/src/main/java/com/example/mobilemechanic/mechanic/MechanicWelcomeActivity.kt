@@ -14,8 +14,11 @@ import android.view.MenuItem
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.model.EXTRA_USER_TYPE
+import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -154,7 +157,9 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_messages -> {
-
+                    val intent = Intent(this, ChatRoomsActivity::class.java)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.MECHANIC.name)
+                    startActivity(intent)
                     true
                 }
                 R.id.nav_services -> {

@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
             android:allowBackup="true"
@@ -20,6 +20,10 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
+        <activity android:name="com.example.mobilemechanic.shared.messaging.ChatRoomsActivity">
+        </activity>
+        <activity android:name="com.example.mobilemechanic.shared.messaging.MessagesActivity">
+        </activity>
         <activity android:name=".client.detail.ServiceDetailActivity">
         </activity>
 
@@ -43,8 +47,6 @@
         <activity
                 android:name=".mechanic.map.MechanicManageJobActivity"
                 android:label="@string/title_activity_mechanic_manage_job">
-        </activity>
-        <activity android:name=".shared.ProfilePictureActivity">
         </activity>
         <activity android:name=".client.garage.GarageActivity">
         </activity>

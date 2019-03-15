@@ -21,12 +21,10 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.support.v4.content.ContextCompat.startActivity
-
-
 
 
 class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>) :
@@ -36,7 +34,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private lateinit var requestRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-//        val price = itemView.findViewById<TextView>(R.id.id_price)
+        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_client_profile_image)
         val name = itemView.findViewById<TextView>(R.id.id_client_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
@@ -65,9 +63,6 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         val request = requests[position]
         handleRequestViewType(request, holder)
 
-        //fill card view
-        // TODO: profile photo url downloads photo into image container
-//        holder.price.text = context.getString(R.string.price, request?.service?.price)
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()

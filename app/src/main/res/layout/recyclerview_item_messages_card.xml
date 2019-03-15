@@ -16,10 +16,10 @@
             app:layout_constraintBottom_toBottomOf="parent" android:layout_marginStart="16dp"/>
 
     <TextView
-            android:text="You Suck"
+            android:text="What's up?"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/id_text_messages"
+            android:id="@+id/id_text_message"
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/colorAccent"
             android:layout_marginStart="8dp"

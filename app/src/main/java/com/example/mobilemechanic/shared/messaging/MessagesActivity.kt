@@ -11,6 +11,7 @@ import com.example.mobilemechanic.model.adapter.MessageListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.ChatUserInfo
 import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
+import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -57,14 +58,21 @@ class MessagesActivity : AppCompatActivity()
             sendGreetingMessage()
         else
             setUpMessagesRecyclerView()
+
+        id_send_msg_btn.setOnClickListener {
+            sendMessage(id_chat_log_field.text.toString())
+            id_chat_log_field.setText("")
+        }
     }
 
     private fun setUpMessagesRecyclerView(){
         viewManager = LinearLayoutManager(this)
-        messageListAdapter = MessageListAdapter(this, messages, userType)
+        messageListAdapter = MessageListAdapter(this, messages)
         id_messages_recyclerview.apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
+            layoutManager = viewManager.apply {
+                reverseLayout = false
+            }
             adapter = messageListAdapter
         }
         reactiveMessagesRecyclerView()
@@ -86,6 +94,14 @@ class MessagesActivity : AppCompatActivity()
             }
     }
 
+    private fun sendMessage(contents: String)
+    {
+        val message = Message(myInfo, contents, DateTimeManager.currentTimeMillis())
+        chatRoomsRef.document(chatRoom.objectID).collection("Messages")
+            .document(DateTimeManager.currentTimeMillis().toString())
+            .set(message)
+    }
+
     private fun sendGreetingMessage()
     {
         val myInfoField = when(userType){
@@ -98,11 +114,21 @@ class MessagesActivity : AppCompatActivity()
             .get().addOnSuccessListener {
                 if(it.isEmpty)
                 {
+                    myInfo.isNewcomer = false
                     val contents = "${myInfo.firstName} joined the chat."
                     val greetingMessage =
-                        Message(myInfo, contents, System.currentTimeMillis())
-                    chatRoomsRef.document(chatRoom.objectID).collection("Messages").document()
+                        Message(myInfo, contents, DateTimeManager.currentTimeMillis())
+                    chatRoomsRef.document(chatRoom.objectID).collection("Messages")
+                        .document(DateTimeManager.currentTimeMillis().toString())
                         .set(greetingMessage)
+                        .addOnSuccessListener {
+                            setUpMessagesRecyclerView()
+                            val myInfoField = when(userType){
+                                UserType.CLIENT -> {"clientInfo"}
+                                UserType.MECHANIC -> {"mechanicInfo"}
+                            }
+                            chatRoomsRef.document(chatRoom.objectID).update(myInfoField, myInfo)
+                        }
                 }
                 else
                 {

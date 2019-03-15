@@ -21,6 +21,7 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -34,6 +35,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
 //        val price = itemView.findViewById<TextView>(R.id.id_price)
+        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_mechanic_profile_image)
         val name = itemView.findViewById<TextView>(R.id.id_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)

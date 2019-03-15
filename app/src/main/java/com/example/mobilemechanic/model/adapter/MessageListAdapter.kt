@@ -11,11 +11,13 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.Message
+import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import de.hdodenhof.circleimageview.CircleImageView
 
 
-class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>, var userType: UserType) :
+class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>) :
     RecyclerView.Adapter<MessageListAdapter.ViewHolder>() {
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var chatRoomsRef: CollectionReference
@@ -33,33 +35,15 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
     }
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        //setup cardview stuff here
-        val chatlog = itemView.findViewById<TextView>(R.id.id_chat_log_field)
-        val sendBtn = itemView.findViewById<Button>(R.id.id_send_msg_btn)
-        val timelog = itemView.findViewById<TextView>(R.id.id_text_timestamp)
+        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_message_profile_image)
+        val textMessage = itemView.findViewById<TextView>(R.id.id_text_message)
+        val timeStamp = itemView.findViewById<TextView>(R.id.id_text_timestamp)
     }
 
     override fun onBindViewHolder(holder: MessageListAdapter.ViewHolder, position: Int) {
         val message = messages[position]
-        when(userType)
-        {
-            UserType.CLIENT -> {
-                setUpClientDisplay(holder, message)
-            }
-            UserType.MECHANIC -> {
-                setUpMechanicDisplay(holder, message)
-            }
-        }
-    }
-
-    private fun setUpClientDisplay(holder: MessageListAdapter.ViewHolder, message: Message)
-    {
-
-    }
-
-    private fun setUpMechanicDisplay(holder: MessageListAdapter.ViewHolder, message: Message)
-    {
-
+        holder.textMessage.text = message.contents
+        holder.timeStamp.text = DateTimeManager.millisToDate(message.timeStamp, "h:mm a")
     }
 }
 

@@ -23,7 +23,7 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
     private lateinit var chatRoomsRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val name = itemView.findViewById<TextView>(R.id.id_name)
+        val name = itemView.findViewById<TextView>(R.id.id_client_name)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomListAdapter.ViewHolder {
         val view = LayoutInflater.from(context)

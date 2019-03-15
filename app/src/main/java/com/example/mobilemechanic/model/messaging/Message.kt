@@ -1,23 +1,23 @@
-package com.example.mobilemechanic.model
+package com.example.mobilemechanic.model.messaging
 
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Message(var senderId: String, var recipientId: String, var contents: String, var timeStamp: Long) : Parcelable
+data class Message(var chatUserInfo: ChatUserInfo,
+                   var contents: String,
+                   var timeStamp: Long
+) : Parcelable
 {
-    constructor() : this("", "", "", 0L)
+    constructor() : this(ChatUserInfo(), "", 0L)
 
     constructor(parcel: Parcel) : this(
-        parcel.readString(),
-        parcel.readString(),
+        parcel.readParcelable<ChatUserInfo>(ChatUserInfo::class.java.classLoader),
         parcel.readString(),
         parcel.readLong()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(senderId)
-        parcel.writeString(recipientId)
+        parcel.writeParcelable(chatUserInfo, flags)
         parcel.writeString(contents)
         parcel.writeLong(timeStamp)
     }

@@ -5,7 +5,9 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".client.garage.GarageActivity" android:id="@+id/id_frame_layout">
+        tools:context=".client.garage.GarageActivity"
+        android:fitsSystemWindows="true"
+        android:id="@+id/id_frame_layout">
 
         <android.support.v7.widget.Toolbar
                 style="@style/AppActionBar"
@@ -24,4 +26,11 @@
                 app:layout_constraintTop_toTopOf="@+id/id_garage_toolbar"
                 app:layout_constraintVertical_bias="0.32"
                 android:layout_marginTop="8dp"/>
+    <android.support.v7.widget.RecyclerView
+            android:layout_width="350dp"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="16dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/id_garage_toolbar"
+            android:id="@+id/id_garage_recyclerview" android:layout_height="0dp"/>
 </android.support.constraint.ConstraintLayout>

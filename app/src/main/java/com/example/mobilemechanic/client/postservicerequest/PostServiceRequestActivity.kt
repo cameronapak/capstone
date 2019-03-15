@@ -11,19 +11,18 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Toast
-import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
-import com.example.mobilemechanic.model.User
-import com.example.mobilemechanic.model.Vehicle
+import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
+import com.example.mobilemechanic.model.dto.MechanicInfo
+import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.model.messaging.ChatUserInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -44,12 +43,16 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private lateinit var accountRef: CollectionReference
     private lateinit var requestsRef: CollectionReference
     private lateinit var vehiclesRef: CollectionReference
+    private lateinit var chatRoomsRef: CollectionReference
     private lateinit var spinnerAdapter: HintVehicleSpinnerAdapter
     private val availableDays = ArrayList<String>()
     private lateinit var dialogContainer: View
     private lateinit var daysOfWeekString: String
     private var fromTime: String = ""
     private var toTime: String = ""
+    private var clientInfo: ClientInfo? = null
+    private lateinit var serviceModel: ServiceModel
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,7 +62,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         mAuth = FirebaseAuth.getInstance()
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
-
+        chatRoomsRef = mFirestore.collection("ChatRooms")
+        serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
@@ -96,12 +100,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
             val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
-            id_client_name.text =
+            id_mechanic_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
             id_price.text = "$${serviceModel.service.price.toInt()}"
-            id_mechanic_rating.text = serviceModel.mechanicInfo.rating.toString()
+            id_mechanic_rating.rating = serviceModel.mechanicInfo.rating
         }
     }
 
@@ -129,13 +133,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             .comment(comment)
                             .status(Status.Request)
                             .postedOn(currentTime)
-                            .acceptedOn(-1)
                             .build()
 
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request).addOnSuccessListener {
                             Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
-                            startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                            setUpChatRoom()
                         }.addOnFailureListener {
                             Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
@@ -160,6 +163,43 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         return null
     }
 
+    private fun setUpChatRoom()
+    {
+        if(clientInfo == null) return
+
+        chatRoomsRef.whereEqualTo("chatUserInfo.uid", mAuth.currentUser!!.uid)
+            .whereEqualTo("mechanicInfo.uid", serviceModel.mechanicInfo.uid)
+            .get()
+            .addOnSuccessListener {
+                if(it.isEmpty)
+                {
+                    val chatRoom = createNewChatRoom(clientInfo!!, serviceModel.mechanicInfo)
+                    chatRoomsRef.document().set(chatRoom).addOnSuccessListener {
+                        startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                    }
+                }
+                else
+                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
+            }
+    }
+
+    private fun createNewChatRoom(clientInfo: ClientInfo, mechanicInfo: MechanicInfo) : ChatRoom
+    {
+        val clientChatUser = ChatUserInfo(clientInfo.uid,
+            clientInfo.basicInfo.firstName,
+            clientInfo.basicInfo.lastName,
+            clientInfo.basicInfo.photoUrl
+        )
+
+        val mechanicChatUser = ChatUserInfo(mechanicInfo.uid,
+            mechanicInfo.basicInfo.firstName,
+            mechanicInfo.basicInfo.lastName,
+            mechanicInfo.basicInfo.photoUrl
+        )
+
+        return ChatRoom(clientChatUser, mechanicChatUser)
+    }
+
     private fun setUpOnAddVehicle() {
         id_warning_message_add.setOnClickListener {
             startActivity(Intent(this, GarageActivity::class.java))
@@ -167,11 +207,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     private fun validateForm() {
-        if ((id_vehicle_spinner.selectedItemPosition == 0)) {
-            disableSubmitButton()
-        } else {
-            enableSubmitButton()
-        }
+        id_submit.isEnabled = (id_vehicle_spinner.selectedItemPosition != 0)
     }
 
     private fun setUpVehicleSpinner() {
@@ -194,7 +230,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             spinnerAdapter.notifyDataSetChanged()
             checkIfGarageIsEmpty(vehicles)
         }
-
         id_vehicle_spinner.adapter = spinnerAdapter
     }
 
@@ -230,8 +265,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             }
 
             daysOfWeekString = availableDays.joinToString(separator = ", ")
-//            fromTime = dialogContainer.id_btnFromTime.text.toString()
-//            toTime = dialogContainer.id_btnToTime.text.toString()
             if (availableDays.isEmpty()) {
                 Toast.makeText(this, "Select available days", Toast.LENGTH_SHORT).show()
             } else if (fromTime.isNullOrBlank() || toTime.isNullOrBlank()) {
@@ -257,16 +290,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         id_warning_icon.visibility = View.VISIBLE
         id_warning_message.visibility = View.VISIBLE
         id_warning_message_add.visibility = View.VISIBLE
-    }
-
-    private fun disableSubmitButton() {
-        id_submit.isEnabled = false
-        id_submit.setBackgroundResource(R.drawable.button_round_corner_disabled)
-    }
-
-    private fun enableSubmitButton() {
-        id_submit.isEnabled = true
-        id_submit.setBackgroundResource(R.drawable.button_round_corner)
     }
 
     private fun checkIfGarageIsEmpty(vehicles: ArrayList<Vehicle>) {
@@ -304,6 +327,12 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         tpd.show()
     }
 
+    private fun enableHideKeyboard() {
+        id_post_service_frame_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
+    }
+
     override fun onNothingSelected(p0: AdapterView<*>?) {}
 
     override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -314,6 +343,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         super.onResume()
         hideWarningIconAndMessage()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        enableHideKeyboard()
     }
 
     override fun onSupportNavigateUp(): Boolean {

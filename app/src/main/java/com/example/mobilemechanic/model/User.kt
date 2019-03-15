@@ -5,6 +5,8 @@ import android.os.Parcelable
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
 
+const val EXTRA_USER_TYPE = "user_type"
+
 enum class UserType {
     CLIENT, MECHANIC
 }

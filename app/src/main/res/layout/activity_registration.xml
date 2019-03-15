@@ -5,216 +5,99 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".shared.RegistrationActivity">
+        android:id="@+id/id_registration_form_frame_layout"
+        tools:context=".shared.Registration.RegistrationActivity">
 
 
-        <android.support.constraint.ConstraintLayout
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:background="@drawable/round_corner_bottom"
+            android:elevation="5dp"
+            android:fitsSystemWindows="true"
+            android:layout_height="630dp" android:layout_gravity="top" android:id="@+id/id_main_body">
+
+        <android.support.v7.widget.Toolbar
                 android:layout_width="match_parent"
-                android:background="@drawable/round_corner_bottom"
-                android:elevation="5dp"
-                android:fitsSystemWindows="true"
-                android:layout_height="630dp" android:layout_gravity="top">
+                android:layout_height="@dimen/toolbar_height"
+                android:background="@drawable/toolbar_bottom_border"
+                android:theme="?attr/actionBarTheme"
+                android:minHeight="@dimen/toolbar_height"
+                android:id="@+id/id_registration_toolbar"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <TextView
+                android:text="Registration"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_registration"
+                app:layout_constraintTop_toTopOf="@+id/id_registration_toolbar"
+                app:layout_constraintStart_toStartOf="@+id/id_registration_toolbar"
+                android:layout_marginStart="72dp"
+                android:fontFamily="@font/qualio_bold"
+                android:textSize="28sp"
+                android:textColor="@color/colorHeaderDark"
+                app:layout_constraintBottom_toBottomOf="@+id/id_registration_toolbar"
+                android:layout_marginTop="8dp" app:layout_constraintVertical_bias="0.263"/>
+        <TextView
+                android:text="Form"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_form"
+                app:layout_constraintTop_toTopOf="@+id/text_registration"
+                app:layout_constraintStart_toEndOf="@+id/text_registration"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0" android:textSize="28sp"
+                android:fontFamily="@font/qualio_bold" android:layout_marginStart="5dp"
+                android:textColor="@color/colorGrayText"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/text_registration_subtitle"
+                app:layout_constraintStart_toStartOf="@+id/text_registration"
+                app:layout_constraintTop_toBottomOf="@+id/text_registration"
+                android:text="@string/text_registration_subtitle" android:textSize="12sp"
+                android:fontFamily="@font/qualio" android:textColor="@color/colorGrayText"/>
 
-                <android.support.v7.widget.Toolbar
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/toolbar_height"
-                        android:background="@drawable/toolbar_bottom_border"
-                        android:theme="?attr/actionBarTheme"
-                        android:minHeight="@dimen/toolbar_height"
-                        android:id="@+id/id_registration_toolbar"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"/>
-                <TextView
-                        android:text="Registration"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text_registration"
-                        app:layout_constraintTop_toTopOf="@+id/id_registration_toolbar"
-                        app:layout_constraintStart_toStartOf="@+id/id_registration_toolbar"
-                        android:layout_marginStart="72dp"
-                        android:fontFamily="@font/qualio_bold"
-                        android:textSize="28sp"
-                        android:textColor="@color/colorHeaderDark"
-                        app:layout_constraintBottom_toBottomOf="@+id/id_registration_toolbar"
-                        android:layout_marginTop="8dp" app:layout_constraintVertical_bias="0.263"/>
-                <TextView
-                        android:text="Form"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text_form"
-                        app:layout_constraintTop_toTopOf="@+id/text_registration"
-                        app:layout_constraintStart_toEndOf="@+id/text_registration"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0" android:textSize="28sp"
-                        android:fontFamily="@font/qualio_bold" android:layout_marginStart="5dp"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/text_registration_subtitle"
-                        app:layout_constraintStart_toStartOf="@+id/text_registration"
-                        app:layout_constraintTop_toBottomOf="@+id/text_registration"
-                        android:text="@string/text_registration_subtitle" android:textSize="12sp"
-                        android:fontFamily="@font/qualio"/>
+        <com.badoualy.stepperindicator.StepperIndicator
+                android:layout_width="220dp"
+                android:layout_height="27dp"
+                app:stpi_stepCount="4"
+                app:stpi_circleRadius="8dp"
+                app:stpi_circleStrokeWidth="2dp"
+                app:stpi_indicatorColor="@color/colorPrimary3"
+                app:stpi_indicatorRadius="5dp"
+                app:stpi_lineMargin="6dp"
+                app:stpi_lineDoneColor="@color/colorPrimary3"
+                android:layout_centerHorizontal="true"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="52dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="58dp"
+                android:id="@+id/id_registrationStepper"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentStart="true"
+                app:layout_constraintTop_toBottomOf="@+id/id_registration_toolbar" android:layout_marginTop="56dp"
+                app:layout_constraintHorizontal_bias="0.524"/>
 
-               <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:id="@+id/id_registration_email"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/radioGroup" android:layout_marginStart="8dp"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toEndOf="parent" android:hint="@string/hint_registration_email"
-                        android:inputType="textEmailAddress" android:textSize="14sp"/>
+        <com.example.mobilemechanic.shared.Registration.NonSwipeableViewPager
+                android:layout_width="0dp"
+                android:layout_height="0dp" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp"
+                app:layout_constraintHorizontal_bias="0.494"
+                android:id="@+id/id_registrationPager"
+                app:layout_constraintTop_toBottomOf="@+id/id_registrationStepper"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent">
+        </com.example.mobilemechanic.shared.Registration.NonSwipeableViewPager>
 
-            <android.support.design.widget.TextInputLayout
-                    android:id="@+id/id_registration_password_layout"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    app:passwordToggleEnabled="true"
-                    app:layout_constraintTop_toBottomOf="@+id/id_registration_email"
-                    app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                    app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                    app:hintEnabled="false" app:hintAnimationEnabled="false">
+    </android.support.constraint.ConstraintLayout>
 
-                <android.support.design.widget.TextInputEditText
-                        android:id="@+id/id_registration_password"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPassword"
-                        android:textSize="14sp"
-                        android:hint="@string/hint_registration_password"/>
-            </android.support.design.widget.TextInputLayout>
+    <ImageView
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_width="496dp"
+            android:layout_height="wrap_content" app:srcCompat="@drawable/bottom_bg1"
+            android:id="@+id/registration_bottom_image"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="516dp" app:layout_constraintTop_toTopOf="parent"/>
 
-                <!--<EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:id="@+id/id_registration_password"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_email"
-                        android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:inputType="textPassword" android:hint="@string/hint_registration_password"
-                        android:textSize="14sp"/>-->
-                <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:ems="10"
-                        android:id="@+id/id_registration_firstName" android:hint="@string/hint_registration_firstName"
-                        android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:textSize="14sp" android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_password_layout"/>
-                <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:ems="10"
-                        android:id="@+id/id_registration_lastName"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_firstName"
-                        android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:hint="@string/hint_registration_lastName" android:textSize="14sp"/>
-                <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="phone"
-                        android:ems="10"
-                        android:id="@+id/id_registration_phoneNumber"
-                        android:hint="@string/hint_registration_phoneNumber"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_lastName"
-                        android:layout_marginStart="8dp" app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
-                        android:textSize="14sp"/>
-                <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPostalAddress"
-                        android:ems="10"
-                        android:id="@+id/id_registration_address" android:hint="@string/hint_registration_address"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_phoneNumber"
-                        app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
-                        android:textSize="14sp"/>
-                <EditText
-                        android:layout_width="200dp"
-                        android:layout_height="wrap_content"
-                        android:inputType="textPersonName"
-                        android:ems="10"
-                        android:id="@+id/id_registration_city"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_address"
-                        android:layout_marginStart="55dp" app:layout_constraintStart_toStartOf="parent"
-                        android:hint="@string/hint_registration_city" android:textSize="14sp"/>
-                <Spinner
-                        android:layout_width="100dp"
-                        android:layout_height="30dp" android:id="@+id/id_registration_state"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_address"
-                        app:layout_constraintStart_toEndOf="@+id/id_registration_city"
-                        app:layout_constraintHorizontal_bias="0.0" android:spinnerMode="dropdown"/>
-                <EditText
-                        android:layout_width="300dp"
-                        android:layout_height="wrap_content"
-                        android:ems="10"
-                        android:id="@+id/id_registration_zipcode"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_city" android:layout_marginStart="8dp"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginEnd="8dp"
-                        app:layout_constraintEnd_toEndOf="parent" android:inputType="number"
-                        android:hint="@string/hint_registration_zipcode" android:textSize="14sp"/>
-                <Button
-                        android:text="@string/hint_register_button"
-                        android:layout_width="200dp"
-                        android:layout_height="40dp" android:id="@+id/id_register_button"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_zipcode"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                        android:background="@drawable/button_round_corner" android:textSize="18sp"
-                        android:fontFamily="@font/timeburnerbold" android:textColor="@color/colorPrimary"/>
-                <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" android:id="@+id/id_register_signIn"
-                        android:text="@string/hint_signIn" android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_register_button"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
-                <RadioGroup
-                        android:layout_width="300dp"
-                        android:layout_height="30dp"
-                        android:orientation="horizontal"
-                        app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        app:layout_constraintTop_toBottomOf="@+id/id_registration_toolbar"
-                        app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
-                        android:id="@+id/radioGroup">
-                        <RadioButton
-                                android:text="Client"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:id="@+id/id_registration_client"
-                                android:layout_weight="1" android:textAlignment="viewStart" android:checked="true"/>
-                        <RadioButton
-                                android:text="Mechanic"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content" android:id="@+id/id_registration_mechanic"
-                                android:layout_weight="1"/>
-                </RadioGroup>
-        </android.support.constraint.ConstraintLayout>
-        <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_gravity="bottom|center_horizontal" android:layout_height="wrap_content">
-
-                <ImageView
-                        android:layout_width="496dp"
-                        android:layout_height="wrap_content" app:srcCompat="@drawable/bottom_bg1"
-                        android:id="@+id/registration_bottom_image"
-                        app:layout_constraintStart_toStartOf="parent"
-                        android:layout_marginTop="516dp" app:layout_constraintTop_toTopOf="parent"/>
-        </RelativeLayout>
 </FrameLayout>

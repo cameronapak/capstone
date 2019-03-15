@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared
+package com.example.mobilemechanic.shared.Registration
 
 import android.app.Activity
 import android.content.Intent
@@ -115,7 +115,7 @@ class ProfilePictureActivity : AppCompatActivity() {
                 val downloadUrl = it.toString()
                 mFireStore?.collection("$ACCOUNT_DOC_PATH")
                     ?.document(uid)
-                    ?.update("basicInfo.photoUrl", "$downloadUrl")
+                    ?.update("chatUserInfo.photoUrl", "$downloadUrl")
                     ?.addOnSuccessListener {
                         Toast.makeText(this, "photoUrl saved successfully", Toast.LENGTH_LONG).show()
                         goToMainActivity(uid)
@@ -129,8 +129,7 @@ class ProfilePictureActivity : AppCompatActivity() {
             ?.document(uid)
             ?.get()
             ?.addOnSuccessListener {
-                val user = it.toObject(User::class.java)
-                if (user == null) return@addOnSuccessListener
+                val user = it.toObject(User::class.java) ?: return@addOnSuccessListener
 
                 val userType = user.userType
                 var intent = Intent()

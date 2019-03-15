@@ -1,8 +1,18 @@
 [
-    {
-      "brand": "toyota"
-    },
-    {
-      "brand": "honda"
-    }
+  {
+    "brand": "Honda",
+    "models": ["Accord", "Civic", "CR-V", "HR-V", "Passport", "Pilot", "Insight"]
+  },
+  {
+    "brand": "Lexus",
+    "models": ["CT", "GS", "GS 300", "GX", "IS", "IS 200", "IS-F", "LS", "LX"]
+  },
+  {
+    "brand": "Toyota",
+    "models": ["4-Runner", "Camry", "Avalon", "Corolla", "Highlander", "Hilux", "Land Cruiser", "Prius", "RAV4", "Tundra"]
+  },
+  {
+    "brand": "GDLS",
+    "models": ["M1 Abrams"]
+  }
 ]

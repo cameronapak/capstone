@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Dialog
 import android.view.View
 import android.widget.LinearLayout
+import com.algolia.instantsearch.core.helpers.Searcher
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 
@@ -13,9 +14,12 @@ import kotlinx.android.synthetic.main.dialog_container_basic.view.*
 class BasicDialog(parentActivity: Activity, container: View, bodyView: View)
     : Dialog(parentActivity)
 {
+    private lateinit var searcher: Searcher
+
     class Builder
     {
         companion object {
+
             var title = "Title"
             var positive = "Yes"
             var negative = "No"

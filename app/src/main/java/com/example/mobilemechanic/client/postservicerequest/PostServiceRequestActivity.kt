@@ -166,7 +166,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     {
         if(clientInfo == null) return
 
-        chatRoomsRef.whereEqualTo("clientInfo.uid", mAuth.currentUser!!.uid)
+        chatRoomsRef.whereEqualTo("chatUserInfo.uid", mAuth.currentUser!!.uid)
             .whereEqualTo("mechanicInfo.uid", serviceModel.mechanicInfo.uid)
             .get()
             .addOnSuccessListener {

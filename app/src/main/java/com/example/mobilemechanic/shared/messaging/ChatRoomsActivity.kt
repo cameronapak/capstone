@@ -55,6 +55,7 @@ class ChatRoomsActivity : AppCompatActivity()
                 chatRooms.clear()
                 for (doc in querySnapshot!!) {
                     val chatRoom = doc.toObject(ChatRoom::class.java)
+                    chatRoom.objectID = doc.id
                     chatRooms.add(chatRoom)
                 }
                 chatRoomListAdapter.notifyDataSetChanged()

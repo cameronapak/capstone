@@ -9,17 +9,25 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.model.adapter.MessageListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.model.messaging.ChatUserInfo
+import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_messages.*
 
-class MessagesActivity : AppCompatActivity() {
+class MessagesActivity : AppCompatActivity()
+{
 
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var messageListAdapter: MessageListAdapter
     private var messages = ArrayList<Message>()
+
     private lateinit var userType: UserType
+    private lateinit var chatRoom: ChatRoom
+    private lateinit var myInfo: ChatUserInfo
+    private lateinit var theirInfo: ChatUserInfo
+
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var chatRoomsRef: CollectionReference
@@ -31,7 +39,24 @@ class MessagesActivity : AppCompatActivity() {
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
-        setUpMessagesRecyclerView()
+        chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
+
+        when(userType)
+        {
+            UserType.CLIENT -> {
+                myInfo = chatRoom.clientInfo
+                theirInfo = chatRoom.mechanicInfo
+            }
+            UserType.MECHANIC -> {
+                myInfo = chatRoom.mechanicInfo
+                theirInfo = chatRoom.clientInfo
+            }
+        }
+
+        if(myInfo.isNewcomer)
+            sendGreetingMessage()
+        else
+            setUpMessagesRecyclerView()
     }
 
     private fun setUpMessagesRecyclerView(){
@@ -42,12 +67,11 @@ class MessagesActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = messageListAdapter
         }
-        mockData()
-        //reactiveServiceRecyclerView()
+        reactiveMessagesRecyclerView()
     }
 
-    private fun reactiveServiceRecyclerView() {
-        chatRoomsRef.whereEqualTo("mechanicInfo.uid", mAuth?.currentUser?.uid.toString())
+    private fun reactiveMessagesRecyclerView() {
+        chatRoomsRef.document(chatRoom.objectID).collection("Messages")
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
@@ -62,10 +86,29 @@ class MessagesActivity : AppCompatActivity() {
             }
     }
 
-    private fun mockData(){
-        for(i in 0..10){
-            messages.add(Message())
+    private fun sendGreetingMessage()
+    {
+        val myInfoField = when(userType){
+            UserType.CLIENT -> {"clientInfo"}
+            UserType.MECHANIC -> {"mechanicInfo"}
         }
+
+        chatRoomsRef.document(chatRoom.objectID).collection("Messages")
+            .whereEqualTo("$myInfoField.uid", mAuth.currentUser?.uid)
+            .get().addOnSuccessListener {
+                if(it.isEmpty)
+                {
+                    val contents = "${myInfo.firstName} joined the chat."
+                    val greetingMessage =
+                        Message(myInfo, contents, System.currentTimeMillis())
+                    chatRoomsRef.document(chatRoom.objectID).collection("Messages").document()
+                        .set(greetingMessage)
+                }
+                else
+                {
+                    setUpMessagesRecyclerView()
+                }
+            }
     }
 }
 

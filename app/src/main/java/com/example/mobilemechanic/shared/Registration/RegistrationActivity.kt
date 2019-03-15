@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.view.View
 import com.badoualy.stepperindicator.StepperIndicator
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.User
@@ -51,9 +50,8 @@ class RegistrationActivity : AppCompatActivity() {
 
 
     private fun setUpStepperIndicator() {
-        val pager = findViewById<ViewPager>(R.id.id_registrationPager)
+        val pager = findViewById<ViewPager>(R.id.id_registrationPager) as NonSwipeableViewPager
         pager.adapter = SectionsPagerAdapter(supportFragmentManager)
-        pager.setOnTouchListener(View.OnTouchListener { v, event -> true })
 
         val indicator = findViewById<StepperIndicator>(R.id.id_registrationStepper)
         indicator.apply {

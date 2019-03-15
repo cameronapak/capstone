@@ -16,8 +16,11 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
+import com.example.mobilemechanic.model.EXTRA_USER_TYPE
+import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.shared.SignInActivity
+import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_client_welcome.*
@@ -89,10 +92,12 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     startActivity(Intent(this, GarageActivity::class.java))
                     true
                 }
-//                R.id.id_messages ->{
-//                    val intent = Intent(this, ChatRoom)
-//                    true
-//                }
+                R.id.id_messages ->{
+                    val intent = Intent(this, ChatRoomsActivity::class.java)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    startActivity(intent)
+                    true
+                }
                 R.id.id_sign_out -> {
                     mAuth?.signOut()
                     Toast.makeText(this,"Logged Out",Toast.LENGTH_SHORT ).show()

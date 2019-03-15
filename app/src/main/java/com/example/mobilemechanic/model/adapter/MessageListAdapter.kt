@@ -21,7 +21,7 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageListAdapter.ViewHolder {
         val view = LayoutInflater.from(context)
-            .inflate(R.layout.recyclerview_item_chat_room, parent, false)
+            .inflate(R.layout.recyclerview_item_messages_card, parent, false)
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore?.collection(context.getString(R.string.ref_chatRooms))
         return ViewHolder(view)

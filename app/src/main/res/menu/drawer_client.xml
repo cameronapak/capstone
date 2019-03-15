@@ -23,10 +23,12 @@
 
     </group>
     <item android:title="Communicate">
+        <menu>
             <item
                     android:id="@+id/id_messages"
                     android:icon="@drawable/ic_people_black_24dp"
                     android:title="Messages"/>
+        </menu>
     </item>
 
     <group android:id="@+id/client_access_control">

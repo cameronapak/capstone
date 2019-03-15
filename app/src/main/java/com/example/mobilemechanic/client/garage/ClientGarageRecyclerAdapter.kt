@@ -1,7 +1,6 @@
 package com.example.mobilemechanic.client.garage
 
 import android.app.Activity
-import android.app.Dialog
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,7 +14,6 @@ import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -30,9 +28,9 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
-    private lateinit var basicDialog: Dialog
-    private lateinit var vehicleRef: CollectionReference
     private var vehicleBrands: ArrayList<VehicleBrand> = loadVehicleDataJSONFromAssets()
+    private lateinit var vehicleYearAdapter: HintSpinnerAdapter
+    private lateinit var vehicleMakeAdapter: HintSpinnerAdapter
     private lateinit var vehicleModelAdapter: HintSpinnerAdapter
     private lateinit var vehicleModelSpinner: Spinner
     private var allVehicleModel: ArrayList<String> = ArrayList()
@@ -63,11 +61,7 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
         holder.removeButton.setOnClickListener {
             Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] remove vehicle")
-            // TODO: Remove vehicle here.
-            // use document(vehicle.objectID) to tell firestore what document to remove
-
             removeItem(vehicle)
-
         }
 
         holder.updateButton.setOnClickListener {
@@ -80,19 +74,19 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             }.build(context, container, body)
 
             handleDialogOnClick(basicDialog, vehicle)
-            setUpSpinners(basicDialog)
+            setUpSpinners(basicDialog, vehicle)
             basicDialog.show()
 
         }
     }
 
-    // function to remove vehicle
     private fun removeItem(vehicle: Vehicle){
-        mFirestore?.collection("Accounts").document("${vehicle.objectID}" )
+        mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+            .document(vehicle.objectID)
             .delete().addOnSuccessListener {
-                Toast.makeText(context, "Removed Successfully", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Removed successfully", Toast.LENGTH_LONG).show()
             }.addOnFailureListener {
-                Toast.makeText(context, "Removed Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Removed failed", Toast.LENGTH_LONG).show()
             }
     }
 
@@ -109,43 +103,77 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             val model = basicDialog.id_vehicle_model.selectedItem.toString()
             Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] update dialog $year, $make, $model")
 
-            // TODO: Update vehicle to firestore here.
-            mFirestore?.document("${vehicle.objectID}")
-                .update(vehicle.year, year, vehicle.make, make, vehicle.model, model)
+            mFirestore?.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+                .document(vehicle.objectID)
+                .update(
+                    "year", year,
+                    "make", make,
+                    "model", model)
                 .addOnSuccessListener {
-                    Toast.makeText(context, "Updated Successfully", Toast.LENGTH_SHORT).show()
+                    Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] updated vehicle successfully")
+                    Toast.makeText(context, "Updated successfully", Toast.LENGTH_LONG).show()
                 }.addOnFailureListener {
-                    Toast.makeText(context, "Update Failed", Toast.LENGTH_SHORT).show()
+                    Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] updated vehicle fail")
+                    Toast.makeText(context, "Updated fail", Toast.LENGTH_LONG).show()
                 }
 
             basicDialog.dismiss()
         }
     }
 
-    private fun setUpSpinners(basicDialog: BasicDialog) {
-        yearSpinner(basicDialog)
-        makeSpinner(basicDialog)
-        modelSpinner(basicDialog)
+    private fun setUpSpinners(basicDialog: BasicDialog, vehicle: Vehicle) {
+        yearSpinner(basicDialog, vehicle)
+        makeSpinner(basicDialog, vehicle)
+        modelSpinner(basicDialog, vehicle)
     }
 
-    private fun yearSpinner(basicDialog: BasicDialog) {
+    private fun yearSpinner(basicDialog: BasicDialog, vehicle: Vehicle) {
         val years = ArrayList<String>()
         val currentYear = Calendar.getInstance().get(Calendar.YEAR)
         for (year in currentYear downTo MIN_YEAR) {
             years.add(year.toString())
         }
-        basicDialog.id_vehicle_year.adapter =
+        vehicleYearAdapter =
             HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, years, "Year")
+        basicDialog.id_vehicle_year.adapter = vehicleYearAdapter
+
+        val yearPosition = vehicleYearAdapter.getPosition(vehicle.year)
+        basicDialog.id_vehicle_year.setSelection(yearPosition)
     }
 
-    private fun makeSpinner(basicDialog: BasicDialog) {
+    private fun makeSpinner(basicDialog: BasicDialog, vehicle: Vehicle) {
         basicDialog.id_vehicle_make.onItemSelectedListener = this
         val makes = ArrayList<String>()
         vehicleBrands.forEach {
             makes.add(it.brand)
         }
-        basicDialog.id_vehicle_make.adapter =
+        vehicleMakeAdapter =
             HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, makes, "Make")
+        basicDialog.id_vehicle_make.adapter = vehicleMakeAdapter
+
+        val makePosition = vehicleMakeAdapter.getPosition(vehicle.make)
+        basicDialog.id_vehicle_make.setSelection(makePosition)
+    }
+
+    private fun modelSpinner(basicDialog: BasicDialog, vehicle: Vehicle) {
+        var selectedMake = VehicleBrand()
+        vehicleBrands.forEach {
+            if (it.brand == vehicle.make) {
+                selectedMake = it
+            }
+        }
+        allVehicleModel.clear()
+        allVehicleModel.addAll(selectedMake.models)
+
+        vehicleModelSpinner = basicDialog.findViewById(R.id.id_vehicle_model)
+        vehicleModelAdapter =
+            HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, allVehicleModel, "Model")
+        vehicleModelSpinner.adapter = vehicleModelAdapter
+
+        val modelPosition = vehicleModelAdapter.getPosition(vehicle.model)
+        Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] model position $modelPosition")
+        vehicleModelSpinner.setSelection(modelPosition)
+        vehicleModelAdapter.notifyDataSetChanged()
     }
 
     private fun loadVehicleDataJSONFromAssets(): ArrayList<VehicleBrand> {
@@ -168,13 +196,6 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         return vehicleMakes
     }
 
-    private fun modelSpinner(basicDialog: BasicDialog) {
-        vehicleModelAdapter =
-            HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, allVehicleModel, "Model")
-        vehicleModelSpinner = basicDialog.findViewById(R.id.id_vehicle_model)
-        vehicleModelSpinner.adapter = vehicleModelAdapter
-    }
-
     override fun getItemCount() = dataset.size
 
     override fun onNothingSelected(p0: AdapterView<*>?) {}
@@ -187,9 +208,9 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             }
         }
         allVehicleModel.clear()
+        allVehicleModel.add("Models")
         allVehicleModel.addAll(selectedMake.models)
-        vehicleModelAdapter = HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, allVehicleModel, "Model")
-        vehicleModelSpinner.adapter = vehicleModelAdapter
+        vehicleModelAdapter.notifyDataSetChanged()
         Log.d(CLIENT_TAG, "[GarageActivity] models $allVehicleModel")
     }
 

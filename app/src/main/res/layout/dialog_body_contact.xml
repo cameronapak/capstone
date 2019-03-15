@@ -8,7 +8,6 @@
     <de.hdodenhof.circleimageview.CircleImageView
             style="@style/AppCircleImageViewSmall"
             android:id="@+id/id_mechanic_profile_image"
-            android:src="@drawable/chan_profile_cropped"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
             android:layout_marginTop="8dp"

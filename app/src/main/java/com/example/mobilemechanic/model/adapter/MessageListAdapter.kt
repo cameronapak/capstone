@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.UserType
@@ -33,7 +34,9 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         //setup cardview stuff here
-        val name = itemView.findViewById<TextView>(R.id.id_name)
+        val chatlog = itemView.findViewById<TextView>(R.id.id_chat_log_field)
+        val sendBtn = itemView.findViewById<Button>(R.id.id_send_msg_btn)
+        val timelog = itemView.findViewById<TextView>(R.id.id_text_timestamp)
     }
 
     override fun onBindViewHolder(holder: MessageListAdapter.ViewHolder, position: Int) {

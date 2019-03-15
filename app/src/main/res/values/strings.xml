@@ -154,5 +154,7 @@
     <string name="text_review">Review</string>
     <string name="label_message_btn">Message</string>
     <string name="label_call_btn">Call</string>
+    <string name="label_chatlog">Enter Message</string>
+    <string name="label_send_msg_btn">Send</string>
 
 </resources>

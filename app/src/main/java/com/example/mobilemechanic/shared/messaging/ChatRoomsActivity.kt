@@ -46,7 +46,11 @@ class ChatRoomsActivity : AppCompatActivity()
     }
 
     private fun reactiveChatRoomRecyclerView() {
-        chatRoomsRef.whereEqualTo("mechanicInfo.uid", mAuth?.currentUser?.uid.toString())
+        val myInfoField = when(userType){
+            UserType.CLIENT -> {"clientInfo"}
+            UserType.MECHANIC -> {"mechanicInfo"}
+        }
+        chatRoomsRef.whereEqualTo("$myInfoField.uid", mAuth?.currentUser?.uid.toString())
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener

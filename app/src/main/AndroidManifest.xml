@@ -19,9 +19,9 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".mechanic.messaging.MechanicChatRooms">
+        <activity android:name="com.example.mobilemechanic.shared.messaging.ChatRoomsActivity">
         </activity>
-        <activity android:name=".mechanic.messaging.MechanicMessages">
+        <activity android:name="com.example.mobilemechanic.shared.messaging.MessagesActivity">
         </activity>
         <activity android:name=".client.detail.ServiceDetailActivity">
         </activity>

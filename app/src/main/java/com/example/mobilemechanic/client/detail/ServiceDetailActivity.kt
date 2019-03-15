@@ -17,9 +17,12 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.mechanic.map.MY_PERMISSION_REQ_GPS
+import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -32,6 +35,7 @@ import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_service_detail.*
 import kotlinx.android.synthetic.main.client_card_vehicle_container.view.*
 import kotlinx.android.synthetic.main.dialog_body_contact.*
@@ -91,6 +95,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     private fun setUpVehicleContainer(request: Request)
     {
         val holder = id_client_more_info_card
+        Picasso.get().load(request?.vehicle?.photoUrl).into(holder.id_client_car_image)
         holder.id_client_car_title.text = "${request.vehicle?.year} ${request.vehicle?.make} ${request.vehicle?.model}"
         holder.id_service_completed.text = request.service?.serviceType
         val address = request.clientInfo!!.address
@@ -104,22 +109,13 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getSummary(request: Request): String {
-//        var subTotal = java.lang.String.format("%-15s %15s", "Subtotal", request.receipt?.subTotal)
-//        var estimatedTax = java.lang.String.format("%-15s %15s", "Estimated tax", request.receipt?.estimatedTax)
-//        var grandTotal = java.lang.String.format("%-15s %15s", "Grand total", request.receipt?.grandTottal)
-//
-//        var summary = "${subTotal}\n${estimatedTax}\n\n${grandTotal}"
-
-
+//        var sub = request.receipt?.subTotal
+//        var tax = request.receipt?.estimatedTax
+//        var total = request.receipt?.grandTottal
         //mock summary
         var sub = 0.00F
         var tax = 0.00F
         var total = 0.00F
-
-//        var subTotal = "Subtotal"
-//        var estimatedTax = "Estimated Tax"
-//        var grandTotal = "Grand Total"
-
 
         var subTotal = java.lang.String.format("%s %18s %.2f", "Subtotal", "$", sub)
         var estimatedTax = java.lang.String.format("%s %6s %.2f", "Estimated tax", "$", tax)
@@ -236,7 +232,11 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             }
         }
         basicDialog.id_negative.setOnClickListener {
-
+            //navigates to MessagesActivity
+            val intent = Intent(this, ChatRoomsActivity::class.java)
+            intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+            startActivity(intent)
+            true
         }
     }
 

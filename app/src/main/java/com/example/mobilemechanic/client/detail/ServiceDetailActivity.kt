@@ -14,9 +14,11 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.mechanic.map.MY_PERMISSION_REQ_GPS
 import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.DateTimeManager
@@ -27,55 +29,101 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_service_detail.*
 import kotlinx.android.synthetic.main.client_card_vehicle_container.view.*
 import kotlinx.android.synthetic.main.dialog_body_contact.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
+import java.util.*
 
 class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var request: Request
+    private lateinit var extraRequest: Request
     private lateinit var mMap: GoogleMap
     private lateinit var basicDialog: Dialog
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var requestRef: CollectionReference
 
     val REQUEST_PHONE_CALL = 1
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service_detail)
+
         setUpServiceDetailActivity()
     }
 
     private fun setUpServiceDetailActivity() {
+        initFireStore()
         getRequestParcel()
-        setUpVehicleContainer()
+        getRequest()
         setUpMap()
-        setUpToolBar()
     }
 
     private fun getRequestParcel() {
-        request = intent.getParcelableExtra(EXTRA_REQUEST)
+        extraRequest = intent.getParcelableExtra(EXTRA_REQUEST)
     }
 
-    private fun setUpVehicleContainer()
+    private fun initFireStore() {
+        mAuth = FirebaseAuth.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+        requestRef = mFirestore.collection("Requests")
+    }
+
+    private fun getRequest() {
+        requestRef.document(extraRequest.objectID).get()
+            .addOnSuccessListener {
+                val request = it.toObject(Request::class.java)!!
+
+                request.objectID = it.id
+                Log.d(CLIENT_TAG, "[ServiceDetailActivity] Request ID: ${request.objectID}")
+
+                setUpVehicleContainer(request)
+                setUpToolBar(request)
+            }
+            .addOnFailureListener {
+                finish()
+            }
+    }
+
+    private fun setUpVehicleContainer(request: Request)
     {
         val holder = id_client_more_info_card
         holder.id_client_car_title.text = "${request.vehicle?.year} ${request.vehicle?.make} ${request.vehicle?.model}"
         holder.id_service_completed.text = request.service?.serviceType
         val address = request.clientInfo!!.address
         holder.id_client_address.text = "${address.street}\n${address.city}, ${address.state} ${address.zipCode}"
-        holder.id_summary.text = getSummary()
+        holder.id_summary.text = getSummary(request)
         holder.id_mechanic.text = "${request.mechanicInfo!!.basicInfo.firstName} ${request.mechanicInfo!!.basicInfo.lastName}"
 
         holder.id_contact.setOnClickListener {
-            setUpContactServiceDialog()
+            setUpContactServiceDialog(request)
         }
     }
 
-    private fun getSummary(): String {
-        var subTotal = java.lang.String.format("%-15s %15s", "Subtotal", request.receipt?.subTotal)
-        var estimatedTax = java.lang.String.format("%-15s %15s", "Estimated tax", request.receipt?.estimatedTax)
-        var grandTotal = java.lang.String.format("%-15s %15s", "Grand total", request.receipt?.grandTottal)
+    private fun getSummary(request: Request): String {
+//        var subTotal = java.lang.String.format("%-15s %15s", "Subtotal", request.receipt?.subTotal)
+//        var estimatedTax = java.lang.String.format("%-15s %15s", "Estimated tax", request.receipt?.estimatedTax)
+//        var grandTotal = java.lang.String.format("%-15s %15s", "Grand total", request.receipt?.grandTottal)
+//
+//        var summary = "${subTotal}\n${estimatedTax}\n\n${grandTotal}"
+
+
+        //mock summary
+        var sub = 0.00F
+        var tax = 0.00F
+        var total = 0.00F
+
+//        var subTotal = "Subtotal"
+//        var estimatedTax = "Estimated Tax"
+//        var grandTotal = "Grand Total"
+
+
+        var subTotal = java.lang.String.format("%s %18s %.2f", "Subtotal", "$", sub)
+        var estimatedTax = java.lang.String.format("%s %6s %.2f", "Estimated tax", "$", tax)
+        var grandTotal = java.lang.String.format("%s %13s %.2f", "Grand total", "$", total)
 
         var summary = "${subTotal}\n${estimatedTax}\n\n${grandTotal}"
 
@@ -110,7 +158,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         //convert the address string into latitude, longitude pair for google maps
-        val address = request.clientInfo!!.address
+        val address = extraRequest.clientInfo!!.address
         val clientAddress = "${address.street} ${address.city}, ${address.state} ${address.zipCode}"
         val clientLatLng = AddressManager.convertAddress(this, clientAddress)
 
@@ -142,7 +190,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
             REQUEST_PHONE_CALL->{
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    startCall()
+                    startCall(extraRequest)
                 else//request permission
                     //context, constant for access call, permission request code
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
@@ -152,7 +200,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     @SuppressLint("MissingPermission")
-    private fun setUpContactServiceDialog() {
+    private fun setUpContactServiceDialog(request: Request) {
 
         val dialogContainer =
             layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
@@ -178,7 +226,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             if(ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
             {
-                startCall()
+                startCall(request)
             }
             else//request permission
             {
@@ -193,7 +241,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     @SuppressLint("MissingPermission")
-    fun startCall(){
+    fun startCall(request: Request){
         val phoneNum = request.mechanicInfo?.basicInfo?.phoneNumber
             ?.replace("[^0-9\\+]".toRegex(), "")
 
@@ -201,7 +249,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         startActivity(intent)
     }
 
-    private fun setUpToolBar() {
+    private fun setUpToolBar(request: Request) {
         setSupportActionBar(id_service_detail_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {

@@ -10,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.DateTimeManager
+import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.dialog_container_basic.*
@@ -22,6 +24,8 @@ import java.util.*
 
 class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList<Request>) :
     RecyclerView.Adapter<ClientRequestRecyclerAdapter.ViewHolder>() {
+
+    private var mFirestore = FirebaseFirestore.getInstance()
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val name = itemView.findViewById<TextView>(R.id.id_mechanic_name)
@@ -92,7 +96,7 @@ class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList
             }.build(context, container, body)
             basicDialog.show()
 
-            handleDialogClick(basicDialog)
+            handleCancelDialogOnClick(basicDialog, request)
         }
 
         if (request.status == Status.Active) {
@@ -115,11 +119,15 @@ class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList
         }
     }
 
-    private fun handleDialogClick(basicDialog: Dialog) {
+    private fun handleCancelDialogOnClick(basicDialog: Dialog, request: Request) {
         basicDialog.id_positive.setOnClickListener {
-            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] confirm cancel request")
-            // TODO: cancel request
-
+            Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] confirm cancel request ${request.objectID}")
+            mFirestore.collection("Requests").document(request.objectID)
+                .delete().addOnSuccessListener {
+                    Toast.makeText(context, "Cancel request successfully", Toast.LENGTH_LONG).show()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Cancel request failed", Toast.LENGTH_LONG).show()
+                }
             basicDialog.dismiss()
         }
 

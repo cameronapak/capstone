@@ -151,6 +151,11 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         }
     }
 
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
+    }
+
     override fun onResume() {
         ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()

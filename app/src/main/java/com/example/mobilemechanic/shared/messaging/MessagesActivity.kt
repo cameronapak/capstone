@@ -2,7 +2,9 @@ package com.example.mobilemechanic.shared.messaging
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
@@ -63,6 +65,7 @@ class MessagesActivity : AppCompatActivity()
             sendMessage(id_chat_log_field.text.toString())
             id_chat_log_field.setText("")
         }
+        setUpActionBar()
     }
 
     private fun setUpMessagesRecyclerView(){
@@ -93,6 +96,15 @@ class MessagesActivity : AppCompatActivity()
                 messageListAdapter.notifyDataSetChanged()
                 viewManager.scrollToPosition(messageListAdapter.itemCount - 1)
             }
+    }
+
+    private fun setUpActionBar() {
+        setSupportActionBar(id_messages_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = myInfo.firstName
+            setDisplayHomeAsUpEnabled(true)
+        }
     }
 
     private fun sendMessage(contents: String)
@@ -136,6 +148,11 @@ class MessagesActivity : AppCompatActivity()
                     setUpMessagesRecyclerView()
                 }
             }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }
 

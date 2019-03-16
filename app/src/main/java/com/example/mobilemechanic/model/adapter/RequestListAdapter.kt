@@ -21,6 +21,7 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
@@ -34,7 +35,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private lateinit var requestRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_client_profile_image)
+        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_client_requesting_image)
         val name = itemView.findViewById<TextView>(R.id.id_client_name)
         val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
         val description = itemView.findViewById<TextView>(R.id.id_description)
@@ -66,6 +67,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
+        holder.serviceType.text = "${request.service?.serviceType} for ${request.vehicle}"
         holder.description.text = request.comment
         holder.distance.text = context.getString(R.string.miles, getDistance(request))
         holder.timeStamp.text = if (request.acceptedOn!! > 0) {
@@ -80,6 +82,12 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             context.getString(R.string.request_on, date)
         }
 
+        if (request.clientInfo?.basicInfo?.photoUrl.isNullOrEmpty()) {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profilePhoto)
+        } else {
+            Picasso.get().load(Uri.parse(request.clientInfo?.basicInfo?.photoUrl)).into(holder.profilePhoto)
+        }
+
         holder.secondaryButton.setOnClickListener {
             handleSecondaryOnClick(request)
         }
@@ -88,7 +96,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             handlePrimaryOnClick(request)
         }
 
-        holder.directionsButton.setOnClickListener{
+        holder.directionsButton.setOnClickListener {
             handleDirectionsOnClick(request)
         }
     }
@@ -100,7 +108,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             holder.directionsButton.visibility = View.GONE
         }
 
-        if (request.status == Status.Active){
+        if (request.status == Status.Active) {
             holder.primaryButton.text = context.getString(R.string.label_choice_complete)
             holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
             holder.directionsButton.visibility = View.VISIBLE
@@ -112,7 +120,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             createAcceptDialog(request)
         }
 
-        if (request.status == Status.Active){
+        if (request.status == Status.Active) {
             createCompleteDialog(request)
         }
     }
@@ -131,8 +139,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         }
     }
 
-    private fun handleDirectionsOnClick(request: Request)
-    {
+    private fun handleDirectionsOnClick(request: Request) {
         val address = AddressManager.getFullAddress(request.clientInfo!!.address)
         val latLong = AddressManager.convertAddress(context, address)
 
@@ -148,33 +155,31 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         context.startActivity(intent)
     }
 
-    private fun createAcceptDialog(request: Request)
-    {
+    private fun createAcceptDialog(request: Request) {
         val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = context.layoutInflater.inflate(R.layout.dialog_body_choice, null)
-        val acceptDialog = BasicDialog.Builder.apply{
+        val acceptDialog = BasicDialog.Builder.apply {
             title = context.getString(R.string.label_choice_accept)
             positive = context.getString(R.string.yes)
             negative = context.getString(R.string.label_cancel_add_service)
         }.build(context, container, dialogBody)
-        acceptDialog .show()
+        acceptDialog.show()
 
         acceptDialog.id_positive.setOnClickListener {
             acceptRequest(request)
-            acceptDialog .dismiss()
+            acceptDialog.dismiss()
         }
 
         acceptDialog.id_negative.setOnClickListener {
-            acceptDialog .dismiss()
+            acceptDialog.dismiss()
         }
     }
 
-    private fun createCompleteDialog(request: Request)
-    {
+    private fun createCompleteDialog(request: Request) {
         val container = context.layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = context.layoutInflater.inflate(R.layout.dialog_body_complete, null)
 
-        val completeDialog = BasicDialog.Builder.apply{
+        val completeDialog = BasicDialog.Builder.apply {
             title = context.getString(R.string.label_choice_complete)
             positive = context.getString(R.string.label_choice_confirm)
             negative = context.getString(R.string.text_cancel)
@@ -195,8 +200,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     private fun acceptRequest(request: Request) {
         val acceptedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
-            .update("status", Status.Active,
-                "acceptedOn", acceptedOn)
+            .update(
+                "status", Status.Active,
+                "acceptedOn", acceptedOn
+            )
             ?.addOnSuccessListener {
                 Toast.makeText(context, "Accepted successfully", Toast.LENGTH_SHORT).show()
             }
@@ -217,8 +224,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             }
     }
 
-    private fun getDistance(request: Request) : Double
-    {
+    private fun getDistance(request: Request): Double {
         val clientAddress = AddressManager.getFullAddress(request.clientInfo!!.address)
         val mechanicAddress = AddressManager.getFullAddress(request.mechanicInfo!!.address)
         val clientLatLng = AddressManager.convertAddress(context, clientAddress)

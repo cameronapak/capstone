@@ -13,7 +13,7 @@
             app:civ_border_color="@color/colorPrimary3"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            android:id="@+id/id_client_profile_image"
+            android:id="@+id/id_client_requesting_image"
             android:src="@drawable/chan_profile_cropped"
             android:layout_alignParentTop="true"
             android:layout_alignParentStart="true"
@@ -47,8 +47,8 @@
             android:id="@+id/id_client_name"
             android:fontFamily="@font/roboto_bold"
             android:textColor="@color/colorGrayTextDark2"
-            app:layout_constraintTop_toTopOf="@+id/id_client_profile_image"
-            app:layout_constraintStart_toEndOf="@+id/id_client_profile_image" android:layout_marginStart="16dp"/>
+            app:layout_constraintTop_toTopOf="@+id/id_client_requesting_image"
+            app:layout_constraintStart_toEndOf="@+id/id_client_requesting_image" android:layout_marginStart="16dp"/>
     <TextView
             android:text="Post on Jan 24, 2019"
             android:layout_width="wrap_content"

@@ -126,10 +126,10 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         return@addSnapshotListener
                     }
 
-                    var clientInfo = extractUserInfo(snapshot)
+                    clientInfo = extractUserInfo(snapshot)
                     if (clientInfo != null) {
                         val request = Request.Builder()
-                            .clientInfo(clientInfo)
+                            .clientInfo(clientInfo!!)
                             .mechanicInfo(serviceModel.mechanicInfo)
                             .service(serviceModel.service)
                             .vehicle(vehicle)
@@ -183,6 +183,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 }
                 else
                     startActivity(Intent(this, ClientWelcomeActivity::class.java))
+            }.addOnFailureListener {
+                Toast.makeText(this, "Chat room creation failed.", Toast.LENGTH_LONG).show()
             }
     }
 

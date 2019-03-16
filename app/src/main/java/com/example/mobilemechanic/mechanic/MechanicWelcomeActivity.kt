@@ -114,7 +114,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Welcome"
-            subtitle = "Mechanic: Jason Statham"
+            subtitle = "${mAuth?.currentUser?.displayName}"
             setDisplayHomeAsUpEnabled(true)
             setHomeAsUpIndicator(R.drawable.ic_menu)
         }

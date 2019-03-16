@@ -78,7 +78,7 @@
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.Registration.RegistrationActivity">
+        <activity android:name=".shared.registration.RegistrationActivity">
         </activity>
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>

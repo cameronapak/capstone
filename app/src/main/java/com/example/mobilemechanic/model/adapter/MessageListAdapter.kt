@@ -3,13 +3,10 @@ package com.example.mobilemechanic.model.adapter
 import android.app.Activity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.TextView
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference

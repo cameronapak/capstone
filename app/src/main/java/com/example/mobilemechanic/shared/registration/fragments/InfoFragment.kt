@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared.Registration.fragments
+package com.example.mobilemechanic.shared.registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Paint
@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
+import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : Fragment() {

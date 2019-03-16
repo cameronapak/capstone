@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared.Registration.fragments
+package com.example.mobilemechanic.shared.registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -24,7 +24,7 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
-import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
+import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import com.example.mobilemechanic.shared.USER_TAG
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult

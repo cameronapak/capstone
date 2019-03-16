@@ -208,7 +208,6 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }.build(this, dialogContainer, dialogBody)
 
         val basicInfo = request.mechanicInfo!!.basicInfo
-        Picasso.get().load(basicInfo?.photoUrl).into(basicDialog.id_contact_user_profile_image)
         basicDialog.id_phone_number.text = basicInfo.phoneNumber
         basicDialog.id_show_client_name.text = "${basicInfo.firstName}  ${basicInfo.lastName}"
 

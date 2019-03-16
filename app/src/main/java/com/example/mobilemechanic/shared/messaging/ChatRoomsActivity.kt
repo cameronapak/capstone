@@ -2,7 +2,9 @@ package com.example.mobilemechanic.shared.messaging
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
@@ -32,6 +34,7 @@ class ChatRoomsActivity : AppCompatActivity()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
         setUpChatRoomRecyclerView()
+        setUpActionBar()
     }
 
     private fun setUpChatRoomRecyclerView(){
@@ -64,5 +67,20 @@ class ChatRoomsActivity : AppCompatActivity()
                 }
                 chatRoomListAdapter.notifyDataSetChanged()
             }
+    }
+
+    private fun setUpActionBar() {
+        setSupportActionBar(id_chat_room_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "Messaging"
+            subtitle = "Active messages"
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return true
     }
 }

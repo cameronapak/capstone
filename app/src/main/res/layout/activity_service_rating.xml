@@ -114,7 +114,7 @@
                 android:id="@+id/id_rating_question"
                 android:fontFamily="@font/qualio_bold" android:textSize="24sp"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="112dp"
-                android:textColor="@color/colorPrimary3" android:textAlignment="center"
+                android:textColor="@color/colorGrayTextDark2" android:textAlignment="center"
                 app:layout_constraintStart_toStartOf="parent"
                 android:text="How was?" app:layout_constraintEnd_toEndOf="parent"/>
         <TextView
@@ -124,7 +124,7 @@
                 android:fontFamily="@font/qualio_bold" android:textSize="24sp"
                 app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="272dp"
                 app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="105dp"
-                android:textColor="@color/colorHeaderDark" android:textAlignment="center"
+                android:textColor="@color/colorGrayTextDark2" android:textAlignment="center"
                 android:text="@string/text_rating_wrong"/>
     </android.support.constraint.ConstraintLayout>
 

@@ -16,7 +16,10 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.garage.GarageActivity
-import com.example.mobilemechanic.model.*
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.model.User
+import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
@@ -167,7 +170,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     {
         if(clientInfo == null) return
 
-        chatRoomsRef.whereEqualTo("chatUserInfo.uid", mAuth.currentUser!!.uid)
+        chatRoomsRef.whereEqualTo("clientInfo.uid", mAuth.currentUser!!.uid)
             .whereEqualTo("mechanicInfo.uid", serviceModel.mechanicInfo.uid)
             .get()
             .addOnSuccessListener {

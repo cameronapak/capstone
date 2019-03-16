@@ -31,6 +31,7 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
@@ -172,10 +173,25 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     private fun createUserAccountOnFirebase(user: User) {
-        mAuth?.createUserWithEmailAndPassword(user.basicInfo.email, user.password)
+        // get Firebase token
+        FirebaseInstanceId.getInstance().instanceId
             ?.addOnCompleteListener {
-                handleAccountCreationSuccess(it, user)
+                if (!it.isSuccessful) {
+                    return@addOnCompleteListener
+                }
+
+                val token = it.result?.token
+                if (token != null) {
+                    user.fcmToken = token
+                }
+
+                mAuth?.createUserWithEmailAndPassword(user.basicInfo.email, user.password)
+                    ?.addOnCompleteListener {
+                        handleAccountCreationSuccess(it, user)
+                    }
+
             }
+
     }
 
     private fun handleAccountCreationSuccess(it: Task<AuthResult>, user: User) {

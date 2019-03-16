@@ -19,7 +19,6 @@ import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.mechanic.map.MY_PERMISSION_REQ_GPS
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
@@ -40,7 +39,6 @@ import kotlinx.android.synthetic.main.activity_service_detail.*
 import kotlinx.android.synthetic.main.client_card_vehicle_container.view.*
 import kotlinx.android.synthetic.main.dialog_body_contact.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
-import java.util.*
 
 class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -246,7 +244,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         val phoneNum = request.mechanicInfo?.basicInfo?.phoneNumber
             ?.replace("[^0-9\\+]".toRegex(), "")
 
-        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + phoneNum))
+        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNum"))
         startActivity(intent)
     }
 

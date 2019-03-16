@@ -3,7 +3,9 @@ package com.example.mobilemechanic.mechanic.map
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -14,6 +16,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
+import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
@@ -27,14 +30,11 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_mechanic_manage_job.*
 import kotlinx.android.synthetic.main.card_vehicle_container.view.*
-import kotlinx.android.synthetic.main.dialog_body_contact.view.*
-import kotlinx.android.synthetic.main.dialog_container_basic.*
-import android.content.Intent
-import android.net.Uri
-import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import kotlinx.android.synthetic.main.dialog_body_contact.*
+import kotlinx.android.synthetic.main.dialog_container_basic.*
 
 
 class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
@@ -124,11 +124,15 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         }.build(this, dialogContainer, dialogBody)
 
         val basicInfo = request.clientInfo!!.basicInfo
+        basicDialog.id_phone_number.text = basicInfo.phoneNumber
+        basicDialog.id_show_client_name.text = "${basicInfo.firstName}  ${basicInfo.lastName}"
 
-        val showPhone= basicInfo.phoneNumber
-        val showName = "${basicInfo.firstName}  ${basicInfo.lastName}"
-        basicDialog.id_phone_number.text = showPhone
-        basicDialog.id_show_client_name.text = showName
+        if (basicInfo?.photoUrl.isNullOrEmpty()) {
+            Log.d(MECHANIC_TAG, "[MechanicManagerJobActivity] client photo ${basicInfo.photoUrl}")
+            Picasso.get().load(R.drawable.ic_circle_profile).into(basicDialog.id_contact_user_profile_image)
+        } else {
+            Picasso.get().load(Uri.parse(basicInfo?.photoUrl)).into(basicDialog.id_contact_user_profile_image)
+        }
 
         basicDialog.show()
 

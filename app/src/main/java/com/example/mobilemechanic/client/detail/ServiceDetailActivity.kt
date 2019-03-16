@@ -208,12 +208,15 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }.build(this, dialogContainer, dialogBody)
 
         val basicInfo = request.mechanicInfo!!.basicInfo
+        Picasso.get().load(basicInfo?.photoUrl).into(basicDialog.id_contact_user_profile_image)
+        basicDialog.id_phone_number.text = basicInfo.phoneNumber
+        basicDialog.id_show_client_name.text = "${basicInfo.firstName}  ${basicInfo.lastName}"
 
-        val showPhone= basicInfo.phoneNumber
-        val showName = "${basicInfo.firstName}  ${basicInfo.lastName}"
-        Picasso.get().load(basicInfo?.photoUrl).into(basicDialog.id_mechanic_profile_image)
-        basicDialog.id_phone_number.text = showPhone
-        basicDialog.id_show_client_name.text = showName
+        if (basicInfo?.photoUrl.isNullOrEmpty()) {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(basicDialog.id_contact_user_profile_image)
+        } else {
+            Picasso.get().load(Uri.parse(basicInfo?.photoUrl)).into(basicDialog.id_contact_user_profile_image)
+        }
 
         basicDialog.show()
 

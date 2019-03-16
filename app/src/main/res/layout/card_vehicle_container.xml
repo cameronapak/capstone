@@ -27,20 +27,21 @@
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/id_service_needed_title" android:layout_marginTop="12dp"
+            android:id="@+id/id_service_needed_title"
             app:layout_constraintTop_toBottomOf="@+id/id_car_image" app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="60dp" android:text="@string/text_service_needed" android:textSize="18sp"
-            android:textColor="@color/colorHeaderDark" android:fontFamily="@font/qualio_bold"/>
+            android:text="@string/text_service_needed" android:textSize="18sp"
+            android:textColor="@color/colorHeaderDark" android:fontFamily="@font/qualio_bold"
+            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toStartOf="@+id/id_address_title"/>
     <TextView
             android:text="@string/text_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id_address_title"
             app:layout_constraintTop_toTopOf="@+id/id_service_needed_title"
-            app:layout_constraintStart_toEndOf="@+id/id_service_needed_title"
-            android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="8dp" android:textSize="18sp" android:textColor="@color/colorHeaderDark"
-            android:fontFamily="@font/qualio_bold"/>
+            android:textSize="18sp" android:textColor="@color/colorHeaderDark"
+            android:fontFamily="@font/qualio_bold" app:layout_constraintStart_toEndOf="@+id/id_service_needed_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5" android:layout_marginEnd="28dp"/>
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"

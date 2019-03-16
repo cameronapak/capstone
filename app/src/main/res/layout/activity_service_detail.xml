@@ -14,26 +14,27 @@
                 app:subtitleTextAppearance="@style/AppActionBarSubtitle"
                 android:id="@+id/id_service_detail_toolbar"/>
         <ImageView
-                android:layout_marginTop="79dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/id_more_toolbar"
+                android:scaleType="centerInside"
+                android:adjustViewBounds="true"
+                android:layout_below="@id/id_service_detail_toolbar"
                 map:srcCompat="@drawable/bg_more"
                 android:id="@+id/bg_more"/>
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="284dp"
+                android:layout_height="match_parent"
                 android:layout_below="@id/bg_more"
                 android:id="@+id/map"
                 tools:context=".mechanic.map.MechanicMoreInformationActivity"
-                android:name="com.google.android.gms.maps.SupportMapFragment" android:layout_marginTop="1dp"/>
+                android:name="com.google.android.gms.maps.SupportMapFragment"/>
         <include layout="@layout/client_card_vehicle_container"
-                 android:layout_marginTop="95dp"
+                 android:layout_marginTop="20dp"
                  android:layout_width="347dp"
                  android:layout_height="342dp"
                  android:layout_gravity="center"
                  android:layout_centerHorizontal="true"
-                 android:layout_below="@+id/id_more_toolbar"
+                 android:layout_below="@+id/id_service_detail_toolbar"
                  android:id="@+id/id_client_more_info_card"></include>
     </RelativeLayout>
 

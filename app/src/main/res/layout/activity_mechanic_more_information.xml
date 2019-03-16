@@ -23,7 +23,7 @@
                 android:id="@+id/bg_more"/>
         <fragment
                 android:layout_width="match_parent"
-                android:layout_height="355dp"
+                android:layout_height="match_parent"
                 android:layout_below="@id/bg_more"
                 android:id="@+id/map"
                 tools:context=".mechanic.map.MechanicMoreInformationActivity"
@@ -31,12 +31,11 @@
         <include layout="@layout/card_vehicle_container"
                  android:layout_marginTop="20dp"
                  android:layout_width="347dp"
-                 android:layout_height="342dp"
+                 android:layout_height="350dp"
                  android:layout_gravity="center"
                  android:layout_centerHorizontal="true"
                  android:layout_below="@+id/id_more_toolbar"
                  android:id="@+id/id_mechanic_more_info_card"></include>
-
     </RelativeLayout>
 
 </FrameLayout>

@@ -164,5 +164,6 @@
     <string name="label_call_btn">Call</string>
     <string name="label_chatlog">Enter Message</string>
     <string name="label_send_msg_btn">Send</string>
+    <string name="text_check_faq">Have question? Check our FAQ page.</string>
 
 </resources>

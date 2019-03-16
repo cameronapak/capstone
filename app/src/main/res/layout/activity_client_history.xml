@@ -5,9 +5,11 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".client.history.ClientHistoryActivity" android:id="@+id/frameLayout">
+        tools:context=".client.history.ClientHistoryActivity"
+        android:id="@+id/frameLayout">
 
     <android.support.constraint.ConstraintLayout
+            android:id="@+id/id_main_body"
             android:layout_width="411dp"
             android:background="@drawable/round_corner_bottom"
             android:elevation="5dp"
@@ -43,5 +45,15 @@
                 app:layout_constraintBottom_toBottomOf="parent" tools:layout_editor_absoluteX="0dp"
                 android:background="@drawable/bottom_bg2"
                 android:contentDescription="bottom @string/bottom_sheet_behavior"/>
-
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_get_started"
+            android:layout_gravity="center|bottom"
+            android:gravity="center"
+            android:textColor="@color/colorPrimary"
+            android:textAlignment="center"
+            android:fontFamily="@font/roboto_light"
+            android:layout_marginBottom="66dp"
+            android:text="@string/text_check_faq"/>
 </FrameLayout>

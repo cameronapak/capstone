@@ -12,6 +12,8 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
+import android.widget.Toast
+import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
@@ -53,7 +55,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setUpMechanicWelcomeActivity() {
-        mockLogin()       // Replace with real login later
+        //mockLogin()       // Replace with real login later
         setUpToolBar()
         setUpDrawerMenu()
         setUpNavigationListener()
@@ -171,6 +173,12 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_settings -> {
+                    true
+                }
+                R.id.id_mech_sign_out->{
+                    mAuth?.signOut()
+                    Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
+                    startActivity(Intent(this, MainActivity::class.java))
                     true
                 }
                 else -> {

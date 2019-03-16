@@ -27,7 +27,7 @@
     </group>
 
     <group android:id="@+id/client_access_control">
-        <item android:id="@+id/id_sign_out"
+        <item android:id="@+id/id_mech_sign_out"
               android:layout_centerVertical="true"
               android:title="@string/text_sign_out" android:icon="@drawable/ic_exit_app_gray_24dp"/>
     </group>

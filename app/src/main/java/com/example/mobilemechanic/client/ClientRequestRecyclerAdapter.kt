@@ -123,7 +123,7 @@ class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList
         basicDialog.id_positive.setOnClickListener {
             Log.d(CLIENT_TAG, "[ClientRequestRecyclerAdapter] confirm cancel request ${request.objectID}")
             mFirestore.collection("Requests").document(request.objectID)
-                .delete().addOnSuccessListener {
+                .update("status", Status.Cancelled).addOnSuccessListener {
                     Toast.makeText(context, "Cancel request successfully", Toast.LENGTH_LONG).show()
                 }.addOnFailureListener {
                     Toast.makeText(context, "Cancel request failed", Toast.LENGTH_LONG).show()

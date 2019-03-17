@@ -14,7 +14,8 @@ object AddressManager
     {
         val geoCoder = Geocoder(context)
         val addressList = geoCoder.getFromLocationName(address, 1)
-        return LatLng(addressList[0].latitude, addressList[0].longitude)
+        return if (addressList.size > 0) LatLng(addressList[0].latitude, addressList[0].longitude)
+        else LatLng(35.656017, -97.473716)
     }
 
     fun getDistanceKM(clientLatLng: LatLng, mechanicLatLng: LatLng) : Double

@@ -112,6 +112,8 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
             positive = "Update"
             negative = "Cancel"
         }.build(context, dialogContainer, dialogBody)
+        basicDialog.label_price.setText(serviceItem.service.price.toString())
+        basicDialog.label_comment.setText(serviceItem.service.description)
         basicDialog.show()
         basicDialog.id_positive.setOnClickListener {
             val serviceType = basicDialog.add_service_spinner.selectedItem.toString().trim()

@@ -63,7 +63,9 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     override fun onBindViewHolder(holder: RequestListAdapter.ViewHolder, position: Int) {
         val request = requests[position]
         handleRequestViewType(request, holder)
-
+//
+//        val photoUrl = request.clientInfo!!.basicInfo!!.photoUrl
+//        displayProfileImage(holder.profilePhoto ,photoUrl)
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
@@ -112,6 +114,15 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             holder.primaryButton.text = context.getString(R.string.label_choice_complete)
             holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
             holder.directionsButton.visibility = View.VISIBLE
+        }
+    }
+
+    private fun displayProfileImage(drawerProfileImage: CircleImageView, photoUrl: String) {
+        val userProfileUri = Uri.parse(photoUrl)
+        if (userProfileUri != null) {
+            Picasso.get().load(userProfileUri).into(drawerProfileImage)
+        } else {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
         }
     }
 

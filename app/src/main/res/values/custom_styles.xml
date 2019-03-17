@@ -154,4 +154,23 @@
         <item name="android:colorControlNormal">@color/colorGrayText</item>
         <item name="android:colorControlActivated">@color/colorPrimary3</item>
     </style>
+
+    <style name="AppMessageBubble">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingHorizontal">@dimen/md</item>
+        <item name="android:paddingVertical">12dp</item>
+        <item name="android:elevation">2dp</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="AppMessageBubblePrimary" parent="AppMessageBubble">
+        <item name="android:background">@drawable/message_bubble_primary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppMessageBubbleSecondary" parent="AppMessageBubble">
+        <item name="android:background">@drawable/message_bubble_secondary</item>
+        <item name="android:textColor">@color/colorGrayTextDark</item>
+    </style>
 </resources>

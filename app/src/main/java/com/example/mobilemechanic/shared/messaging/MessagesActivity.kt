@@ -1,18 +1,18 @@
 package com.example.mobilemechanic.shared.messaging
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
-import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.model.adapter.MessageListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.ChatUserInfo
 import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
+import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -21,7 +21,6 @@ import kotlinx.android.synthetic.main.activity_messages.*
 
 class MessagesActivity : AppCompatActivity()
 {
-
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var messageListAdapter: MessageListAdapter
     private var messages = ArrayList<Message>()
@@ -56,14 +55,16 @@ class MessagesActivity : AppCompatActivity()
             }
         }
 
-        if(myInfo.isNewcomer)
+        if(myInfo.isNewcomer) {
             sendGreetingMessage()
-        else
+        }
+        else {
             setUpMessagesRecyclerView()
+        }
 
-        id_send_msg_btn.setOnClickListener {
-            sendMessage(id_chat_log_field.text.toString())
-            id_chat_log_field.setText("")
+        id_send_message.setOnClickListener {
+            sendMessage(id_message_input.text.toString())
+            id_message_input.text.clear()
         }
         setUpActionBar()
     }
@@ -102,7 +103,6 @@ class MessagesActivity : AppCompatActivity()
         setSupportActionBar(id_messages_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
-            title = myInfo.firstName
             setDisplayHomeAsUpEnabled(true)
         }
     }

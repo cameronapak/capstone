@@ -20,9 +20,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
-        <activity android:name="com.example.mobilemechanic.shared.messaging.ChatRoomsActivity">
+        <activity android:name=".shared.messaging_test.ChatRoomActivity">
         </activity>
-        <activity android:name="com.example.mobilemechanic.shared.messaging.MessagesActivity">
+        <activity android:name=".shared.messaging.ChatRoomsActivity">
+        </activity>
+        <activity android:name=".shared.messaging.MessagesActivity">
         </activity>
         <activity android:name=".client.detail.ServiceDetailActivity">
         </activity>

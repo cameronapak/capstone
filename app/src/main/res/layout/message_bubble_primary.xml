@@ -3,22 +3,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingVertical="10dp"
-                android:paddingRight="15dp"
-                android:paddingLeft="60dp"
+                android:paddingEnd="15dp"
+                android:paddingStart="60dp"
                 android:clipToPadding="false">
     <de.hdodenhof.circleimageview.CircleImageView
             style="@style/AppCircleImageViewSmall"
             android:id="@+id/id_my_profile_image"
             android:layout_alignTop="@id/message_body"
             android:src="@drawable/ic_circle_profile"
-            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+
             android:layout_height="35dp"
             android:layout_width="35dp"/>
     <TextView
             style="@style/AppMessageBubblePrimary"
             android:id="@+id/message_body"
             android:background="@drawable/message_bubble_primary"
-            android:layout_alignRight="@id/id_my_profile_image"
+            android:layout_alignEnd="@id/id_my_profile_image"
             android:text="Placeholder message"
             android:layout_marginRight="42dp"
     />

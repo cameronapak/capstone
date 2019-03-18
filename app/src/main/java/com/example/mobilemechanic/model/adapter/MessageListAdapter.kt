@@ -33,7 +33,7 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_message_profile_image)
-        val textMessage = itemView.findViewById<TextView>(R.id.message_body)
+        val textMessage = itemView.findViewById<TextView>(R.id.id_message_body)
 //        val timeStamp = itemView.findViewById<TextView>(R.id.id_text_timestamp)
     }
 

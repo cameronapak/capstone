@@ -71,7 +71,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     }
 
     private fun setUpToolBar() {
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] user full name ${mAuth?.currentUser?.displayName}")
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] user full otherMemberName ${mAuth?.currentUser?.displayName}")
         setSupportActionBar(id_welcome_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {

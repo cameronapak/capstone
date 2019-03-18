@@ -1,8 +1,9 @@
 package com.example.mobilemechanic.shared.messaging
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
@@ -44,16 +45,18 @@ class ChatRoomsActivity : AppCompatActivity()
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = chatRoomListAdapter
+            addItemDecoration(DividerItemDecoration(id_chat_room_recylerview.context, viewManager.orientation))
         }
         reactiveChatRoomRecyclerView()
     }
 
     private fun reactiveChatRoomRecyclerView() {
-        val myInfoField = when(userType){
-            UserType.CLIENT -> {"clientInfo"}
-            UserType.MECHANIC -> {"mechanicInfo"}
+        val memberType = when(userType){
+            UserType.CLIENT -> "clientMember"
+            UserType.MECHANIC -> "mechanicMember"
         }
-        chatRoomsRef.whereEqualTo("$myInfoField.uid", mAuth?.currentUser?.uid.toString())
+
+        chatRoomsRef.whereEqualTo("$memberType.uid", mAuth.currentUser?.uid)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener

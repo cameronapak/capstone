@@ -12,6 +12,7 @@
     <color name="colorPrimary4">#462B90</color>
     <color name="colorHeaderDark">#372F9D</color>
 
+    <color name="colorGrayTextLight">#E0E0E0</color>
     <color name="colorGrayText">#828282</color>
     <color name="colorGrayTextDark">#4F4F4F</color>
     <color name="colorGrayTextDark2">#333333</color>

@@ -23,11 +23,11 @@ import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Availability
 import com.example.mobilemechanic.model.dto.ClientInfo
-import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.model.messaging.ChatRoom
-import com.example.mobilemechanic.model.messaging.ChatUserInfo
+import com.example.mobilemechanic.model.messaging.Member
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
+import com.example.mobilemechanic.shared.utility.ObjectConverter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -53,7 +53,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private lateinit var daysOfWeekString: String
     private var fromTime: String = ""
     private var toTime: String = ""
-    private var clientInfo: ClientInfo? = null
     private lateinit var serviceModel: ServiceModel
 
 
@@ -66,7 +65,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
         chatRoomsRef = mFirestore.collection("ChatRooms")
-        serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+        serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
+
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
@@ -102,7 +102,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
-            val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
             id_mechanic_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
@@ -115,7 +114,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     private fun setUpOnSubmit() {
         id_submit.setOnClickListener {
             validateForm()
-            val serviceModel = intent.getParcelableExtra<ServiceModel>(EXTRA_SERVICE)
+            val mechanicInfo = serviceModel.mechanicInfo
             val vehicle = id_vehicle_spinner.selectedItem as Vehicle
             val comment = id_comment.text.toString()
             val currentTime = System.currentTimeMillis()
@@ -126,7 +125,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         return@addSnapshotListener
                     }
 
-                    clientInfo = extractUserInfo(snapshot)
+                    val clientInfo = extractUserInfo(snapshot)
                     if (clientInfo != null) {
                         val request = Request.Builder()
                             .clientInfo(clientInfo!!)
@@ -141,7 +140,13 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request).addOnSuccessListener {
                             Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
-                            setUpChatRoom()
+
+
+                            val clientMember = ObjectConverter.convertToMember(clientInfo)
+                            val mechanicMember = ObjectConverter.convertToMember(mechanicInfo)
+
+                            setUpChatRoom(clientMember, mechanicMember)
+
                         }.addOnFailureListener {
                             Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
                         }
@@ -166,43 +171,37 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         return null
     }
 
-    private fun setUpChatRoom()
+    private fun setUpChatRoom(client: Member, mechanic: Member)
     {
-        if(clientInfo == null) return
+        checkIfChatRoomExist(client, mechanic)
+    }
 
-        chatRoomsRef.whereEqualTo("clientInfo.uid", mAuth.currentUser!!.uid)
-            .whereEqualTo("mechanicInfo.uid", serviceModel.mechanicInfo.uid)
+    private fun checkIfChatRoomExist(client: Member, mechanic: Member) {
+        chatRoomsRef.whereEqualTo("clientMember.uid", client.uid)
+        chatRoomsRef.whereEqualTo("mechanicMember.uid", mechanic.uid)
             .get()
             .addOnSuccessListener {
-                if(it.isEmpty)
-                {
-                    val chatRoom = createNewChatRoom(clientInfo!!, serviceModel.mechanicInfo)
-                    chatRoomsRef.document().set(chatRoom).addOnSuccessListener {
-                        startActivity(Intent(this, ClientWelcomeActivity::class.java))
-                    }
+                if (it.isEmpty) {
+                    Log.d(CLIENT_TAG, "[PostServiceRequestActivity] no chat room exist yet")
+                    createChatRoom(client, mechanic)
+                } else {
+                    Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room already exist")
                 }
-                else
-                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
-            }.addOnFailureListener {
-                Toast.makeText(this, "Chat room creation failed.", Toast.LENGTH_LONG).show()
             }
     }
 
-    private fun createNewChatRoom(clientInfo: ClientInfo, mechanicInfo: MechanicInfo) : ChatRoom
+    private fun createChatRoom(client: Member, mechanic: Member)
     {
-        val clientChatUser = ChatUserInfo(clientInfo.uid,
-            clientInfo.basicInfo.firstName,
-            clientInfo.basicInfo.lastName,
-            clientInfo.basicInfo.photoUrl
-        )
+        val docID = chatRoomsRef.document().id
+        val chatRoom = ChatRoom(docID, client, mechanic)
+        chatRoomsRef.document(docID).set(chatRoom)
+            .addOnSuccessListener {
+                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room created")
+                startActivity(Intent(this, ClientWelcomeActivity::class.java))
+            }.addOnFailureListener {
+                Log.d(CLIENT_TAG, "[PostServiceRequestActivity] fail to create a chat room")
+            }
 
-        val mechanicChatUser = ChatUserInfo(mechanicInfo.uid,
-            mechanicInfo.basicInfo.firstName,
-            mechanicInfo.basicInfo.lastName,
-            mechanicInfo.basicInfo.photoUrl
-        )
-
-        return ChatRoom(clientChatUser, mechanicChatUser)
     }
 
     private fun setUpOnAddVehicle() {
@@ -315,7 +314,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     (if (m < 10) "0$m" else "$m").toString() +
                     (if (h >= 12) " PM" else " AM").toString()
 
-            // TODO: compare times from and to, and do not allow continue unless from is before to
             when (view.id) {
                 dialogContainer.id_btnFromTime.id -> {
                     dialogContainer.id_btnFromTime.text = time

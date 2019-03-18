@@ -8,7 +8,6 @@ import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.shared.SignInActivity
-import com.example.mobilemechanic.shared.messaging_test.ChatRoomActivity
 import com.example.mobilemechanic.shared.registration.RegistrationActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -38,8 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             }
             R.id.id_loginButton -> {
-                val i = Intent(this, SignInActivity::class.java)
-                startActivity(i)
+                startActivity(Intent(this, SignInActivity::class.java))
 
             }
             R.id.id_clientButton -> {
@@ -47,12 +45,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             }
             R.id.id_mechanicButton -> {
-                val i = Intent(this, MechanicWelcomeActivity::class.java)
-                startActivity(i)
-
-            }
-            R.id.id_chat -> {
-                startActivity(Intent(this, ChatRoomActivity::class.java))
+                startActivity(Intent(this, MechanicWelcomeActivity::class.java))
             }
         }
     }

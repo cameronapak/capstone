@@ -6,21 +6,23 @@ import android.os.Parcelable
 const val EXTRA_CHAT_ROOM = "chat_room"
 
 data class ChatRoom(
-    var clientInfo: ChatUserInfo = ChatUserInfo(),
-    var mechanicInfo: ChatUserInfo = ChatUserInfo(),
-    var objectID: String = ""
+    var objectID: String = "",
+    var clientMember: Member,
+    var mechanicMember: Member
 ) : Parcelable
 {
+    constructor() : this("", Member(), Member())
+
     constructor(parcel: Parcel) : this(
-        parcel.readParcelable(ChatUserInfo::class.java.classLoader),
-        parcel.readParcelable(ChatUserInfo::class.java.classLoader),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readParcelable(Member::class.java.classLoader),
+        parcel.readParcelable(Member::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeParcelable(clientInfo, flags)
-        parcel.writeParcelable(mechanicInfo, flags)
         parcel.writeString(objectID)
+        parcel.writeParcelable(clientMember, flags)
+        parcel.writeParcelable(mechanicMember, flags)
     }
 
     override fun describeContents(): Int {
@@ -34,6 +36,21 @@ data class ChatRoom(
 
         override fun newArray(size: Int): Array<ChatRoom?> {
             return arrayOfNulls(size)
+        }
+    }
+
+    fun getMember(myUid: String?): Member {
+        return when (myUid) {
+            clientMember.uid -> clientMember
+            mechanicMember.uid -> mechanicMember
+            else -> Member()
+        }
+    }
+
+    fun getOtherMember(myUid: String?): Member {
+        return when (myUid) {
+            clientMember.uid -> mechanicMember
+            else -> clientMember
         }
     }
 }

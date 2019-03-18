@@ -5,14 +5,15 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.adapter.MessageListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
-import com.example.mobilemechanic.model.messaging.ChatUserInfo
 import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.example.mobilemechanic.model.messaging.Message
+import com.example.mobilemechanic.shared.USER_TAG
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -27,12 +28,12 @@ class MessagesActivity : AppCompatActivity()
 
     private lateinit var userType: UserType
     private lateinit var chatRoom: ChatRoom
-    private lateinit var myInfo: ChatUserInfo
-    private lateinit var theirInfo: ChatUserInfo
+    private lateinit var memberType: String
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var chatRoomsRef: CollectionReference
+    private lateinit var messagesRef: CollectionReference
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,34 +41,69 @@ class MessagesActivity : AppCompatActivity()
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
+
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
         chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
+        Log.d(USER_TAG, "[MessagesActivity] userType: $userType")
+        Log.d(USER_TAG, "[MessagesActivity] chatRoom: $chatRoom")
+        messagesRef = chatRoomsRef.document(chatRoom.objectID).collection("Messages")
 
-        when(userType)
-        {
-            UserType.CLIENT -> {
-                myInfo = chatRoom.clientInfo
-                theirInfo = chatRoom.mechanicInfo
-            }
-            UserType.MECHANIC -> {
-                myInfo = chatRoom.mechanicInfo
-                theirInfo = chatRoom.clientInfo
-            }
-        }
 
-        if(myInfo.isNewcomer) {
-            sendGreetingMessage()
-        }
-        else {
-            setUpMessagesRecyclerView()
-        }
+//        when(userType)
+//        {
+//            UserType.CLIENT -> {
+//                myInfo = chatRoom.clientInfo
+//                theirInfo = chatRoom.mechanicInfo
+//            }
+//            UserType.MECHANIC -> {
+//                myInfo = chatRoom.mechanicInfo
+//                theirInfo = chatRoom.clientInfo
+//            }
+//        }
 
+//        if(myInfo.isNewcomer) {
+//            sendGreetingMessage()
+//        }
+//        else {
+//            setUpMessagesRecyclerView()
+//        }
+
+        setUpMessagesActivity()
+    }
+
+    private fun setUpMessagesActivity() {
+        getMemberType()
+        setUpActionBar()
+        setUpSendMessage()
+        setUpMessagesRecyclerView()
+        joinChatRoom()
+    }
+
+    private fun getMemberType() {
+        memberType = when(userType){
+            UserType.CLIENT -> "clientMember"
+            UserType.MECHANIC -> "mechanicMember"
+        }
+    }
+
+    private fun setUpActionBar() {
+        chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
+        val otherMember = chatRoom.getOtherMember(mAuth.currentUser?.uid)
+        id_other_member_name.text = "${otherMember.firstName} ${otherMember.lastName}"
+        setSupportActionBar(id_messages_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
+
+    private fun setUpSendMessage() {
         id_send_message.setOnClickListener {
             sendMessage(id_message_input.text.toString())
             id_message_input.text.clear()
         }
-        setUpActionBar()
     }
+
 
     private fun setUpMessagesRecyclerView(){
         viewManager = LinearLayoutManager(this)
@@ -99,55 +135,33 @@ class MessagesActivity : AppCompatActivity()
             }
     }
 
-    private fun setUpActionBar() {
-        setSupportActionBar(id_messages_toolbar as Toolbar)
-        val actionBar: ActionBar? = supportActionBar
-        actionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-        }
+    private fun joinChatRoom() {
+        val member = chatRoom.getMember(mAuth.currentUser?.uid)
+        messagesRef.whereEqualTo("$memberType.uid", mAuth.currentUser?.uid)
+            .get()
+            .addOnSuccessListener {
+                if (it.isEmpty) {
+
+                    val contents = "${member?.firstName} joined the chat."
+                    val currentTime = DateTimeManager.currentTimeMillis()
+                    val greetingMessage = Message(member, contents, currentTime)
+
+                    messagesRef.document(currentTime.toString()).set(greetingMessage)
+                        .addOnSuccessListener {
+                            Log.d(USER_TAG, "[MessagesActivity] joined chat greeting send successfully")
+                        }.addOnFailureListener {
+                            Log.d(USER_TAG, "[MessagesActivity] ${it.message}")
+                        }
+                }
+            }
     }
 
     private fun sendMessage(contents: String)
     {
-        val message = Message(myInfo, contents, DateTimeManager.currentTimeMillis())
-        chatRoomsRef.document(chatRoom.objectID).collection("Messages")
-            .document(DateTimeManager.currentTimeMillis().toString())
+        val member = chatRoom.getMember(mAuth.currentUser?.uid)
+        val message = Message(member, contents, DateTimeManager.currentTimeMillis())
+        messagesRef.document(DateTimeManager.currentTimeMillis().toString())
             .set(message)
-    }
-
-    private fun sendGreetingMessage()
-    {
-        val myInfoField = when(userType){
-            UserType.CLIENT -> {"clientInfo"}
-            UserType.MECHANIC -> {"mechanicInfo"}
-        }
-
-        chatRoomsRef.document(chatRoom.objectID).collection("Messages")
-            .whereEqualTo("$myInfoField.uid", mAuth.currentUser?.uid)
-            .get().addOnSuccessListener {
-                if(it.isEmpty)
-                {
-                    myInfo.isNewcomer = false
-                    val contents = "${myInfo.firstName} joined the chat."
-                    val greetingMessage =
-                        Message(myInfo, contents, DateTimeManager.currentTimeMillis())
-                    chatRoomsRef.document(chatRoom.objectID).collection("Messages")
-                        .document(DateTimeManager.currentTimeMillis().toString())
-                        .set(greetingMessage)
-                        .addOnSuccessListener {
-                            setUpMessagesRecyclerView()
-                            val myInfoField = when(userType){
-                                UserType.CLIENT -> {"clientInfo"}
-                                UserType.MECHANIC -> {"mechanicInfo"}
-                            }
-                            chatRoomsRef.document(chatRoom.objectID).update(myInfoField, myInfo)
-                        }
-                }
-                else
-                {
-                    setUpMessagesRecyclerView()
-                }
-            }
     }
 
     override fun onSupportNavigateUp(): Boolean {

@@ -3,15 +3,15 @@ package com.example.mobilemechanic.model.messaging
 import android.os.Parcel
 import android.os.Parcelable
 
-data class Message(var chatUserInfo: ChatUserInfo,
+data class Message(var chatUserInfo: Member,
                    var contents: String,
                    var timeStamp: Long
 ) : Parcelable
 {
-    constructor() : this(ChatUserInfo(), "", 0L)
+    constructor() : this(Member(), "", 0L)
 
     constructor(parcel: Parcel) : this(
-        parcel.readParcelable<ChatUserInfo>(ChatUserInfo::class.java.classLoader),
+        parcel.readParcelable<Member>(Member::class.java.classLoader),
         parcel.readString(),
         parcel.readLong()
     )

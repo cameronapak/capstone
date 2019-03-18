@@ -8,8 +8,8 @@
                 android:clipToPadding="false">
     <de.hdodenhof.circleimageview.CircleImageView
             style="@style/AppCircleImageViewSmall"
-            android:id="@+id/id_my_profile_image"
-            android:layout_alignTop="@id/message_body"
+            android:id="@+id/id_profile_image"
+            android:layout_alignTop="@id/id_message_body"
             android:src="@drawable/ic_circle_profile"
             android:layout_alignParentEnd="true"
 
@@ -17,9 +17,9 @@
             android:layout_width="35dp"/>
     <TextView
             style="@style/AppMessageBubblePrimary"
-            android:id="@+id/message_body"
+            android:id="@+id/id_message_body"
             android:background="@drawable/message_bubble_primary"
-            android:layout_alignEnd="@id/id_my_profile_image"
+            android:layout_alignEnd="@id/id_profile_image"
             android:text="Placeholder message"
             android:layout_marginRight="42dp"
     />

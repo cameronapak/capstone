@@ -41,32 +41,13 @@ class MessagesActivity : AppCompatActivity()
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
+        messagesRef = chatRoomsRef.document(chatRoom.objectID).collection("Messages")
 
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
         chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
+
         Log.d(USER_TAG, "[MessagesActivity] userType: $userType")
         Log.d(USER_TAG, "[MessagesActivity] chatRoom: $chatRoom")
-        messagesRef = chatRoomsRef.document(chatRoom.objectID).collection("Messages")
-
-
-//        when(userType)
-//        {
-//            UserType.CLIENT -> {
-//                myInfo = chatRoom.clientInfo
-//                theirInfo = chatRoom.mechanicInfo
-//            }
-//            UserType.MECHANIC -> {
-//                myInfo = chatRoom.mechanicInfo
-//                theirInfo = chatRoom.clientInfo
-//            }
-//        }
-
-//        if(myInfo.isNewcomer) {
-//            sendGreetingMessage()
-//        }
-//        else {
-//            setUpMessagesRecyclerView()
-//        }
 
         setUpMessagesActivity()
     }
@@ -87,9 +68,9 @@ class MessagesActivity : AppCompatActivity()
     }
 
     private fun setUpActionBar() {
-        chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
         val otherMember = chatRoom.getOtherMember(mAuth.currentUser?.uid)
         id_other_member_name.text = "${otherMember.firstName} ${otherMember.lastName}"
+
         setSupportActionBar(id_messages_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
@@ -100,7 +81,6 @@ class MessagesActivity : AppCompatActivity()
     private fun setUpSendMessage() {
         id_send_message.setOnClickListener {
             sendMessage(id_message_input.text.toString())
-            id_message_input.text.clear()
         }
     }
 
@@ -161,7 +141,9 @@ class MessagesActivity : AppCompatActivity()
         val member = chatRoom.getMember(mAuth.currentUser?.uid)
         val message = Message(member, contents, DateTimeManager.currentTimeMillis())
         messagesRef.document(DateTimeManager.currentTimeMillis().toString())
-            .set(message)
+            .set(message).addOnCompleteListener {
+                id_message_input.text.clear()
+            }
     }
 
     override fun onSupportNavigateUp(): Boolean {

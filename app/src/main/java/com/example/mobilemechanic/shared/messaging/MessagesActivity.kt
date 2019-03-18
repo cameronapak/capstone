@@ -15,6 +15,7 @@ import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.shared.USER_TAG
 import com.example.mobilemechanic.shared.utility.DateTimeManager
+import com.example.mobilemechanic.shared.utility.StringManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -69,7 +70,9 @@ class MessagesActivity : AppCompatActivity()
 
     private fun setUpActionBar() {
         val otherMember = chatRoom.getOtherMember(mAuth.currentUser?.uid)
-        id_other_member_name.text = "${otherMember.firstName} ${otherMember.lastName}"
+        val firstName = StringManager.firstLetterToUppercase(otherMember.firstName)
+        val lastName = StringManager.firstLetterToUppercase(otherMember.lastName)
+        id_other_member_name.text = "$firstName $lastName"
 
         setSupportActionBar(id_messages_toolbar as Toolbar)
         val actionBar: ActionBar? = supportActionBar
@@ -117,11 +120,15 @@ class MessagesActivity : AppCompatActivity()
 
     private fun joinChatRoom() {
         val member = chatRoom.getMember(mAuth.currentUser?.uid)
-        messagesRef.whereEqualTo("$memberType.uid", mAuth.currentUser?.uid)
+        Log.d(USER_TAG, "[MessagesActivity] member: $member")
+        Log.d(USER_TAG, "[MessagesActivity] memberType.uid: $memberType.uid")
+        Log.d(USER_TAG, "[MessagesActivity] mAuth uid: ${mAuth.currentUser?.uid}")
+        messagesRef.whereEqualTo("chatUserInfo.uid", mAuth.currentUser?.uid)
             .get()
             .addOnSuccessListener {
                 if (it.isEmpty) {
 
+                    Log.d(USER_TAG, "[MessagesActivity] not exist")
                     val contents = "${member?.firstName} joined the chat."
                     val currentTime = DateTimeManager.currentTimeMillis()
                     val greetingMessage = Message(member, contents, currentTime)
@@ -132,6 +139,8 @@ class MessagesActivity : AppCompatActivity()
                         }.addOnFailureListener {
                             Log.d(USER_TAG, "[MessagesActivity] ${it.message}")
                         }
+                } else {
+                    Log.d(USER_TAG, "[MessagesActivity] already exist")
                 }
             }
     }

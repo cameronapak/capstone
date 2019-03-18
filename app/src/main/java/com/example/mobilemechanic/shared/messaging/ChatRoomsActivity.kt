@@ -6,11 +6,13 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.adapter.ChatRoomListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.shared.USER_TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +36,8 @@ class ChatRoomsActivity : AppCompatActivity()
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
+        Log.d(USER_TAG, "[ChatRoomsActivity] userType: $userType")
+
         setUpChatRoomRecyclerView()
         setUpActionBar()
     }
@@ -55,6 +59,9 @@ class ChatRoomsActivity : AppCompatActivity()
             UserType.CLIENT -> "clientMember"
             UserType.MECHANIC -> "mechanicMember"
         }
+
+        Log.d(USER_TAG, "[ChatRoomsActivity] memberType.uid: $memberType.uid")
+        Log.d(USER_TAG, "[ChatRoomsActivity] mAuth uid: ${mAuth.currentUser?.uid}")
 
         chatRoomsRef.whereEqualTo("$memberType.uid", mAuth.currentUser?.uid)
             ?.addSnapshotListener { querySnapshot, exception ->

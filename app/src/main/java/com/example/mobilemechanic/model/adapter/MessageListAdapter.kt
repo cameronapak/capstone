@@ -1,6 +1,7 @@
 package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -8,8 +9,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.messaging.Message
+import com.example.mobilemechanic.shared.utility.DateTimeManager
+import com.example.mobilemechanic.shared.utility.StringManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 const val MY_MESSAGE = 1
@@ -32,20 +36,22 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
     }
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
-        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_message_profile_image)
+        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_profile_image)
         val textMessage = itemView.findViewById<TextView>(R.id.id_message_body)
         val otherMemberName = itemView.findViewById<TextView>(R.id.id_name)
-//        val timeStamp = itemView.findViewById<TextView>(R.id.id_text_timestamp)
+        val timeStamp = itemView.findViewById<TextView>(R.id.id_time_stamp)
     }
 
     override fun onBindViewHolder(holder: MessageListAdapter.ViewHolder, position: Int) {
         val message = messages[position]
         holder.textMessage.text = message.contents
-//        holder.timeStamp.text = DateTimeManager.millisToDate(message.timeStamp, "h:mm a")
 
         if (holder.itemViewType == YOUR_MESSAGE) {
-            holder.otherMemberName.text = message.chatUserInfo.firstName
+            holder.otherMemberName.text = StringManager.firstLetterToUppercase(message.chatUserInfo.firstName)
+            holder.timeStamp.text = DateTimeManager.millisToDate(message.timeStamp, "h:m a")
         }
+
+        Picasso.get().load(Uri.parse(message.chatUserInfo.photoUrl)).into(holder.profilePhoto)
     }
 
     override fun getItemViewType(position: Int): Int {

@@ -1,6 +1,7 @@
 package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 
 
@@ -31,6 +33,15 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
         return messages.size
     }
 
+    private fun displayProfileImage(drawerProfileImage: CircleImageView, photoUrl: String) {
+        val userProfileUri = Uri.parse(photoUrl)
+        if (userProfileUri != null) {
+            Picasso.get().load(userProfileUri).into(drawerProfileImage)
+        } else {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
+        }
+    }
+
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_message_profile_image)
         val textMessage = itemView.findViewById<TextView>(R.id.id_text_message)
@@ -41,6 +52,8 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
         val message = messages[position]
         holder.textMessage.text = message.contents
         holder.timeStamp.text = DateTimeManager.millisToDate(message.timeStamp, "h:mm a")
+        val photoUrl = message.chatUserInfo.photoUrl
+        displayProfileImage(holder.profilePhoto ,photoUrl)
     }
 }
 

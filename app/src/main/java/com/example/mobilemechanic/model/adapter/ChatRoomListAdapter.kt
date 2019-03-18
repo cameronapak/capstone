@@ -2,6 +2,7 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -13,8 +14,11 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.example.mobilemechanic.shared.messaging.MessagesActivity
+import com.google.android.gms.maps.model.Circle
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
+import de.hdodenhof.circleimageview.CircleImageView
 
 class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRoom>, var userType: UserType) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>()
@@ -24,6 +28,7 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val name = itemView.findViewById<TextView>(R.id.id_client_name)
+        val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_chat_profile_image)
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomListAdapter.ViewHolder {
         val view = LayoutInflater.from(context)
@@ -58,13 +63,26 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
         }
     }
 
+    private fun displayProfileImage(drawerProfileImage: CircleImageView, photoUrl: String) {
+        val userProfileUri = Uri.parse(photoUrl)
+        if (userProfileUri != null) {
+            Picasso.get().load(userProfileUri).into(drawerProfileImage)
+        } else {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
+        }
+    }
+
     private fun setUpClientDisplay(holder: ChatRoomListAdapter.ViewHolder, chatRoom: ChatRoom)
     {
         holder.name.text = "${chatRoom.mechanicInfo.firstName} ${chatRoom.mechanicInfo.lastName}"
+        val photoUrl = chatRoom.mechanicInfo.photoUrl
+        displayProfileImage(holder.profilePhoto ,photoUrl)
     }
 
     private fun setUpMechanicDisplay(holder: ChatRoomListAdapter.ViewHolder, chatRoom: ChatRoom)
     {
         holder.name.text = "${chatRoom.clientInfo.firstName} ${chatRoom.clientInfo.lastName}"
+        val photoUrl = chatRoom.clientInfo.photoUrl
+        displayProfileImage(holder.profilePhoto ,photoUrl)
     }
 }

@@ -34,6 +34,7 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val profilePhoto = itemView.findViewById<CircleImageView>(R.id.id_message_profile_image)
         val textMessage = itemView.findViewById<TextView>(R.id.id_message_body)
+        val otherMemberName = itemView.findViewById<TextView>(R.id.id_name)
 //        val timeStamp = itemView.findViewById<TextView>(R.id.id_text_timestamp)
     }
 
@@ -41,14 +42,19 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
         val message = messages[position]
         holder.textMessage.text = message.contents
 //        holder.timeStamp.text = DateTimeManager.millisToDate(message.timeStamp, "h:mm a")
+
+        if (holder.itemViewType == YOUR_MESSAGE) {
+            holder.otherMemberName.text = message.chatUserInfo.firstName
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
         val chatUserInfo = messages[position].chatUserInfo
-        return if (mAuth?.currentUser?.uid == chatUserInfo.uid)
+        return if (mAuth?.currentUser?.uid == chatUserInfo.uid) {
             MY_MESSAGE
-        else
+        } else {
             YOUR_MESSAGE
+        }
     }
 }
 

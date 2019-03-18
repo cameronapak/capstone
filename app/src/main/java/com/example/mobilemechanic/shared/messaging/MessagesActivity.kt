@@ -38,13 +38,13 @@ class MessagesActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_messages)
+        userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
+        chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
+
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
         messagesRef = chatRoomsRef.document(chatRoom.objectID).collection("Messages")
-
-        userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
-        chatRoom = intent.getParcelableExtra(EXTRA_CHAT_ROOM)
 
         Log.d(USER_TAG, "[MessagesActivity] userType: $userType")
         Log.d(USER_TAG, "[MessagesActivity] chatRoom: $chatRoom")

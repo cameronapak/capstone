@@ -46,8 +46,6 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
             }
         }
 
-
-        //open MessagesActivity by tapping on a chatroom in the recyclerview
         holder.itemView.setOnClickListener {
             val intent = Intent(context, MessagesActivity::class.java)
             Log.d(USER_TAG, "[ChatRoomListAdapter] userType: ${userType.name}")

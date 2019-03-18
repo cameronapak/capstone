@@ -42,8 +42,7 @@ data class ChatRoom(
     fun getMember(myUid: String?): Member {
         return when (myUid) {
             clientMember.uid -> clientMember
-            mechanicMember.uid -> mechanicMember
-            else -> Member()
+            else -> mechanicMember
         }
     }
 

@@ -34,7 +34,7 @@
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/id_last_read_message"
+            android:id="@+id/id_latest_message"
             app:layout_constraintTop_toBottomOf="@+id/id_other_member_name"
             app:layout_constraintStart_toStartOf="@+id/id_other_member_name" android:textColor="@color/colorGrayText"
             android:textSize="10sp"/>

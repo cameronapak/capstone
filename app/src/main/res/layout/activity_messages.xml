@@ -28,8 +28,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginEnd="8dp"
             android:fontFamily="@font/qualio_bold"
-            android:textSize="32sp"
-            android:textColor="@color/colorPrimary3"/>
+            android:textSize="28sp"
+            android:textColor="@color/colorHeaderDark"/>
     <android.support.v7.widget.RecyclerView
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -98,7 +98,19 @@ class MessagesActivity : AppCompatActivity()
             }
             adapter = messageListAdapter
         }
+
+        scrollToLatestMessage()
         reactiveMessagesRecyclerView()
+    }
+
+    private fun scrollToLatestMessage() {
+        id_messages_recyclerview.addOnLayoutChangeListener { view, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+            if (bottom < oldBottom) {
+                id_messages_recyclerview.postDelayed({
+                    id_messages_recyclerview.smoothScrollToPosition(messageListAdapter.itemCount-1)
+                }, 100)
+            }
+        }
     }
 
     private fun reactiveMessagesRecyclerView() {

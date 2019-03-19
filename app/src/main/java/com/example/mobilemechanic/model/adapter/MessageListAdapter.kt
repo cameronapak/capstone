@@ -51,7 +51,11 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
             holder.timeStamp.text = DateTimeManager.millisToDate(message.timeStamp, "h:m a")
         }
 
-        Picasso.get().load(Uri.parse(message.chatUserInfo.photoUrl)).into(holder.profilePhoto)
+        if (message.chatUserInfo.photoUrl.isNullOrEmpty()) {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profilePhoto)
+        } else {
+            Picasso.get().load(Uri.parse(message.chatUserInfo.photoUrl)).into(holder.profilePhoto)
+        }
     }
 
     override fun getItemViewType(position: Int): Int {

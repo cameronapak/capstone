@@ -20,6 +20,7 @@ import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 
 class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRoom>, var userType: UserType) :
@@ -30,6 +31,7 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
     private lateinit var messagesRef: CollectionReference
 
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
+        val profileImage = itemView.findViewById<CircleImageView>(R.id.id_profile_image)
         val otherMemberName = itemView.findViewById<TextView>(R.id.id_other_member_name)
         val latestMessage = itemView.findViewById<TextView>(R.id.id_latest_message)
         val latestMessageTimeStamp = itemView.findViewById<TextView>(R.id.id_latest_message_time_stamp)
@@ -71,9 +73,15 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
     }
 
     private fun getChatRoomLatestMessage(chatRoom: ChatRoom, holder: ChatRoomListAdapter.ViewHolder) {
+        val otherUserUid = when(userType){
+            UserType.CLIENT -> chatRoom.mechanicMember.uid
+            UserType.MECHANIC -> chatRoom.clientMember.uid
+        }
+
         var latestMessage: Message
         messagesRef = mFirestore.collection("ChatRooms/${chatRoom.objectID}/Messages")
-        messagesRef.orderBy("timeStamp", Query.Direction.DESCENDING)
+        messagesRef.whereEqualTo("chatUserInfo.uid", otherUserUid)
+            .orderBy("timeStamp", Query.Direction.DESCENDING)
             .limit(1)
             .addSnapshotListener { querySnapshot, exception ->
             if (exception != null) {

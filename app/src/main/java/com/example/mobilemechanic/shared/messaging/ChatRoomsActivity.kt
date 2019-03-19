@@ -1,15 +1,18 @@
 package com.example.mobilemechanic.shared.messaging
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.adapter.ChatRoomListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
+import com.example.mobilemechanic.shared.USER_TAG
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -29,10 +32,13 @@ class ChatRoomsActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_rooms)
+        userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
+
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
-        userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
+        Log.d(USER_TAG, "[ChatRoomsActivity] userType: $userType")
+
         setUpChatRoomRecyclerView()
         setUpActionBar()
     }
@@ -44,16 +50,21 @@ class ChatRoomsActivity : AppCompatActivity()
             setHasFixedSize(true)
             layoutManager = viewManager
             adapter = chatRoomListAdapter
+            addItemDecoration(DividerItemDecoration(id_chat_room_recylerview.context, viewManager.orientation))
         }
         reactiveChatRoomRecyclerView()
     }
 
     private fun reactiveChatRoomRecyclerView() {
-        val myInfoField = when(userType){
-            UserType.CLIENT -> {"clientInfo"}
-            UserType.MECHANIC -> {"mechanicInfo"}
+        val memberType = when(userType){
+            UserType.CLIENT -> "clientMember"
+            UserType.MECHANIC -> "mechanicMember"
         }
-        chatRoomsRef.whereEqualTo("$myInfoField.uid", mAuth?.currentUser?.uid.toString())
+
+        Log.d(USER_TAG, "[ChatRoomsActivity] memberType.uid: $memberType.uid")
+        Log.d(USER_TAG, "[ChatRoomsActivity] mAuth uid: ${mAuth.currentUser?.uid}")
+
+        chatRoomsRef.whereEqualTo("$memberType.uid", mAuth.currentUser?.uid)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener

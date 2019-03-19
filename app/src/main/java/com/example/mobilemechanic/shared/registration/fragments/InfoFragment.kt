@@ -52,12 +52,12 @@ class InfoFragment : Fragment() {
         val phoneNumber = id_registrationPhoneNumber.text.toString().trim()
 
         if(firstName.isNullOrEmpty() || firstName.isNullOrBlank()) {
-            Toast.makeText(activity, "Invalid first name!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Invalid first otherMemberName!", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if(lastName.isNullOrEmpty() || lastName.isNullOrBlank()) {
-            Toast.makeText(activity, "Invalid last name!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Invalid last otherMemberName!", Toast.LENGTH_SHORT).show()
             return false
         }
 

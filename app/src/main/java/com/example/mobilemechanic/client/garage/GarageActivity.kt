@@ -276,5 +276,4 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         onBackPressed()
         return true
     }
-
 }

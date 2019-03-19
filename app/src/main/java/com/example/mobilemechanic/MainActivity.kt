@@ -7,8 +7,8 @@ import android.view.View
 import android.view.View.OnClickListener
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
-import com.example.mobilemechanic.shared.registration.RegistrationActivity
 import com.example.mobilemechanic.shared.SignInActivity
+import com.example.mobilemechanic.shared.registration.RegistrationActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         id_loginButton.setOnClickListener(this)
         id_clientButton.setOnClickListener(this)
         id_mechanicButton.setOnClickListener(this)
+        id_chat.setOnClickListener(this)
     }
 
     override fun onClick(view: View) {
@@ -36,8 +37,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             }
             R.id.id_loginButton -> {
-                val i = Intent(this, SignInActivity::class.java)
-                startActivity(i)
+                startActivity(Intent(this, SignInActivity::class.java))
 
             }
             R.id.id_clientButton -> {
@@ -45,9 +45,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
 
             }
             R.id.id_mechanicButton -> {
-                val i = Intent(this, MechanicWelcomeActivity::class.java)
-                startActivity(i)
-
+                startActivity(Intent(this, MechanicWelcomeActivity::class.java))
             }
         }
     }

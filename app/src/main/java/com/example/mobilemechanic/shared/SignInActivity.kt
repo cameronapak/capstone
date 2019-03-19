@@ -103,6 +103,7 @@ class SignInActivity : AppCompatActivity() {
                     } else {
                         startActivity(Intent(this, MechanicWelcomeActivity::class.java))
                     }
+                    finish()
                 }
         }
     }

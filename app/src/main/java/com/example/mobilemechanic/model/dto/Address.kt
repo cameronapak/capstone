@@ -16,8 +16,7 @@ data class Address(
         parcel.readString(),
         parcel.readString(),
         parcel.readString()
-    ) {
-    }
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(street)
@@ -38,5 +37,9 @@ data class Address(
         override fun newArray(size: Int): Array<Address?> {
             return arrayOfNulls(size)
         }
+    }
+
+    override fun toString(): String {
+        return "$street $city, $state $zipCode"
     }
 }

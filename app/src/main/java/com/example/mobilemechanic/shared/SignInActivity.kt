@@ -74,8 +74,6 @@ class SignInActivity : AppCompatActivity() {
             .document(mAuth?.currentUser?.uid.toString()).get()
             ?.addOnSuccessListener {
                 retrieveFcmToken()
-                redirectToWelcomePageByUserType(it)
-
                 val user = it.toObject(User::class.java)
                 if (user != null) {
                     updateUserProfile(user)
@@ -105,15 +103,6 @@ class SignInActivity : AppCompatActivity() {
                     }
                     finish()
                 }
-        }
-    }
-
-    private fun redirectToWelcomePageByUserType(it: DocumentSnapshot) {
-        val user = it.toObject(User::class.java)
-        if (user?.userType == UserType.CLIENT) {
-            startActivity(Intent(this, ClientWelcomeActivity::class.java))
-        } else {
-            startActivity(Intent(this, MechanicWelcomeActivity::class.java))
         }
     }
 

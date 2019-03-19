@@ -36,11 +36,16 @@ import com.algolia.search.saas.AlgoliaException
 import com.algolia.search.saas.Query
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
+import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import de.hdodenhof.circleimageview.CircleImageView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
@@ -52,6 +57,8 @@ class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
     AlgoliaErrorListener, AlgoliaSearcherListener {
 
+    private var mFirestore: FirebaseFirestore
+    private var mAuth: FirebaseAuth
     private var remainingItemsBeforeLoading: Int
     var layoutId: Int = 0
         protected set
@@ -63,6 +70,7 @@ class HitsCustomized
     private var infiniteScrollListener: InfiniteScrollListener?
     private var keyboardListener: RecyclerView.OnScrollListener? = null
     private var emptyView: View? = null
+    private lateinit var clientAddress: Address
 
     init {
 
@@ -74,6 +82,9 @@ class HitsCustomized
         }
 
         gson = Gson()
+        mFirestore = FirebaseFirestore.getInstance()
+        mAuth = FirebaseAuth.getInstance()
+        getClientAddress()
         val infiniteScroll: Boolean
         val styledAttributes = context.theme.obtainStyledAttributes(attrs, R.styleable.Hits, 0, 0)
         try {
@@ -116,6 +127,21 @@ class HitsCustomized
         infiniteScrollListener = if (infiniteScroll) InfiniteScrollListener() else null
         if (infiniteScroll) {
             addOnScrollListener(infiniteScrollListener!!)
+        }
+    }
+
+    private fun getClientAddress() {
+        val uid = mAuth.currentUser?.uid
+        if (uid != null) {
+            mFirestore.collection("Accounts").document(uid)
+                .get()
+                .addOnSuccessListener {
+                    if (it != null) {
+                        val account = it.toObject(User::class.java)
+                        Log.d(CLIENT_TAG, "[HitsCustomized] client address ${account?.address}")
+                        clientAddress = account?.address!!
+                    }
+                }
         }
     }
 
@@ -362,22 +388,15 @@ class HitsCustomized
                 ScreenManager.hideKeyBoard(context, it)
             }
 
-            holder.mechanicRating.rating
-
-//            if (serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()||
-//                serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrBlank()) {
-//                Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
-//            } else {
-//                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
-//            }
-
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
+
+            val mechanicAddress = serviceObj.mechanicInfo.address
+            holder.distance.text = "${getDistanceFromMechanic(clientAddress, mechanicAddress)} mi"
 
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
             val hit = hits[position]
-
 
             for (hitView in hitViews) {
                 if (mappedViews.contains(hitView as View)) {
@@ -441,6 +460,12 @@ class HitsCustomized
             }
         }
 
+        private fun getDistanceFromMechanic(clientAddress: Address, mechanicAddress: Address): Double {
+            val clientLatLng = AddressManager.convertAddressToLatLng(context, clientAddress)
+            val mechanicLatLng = AddressManager.convertAddressToLatLng(context, mechanicAddress)
+            return AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
+        }
+
         private fun getFloatValue(attributeValue: String?): Float {
             return if (attributeValue != null) java.lang.Float.parseFloat(attributeValue) else 0f
         }
@@ -468,8 +493,8 @@ class HitsCustomized
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
             val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
-            val profileImage = itemView.findViewById<CircleImageView>(com.example.mobilemechanic.R.id.id_mechanic_profile_image)
             val mechanicRating = itemView.findViewById<RatingBar>(com.example.mobilemechanic.R.id.id_mechanic_rating)
+            val distance = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_distance)
 
             init {
                 var indexVariant: String? = defaultValue

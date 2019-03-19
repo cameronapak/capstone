@@ -5,15 +5,17 @@ import android.location.Geocoder
 import android.location.Location
 import com.example.mobilemechanic.model.dto.Address
 import com.google.android.gms.maps.model.LatLng
+import java.util.*
 
 object AddressManager
 {
-    fun getFullAddress(address: Address) = "${address.street} ${address.city}, ${address.state} ${address.zipCode}"
 
-    fun convertAddress(context: Context, address: String) : LatLng
+//    fun getFullAddress(address: Address) = "${address.street} ${address.city}, ${address.state} ${address.zipCode}"
+
+    fun convertAddressToLatLng(context: Context, address: Address?) : LatLng
     {
-        val geoCoder = Geocoder(context)
-        val addressList = geoCoder.getFromLocationName(address, 1)
+        val geoCoder = Geocoder(context, Locale.US)
+        val addressList = geoCoder.getFromLocationName(address.toString(), 1)
         return if (addressList.size > 0) LatLng(addressList[0].latitude, addressList[0].longitude)
         else LatLng(35.656017, -97.473716)
     }

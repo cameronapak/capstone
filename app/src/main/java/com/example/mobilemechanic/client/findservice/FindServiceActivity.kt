@@ -16,10 +16,13 @@ import com.algolia.search.saas.Client
 import com.algolia.search.saas.Index
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.DataProviderManager
+import com.example.mobilemechanic.model.User
+import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_find_service.*
 import kotlinx.android.synthetic.main.dialog_body_algolia_filter.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
@@ -27,7 +30,8 @@ import kotlinx.android.synthetic.main.dialog_container_basic.*
 
 class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var mFireStore: FirebaseStorage
+    private lateinit var mFireStore: FirebaseFirestore
+    private lateinit var mAth: FirebaseAuth
     private lateinit var searcher: Searcher
     private lateinit var index: Index
     private lateinit var client: Client
@@ -41,7 +45,8 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_find_service)
-        mFireStore = FirebaseStorage.getInstance()
+        mFireStore = FirebaseFirestore.getInstance()
+        mAth = FirebaseAuth.getInstance()
         setUpFindServiceActivity()
     }
 
@@ -63,6 +68,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         val hits = findViewById<HitsCustomized>(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
     }
+
 
     private fun setUpToolBar() {
         val arrow = resources.getDrawable(com.example.mobilemechanic.R.drawable.abc_ic_ab_back_material, null)

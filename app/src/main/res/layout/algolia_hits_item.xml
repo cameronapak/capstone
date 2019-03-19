@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/id_mechanic_name"
                 android:fontFamily="@font/roboto_bold"
-                android:textColor="@color/colorAccent"
+                android:textColor="@color/colorGrayTextDark2"
                 algolia:layout_constraintTop_toTopOf="@+id/id_mechanic_profile_image" android:layout_marginStart="8dp"
                 algolia:layout_constraintStart_toStartOf="@+id/id_mechanic_rating"/>
         <RatingBar
@@ -70,7 +70,7 @@
                 android:id="@+id/id_price"
                 algolia:layout_constraintEnd_toEndOf="@+id/id_select"
                 android:layout_marginTop="16dp"
-                algolia:layout_constraintTop_toTopOf="parent"/>
+                algolia:layout_constraintTop_toTopOf="parent" android:textColor="@color/colorGrayTextDark2"/>
         <TextView
                 android:text="15 Reviews"
                 android:layout_width="wrap_content"
@@ -89,5 +89,12 @@
                 algolia:layout_constraintTop_toBottomOf="@+id/textView3"
                 algolia:layout_constraintStart_toStartOf="@+id/id_mechanic_name" android:layout_marginTop="8dp"
                 android:textSize="12sp" android:fontFamily="@font/roboto" android:textColor="@color/colorGrayTextDark"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_distance"
+                algolia:layout_constraintTop_toBottomOf="@+id/id_price"
+                algolia:layout_constraintEnd_toEndOf="@+id/id_price" android:textSize="10sp"
+                android:textColor="@color/colorGrayTextDark"/>
     </android.support.constraint.ConstraintLayout>
 </layout>

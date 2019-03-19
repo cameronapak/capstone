@@ -16,9 +16,11 @@ import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.shared.USER_TAG
 import com.example.mobilemechanic.shared.messaging.MessagesActivity
+import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import java.util.*
 
 class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRoom>, var userType: UserType) :
     RecyclerView.Adapter<ChatRoomListAdapter.ViewHolder>()
@@ -30,6 +32,7 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
     inner class ViewHolder(v: View) : RecyclerView.ViewHolder(v) {
         val otherMemberName = itemView.findViewById<TextView>(R.id.id_other_member_name)
         val latestMessage = itemView.findViewById<TextView>(R.id.id_latest_message)
+        val latestMessageTimeStamp = itemView.findViewById<TextView>(R.id.id_latest_message_time_stamp)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatRoomListAdapter.ViewHolder {
@@ -78,12 +81,11 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
                 return@addSnapshotListener
             }
 
-            if (querySnapshot != null) {
-                for (message in querySnapshot!!) {
-                    Log.d(USER_TAG, "[ChatRoomListAdapter] chatroom ${chatRoom.objectID} latest message $message")
-                    latestMessage = message.toObject(Message::class.java)
-                    holder.latestMessage.text = latestMessage.contents
-                }
+            if (querySnapshot != null && !querySnapshot.isEmpty) {
+                latestMessage = querySnapshot.single().toObject(Message::class.java)
+                Log.d(USER_TAG, "[ChatRoomListAdapter] chatroom ${chatRoom.objectID} latest message $latestMessage")
+                holder.latestMessage.text = latestMessage.contents
+                holder.latestMessageTimeStamp.text = DateTimeManager.millisToDate(latestMessage.timeStamp, "h:m a")
             }
         }
     }

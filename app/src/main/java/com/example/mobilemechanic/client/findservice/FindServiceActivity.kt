@@ -32,8 +32,8 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     private lateinit var index: Index
     private lateinit var client: Client
     private lateinit var helper: InstantSearch
-    private var priceRefinement: NumericRefinement? = null
-    private var ratingRefinement: NumericRefinement? = null
+    private lateinit var priceRefinement: NumericRefinement
+    private lateinit var distanceRefinement: NumericRefinement
     private var operatorLessThanOrEqual = NumericRefinement.OPERATOR_LE
     private var priceBelow = Double.MAX_VALUE
     private var spinnerSelectedPosition = 0
@@ -120,7 +120,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     private fun filterPrice() {
         priceRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, priceBelow)
-        searcher.addNumericRefinement(priceRefinement as NumericRefinement)
+        searcher.addNumericRefinement(priceRefinement)
         searcher.search()
     }
 

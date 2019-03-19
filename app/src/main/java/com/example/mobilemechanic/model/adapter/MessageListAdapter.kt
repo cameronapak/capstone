@@ -58,7 +58,11 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
             Picasso.get().load(Uri.parse(message.chatUserInfo.photoUrl)).into(holder.profilePhoto)
         }
 
-        holder.itemView.setOnClickListener { 
+        hideKeyBoardOnItemClick(holder)
+    }
+
+    private fun hideKeyBoardOnItemClick(holder: MessageListAdapter.ViewHolder) {
+        holder.itemView.setOnClickListener {
             ScreenManager.hideKeyBoard(context)
         }
     }

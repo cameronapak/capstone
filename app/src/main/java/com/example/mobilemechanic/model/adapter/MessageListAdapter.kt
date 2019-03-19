@@ -10,6 +10,7 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.messaging.Message
 import com.example.mobilemechanic.shared.utility.DateTimeManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.example.mobilemechanic.shared.utility.StringManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -55,6 +56,10 @@ class MessageListAdapter(var context: Activity, var messages: ArrayList<Message>
             Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profilePhoto)
         } else {
             Picasso.get().load(Uri.parse(message.chatUserInfo.photoUrl)).into(holder.profilePhoto)
+        }
+
+        holder.itemView.setOnClickListener { 
+            ScreenManager.hideKeyBoard(context)
         }
     }
 

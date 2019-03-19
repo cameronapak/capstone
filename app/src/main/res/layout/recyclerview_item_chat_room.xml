@@ -38,7 +38,6 @@
             app:layout_constraintStart_toStartOf="@+id/id_other_member_name" android:textColor="@color/colorGrayText"
             android:textSize="10sp"/>
     <TextView
-            android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id_latest_message_time_stamp"

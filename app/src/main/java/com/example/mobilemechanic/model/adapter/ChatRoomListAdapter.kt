@@ -2,6 +2,7 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -20,6 +21,7 @@ import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
 import java.util.*
 
@@ -100,11 +102,23 @@ class ChatRoomListAdapter(var context: Activity, var chatRooms: ArrayList<ChatRo
 
     private fun setUpClientDisplay(holder: ChatRoomListAdapter.ViewHolder, chatRoom: ChatRoom)
     {
+        if (chatRoom.mechanicMember.photoUrl.isNullOrEmpty()) {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profileImage)
+        } else {
+            Picasso.get().load(Uri.parse(chatRoom.mechanicMember.photoUrl)).into(holder.profileImage)
+        }
+
         holder.otherMemberName.text = "${chatRoom.mechanicMember.firstName} ${chatRoom.mechanicMember.lastName}"
     }
 
     private fun setUpMechanicDisplay(holder: ChatRoomListAdapter.ViewHolder, chatRoom: ChatRoom)
     {
+        if (chatRoom.mechanicMember.photoUrl.isNullOrEmpty()) {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(holder.profileImage)
+        } else {
+            Picasso.get().load(Uri.parse(chatRoom.clientMember.photoUrl)).into(holder.profileImage)
+        }
+
         holder.otherMemberName.text = "${chatRoom.clientMember.firstName} ${chatRoom.clientMember.lastName}"
     }
 }

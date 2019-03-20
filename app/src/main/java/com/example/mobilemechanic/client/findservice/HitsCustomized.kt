@@ -376,11 +376,11 @@ class HitsCustomized
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
 
             if (AddressManager.hasAddress()) {
-                val clientLatLng = AddressManager.convertAddressToLatLng(context, AddressManager.getUserAddress())
-                val mechanicLatLng = AddressManager.convertAddressToLatLng(context, serviceObj.mechanicInfo.address)
-                val distance = AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
-                Log.d(CLIENT_TAG, "[HitsCustomized] distance from ${serviceObj.mechanicInfo.basicInfo.firstName} is $distance")
-                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
+//                val clientLatLng = AddressManager.convertAddressToLatLng(context, AddressManager.getUserAddress())
+//                val mechanicLatLng = AddressManager.convertAddressToLatLng(context, serviceObj.mechanicInfo.address)
+//                val distance = AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
+//                Log.d(CLIENT_TAG, "[HitsCustomized] distance from ${serviceObj.mechanicInfo.basicInfo.firstName} is $distance")
+//                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
             }
 
             val mappedViews = holder.viewMap.keys

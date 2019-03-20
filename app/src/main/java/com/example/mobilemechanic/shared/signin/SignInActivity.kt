@@ -40,8 +40,6 @@ class SignInActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
-        Log.d(CLIENT_TAG, "[SignInActivity] mAuth.currentUser.email: ${mAuth.currentUser?.email}")
-        Log.d(CLIENT_TAG, "[SignInActivity] mAuth.currentUser.email: ${mAuth.currentUser?.uid}")
         setUpSignInActivity()
     }
 
@@ -105,6 +103,7 @@ class SignInActivity : AppCompatActivity() {
                     } else {
                         startActivity(Intent(this, MechanicWelcomeActivity::class.java))
                     }
+                    finish()
                 }
         }
     }

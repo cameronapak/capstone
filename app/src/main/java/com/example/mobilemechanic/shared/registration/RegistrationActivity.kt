@@ -15,7 +15,7 @@ import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
-import com.example.mobilemechanic.shared.USER_TAG
+import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore

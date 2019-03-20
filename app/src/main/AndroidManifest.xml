@@ -89,7 +89,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.SignInActivity">
+        <activity android:name=".shared.signin.SignInActivity">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

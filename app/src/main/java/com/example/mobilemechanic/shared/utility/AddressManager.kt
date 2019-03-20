@@ -10,7 +10,19 @@ import java.util.*
 object AddressManager
 {
 
-//    fun getFullAddress(address: Address) = "${address.street} ${address.city}, ${address.state} ${address.zipCode}"
+    private var address: Address? = null
+
+    fun saveUserAddress(addr: Address) {
+        address = addr
+    }
+
+    fun getUserAddress(): Address? {
+        return address
+    }
+
+    fun hasAddress() : Boolean {
+        return address != null
+    }
 
     fun convertAddressToLatLng(context: Context, address: Address?) : LatLng
     {

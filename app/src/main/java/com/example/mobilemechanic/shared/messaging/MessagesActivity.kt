@@ -13,7 +13,7 @@ import com.example.mobilemechanic.model.adapter.MessageListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.example.mobilemechanic.model.messaging.Message
-import com.example.mobilemechanic.shared.USER_TAG
+import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.StringManager
 import com.google.firebase.auth.FirebaseAuth

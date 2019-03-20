@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared
+package com.example.mobilemechanic.shared.signin
 
 import android.app.Dialog
 import android.content.Intent
@@ -14,12 +14,13 @@ import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
+import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.registration.RegistrationActivity
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.iid.FirebaseInstanceId
 import kotlinx.android.synthetic.main.activity_sign_in.*
@@ -82,6 +83,9 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun updateUserProfile(userInfo: User) {
+        Log.d(CLIENT_TAG, "[SignInActivity] AddressManager.saveUserAddress ${userInfo.address}")
+        AddressManager.saveUserAddress(userInfo.address)
+
         val user = mAuth?.currentUser
         if (user != null) {
             val profileUpdates = UserProfileChangeRequest.Builder()
@@ -101,7 +105,6 @@ class SignInActivity : AppCompatActivity() {
                     } else {
                         startActivity(Intent(this, MechanicWelcomeActivity::class.java))
                     }
-                    finish()
                 }
         }
     }
@@ -110,11 +113,7 @@ class SignInActivity : AppCompatActivity() {
         val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val body = layoutInflater.inflate(R.layout.dialog_body_reset_password, null)
 
-        basicDialog = BasicDialog.Builder.apply {
-            title = "Reset"
-            negative = "Cancel"
-            positive = "Reset"
-        }.build(this, container, body)
+        basicDialog = BasicDialog.Builder.build(this, container, body)
         basicDialog.show()
 
         handleDialogOnClick(basicDialog)
@@ -137,8 +136,6 @@ class SignInActivity : AppCompatActivity() {
     private fun sendFcmTokenToFirestore(token: String?) {
         mFirestore = FirebaseFirestore.getInstance()
         Log.d(CLIENT_TAG, "[SignInActivity] sendFcmTokenToFirebtore() token: $token")
-        Log.d(CLIENT_TAG, "[SignInActivity] mAuth.currentUser.email: ${mAuth.currentUser?.email}")
-        Log.d(CLIENT_TAG, "[SignInActivity] mAuth.currentUser.email: ${mAuth.currentUser?.uid}")
         mFirestore.collection("Accounts")
             ?.document("${mAuth.currentUser?.uid}")
             .update("fcmToken", token)

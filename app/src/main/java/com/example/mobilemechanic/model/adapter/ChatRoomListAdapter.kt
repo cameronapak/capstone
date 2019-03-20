@@ -15,7 +15,7 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.EXTRA_CHAT_ROOM
 import com.example.mobilemechanic.model.messaging.Message
-import com.example.mobilemechanic.shared.USER_TAG
+import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.messaging.MessagesActivity
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.firebase.firestore.CollectionReference

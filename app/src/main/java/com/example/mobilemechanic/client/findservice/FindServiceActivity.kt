@@ -12,12 +12,8 @@ import android.widget.AdapterView
 import com.algolia.instantsearch.core.helpers.Searcher
 import com.algolia.instantsearch.core.model.NumericRefinement
 import com.algolia.instantsearch.ui.helpers.InstantSearch
-import com.algolia.search.saas.Client
-import com.algolia.search.saas.Index
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.DataProviderManager
-import com.example.mobilemechanic.model.User
-import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -32,12 +28,12 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     private lateinit var mFireStore: FirebaseFirestore
     private lateinit var mAth: FirebaseAuth
+
     private lateinit var searcher: Searcher
-    private lateinit var index: Index
-    private lateinit var client: Client
     private lateinit var helper: InstantSearch
     private lateinit var priceRefinement: NumericRefinement
     private lateinit var distanceRefinement: NumericRefinement
+    private lateinit var hits: HitsCustomized
     private var operatorLessThanOrEqual = NumericRefinement.OPERATOR_LE
     private var priceBelow = Double.MAX_VALUE
     private var spinnerSelectedPosition = 0
@@ -47,6 +43,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         setContentView(com.example.mobilemechanic.R.layout.activity_find_service)
         mFireStore = FirebaseFirestore.getInstance()
         mAth = FirebaseAuth.getInstance()
+
         setUpFindServiceActivity()
     }
 
@@ -65,7 +62,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
         helper = InstantSearch(this, searcher)
         helper.search()
-        val hits = findViewById<HitsCustomized>(com.example.mobilemechanic.R.id.id_hits_customized)
+        hits = findViewById<HitsCustomized>(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
     }
 

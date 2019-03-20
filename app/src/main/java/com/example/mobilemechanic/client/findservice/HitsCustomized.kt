@@ -38,13 +38,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
-import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -56,9 +53,6 @@ const val EXTRA_SERVICE = "extra_service"
 class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
     AlgoliaErrorListener, AlgoliaSearcherListener {
-
-    private var mFirestore: FirebaseFirestore
-    private var mAuth: FirebaseAuth
     private var remainingItemsBeforeLoading: Int
     var layoutId: Int = 0
         protected set
@@ -70,7 +64,6 @@ class HitsCustomized
     private var infiniteScrollListener: InfiniteScrollListener?
     private var keyboardListener: RecyclerView.OnScrollListener? = null
     private var emptyView: View? = null
-    private lateinit var clientAddress: Address
 
     init {
 
@@ -82,9 +75,6 @@ class HitsCustomized
         }
 
         gson = Gson()
-        mFirestore = FirebaseFirestore.getInstance()
-        mAuth = FirebaseAuth.getInstance()
-        getClientAddress()
         val infiniteScroll: Boolean
         val styledAttributes = context.theme.obtainStyledAttributes(attrs, R.styleable.Hits, 0, 0)
         try {
@@ -130,23 +120,12 @@ class HitsCustomized
         }
     }
 
-    private fun getClientAddress() {
-        val uid = mAuth.currentUser?.uid
-        if (uid != null) {
-            mFirestore.collection("Accounts").document(uid)
-                .get()
-                .addOnSuccessListener {
-                    if (it != null) {
-                        val account = it.toObject(User::class.java)
-                        Log.d(CLIENT_TAG, "[HitsCustomized] client address ${account?.address}")
-                        clientAddress = account?.address!!
-                    }
-                }
-        }
-    }
-
     private fun clear() {
         adapter.clear()
+    }
+
+    fun addAddress(address: Address) {
+        adapter.addAddress(address)
     }
 
     operator fun get(position: Int): JSONObject {
@@ -339,6 +318,7 @@ class HitsCustomized
 
         private var hits = ArrayList<JSONObject>()
         private val placeholders = SparseArray<Drawable>()
+        private lateinit var clientAddress: Address
 
         init {
             this.hits = ArrayList()
@@ -357,6 +337,11 @@ class HitsCustomized
 
         fun add(result: JSONObject) {
             hits.add(result)
+        }
+
+        fun addAddress(address: Address) {
+            clientAddress = address
+            Log.d(CLIENT_TAG, "[HitsCustomized] client address $clientAddress")
         }
 
         internal fun getItemAt(position: Int): JSONObject {
@@ -390,8 +375,13 @@ class HitsCustomized
 
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
 
-            val mechanicAddress = serviceObj.mechanicInfo.address
-            holder.distance.text = "${getDistanceFromMechanic(clientAddress, mechanicAddress)} mi"
+            if (AddressManager.hasAddress()) {
+                val clientLatLng = AddressManager.convertAddressToLatLng(context, AddressManager.getUserAddress())
+                val mechanicLatLng = AddressManager.convertAddressToLatLng(context, serviceObj.mechanicInfo.address)
+                val distance = AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
+                Log.d(CLIENT_TAG, "[HitsCustomized] distance from ${serviceObj.mechanicInfo.basicInfo.firstName} is $distance")
+                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
+            }
 
             val mappedViews = holder.viewMap.keys
             val hitViews =

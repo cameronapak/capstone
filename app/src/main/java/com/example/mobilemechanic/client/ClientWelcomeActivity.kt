@@ -22,8 +22,8 @@ import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.UserType
-import com.example.mobilemechanic.shared.SignInActivity
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
+import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -68,6 +68,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
         Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User email: ${mAuth.currentUser?.email}")
     }
+
 
     private fun setUpToolBar() {
         Log.d(CLIENT_TAG, "[ClientWelcomeActivity] user full otherMemberName ${mAuth?.currentUser?.displayName}")

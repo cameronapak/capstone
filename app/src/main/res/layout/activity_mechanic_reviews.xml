@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".client.mechanicreview.MechanicReviewsActivity">
+
+    <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="78dp"
+            style="@style/AppActionBar"
+            app:titleTextAppearance="@style/AppActionBarTitle"
+            app:subtitleTextAppearance="@style/AppActionBarSubtitle"
+            android:id="@+id/id_mechanic_reviews_toolbar"/>
+
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <ImageView
+                android:layout_height="238dp"
+                app:srcCompat="@drawable/bg_more"
+                android:id="@+id/id_mechanic_reviews_bgmore"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="76dp"
+                android:layout_width="wrap_content"
+                android:scaleType="fitXY"/>
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="411dp"
+                android:layout_height="408dp"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="320dp" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.0"/>
+        <include android:layout_width="347dp"
+                 android:layout_height="256dp"
+                 layout="@layout/content_mechanic_reviews"
+                 android:id="@+id/include"
+                 app:layout_constraintTop_toTopOf="parent"
+                 app:layout_constraintStart_toStartOf="parent"
+                 app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="92dp"/>
+    </android.support.constraint.ConstraintLayout>
+
+</FrameLayout>

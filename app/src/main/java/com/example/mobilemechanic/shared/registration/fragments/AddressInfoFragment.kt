@@ -23,9 +23,11 @@ import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
+import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import com.example.mobilemechanic.shared.signin.USER_TAG
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -160,7 +162,12 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             (!(password.isNullOrEmpty() || password.isNullOrBlank()))
         ) {
 
-            val address = Address(street, city, state, zip)
+            val address = Address(street, city, state, zip, LatLngHolder())
+
+            val userLatLng = AddressManager.convertAddressToLatLng(context!!, address)
+            val latlngHolder = LatLngHolder(userLatLng.latitude, userLatLng.longitude)
+            address._geoloc = latlngHolder
+
             val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
             val user = User("", "", password, userType!!, basicInfo, address, 0f)
 

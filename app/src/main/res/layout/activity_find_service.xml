@@ -23,7 +23,7 @@
                 android:id="@+id/id_find_service_toolbar"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
-        <com.algolia.instantsearch.ui.views.SearchBox
+        <SearchView
                 android:id="@+id/searchBox"
                 android:layout_width="0dp"
                 android:background="@drawable/bg_white_rounded"

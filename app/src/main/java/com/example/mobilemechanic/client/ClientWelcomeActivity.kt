@@ -116,6 +116,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.id_find_service -> {
                     startActivity(Intent(this, FindServiceActivity::class.java))
+//                    startActivity(Intent(this, FindServiceActivityTest::class.java))
                     true
                 }
                 R.id.id_history -> {

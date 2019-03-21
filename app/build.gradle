@@ -51,7 +51,7 @@ dependencies {
     implementation 'com.github.badoualy:stepper-indicator:1.0.7'
 
     implementation 'com.algolia:algoliasearch-android:3.+'
-    implementation 'com.algolia:algoliasearch-android:2.4.0@aar'
+//    implementation 'com.algolia:algoliasearch-android:2.4.0@aar'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     implementation 'com.algolia:instantsearch-android:1.+'
 

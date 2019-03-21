@@ -13,9 +13,11 @@ import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.adapter.ServiceListAdapter
 import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -146,6 +148,10 @@ class MechanicServicesActivity : AppCompatActivity() {
                 Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia service  $service")
 
                 val address = user.address
+                val mechanicAddressLatLng = AddressManager.convertAddressToLatLng(this, address)
+                val latlngHolder = LatLngHolder(mechanicAddressLatLng.latitude, mechanicAddressLatLng.longitude)
+                address._geoloc = latlngHolder
+
                 val mechanicInfo = MechanicInfo(
                     user.uid,
                     user.basicInfo,
@@ -153,7 +159,7 @@ class MechanicServicesActivity : AppCompatActivity() {
                     user.rating
                 )
 
-                var service = ServiceModel("", mechanicInfo, service)
+                var service = ServiceModel("", mechanicInfo, service, latlngHolder)
                 serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
                     Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
                 }

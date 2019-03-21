@@ -7,15 +7,17 @@ data class Address(
     var street: String,
     var city: String,
     var state: String,
-    var zipCode: String
+    var zipCode: String,
+    var _geoloc: LatLngHolder
 ) : Parcelable {
-    constructor() : this("", "", "", "")
+    constructor() : this("", "", "", "", LatLngHolder())
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString()
+        parcel.readString(),
+        parcel.readParcelable(LatLngHolder::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -23,6 +25,7 @@ data class Address(
         parcel.writeString(state)
         parcel.writeString(city)
         parcel.writeString(zipCode)
+        parcel.writeParcelable(_geoloc, flags)
     }
 
     override fun describeContents(): Int {

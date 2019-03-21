@@ -232,10 +232,13 @@ class HitsCustomized
     }
 
     override fun initWithSearcher(searcher: Searcher) {
+        Log.d(CLIENT_TAG, "initWithSearcher")
         this.searcher = searcher
     }
 
     override fun onResults(results: SearchResults, isLoadingMore: Boolean) {
+        Log.d(CLIENT_TAG, "[HitsCustomized] result $results")
+        Log.d(CLIENT_TAG, "[HitsCustomized] ${results.content}")
         addHits(results, !isLoadingMore)
     }
 
@@ -358,6 +361,7 @@ class HitsCustomized
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val serviceJson = hits[position]
+            Log.d(CLIENT_TAG, "[HitsCustomized] $serviceJson")
             val serviceObj = gson.fromJson(serviceJson.toString(), ServiceModel::class.java)
 
             holder.price.text = "$${serviceObj.service.price.toInt()}"
@@ -376,11 +380,11 @@ class HitsCustomized
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
 
             if (AddressManager.hasAddress()) {
-//                val clientLatLng = AddressManager.convertAddressToLatLng(context, AddressManager.getUserAddress())
-//                val mechanicLatLng = AddressManager.convertAddressToLatLng(context, serviceObj.mechanicInfo.address)
-//                val distance = AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
-//                Log.d(CLIENT_TAG, "[HitsCustomized] distance from ${serviceObj.mechanicInfo.basicInfo.firstName} is $distance")
-//                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
+                val clientLatLng = AddressManager.convertAddressToLatLng(context, AddressManager.getUserAddress())
+                val mechanicLatLng = AddressManager.convertAddressToLatLng(context, serviceObj.mechanicInfo.address)
+                val distance = AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
+                Log.d(CLIENT_TAG, "[HitsCustomized] distance from ${serviceObj.mechanicInfo.basicInfo.firstName} is $distance")
+                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
             }
 
             val mappedViews = holder.viewMap.keys

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/constraintLayout2">
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="347dp"
+            android:layout_height="36.72dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/round_corner"
+            app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <Button
+                android:text="@string/label_call_btn"
+                android:fontFamily="@font/qualio_font_family"
+                android:textColor="@color/colorPrimary4"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_call_button"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/id_message_button" android:layout_marginStart="24dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <Button
+                android:text="@string/text_message"
+                android:fontFamily="@font/qualio_font_family"
+                android:textColor="@color/colorPrimary4"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_message_button"
+                android:textSize="12sp"
+                app:layout_constraintStart_toEndOf="@+id/id_email_button" android:layout_marginStart="20dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+        <Button
+                android:text="@string/text_email"
+                android:fontFamily="@font/qualio_font_family"
+                android:textColor="@color/colorPrimary4"
+                style="@style/Base.Widget.AppCompat.Button.Borderless"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_email_button"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="36dp"
+                app:layout_constraintTop_toTopOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="347dp"
+            android:layout_height="135dp"
+            android:background="@drawable/round_corner"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/constraintLayout">
+        <RelativeLayout
+                android:layout_width="98dp"
+                android:layout_height="50dp"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="16dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_mechanic_more_info_image"
+                android:layout_marginTop="8dp">
+
+            <TextView
+                    android:text="TextView"
+                    android:textSize="10sp"
+                    android:layout_width="48dp"
+                    android:layout_height="12dp"
+                    android:id="@+id/id_mechanic_more_info_reviews_count"
+                    android:layout_below="@id/id_mechanic_more_info_rating"
+                    android:layout_marginStart="10dp"/>
+            <RatingBar
+                    style="@style/AppRatingBarSmall"
+                    android:rating="4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/id_mechanic_more_info_rating"
+                    android:layout_below="@id/id_mechanic_more_info_name"
+                    android:numStars="5" android:layout_marginTop="0dp"/>
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="89dp"
+                    android:layout_height="18dp"
+                    android:textSize="18sp"
+                    android:id="@+id/id_mechanic_more_info_name"
+                    style="@style/QualioFont"
+                    android:layout_marginStart="10dp" android:layout_marginTop="0dp"
+                    android:layout_alignParentTop="true"/>
+        </RelativeLayout>
+        <ImageView
+                android:layout_width="56dp"
+                android:layout_height="58dp" app:srcCompat="@color/colorGrayTextDark2"
+                android:id="@+id/id_mechanic_more_info_image" app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="16dp"
+        />
+        <RelativeLayout
+                android:layout_width="85dp"
+                android:layout_height="87dp"
+                app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
+                android:id="@+id/relativeLayout5" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="121dp">
+
+            <TextView
+                    android:text="TextView"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:id="@+id/id_mechanic_more_info_service_items"
+                    android:textSize="10sp"
+                    android:layout_alignParentStart="true" android:layout_marginStart="5dp"
+                    android:layout_marginTop="-1dp" android:layout_below="@+id/id_mechanic_more_info_service_offer"/>
+            <TextView
+                    android:text="Service Offer"
+                    android:textSize="14sp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/id_mechanic_more_info_service_offer" android:layout_marginTop="0dp"
+                    android:layout_alignParentTop="true"
+                    android:fontFamily="@font/qualio_font_family"
+                    android:textColor="@color/colorPrimary4" android:layout_alignParentStart="true"
+                    android:layout_marginStart="6dp"/>
+        </RelativeLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

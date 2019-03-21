@@ -36,6 +36,8 @@
     <string name="text_summary">Summary</string>
     <string name="text_mechanic">Mechanic</string>
     <string name="text_service_completed">Service Completed</string>
+    <string name="text_email">Email</string>
+    <string name="text_message">Message</string>
 
     <string name="notification">Notification</string>
     <string name="garage">Garage</string>
@@ -165,5 +167,6 @@
     <string name="label_chatlog">Enter Message</string>
     <string name="label_send_msg_btn">Send</string>
     <string name="text_check_faq">Have question? Check our FAQ page.</string>
+    <string name="title_activity_mechanic_reviews">MechanicReviewsActivity</string>
 
 </resources>

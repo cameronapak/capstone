@@ -58,7 +58,7 @@ class SignInActivity : AppCompatActivity() {
             return
         }
 
-        mAuth?.signInWithEmailAndPassword(email, password)
+        mAuth?.signInWithEmailAndPassword("dat@gmail.com", "123456")
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
                     checkUserType()
@@ -79,6 +79,7 @@ class SignInActivity : AppCompatActivity() {
                 }
             }
     }
+
 
     private fun updateUserProfile(userInfo: User) {
         Log.d(CLIENT_TAG, "[SignInActivity] AddressManager.saveUserAddress ${userInfo.address}")

@@ -3,13 +3,13 @@ package com.example.mobilemechanic.client.findservice
 import android.app.Dialog
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.os.StrictMode
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.SearchView
 import com.algolia.instantsearch.core.helpers.Searcher
 import com.algolia.instantsearch.core.model.NumericRefinement
 import com.algolia.instantsearch.ui.helpers.InstantSearch
@@ -47,6 +47,9 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_find_service)
+
+        StrictMode.enableDefaults()
+
         mFireStore = FirebaseFirestore.getInstance()
         mAth = FirebaseAuth.getInstance()
 
@@ -80,18 +83,18 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         hits = findViewById(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
 
-        searchBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(p0: String?): Boolean {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-            }
-
-            override fun onQueryTextChange(query: String?): Boolean {
-                Log.d(CLIENT_TAG, "[FindServiceActivity] onQueryTextChange $query")
-                searcher.search(query)
-                return true
-            }
-
-        })
+//        searchBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//            }
+//
+//            override fun onQueryTextChange(query: String?): Boolean {
+//                Log.d(CLIENT_TAG, "[FindServiceActivity] onQueryTextChange $query")
+//                searcher.search(query)
+//                return true
+//            }
+//
+//        })
     }
 
 

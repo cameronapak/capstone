@@ -7,6 +7,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Build
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -49,10 +50,15 @@ import org.json.JSONObject
 import java.util.*
 
 const val EXTRA_SERVICE = "extra_service"
+const val EXTRA_CLIENT_LAT = "extra_client_lat"
+const val EXTRA_CLIENT_LNG = "extra_client_lng"
+const val EXTRA_MECHANIC_LAT = "extra_mechanic_lat"
+const val EXTRA_MECHANIC_LNG = "extra_mechanic_lng"
 
 class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
     AlgoliaErrorListener, AlgoliaSearcherListener {
+
     private var remainingItemsBeforeLoading: Int
     var layoutId: Int = 0
         protected set
@@ -75,6 +81,7 @@ class HitsCustomized
         }
 
         gson = Gson()
+
         val infiniteScroll: Boolean
         val styledAttributes = context.theme.obtainStyledAttributes(attrs, R.styleable.Hits, 0, 0)
         try {
@@ -122,10 +129,6 @@ class HitsCustomized
 
     private fun clear() {
         adapter.clear()
-    }
-
-    fun addAddress(address: Address) {
-        adapter.addAddress(address)
     }
 
     operator fun get(position: Int): JSONObject {
@@ -342,11 +345,6 @@ class HitsCustomized
             hits.add(result)
         }
 
-        fun addAddress(address: Address) {
-            clientAddress = address
-            Log.d(CLIENT_TAG, "[HitsCustomized] client address $clientAddress")
-        }
-
         internal fun getItemAt(position: Int): JSONObject {
             return hits[position]
         }
@@ -380,11 +378,20 @@ class HitsCustomized
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
 
             if (AddressManager.hasAddress()) {
-                val clientLatLng = AddressManager.convertAddressToLatLng(context, AddressManager.getUserAddress())
-                val mechanicLatLng = AddressManager.convertAddressToLatLng(context, serviceObj.mechanicInfo.address)
-                val distance = AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
-                Log.d(CLIENT_TAG, "[HitsCustomized] distance from ${serviceObj.mechanicInfo.basicInfo.firstName} is $distance")
-                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
+                val userAddress = AddressManager.getUserAddress()
+                Log.d(CLIENT_TAG, "[HitsCustomized] $userAddress")
+                val clientLocation = Location("client").apply {
+                    latitude = userAddress?._geoloc!!.lat
+                    longitude = userAddress?._geoloc!!.lng
+                }
+
+                val mechanicLocation = Location("mechanic").apply {
+                    latitude = serviceObj._geoloc.lat
+                    longitude = serviceObj._geoloc.lng
+                }
+
+                val distance = (mechanicLocation.distanceTo(clientLocation).toDouble() / 1000) / 1.609
+                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles,distance)
             }
 
             val mappedViews = holder.viewMap.keys

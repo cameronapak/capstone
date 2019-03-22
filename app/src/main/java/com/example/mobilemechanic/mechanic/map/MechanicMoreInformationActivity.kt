@@ -12,7 +12,6 @@ import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
-import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
@@ -119,9 +118,8 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         }
 
         //convert the address string into latitude, longitude pair for google maps
-        val address = request.clientInfo!!.address
-        val clientAddress = "${address.street} ${address.city}, ${address.state} ${address.zipCode}"
-        val clientLatLng = AddressManager.convertAddress(this, clientAddress)
+        val clientAddress = request.clientInfo?.address
+        val clientLatLng = AddressManager.convertAddressToLatLng(this, clientAddress)
 
         //zoom into client's location on the map
         val cameraPosition = CameraPosition.Builder()

@@ -18,12 +18,10 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
-import com.example.mobilemechanic.model.EXTRA_USER_TYPE
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.Status
-import com.example.mobilemechanic.model.UserType
-import com.example.mobilemechanic.shared.SignInActivity
+import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
+import com.example.mobilemechanic.shared.signin.SignInActivity
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -59,6 +57,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
         setUpDrawerMenu()
         setUpNavigationListener()
         setUpRequestRecyclerView()
+        getUserAddress()
     }
 
     private fun initFirestore() {
@@ -68,6 +67,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
         Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User uid: ${mAuth.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User email: ${mAuth.currentUser?.email}")
     }
+
 
     private fun setUpToolBar() {
         Log.d(CLIENT_TAG, "[ClientWelcomeActivity] user full otherMemberName ${mAuth?.currentUser?.displayName}")
@@ -116,6 +116,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.id_find_service -> {
                     startActivity(Intent(this, FindServiceActivity::class.java))
+//                    startActivity(Intent(this, FindServiceActivityTest::class.java))
                     true
                 }
                 R.id.id_history -> {
@@ -178,6 +179,19 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
                 clientRequestRecyclerAdapter.notifyDataSetChanged()
             }
+    }
+
+    private fun getUserAddress() {
+        if (!AddressManager.hasAddress()) {
+            mFirestore.collection("Accounts")
+                .document(mAuth.currentUser?.uid.toString()).get()
+                ?.addOnSuccessListener {
+                    val user = it.toObject(User::class.java)
+                    if (user != null) {
+                        AddressManager.saveUserAddress(user.address)
+                    }
+                }
+        }
     }
 
     private fun signInGuard() {

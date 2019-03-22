@@ -14,8 +14,8 @@ import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.registration.RegistrationViewModel
-import com.example.mobilemechanic.shared.SignInActivity
-import com.example.mobilemechanic.shared.USER_TAG
+import com.example.mobilemechanic.shared.signin.SignInActivity
+import com.example.mobilemechanic.shared.signin.USER_TAG
 import kotlinx.android.synthetic.main.fragment_credentials.*
 
 class CredentialsFragment : Fragment() {

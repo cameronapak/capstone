@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
             android:allowBackup="true"
@@ -21,9 +22,9 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
         <activity
-                android:name=".client.mechanicreview.MechanicReviewsActivity"
-                android:label="@string/title_activity_mechanic_reviews"
-                android:theme="@style/AppTheme.NoActionBar">
+                android:name=".client.mechanicreview.MechanicReviewsActivity">
+        </activity>
+        <activity android:name=".client.review.ReviewActivity">
         </activity>
         <activity android:name=".shared.messaging.ChatRoomsActivity">
         </activity>
@@ -94,7 +95,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.SignInActivity">
+        <activity android:name=".shared.signin.SignInActivity">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -152,9 +152,8 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         //convert the address string into latitude, longitude pair for google maps
-        val address = extraRequest.clientInfo!!.address
-        val clientAddress = "${address.street} ${address.city}, ${address.state} ${address.zipCode}"
-        val clientLatLng = AddressManager.convertAddress(this, clientAddress)
+        val clientAddress = extraRequest.clientInfo!!.address
+        val clientLatLng = AddressManager.convertAddressToLatLng(this, clientAddress)
 
         //zoom into client's location on the map
         val cameraPosition = CameraPosition.Builder()

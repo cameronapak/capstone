@@ -24,8 +24,6 @@
         <activity
                 android:name=".client.mechanicreview.MechanicReviewsActivity">
         </activity>
-        <activity android:name=".client.review.ReviewActivity">
-        </activity>
         <activity android:name=".shared.messaging.ChatRoomsActivity">
         </activity>
         <activity android:name=".shared.messaging.MessagesActivity">

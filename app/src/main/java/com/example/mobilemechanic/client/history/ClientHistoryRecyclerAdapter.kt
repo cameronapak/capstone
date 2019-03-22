@@ -1,5 +1,6 @@
 package com.example.mobilemechanic.client.history
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -12,7 +13,6 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.detail.ServiceDetailActivity
-import com.example.mobilemechanic.client.mechanicreview.MechanicReviewsActivity
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
@@ -39,6 +39,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         return ViewHolder(view)
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val request = dataset[position]
         var type = "${request.service?.serviceType}"
@@ -53,7 +54,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
         holder.name.text = "$mechanicFirstName $mechanicLastName"
         holder.description.text =
-            "$type for ${vehicle?.year} ${vehicle?.make} ${vehicle?.model}."
+            "$type for ${vehicle}."
 
         holder.reviewButton.setOnClickListener {
             val intent = Intent(context, ServiceRatingActivity::class.java)

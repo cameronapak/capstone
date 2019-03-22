@@ -20,11 +20,11 @@
                 android:adjustViewBounds="true"
                 android:layout_below="@id/id_more_toolbar"
                 map:srcCompat="@drawable/bg_more"
-                android:id="@+id/bg_more"/>
+                android:id="@+id/id_body_bg"/>
         <fragment
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@id/bg_more"
+                android:layout_below="@id/id_body_bg"
                 android:id="@+id/map"
                 tools:context=".mechanic.map.MechanicMoreInformationActivity"
                 android:name="com.google.android.gms.maps.SupportMapFragment"/>

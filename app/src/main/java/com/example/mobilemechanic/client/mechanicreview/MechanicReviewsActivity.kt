@@ -5,8 +5,6 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 
 import kotlinx.android.synthetic.main.activity_mechanic_reviews.*

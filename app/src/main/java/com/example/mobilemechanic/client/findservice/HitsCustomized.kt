@@ -37,8 +37,8 @@ import com.algolia.search.saas.Query
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.mechanicreview.MechanicReviewsActivity
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
-import com.example.mobilemechanic.client.review.ReviewActivity
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.utility.AddressManager
@@ -382,7 +382,7 @@ class HitsCustomized
             }
 
             holder.review.setOnClickListener {
-                val intent = Intent(context, ReviewActivity::class.java)
+                val intent = Intent(context, MechanicReviewsActivity::class.java)
                 intent.putExtra(EXTRA_MECHANIC_INFO, serviceObj.mechanicInfo)
                 context.startActivity(intent)
             }

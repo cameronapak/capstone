@@ -34,6 +34,15 @@ object AddressManager
         else LatLng(35.656017, -97.473716)
     }
 
+    fun convertAddressToLatLngHolder(context: Context?, address: Address?) : LatLngHolder
+    {
+        val geoCoder = Geocoder(context, Locale.US)
+        val addressList = geoCoder.getFromLocationName(address.toString(), 1)
+        return if (addressList.size > 0)
+            LatLngHolder(addressList[0].latitude, addressList[0].longitude)
+        else LatLngHolder(35.656017, -97.473716)
+    }
+
     fun getDistanceKM(clientLatLng: LatLng, mechanicLatLng: LatLng) : Double
     {
         val clientLocation = Location("Client")

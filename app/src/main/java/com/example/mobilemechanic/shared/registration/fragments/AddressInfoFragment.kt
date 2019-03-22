@@ -209,6 +209,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 user.uid = currentUserUid
             }
 
+            user.address._geoloc = AddressManager.convertAddressToLatLngHolder(context, user.address)
             saveUserToFirestore(user)
         } else {
             Toast.makeText(activity, "Registration failed. Please try another email.", Toast.LENGTH_SHORT).show()
@@ -273,7 +274,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
                         mAuth.currentUser?.updateProfile(profileUpdates)
                             ?.addOnCompleteListener {
                                 if (it.isSuccessful) {
-                                    Log.d(USER_TAG, "[AddressInfoFragment] user profile udpated")
+                                    Log.d(USER_TAG, "[AddressInfoFragment] user profile updated")
                                     redirectUserToWelcomePage()
                                 }
                             }

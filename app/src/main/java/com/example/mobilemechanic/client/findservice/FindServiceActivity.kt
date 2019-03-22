@@ -69,32 +69,22 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             getString(com.example.mobilemechanic.R.string.algolia_services_index)
         )
 
-        val clientAddress = AddressManager.getUserAddress()
-        val latlng = AddressManager.convertAddressToLatLng(this, clientAddress)
-        val abstractQueryLatLng = AbstractQuery.LatLng(latlng.latitude, latlng.longitude)
-        Log.d(CLIENT_TAG, "[FindServiceActivity] $latlng")
-        searcher.query.aroundLatLng = abstractQueryLatLng
-        searcher.query.aroundRadius = Query.RADIUS_ALL
-        searcher.query.getRankingInfo = true
+
+        if (AddressManager.hasAddress()) {
+            val clientAddress = AddressManager.getUserAddress()
+            val abstractQueryLatLng =
+                AbstractQuery.LatLng(clientAddress!!._geoloc.lat, clientAddress!!._geoloc.lng)
+            searcher.query.aroundLatLng = abstractQueryLatLng
+            searcher.query.aroundRadius = Query.RADIUS_ALL
+            searcher.query.getRankingInfo = true
+        }
+
 
         helper = InstantSearch(this, searcher)
         helper.search()
 
         hits = findViewById(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
-
-//        searchBox.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
-//                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-//            }
-//
-//            override fun onQueryTextChange(query: String?): Boolean {
-//                Log.d(CLIENT_TAG, "[FindServiceActivity] onQueryTextChange $query")
-//                searcher.search(query)
-//                return true
-//            }
-//
-//        })
     }
 
 
@@ -153,11 +143,9 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     }
 
     private fun filterPrice() {
-        searcher.query.setFilters("service.price<=$priceBelow")
+        priceRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, priceBelow)
+        searcher.addNumericRefinement(priceRefinement)
         searcher.search()
-//        priceRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, priceBelow)
-//        searcher.addNumericRefinement(priceRefinement)
-//        searcher.search()
     }
 
     override fun onResume() {

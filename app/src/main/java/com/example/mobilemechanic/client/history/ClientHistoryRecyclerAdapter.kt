@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.detail.ServiceDetailActivity
+import com.example.mobilemechanic.client.mechanicreview.MechanicReviewsActivity
 import com.example.mobilemechanic.client.servicerating.ServiceRatingActivity
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request

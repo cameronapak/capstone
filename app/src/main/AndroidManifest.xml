@@ -20,6 +20,11 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
+        <activity
+                android:name=".client.mechanicreview.MechanicReviewsActivity"
+                android:label="@string/title_activity_mechanic_reviews"
+                android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity android:name=".shared.messaging.ChatRoomsActivity">
         </activity>
         <activity android:name=".shared.messaging.MessagesActivity">

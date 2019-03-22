@@ -38,6 +38,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
+import com.example.mobilemechanic.client.review.ReviewActivity
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.utility.AddressManager
@@ -49,6 +50,7 @@ import org.json.JSONObject
 import java.util.*
 
 const val EXTRA_SERVICE = "extra_service"
+const val EXTRA_MECHANIC_INFO = "extra_mechanic_info"
 
 class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
@@ -379,6 +381,12 @@ class HitsCustomized
                 holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
             }
 
+            holder.review.setOnClickListener {
+                val intent = Intent(context, ReviewActivity::class.java)
+                intent.putExtra(EXTRA_MECHANIC_INFO, serviceObj.mechanicInfo)
+                context.startActivity(intent)
+            }
+
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
@@ -475,6 +483,7 @@ class HitsCustomized
             val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
             val mechanicRating = itemView.findViewById<RatingBar>(com.example.mobilemechanic.R.id.id_mechanic_rating)
             val distance = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_distance)
+            val review = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_review)
 
             init {
                 var indexVariant: String? = defaultValue

@@ -75,9 +75,13 @@
                 android:text="15 Reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/textView3" algolia:layout_constraintStart_toEndOf="@+id/id_mechanic_rating"
-                android:layout_marginStart="8dp" android:textSize="10sp" android:fontFamily="@font/roboto"
-                android:textColor="@color/colorLink" algolia:layout_constraintTop_toTopOf="@+id/id_mechanic_rating"
+                android:id="@+id/id_review"
+                algolia:layout_constraintStart_toEndOf="@+id/id_mechanic_rating"
+                android:layout_marginStart="8dp"
+                android:textSize="10sp"
+                android:fontFamily="@font/roboto"
+                android:textColor="@color/colorLink"
+                algolia:layout_constraintTop_toTopOf="@+id/id_mechanic_rating"
                 android:layout_marginTop="2dp"/>
         <TextView
                 android:text="TextView"
@@ -86,7 +90,7 @@
                 android:id="@+id/id_algolia_service_description"
                 algolia:highlighted='@{true}'
                 algolia:attribute='@{"service.serviceType"}'
-                algolia:layout_constraintTop_toBottomOf="@+id/textView3"
+                algolia:layout_constraintTop_toBottomOf="@+id/id_review"
                 algolia:layout_constraintStart_toStartOf="@+id/id_mechanic_name" android:layout_marginTop="8dp"
                 android:textSize="12sp" android:fontFamily="@font/roboto" android:textColor="@color/colorGrayTextDark"/>
         <TextView

@@ -27,9 +27,6 @@ import kotlinx.android.synthetic.main.activity_find_service.*
 import kotlinx.android.synthetic.main.dialog_body_algolia_filter.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
-
-const val TWENTY_MI = 33000
-
 class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mFireStore: FirebaseFirestore

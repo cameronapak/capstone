@@ -58,7 +58,7 @@ class SignInActivity : AppCompatActivity() {
             return
         }
 
-        mAuth?.signInWithEmailAndPassword("dat@gmail.com", "123456")
+        mAuth?.signInWithEmailAndPassword(email, password)
             ?.addOnCompleteListener {
                 if (it.isSuccessful) {
                     checkUserType()
@@ -92,8 +92,8 @@ class SignInActivity : AppCompatActivity() {
                 .setPhotoUri(Uri.parse("${userInfo.basicInfo.photoUrl}"))
                 .build()
 
-            user.updateProfile((profileUpdates))
-                ?.addOnCompleteListener {
+            user.updateProfile(profileUpdates)
+                .addOnCompleteListener {
                     if (it.isSuccessful) {
                         Log.d(CLIENT_TAG, "[SignInActivity] updateUserProfile completed")
                         Log.d(CLIENT_TAG, "[SignInActivity] photoUri ${userInfo.basicInfo.photoUrl}")
@@ -137,11 +137,11 @@ class SignInActivity : AppCompatActivity() {
         mFirestore = FirebaseFirestore.getInstance()
         Log.d(CLIENT_TAG, "[SignInActivity] sendFcmTokenToFirebtore() token: $token")
         mFirestore.collection("Accounts")
-            ?.document("${mAuth.currentUser?.uid}")
+            .document("${mAuth.currentUser?.uid}")
             .update("fcmToken", token)
-            ?.addOnSuccessListener {
+            .addOnSuccessListener {
                 Log.d(CLIENT_TAG, "[SignInActivity] update fcm token: $token to ${mAuth.currentUser?.email}")
-            }?.addOnFailureListener {
+            }.addOnFailureListener {
                 Log.d(CLIENT_TAG, "[SignInActivity] update fcm token Failed: ${it.message}")
             }
     }
@@ -159,7 +159,7 @@ class SignInActivity : AppCompatActivity() {
             val email = basicDialog.id_email_password_reset.text.toString().trim()
             Log.d(CLIENT_TAG, "[SignInActivity]: email to reset password: $email")
 
-            if (email.isNullOrEmpty() || email.isBlank()) {
+            if (email.isEmpty() || email.isBlank()) {
                 Toast.makeText(this, "Please enter in a valid email.", Toast.LENGTH_LONG).show()
                 return@setOnClickListener
             }
@@ -170,7 +170,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun sendResetEmail(email: String) {
-        mAuth?.sendPasswordResetEmail(email)?.addOnCompleteListener(this) {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(this) {
             if (it.isSuccessful) {
                 Toast.makeText(this, "Reset password email sent success", Toast.LENGTH_SHORT).show()
                 startActivity(Intent(this, SignInActivity::class.java))

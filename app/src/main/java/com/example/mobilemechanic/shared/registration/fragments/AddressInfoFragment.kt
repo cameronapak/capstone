@@ -210,6 +210,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
 
             user.address._geoloc = AddressManager.convertAddressToLatLngHolder(context, user.address)
+            updateUserProfile(user)
             saveUserToFirestore(user)
         } else {
             Toast.makeText(activity, "Registration failed. Please try another email.", Toast.LENGTH_SHORT).show()
@@ -221,7 +222,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             .set(user)
             .addOnSuccessListener {
                 Log.d(USER_TAG, "[AddressInfoFragment] Account information saved to firestore")
-                Toast.makeText(activity, "Account saved.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Account create.", Toast.LENGTH_SHORT).show()
                 if (!Uri.EMPTY.equals(selectedImageUri)) {
                     saveImageToFireStorage(user)
                 } else {
@@ -231,6 +232,17 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             .addOnFailureListener {
                 Log.d(USER_TAG, "[AddressInfoFragment] ${it.message}")
             }
+    }
+
+    private fun updateUserProfile(userInfo: User) {
+        val user = mAuth?.currentUser
+        if (user != null) {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("${userInfo.basicInfo.firstName} ${userInfo.basicInfo.lastName}")
+                .setPhotoUri(Uri.parse("${userInfo.basicInfo.photoUrl}"))
+                .build()
+            user.updateProfile(profileUpdates)
+        }
     }
 
     private fun redirectUserToWelcomePage() {
@@ -265,19 +277,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 mFireStore.collection("Accounts").document(user.uid).update("basicInfo.photoUrl", "$downloadUrl")
                     .addOnSuccessListener {
                         Log.d(USER_TAG, "[AddressInfoFragment] user photoUrl saved to firestore successfully")
-
-                        val profileUpdates = UserProfileChangeRequest.Builder()
-                            .setDisplayName("${user.basicInfo.firstName} ${user.basicInfo.lastName}")
-                            .setPhotoUri(Uri.parse(downloadUrl))
-                            .build()
-
-                        mAuth.currentUser?.updateProfile(profileUpdates)
-                            ?.addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Log.d(USER_TAG, "[AddressInfoFragment] user profile updated")
-                                    redirectUserToWelcomePage()
-                                }
-                            }
+                        redirectUserToWelcomePage()
                     }
             }
         }

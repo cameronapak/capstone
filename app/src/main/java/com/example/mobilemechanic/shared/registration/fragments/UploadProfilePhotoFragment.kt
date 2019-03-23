@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared.Registration.fragments
+package com.example.mobilemechanic.shared.registration.fragments
 
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
@@ -17,7 +17,7 @@ import android.widget.Toast
 
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
-import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
+import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.fragment_upload_profile_photo.*

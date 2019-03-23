@@ -63,13 +63,15 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     override fun onBindViewHolder(holder: RequestListAdapter.ViewHolder, position: Int) {
         val request = requests[position]
         handleRequestViewType(request, holder)
-
+//
+//        val photoUrl = request.clientInfo!!.basicInfo!!.photoUrl
+//        displayProfileImage(holder.profilePhoto ,photoUrl)
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
         holder.serviceType.text = "${request.service?.serviceType} for ${request.vehicle}"
         holder.description.text = request.comment
-        holder.distance.text = context.getString(R.string.miles, getDistance(request))
+        holder.distance.text = context.getString(R.string.miles, getDistanceFromClient(request))
         holder.timeStamp.text = if (request.acceptedOn!! > 0) {
             val time = Date(request.acceptedOn!!)
             val dateFormat = SimpleDateFormat("MMM d, y")
@@ -115,6 +117,15 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         }
     }
 
+    private fun displayProfileImage(drawerProfileImage: CircleImageView, photoUrl: String) {
+        val userProfileUri = Uri.parse(photoUrl)
+        if (userProfileUri != null) {
+            Picasso.get().load(userProfileUri).into(drawerProfileImage)
+        } else {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
+        }
+    }
+
     private fun handlePrimaryOnClick(request: Request) {
         if (request.status == Status.Request) {
             createAcceptDialog(request)
@@ -140,8 +151,8 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     }
 
     private fun handleDirectionsOnClick(request: Request) {
-        val address = AddressManager.getFullAddress(request.clientInfo!!.address)
-        val latLong = AddressManager.convertAddress(context, address)
+        val address = request.clientInfo?.address.toString()
+        val latLong = AddressManager.convertAddressToLatLng(context, request.clientInfo?.address)
 
         val uri = String.format(
             Locale.ENGLISH,
@@ -224,11 +235,9 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             }
     }
 
-    private fun getDistance(request: Request): Double {
-        val clientAddress = AddressManager.getFullAddress(request.clientInfo!!.address)
-        val mechanicAddress = AddressManager.getFullAddress(request.mechanicInfo!!.address)
-        val clientLatLng = AddressManager.convertAddress(context, clientAddress)
-        val mechanicLatLng = AddressManager.convertAddress(context, mechanicAddress)
+    private fun getDistanceFromClient(request: Request): Double {
+        val clientLatLng = AddressManager.convertAddressToLatLng(context, request.clientInfo?.address)
+        val mechanicLatLng = AddressManager.convertAddressToLatLng(context, request.mechanicInfo?.address)
         return AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
     }
 }

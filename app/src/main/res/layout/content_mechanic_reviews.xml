@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/constraintLayout2">
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="347dp"
+            android:layout_height="135dp"
+            android:background="@drawable/round_corner"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:id="@+id/id_mechanic_info_card">
+        <de.hdodenhof.circleimageview.CircleImageView
+                style="@style/AppCircleImageViewSmall"
+                app:civ_border_width="1dp"
+                app:civ_border_color="@color/colorPrimary3"
+                android:src="@drawable/chan_profile_cropped"
+                android:id="@+id/id_mechanic_more_info_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="16dp"
+        />
+        <TextView
+                android:text="TextView"
+                android:layout_width="89dp"
+                android:layout_height="18dp"
+                android:textSize="12sp"
+                android:id="@+id/id_mechanic_more_info_name"
+                style="@style/QualioFont"
+                android:fontFamily="@font/roboto_bold"
+                app:layout_constraintStart_toStartOf="@+id/id_mechanic_more_info_image" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/id_mechanic_more_info_image"
+        />
+        <RatingBar
+                style="@style/AppRatingBarSmall"
+                android:rating="4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_mechanic_more_info_rating"
+                android:numStars="5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/id_mechanic_more_info_name" android:layout_marginStart="11dp"/>
+        <TextView
+                android:text="TextView"
+                android:textSize="10sp"
+                android:layout_width="48dp"
+                android:layout_height="12dp"
+                android:id="@+id/id_mechanic_more_info_reviews_count"
+                android:textColor="@color/colorLink"
+                app:layout_constraintStart_toStartOf="@+id/id_mechanic_more_info_name"
+                app:layout_constraintTop_toBottomOf="@id/id_mechanic_more_info_rating"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="172dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_mechanic_more_info_service_items"
+                android:textSize="12sp"
+                app:layout_constraintStart_toStartOf="@+id/id_mechanic_more_info_service_offer"
+                android:layout_marginBottom="8dp" app:layout_constraintBottom_toBottomOf="parent"
+                android:fontFamily="@font/qualio" android:textColor="@color/colorGrayText"
+                app:layout_constraintTop_toBottomOf="@+id/id_mechanic_more_info_service_offer"
+                app:layout_constraintVertical_bias="0.0"/>
+        <TextView
+                android:text="Service Offer"
+                android:textSize="18sp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_mechanic_more_info_service_offer"
+                android:fontFamily="@font/qualio_bold"
+                android:textColor="@color/colorHeaderDark"
+                app:layout_constraintStart_toEndOf="@+id/id_mechanic_more_info_image" android:layout_marginStart="60dp"
+                app:layout_constraintTop_toTopOf="@+id/id_mechanic_more_info_image"/>
+        <TextView
+                android:text="TextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_mechanic_more_info_distance" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="16dp" app:layout_constraintTop_toTopOf="parent"
+                android:fontFamily="@font/roboto" android:textColor="@color/colorGrayText" android:textSize="10sp"/>
+    </android.support.constraint.ConstraintLayout>
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="347dp"
+            android:layout_height="37dp"
+            android:layout_marginTop="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            android:background="@drawable/round_corner"
+            app:layout_constraintTop_toBottomOf="@+id/id_mechanic_info_card" android:id="@+id/id_contact_bar">
+
+        <TextView
+                android:text="@string/label_call_btn"
+                android:fontFamily="@font/timeburnerbold"
+                android:textColor="@color/colorPrimary3"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_call_button"
+                android:textSize="12sp"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@+id/id_message_button" android:layout_marginStart="24dp"
+                app:layout_constraintTop_toTopOf="@+id/id_message_button" app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+                android:textAlignment="center"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+                android:text="@string/text_message"
+                android:fontFamily="@font/timeburnerbold"
+                android:textColor="@color/colorPrimary3"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_message_button"
+                android:textSize="12sp"
+                android:gravity="center"
+                app:layout_constraintStart_toEndOf="@+id/id_email_button"
+                android:layout_marginStart="20dp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/id_call_button"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+        <TextView
+                android:text="@string/text_email"
+                android:fontFamily="@font/timeburnerbold"
+                android:textColor="@color/colorPrimary3"
+                android:layout_width="75dp"
+                android:layout_height="0dp"
+                android:id="@+id/id_email_button"
+                android:textSize="12sp"
+                android:gravity="center"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/id_message_button"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>

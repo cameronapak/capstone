@@ -6,7 +6,7 @@
         android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:id="@+id/id_main_frame_layout"
-        tools:context=".shared.SignInActivity">
+        tools:context=".shared.signin.SignInActivity">
     <android.support.constraint.ConstraintLayout
             android:id="@+id/id_main_body"
             android:layout_width="match_parent"

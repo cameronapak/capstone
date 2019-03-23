@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared.Registration.fragments
+package com.example.mobilemechanic.shared.registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -23,9 +23,11 @@ import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
+import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
-import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
-import com.example.mobilemechanic.shared.USER_TAG
+import com.example.mobilemechanic.shared.registration.RegistrationViewModel
+import com.example.mobilemechanic.shared.signin.USER_TAG
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
@@ -160,7 +162,12 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             (!(password.isNullOrEmpty() || password.isNullOrBlank()))
         ) {
 
-            val address = Address(street, city, state, zip)
+            val address = Address(street, city, state, zip, LatLngHolder())
+
+            val userLatLng = AddressManager.convertAddressToLatLng(context!!, address)
+            val latlngHolder = LatLngHolder(userLatLng.latitude, userLatLng.longitude)
+            address._geoloc = latlngHolder
+
             val basicInfo = BasicInfo(firstName, lastName, email, phoneNumber, "")
             val user = User("", "", password, userType!!, basicInfo, address, 0f)
 
@@ -202,6 +209,8 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 user.uid = currentUserUid
             }
 
+            user.address._geoloc = AddressManager.convertAddressToLatLngHolder(context, user.address)
+            updateUserProfile(user)
             saveUserToFirestore(user)
         } else {
             Toast.makeText(activity, "Registration failed. Please try another email.", Toast.LENGTH_SHORT).show()
@@ -213,7 +222,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             .set(user)
             .addOnSuccessListener {
                 Log.d(USER_TAG, "[AddressInfoFragment] Account information saved to firestore")
-                Toast.makeText(activity, "Account saved.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(activity, "Account create.", Toast.LENGTH_SHORT).show()
                 if (!Uri.EMPTY.equals(selectedImageUri)) {
                     saveImageToFireStorage(user)
                 } else {
@@ -223,6 +232,17 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             .addOnFailureListener {
                 Log.d(USER_TAG, "[AddressInfoFragment] ${it.message}")
             }
+    }
+
+    private fun updateUserProfile(userInfo: User) {
+        val user = mAuth?.currentUser
+        if (user != null) {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("${userInfo.basicInfo.firstName} ${userInfo.basicInfo.lastName}")
+                .setPhotoUri(Uri.parse("${userInfo.basicInfo.photoUrl}"))
+                .build()
+            user.updateProfile(profileUpdates)
+        }
     }
 
     private fun redirectUserToWelcomePage() {
@@ -257,19 +277,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
                 mFireStore.collection("Accounts").document(user.uid).update("basicInfo.photoUrl", "$downloadUrl")
                     .addOnSuccessListener {
                         Log.d(USER_TAG, "[AddressInfoFragment] user photoUrl saved to firestore successfully")
-
-                        val profileUpdates = UserProfileChangeRequest.Builder()
-                            .setDisplayName("${user.basicInfo.firstName} ${user.basicInfo.lastName}")
-                            .setPhotoUri(Uri.parse(downloadUrl))
-                            .build()
-
-                        mAuth.currentUser?.updateProfile(profileUpdates)
-                            ?.addOnCompleteListener {
-                                if (it.isSuccessful) {
-                                    Log.d(USER_TAG, "[AddressInfoFragment] user profile udpated")
-                                    redirectUserToWelcomePage()
-                                }
-                            }
+                        redirectUserToWelcomePage()
                     }
             }
         }

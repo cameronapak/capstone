@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".client.mechanicreview.MechanicReviewsActivity">
+    <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="78dp"
+                style="@style/AppActionBar"
+                app:titleTextAppearance="@style/AppActionBarTitle"
+                app:subtitleTextAppearance="@style/AppActionBarSubtitle"
+                android:id="@+id/id_mechanic_reviews_toolbar"/>
+        <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="238dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:layout_below="@id/id_mechanic_reviews_toolbar"
+                app:srcCompat="@drawable/bg_more"
+                android:id="@+id/id_body_bg"/>
+        <include
+                android:id="@+id/include"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@id/id_mechanic_reviews_toolbar"
+                layout="@layout/content_mechanic_reviews"
+                android:layout_marginTop="20dp"/>
+        <android.support.v7.widget.RecyclerView
+                android:layout_below="@id/id_body_bg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+    </RelativeLayout>
+
+</FrameLayout>

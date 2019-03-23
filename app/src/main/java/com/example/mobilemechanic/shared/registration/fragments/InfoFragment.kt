@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared.Registration.fragments
+package com.example.mobilemechanic.shared.registration.fragments
 
 import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Paint
@@ -11,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.shared.Registration.RegistrationViewModel
+import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : Fragment() {
@@ -52,12 +52,12 @@ class InfoFragment : Fragment() {
         val phoneNumber = id_registrationPhoneNumber.text.toString().trim()
 
         if(firstName.isNullOrEmpty() || firstName.isNullOrBlank()) {
-            Toast.makeText(activity, "Invalid first name!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Invalid first otherMemberName!", Toast.LENGTH_SHORT).show()
             return false
         }
 
         if(lastName.isNullOrEmpty() || lastName.isNullOrBlank()) {
-            Toast.makeText(activity, "Invalid last name!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(activity, "Invalid last otherMemberName!", Toast.LENGTH_SHORT).show()
             return false
         }
 

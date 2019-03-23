@@ -36,17 +36,21 @@ import com.algolia.search.saas.AlgoliaException
 import com.algolia.search.saas.Query
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.mechanicreview.MechanicReviewsActivity
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
 import com.example.mobilemechanic.model.algolia.ServiceModel
+import com.example.mobilemechanic.model.dto.Address
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
-import de.hdodenhof.circleimageview.CircleImageView
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
 import java.util.*
 
 const val EXTRA_SERVICE = "extra_service"
+const val EXTRA_MECHANIC_INFO = "extra_mechanic_info"
 
 class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
@@ -74,6 +78,7 @@ class HitsCustomized
         }
 
         gson = Gson()
+
         val infiniteScroll: Boolean
         val styledAttributes = context.theme.obtainStyledAttributes(attrs, R.styleable.Hits, 0, 0)
         try {
@@ -227,10 +232,13 @@ class HitsCustomized
     }
 
     override fun initWithSearcher(searcher: Searcher) {
+        Log.d(CLIENT_TAG, "initWithSearcher")
         this.searcher = searcher
     }
 
     override fun onResults(results: SearchResults, isLoadingMore: Boolean) {
+        Log.d(CLIENT_TAG, "[HitsCustomized] result $results")
+        Log.d(CLIENT_TAG, "[HitsCustomized] ${results.content}")
         addHits(results, !isLoadingMore)
     }
 
@@ -313,6 +321,7 @@ class HitsCustomized
 
         private var hits = ArrayList<JSONObject>()
         private val placeholders = SparseArray<Drawable>()
+        private lateinit var clientAddress: Address
 
         init {
             this.hits = ArrayList()
@@ -347,6 +356,7 @@ class HitsCustomized
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val serviceJson = hits[position]
+            Log.d(CLIENT_TAG, "[HitsCustomized] $serviceJson")
             val serviceObj = gson.fromJson(serviceJson.toString(), ServiceModel::class.java)
 
             holder.price.text = "$${serviceObj.service.price.toInt()}"
@@ -362,22 +372,25 @@ class HitsCustomized
                 ScreenManager.hideKeyBoard(context, it)
             }
 
-            holder.mechanicRating.rating
-
-//            if (serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()||
-//                serviceObj.mechanicInfo.basicInfo.photoUrl.isNullOrBlank()) {
-//                Picasso.get().load(com.example.mobilemechanic.R.drawable.ic_circle_profile).into(holder.profileImage)
-//            } else {
-//                Picasso.get().load(serviceObj.mechanicInfo.basicInfo.photoUrl).into(holder.profileImage)
-//            }
-
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
+
+            if (AddressManager.hasAddress()) {
+                val userAddress = AddressManager.getUserAddress()
+                Log.d(CLIENT_TAG, "[HitsCustomized] $userAddress")
+                val distance = AddressManager.getDistanceMI(userAddress!!._geoloc, serviceObj._geoloc)
+                holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
+            }
+
+            holder.review.setOnClickListener {
+                val intent = Intent(context, MechanicReviewsActivity::class.java)
+                intent.putExtra(EXTRA_MECHANIC_INFO, serviceObj.mechanicInfo)
+                context.startActivity(intent)
+            }
 
             val mappedViews = holder.viewMap.keys
             val hitViews =
                 LayoutViews.findByClass(holder.itemView as ViewGroup, AlgoliaHitView::class.java)
             val hit = hits[position]
-
 
             for (hitView in hitViews) {
                 if (mappedViews.contains(hitView as View)) {
@@ -468,8 +481,9 @@ class HitsCustomized
             val selectButton = itemView.findViewById<Button>(com.example.mobilemechanic.R.id.id_select)
             val price = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_price)
             val hitItem = itemView.findViewById<ConstraintLayout>(com.example.mobilemechanic.R.id.id_algolia_hit_item)
-            val profileImage = itemView.findViewById<CircleImageView>(com.example.mobilemechanic.R.id.id_mechanic_profile_image)
             val mechanicRating = itemView.findViewById<RatingBar>(com.example.mobilemechanic.R.id.id_mechanic_rating)
+            val distance = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_distance)
+            val review = itemView.findViewById<TextView>(com.example.mobilemechanic.R.id.id_review)
 
             init {
                 var indexVariant: String? = defaultValue

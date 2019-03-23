@@ -3,22 +3,20 @@ package com.example.mobilemechanic.model.messaging
 import android.os.Parcel
 import android.os.Parcelable
 
-data class ChatUserInfo(
+data class Member(
     var uid: String,
     var firstName: String,
     var lastName: String,
-    var photoUrl: String,
-    var isNewcomer: Boolean = true
+    var photoUrl: String
 ) : Parcelable
 {
-    constructor() : this("", "", "", "", true)
+    constructor() : this("", "", "", "")
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readString(),
         parcel.readString(),
-        parcel.readString(),
-        parcel.readInt() == 1
+        parcel.readString()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -26,19 +24,18 @@ data class ChatUserInfo(
         parcel.writeString(firstName)
         parcel.writeString(lastName)
         parcel.writeString(photoUrl)
-        parcel.writeInt(if(isNewcomer) 1 else 0)
     }
 
     override fun describeContents(): Int {
         return 0
     }
 
-    companion object CREATOR : Parcelable.Creator<ChatUserInfo> {
-        override fun createFromParcel(parcel: Parcel): ChatUserInfo {
-            return ChatUserInfo(parcel)
+    companion object CREATOR : Parcelable.Creator<Member> {
+        override fun createFromParcel(parcel: Parcel): Member {
+            return Member(parcel)
         }
 
-        override fun newArray(size: Int): Array<ChatUserInfo?> {
+        override fun newArray(size: Int): Array<Member?> {
             return arrayOfNulls(size)
         }
     }

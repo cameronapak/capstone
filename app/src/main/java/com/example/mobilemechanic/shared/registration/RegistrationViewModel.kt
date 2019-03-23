@@ -1,4 +1,4 @@
-package com.example.mobilemechanic.shared.Registration
+package com.example.mobilemechanic.shared.registration
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel

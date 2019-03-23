@@ -3,6 +3,7 @@ package com.example.mobilemechanic.client.findservice
 import android.app.Dialog
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.os.StrictMode
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -12,28 +13,30 @@ import android.widget.AdapterView
 import com.algolia.instantsearch.core.helpers.Searcher
 import com.algolia.instantsearch.core.model.NumericRefinement
 import com.algolia.instantsearch.ui.helpers.InstantSearch
-import com.algolia.search.saas.Client
-import com.algolia.search.saas.Index
+import com.algolia.search.saas.AbstractQuery
+import com.algolia.search.saas.Query
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
-import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_find_service.*
 import kotlinx.android.synthetic.main.dialog_body_algolia_filter.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
-
 class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private lateinit var mFireStore: FirebaseStorage
+    private lateinit var mFireStore: FirebaseFirestore
+    private lateinit var mAth: FirebaseAuth
+
     private lateinit var searcher: Searcher
-    private lateinit var index: Index
-    private lateinit var client: Client
     private lateinit var helper: InstantSearch
-    private var priceRefinement: NumericRefinement? = null
-    private var ratingRefinement: NumericRefinement? = null
+    private lateinit var priceRefinement: NumericRefinement
+    private lateinit var distanceRefinement: NumericRefinement
+    private lateinit var hits: HitsCustomized
     private var operatorLessThanOrEqual = NumericRefinement.OPERATOR_LE
     private var priceBelow = Double.MAX_VALUE
     private var spinnerSelectedPosition = 0
@@ -41,7 +44,12 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_find_service)
-        mFireStore = FirebaseStorage.getInstance()
+
+        StrictMode.enableDefaults()
+
+        mFireStore = FirebaseFirestore.getInstance()
+        mAth = FirebaseAuth.getInstance()
+
         setUpFindServiceActivity()
     }
 
@@ -58,11 +66,24 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             getString(com.example.mobilemechanic.R.string.algolia_services_index)
         )
 
+
+        if (AddressManager.hasAddress()) {
+            val clientAddress = AddressManager.getUserAddress()
+            val abstractQueryLatLng =
+                AbstractQuery.LatLng(clientAddress!!._geoloc.lat, clientAddress!!._geoloc.lng)
+            searcher.query.aroundLatLng = abstractQueryLatLng
+            searcher.query.aroundRadius = Query.RADIUS_ALL
+            searcher.query.getRankingInfo = true
+        }
+
+
         helper = InstantSearch(this, searcher)
         helper.search()
-        val hits = findViewById<HitsCustomized>(com.example.mobilemechanic.R.id.id_hits_customized)
+
+        hits = findViewById(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
     }
+
 
     private fun setUpToolBar() {
         val arrow = resources.getDrawable(com.example.mobilemechanic.R.drawable.abc_ic_ab_back_material, null)
@@ -120,7 +141,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
     private fun filterPrice() {
         priceRefinement = NumericRefinement("service.price", operatorLessThanOrEqual, priceBelow)
-        searcher.addNumericRefinement(priceRefinement as NumericRefinement)
+        searcher.addNumericRefinement(priceRefinement)
         searcher.search()
     }
 

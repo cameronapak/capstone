@@ -20,6 +20,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_body_add_service.*
 import kotlinx.android.synthetic.main.dialog_body_add_service.view.*
+import kotlinx.android.synthetic.main.dialog_body_remove_service.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 
 
@@ -81,6 +82,8 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
             positive = "Remove"
             negative = "Cancel"
         }.build(context, dialogContainer, dialogBody)
+        basicDialog.id_remove_service_type.text = serviceItem.service.serviceType
+
         basicDialog.show()
         basicDialog.id_positive.setOnClickListener {
             Log.d(MECHANIC_TAG, "[ServiceListAdapter] remove ${serviceItem.objectID}")
@@ -112,6 +115,12 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
             positive = "Update"
             negative = "Cancel"
         }.build(context, dialogContainer, dialogBody)
+        val serviceTypeAdapter = HintSpinnerAdapter(context, android.R.layout.simple_spinner_dropdown_item, service, "Service")
+        val serviceTypePosition = serviceTypeAdapter.getPosition(serviceItem.service.serviceType)
+        basicDialog.add_service_spinner.setSelection(serviceTypePosition)
+
+        basicDialog.label_price.setText(serviceItem.service.price.toString())
+        basicDialog.label_comment.setText(serviceItem.service.description)
         basicDialog.show()
         basicDialog.id_positive.setOnClickListener {
             val serviceType = basicDialog.add_service_spinner.selectedItem.toString().trim()

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="10dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="60dp"
+                android:clipToPadding="false">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:id="@+id/id_profile_image" android:src="@drawable/ic_circle_profile"/>
+
+    <TextView
+            android:id="@+id/id_name"
+            android:layout_marginLeft="15dp"
+            android:layout_toRightOf="@+id/id_profile_image"
+            android:layout_alignTop="@+id/id_profile_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:text="Rose" android:textColor="@color/colorGrayTextDark2" android:textSize="10sp"
+            android:textStyle="bold"/>
+
+    <TextView
+            style="@style/AppMessageBubbleSecondary"
+            android:id="@+id/id_message_body"
+            android:layout_below="@+id/id_name"
+            android:layout_alignStart="@id/id_name"
+            android:background="@drawable/message_bubble_secondary"
+            android:text="How are you doing? This is a long message that should probably wrap."/>
+    <TextView
+            android:layout_toEndOf="@id/id_name"
+            android:layout_marginTop="1dp"
+            android:layout_marginStart="8dp"
+            android:text="TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/id_time_stamp" android:textSize="8sp"
+            android:textColor="@color/colorGrayText" android:textStyle="italic"/>
+</RelativeLayout>

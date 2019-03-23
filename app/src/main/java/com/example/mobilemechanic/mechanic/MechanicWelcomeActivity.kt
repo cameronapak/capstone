@@ -13,15 +13,16 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
-import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
+import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -175,7 +176,13 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                 R.id.nav_settings -> {
                     true
                 }
-                R.id.id_mech_sign_out->{
+                R.id.id_settings -> {
+                    val intent = Intent(this, EditAccountInfoActivity::class.java)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    startActivity(intent)
+                    true
+                }
+                R.id.id_sign_out->{
                     mAuth?.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))

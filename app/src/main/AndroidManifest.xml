@@ -11,6 +11,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 
     <application
             android:allowBackup="true"
@@ -20,9 +21,13 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
-        <activity android:name="com.example.mobilemechanic.shared.messaging.ChatRoomsActivity">
+        <activity android:name=".EditAccountInfoActivity">
         </activity>
-        <activity android:name="com.example.mobilemechanic.shared.messaging.MessagesActivity">
+        <activity android:name=".client.mechanicreview.MechanicReviewsActivity">
+        </activity>
+        <activity android:name=".shared.messaging.ChatRoomsActivity">
+        </activity>
+        <activity android:name=".shared.messaging.MessagesActivity">
         </activity>
         <activity android:name=".client.detail.ServiceDetailActivity">
         </activity>
@@ -78,7 +83,7 @@
                 <action android:name="android.intent.action.VIEW"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.Registration.RegistrationActivity">
+        <activity android:name=".shared.registration.RegistrationActivity">
         </activity>
         <activity android:name=".client.postservicerequest.PostServiceRequestActivity">
         </activity>
@@ -89,7 +94,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-        <activity android:name=".shared.SignInActivity">
+        <activity android:name=".shared.signin.SignInActivity">
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>

@@ -117,11 +117,4 @@
             android:id="@+id/btn_updateAccountInfo" android:layout_marginTop="30dp"
             app:layout_constraintTop_toBottomOf="@+id/id_editStateSpinner" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/id_editInfoText" android:layout_marginTop="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/btn_updateAccountInfo"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginStart="8dp"
-            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"/>
 </android.support.constraint.ConstraintLayout>

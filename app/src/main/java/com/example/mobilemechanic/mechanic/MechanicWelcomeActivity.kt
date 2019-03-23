@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
@@ -175,7 +176,13 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                 R.id.nav_settings -> {
                     true
                 }
-                R.id.nav_mechanic_signout->{
+                R.id.id_settings -> {
+                    val intent = Intent(this, EditAccountInfoActivity::class.java)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    startActivity(intent)
+                    true
+                }
+                R.id.id_sign_out->{
                     mAuth?.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))

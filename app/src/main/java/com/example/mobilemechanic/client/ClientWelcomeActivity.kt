@@ -13,6 +13,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
 import android.widget.Toast
+import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
@@ -129,6 +130,12 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
                 R.id.id_messages ->{
                     val intent = Intent(this, ChatRoomsActivity::class.java)
+                    //intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    startActivity(intent)
+                    true
+                }
+                R.id.id_settings -> {
+                    val intent = Intent(this, EditAccountInfoActivity::class.java)
                     intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
                     startActivity(intent)
                     true

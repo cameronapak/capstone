@@ -1,13 +1,9 @@
 package com.example.mobilemechanic
 
-import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
-import android.util.Log
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -22,14 +18,13 @@ import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
-import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_edit_account_info.*
-import kotlinx.android.synthetic.main.fragment_address_info.*
 
 class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -188,8 +183,12 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
     private fun updateInfo(user: User) {
         val uid = user.uid
 
-        mFireStore?.collection("Accounts")?.document(uid)?.set(user)?.addOnSuccessListener {
+        mFireStore?.collection("Accounts")
+            ?.document(uid)
+            ?.set(user)
+            ?.addOnSuccessListener {
             Toast.makeText(this, "Updated info!", Toast.LENGTH_SHORT).show()
+                updateUserProfile(user)
         }
 
         if(!oldPassword.equals(user.password)) {
@@ -202,9 +201,22 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                     Toast.makeText(this, "Password updated failed!", Toast.LENGTH_SHORT).show()
                 }
         }
-
-        goToHomeActivity()
     }
+
+
+    private fun updateUserProfile(userInfo: User) {
+        val user = mAuth?.currentUser
+        if (user != null) {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName("${userInfo.basicInfo.firstName} ${userInfo.basicInfo.lastName}")
+                .setPhotoUri(Uri.parse("${userInfo.basicInfo.photoUrl}"))
+                .build()
+            user.updateProfile(profileUpdates).addOnSuccessListener {
+                goToHomeActivity()
+            }
+        }
+    }
+
 
     private fun goToHomeActivity() {
 

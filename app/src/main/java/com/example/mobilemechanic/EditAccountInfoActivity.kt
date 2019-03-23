@@ -4,6 +4,8 @@ import android.app.Activity
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcel
+import android.os.Parcelable
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
@@ -16,8 +18,9 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.activity_edit_account_info.*
+import kotlinx.android.synthetic.main.fragment_address_info.*
 
-class EditAccountInfoActivity : AppCompatActivity() {
+class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private var mAuth: FirebaseAuth?= null
     private var mFireStore: FirebaseFirestore? = null
@@ -55,14 +58,32 @@ class EditAccountInfoActivity : AppCompatActivity() {
                 id_editStreet.setText(userInfo?.address?.street)
                 id_editCity.setText(userInfo?.address?.city)
                 id_editZipcode.setText(userInfo?.address?.zipCode)
-                //id_editStateSpinner.
 
+                val state = userInfo?.address?.state.toString()
+                setUpSpinner(state)
 
             }?.addOnFailureListener {
 
             }
     }
 
+    private fun setUpSpinner(state: String) {
+        val spinner: Spinner = findViewById(R.id.id_editStateSpinner)
+        spinner.onItemSelectedListener = this
+        val states = DataProviderManager.getAllStates()
+        val spinnerAdapter = HintSpinnerAdapter(this, android.R.layout.simple_spinner_item, states, "States")
+        spinner.adapter = spinnerAdapter
+
+        val index = states.indexOf(state)
+        spinner.setSelection(index)
+    }
+
+    override fun onNothingSelected(parent: AdapterView<*>?) {
+    }
+
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+        //editModel.state.value = id_editStateSpinner.selectedItem.toString()
+    }
 
 
 }

@@ -25,6 +25,10 @@ class ServiceRatingActivity : AppCompatActivity() {
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var reviewRef: CollectionReference
+    private lateinit var requestRef: CollectionReference
+    private lateinit var serviceRef: CollectionReference
+    private lateinit var accountRef: CollectionReference
+
     private lateinit var request: Request
     private var checkBoxesOfWhatWentWrong = ArrayList<CheckBox>()
 
@@ -60,6 +64,9 @@ class ServiceRatingActivity : AppCompatActivity() {
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         reviewRef = mFirestore.collection("Reviews")
+        requestRef = mFirestore.collection("Requests")
+        serviceRef = mFirestore.collection("Services")
+        accountRef = mFirestore.collection("Accounts")
     }
 
     private fun setUpReview() {
@@ -99,7 +106,6 @@ class ServiceRatingActivity : AppCompatActivity() {
             )
 
             addReview(review)
-
             Log.d(CLIENT_TAG, "[ServiceRatingActivity] $listOfWhatWentWrong")
             Log.d(CLIENT_TAG, "[ServiceRatingActivity] requestID ${request?.objectID}")
         }
@@ -129,9 +135,98 @@ class ServiceRatingActivity : AppCompatActivity() {
                 Log.d(CLIENT_TAG, "[ServiceRatingActivity] review added")
                 Toast.makeText(this, "Review submitted", Toast.LENGTH_LONG).show()
             }.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    calcMechanicRating(review)
+                }
                 finish()
             }
     }
+
+    private fun calcMechanicRating(review: Review) {
+        var avgRating = 0.00F
+        var reviewDocs = ArrayList<String>()
+
+        reviewRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
+            .addOnSuccessListener {
+                var totalRating = 0F
+                var count = 0
+
+                for(document in it) {
+                    Log.d(CLIENT_TAG, "[ServiceRatingActivity] Review ID: ${document.id}")
+                    count++
+                    val item = document.toObject(Review::class.java)
+                    totalRating += item.rating
+                    reviewDocs.add(item.requestID)
+                }
+
+                avgRating = totalRating/count
+                Log.d(CLIENT_TAG, "[ServiceRatingActivity] Average Rating: ${avgRating}")
+
+            }.addOnCompleteListener {
+                if(it.isSuccessful) {
+                    populateRatings(avgRating, review.mechanicInfo?.uid!!)
+                }
+            }
+
+
+
+    }
+
+    private fun populateRatings(avgRating: Float, mechanicID: String) {
+
+        reviewRef.whereEqualTo("mechanicInfo.uid", mechanicID).get()
+            .addOnCompleteListener {
+                val batch = mFirestore.batch()
+
+                if(it.isSuccessful) {
+                    for(item in it.result!!) {
+                        val path = reviewRef.document(item.id)
+                        batch.update(path,"mechanicInfo.rating", avgRating)
+                    }
+                }
+                batch.commit()
+            }
+
+        requestRef.whereEqualTo("mechanicInfo.uid", mechanicID).get()
+            .addOnCompleteListener {
+                val batch = mFirestore.batch()
+
+                if(it.isSuccessful) {
+                    for(item in it.result!!) {
+                        val path = requestRef.document(item.id)
+                        batch.update(path,"mechanicInfo.rating", avgRating)
+                    }
+                }
+                batch.commit()
+            }
+
+        serviceRef.whereEqualTo("mechanicInfo.uid", mechanicID).get()
+            .addOnCompleteListener {
+                val batch = mFirestore.batch()
+
+                if(it.isSuccessful) {
+                    for(item in it.result!!) {
+                        val path = serviceRef.document(item.id)
+                        batch.update(path,"mechanicInfo.rating", avgRating)
+                    }
+                }
+                batch.commit()
+            }
+
+        accountRef.whereEqualTo("uid", mechanicID).get()
+            .addOnCompleteListener {
+                val batch = mFirestore.batch()
+
+                if(it.isSuccessful) {
+                    for(item in it.result!!) {
+                        val path = accountRef.document(item.id)
+                        batch.update(path,"rating", avgRating)
+                    }
+                }
+                batch.commit()
+            }
+    }
+
 
     private fun hideKeyboard() {
         id_service_rating_framelayout.setOnClickListener {

@@ -122,6 +122,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
         }
 
         holder.id_mechanic_more_info_name.text = "${mechanicInfo?.basicInfo?.firstName} ${mechanicInfo?.basicInfo?.lastName}"
+        holder.id_mechanic_more_info_rating.rating = mechanicInfo.rating
         holder.id_mechanic_more_info_reviews_count.text = "$count Reviews"
         holder.id_mechanic_more_info_service_items.text = ""
         for(item in serviceItems) {

@@ -130,7 +130,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
                 R.id.id_messages ->{
                     val intent = Intent(this, ChatRoomsActivity::class.java)
-                    //intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
                     startActivity(intent)
                     true
                 }

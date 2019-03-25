@@ -178,13 +178,15 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun checkIfChatRoomExist(client: Member, mechanic: Member) {
         chatRoomsRef.whereEqualTo("clientMember.uid", client.uid)
-        chatRoomsRef.whereEqualTo("mechanicMember.uid", mechanic.uid)
+            .whereEqualTo("mechanicMember.uid", mechanic.uid)
             .get()
             .addOnSuccessListener {
                 if (it.isEmpty) {
                     Log.d(CLIENT_TAG, "[PostServiceRequestActivity] no chat room exist yet")
                     createChatRoom(client, mechanic)
                 } else {
+                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                    finish()
                     Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room already exist")
                 }
             }
@@ -198,6 +200,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             .addOnSuccessListener {
                 Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room created")
                 startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                finish()
             }.addOnFailureListener {
                 Log.d(CLIENT_TAG, "[PostServiceRequestActivity] fail to create a chat room")
             }

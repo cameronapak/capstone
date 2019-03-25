@@ -185,6 +185,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     Log.d(CLIENT_TAG, "[PostServiceRequestActivity] no chat room exist yet")
                     createChatRoom(client, mechanic)
                 } else {
+                    startActivity(Intent(this, ClientWelcomeActivity::class.java))
                     Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room already exist")
                 }
             }

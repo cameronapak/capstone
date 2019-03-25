@@ -186,6 +186,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                     createChatRoom(client, mechanic)
                 } else {
                     startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                    finish()
                     Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room already exist")
                 }
             }
@@ -199,6 +200,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
             .addOnSuccessListener {
                 Log.d(CLIENT_TAG, "[PostServiceRequestActivity] chat room created")
                 startActivity(Intent(this, ClientWelcomeActivity::class.java))
+                finish()
             }.addOnFailureListener {
                 Log.d(CLIENT_TAG, "[PostServiceRequestActivity] fail to create a chat room")
             }

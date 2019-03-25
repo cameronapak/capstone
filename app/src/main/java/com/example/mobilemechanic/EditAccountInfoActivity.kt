@@ -3,11 +3,15 @@ package com.example.mobilemechanic
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
 import android.widget.Toast
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.DataProviderManager
@@ -18,6 +22,7 @@ import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
+import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -41,26 +46,33 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         mAuth = FirebaseAuth.getInstance()
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
+        setUpEditAccountInfoActivity()
+    }
 
+    private fun setUpEditAccountInfoActivity() {
+        setUpToolBar()
+        setUpForm()
+    }
+
+    private fun setUpForm() {
         val currentUser = mAuth?.currentUser
-
         if(currentUser != null) {
-            setUpInfo(currentUser)
-
-            btn_updateAccountInfo.setOnClickListener {
-                if(validateInfo()) {
-                    getUpdateInfo(currentUser)
-                    Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, "Fail", Toast.LENGTH_SHORT).show()
-                }
-            }
+            setUpCurrentInfo(currentUser)
         }
     }
 
-    private fun setUpInfo(currentUser: FirebaseUser) {
-        val uid = currentUser.uid
+    private fun setUpToolBar() {
+        setSupportActionBar(id_edit_settings_toolbar as Toolbar)
+        val actionBar: ActionBar? = supportActionBar
+        actionBar?.apply {
+            title = "Settings"
+            subtitle = "Update your information"
+            setDisplayHomeAsUpEnabled(true)
+        }
+    }
 
+    private fun setUpCurrentInfo(currentUser: FirebaseUser) {
+        val uid = currentUser.uid
         mFireStore?.collection(ACCOUNT_DOC_PATH)?.document(uid)?.get()
             ?.addOnSuccessListener {
                 userInfo = it.toObject(User::class.java)
@@ -92,6 +104,14 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
 
         val index = states.indexOf(state)
         spinner.setSelection(index)
+    }
+
+    private fun saveUserInfo() {
+        if(validateInfo()) {
+            getNewInformationFromForm(mAuth?.currentUser!!)
+        } else {
+            Log.d(USER_TAG, "Invalid information")
+        }
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -154,7 +174,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         return true
     }
 
-    private fun getUpdateInfo(currentUser: FirebaseUser) {
+    private fun getNewInformationFromForm(currentUser: FirebaseUser) {
         val email = id_editEmail.text.toString().trim()
         val password = id_editPassword.text.toString().trim()
         val firstName = id_editFirstName.text.toString().trim()
@@ -187,7 +207,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             ?.document(uid)
             ?.set(user)
             ?.addOnSuccessListener {
-            Toast.makeText(this, "Updated info!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Account information saved!", Toast.LENGTH_SHORT).show()
                 updateUserProfile(user)
         }
 
@@ -213,13 +233,13 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                 .build()
             user.updateProfile(profileUpdates).addOnSuccessListener {
                 goToHomeActivity()
+//                onBackPressed()
             }
         }
     }
 
 
     private fun goToHomeActivity() {
-
         if(userInfo!!.userType.equals(UserType.MECHANIC)) {
             startActivity(Intent(this, MechanicWelcomeActivity::class.java))
         } else if (userInfo!!.userType.equals(UserType.CLIENT)){
@@ -227,5 +247,11 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         }
 
         finish()
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        saveUserInfo()
+        Log.d(CLIENT_TAG, "Save user information and go back to previous activity")
+        return true
     }
 }

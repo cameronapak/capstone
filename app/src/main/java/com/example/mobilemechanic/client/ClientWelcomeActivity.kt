@@ -138,6 +138,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     val intent = Intent(this, EditAccountInfoActivity::class.java)
                     intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
                     startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.id_sign_out -> {

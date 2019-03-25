@@ -178,7 +178,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun checkIfChatRoomExist(client: Member, mechanic: Member) {
         chatRoomsRef.whereEqualTo("clientMember.uid", client.uid)
-        chatRoomsRef.whereEqualTo("mechanicMember.uid", mechanic.uid)
+            .whereEqualTo("mechanicMember.uid", mechanic.uid)
             .get()
             .addOnSuccessListener {
                 if (it.isEmpty) {

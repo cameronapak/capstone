@@ -2,6 +2,7 @@ package com.example.mobilemechanic.client
 
 import android.app.Activity
 import android.app.Dialog
+import android.content.Intent
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.util.Log
@@ -12,6 +13,7 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.payment.Payment
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
@@ -101,7 +103,8 @@ class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList
 
         if (request.status == Status.Active) {
             // TODO: Go to payment activity
-
+            val intent = Intent(context, Payment::class.java)
+            context.startActivity(intent)
         }
 
     }

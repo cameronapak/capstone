@@ -175,12 +175,10 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_settings -> {
-                    true
-                }
-                R.id.id_settings -> {
                     val intent = Intent(this, EditAccountInfoActivity::class.java)
-                    intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.MECHANIC.name)
                     startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.id_sign_out->{
@@ -208,6 +206,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
+        setUpToolBar()
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
     }

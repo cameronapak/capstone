@@ -233,7 +233,6 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                 .build()
             user.updateProfile(profileUpdates).addOnSuccessListener {
                 goToHomeActivity()
-//                onBackPressed()
             }
         }
     }

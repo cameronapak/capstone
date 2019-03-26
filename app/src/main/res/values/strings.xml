@@ -169,5 +169,10 @@
     <string name="text_check_faq">Have question? Check our FAQ page.</string>
     <string name="title_activity_mechanic_reviews">MechanicReviewsActivity</string>
     <string name="label_payment">Payment</string>
+    <string name="label_tip">Tips</string>
+    <string name="label_cardnumbers">Card Numbers</string>
+    <string name="label_expire">Expire</string>
+    <string name="label_cvc">CVC</string>
+    <string name="id_submit_payment_btn">Submit</string>
 
 </resources>

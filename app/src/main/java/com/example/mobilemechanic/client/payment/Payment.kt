@@ -5,16 +5,22 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
+import com.android.volley.Response
+import com.android.volley.Request
+import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.Volley
 import com.example.mobilemechanic.R
 import kotlinx.android.synthetic.main.activity_payment.*
 import com.stripe.android.model.Card
 import kotlinx.android.synthetic.main.payment_container.*
 import kotlinx.android.synthetic.main.payment_container.view.*
+import com.stripe.android.Stripe
+import com.stripe.android.TokenCallback
+import com.stripe.android.model.Token
+
 
 
 class Payment : AppCompatActivity() {
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,69 @@ class Payment : AppCompatActivity() {
             cardExpYear,
             cardCVC
         )
+
+        //Toast.makeText(this, cardExpYear.toString(), Toast.LENGTH_LONG).show()
+        //test with this card
+        //Card("4242-4242-4242-4242", 12, 2020, "123");
+
+        //check number
+        if(!card.validateNumber()){
+            Toast.makeText(this, "You Suck, your card # sucks", Toast.LENGTH_SHORT).show()
+        } else{
+            Toast.makeText(this, "You Good, your card # works", Toast.LENGTH_SHORT).show()
+        }
+
+        //check CVC
+        if(!card.validateCVC()){
+            Toast.makeText(this, "You Suck, your card CVC sucks", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "You Good, your card CVC works", Toast.LENGTH_LONG).show()
+        }
+
+        //check card
+        if(!card.validateCard()){
+            Toast.makeText(this, "You Suck, your card sucks", Toast.LENGTH_SHORT).show()
+        } else{
+            Toast.makeText(this, "You Good, your card works", Toast.LENGTH_SHORT).show()
+            convertInfoToToken(card)
+        }
+    }
+
+    private fun convertInfoToToken(card: Card){
+        val stripe = Stripe(this, "pk_test_wTx4vP8D0gatpbC02tmXXthM00qBhOeNO5")
+            stripe.createToken(card, object : TokenCallback {
+                override fun onSuccess(token: Token) {
+                    Toast.makeText(this@Payment,"Token Created!! ${token!!.getId()}", Toast.LENGTH_LONG).show()
+                    //chargeCard(token!!.getId()) // Pass that token to your Server for further processing
+                }
+
+                override fun onError(error: Exception?) {
+                    Toast.makeText(this@Payment,"Token Not Created!!", Toast.LENGTH_LONG).show()
+                    error!!.printStackTrace()
+                }
+
+            })
+    }
+
+    private fun requestQueue(){
+        // Instantiate the RequestQueue.
+        val queue = Volley.newRequestQueue(this)
+        val url = "https://api.stripe.com"
+
+        // Request a string response from the provided URL.
+        val stringRequest = StringRequest(Request.Method.GET, url,
+            Response.Listener<String> { response ->
+                // Display the first 500 characters of the response string.
+                Toast.makeText(this,
+                    "Response is: ${response.substring(0, 500)}", Toast.LENGTH_LONG).show()
+            },
+            Response.ErrorListener {
+                Toast.makeText(this,
+                "cannot request queue!!", Toast.LENGTH_LONG).show()
+            })
+
+        // Add the request to the RequestQueue.
+        queue.add(stringRequest)
     }
 
     private fun setUpActionBar() {

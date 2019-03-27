@@ -15,6 +15,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.findservice.EXTRA_DISTANCE
 import com.example.mobilemechanic.client.findservice.EXTRA_MECHANIC_INFO
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.Review
@@ -48,6 +49,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
 
     val REQUEST_PHONE_CALL = 1
     var count: Int = 0
+    var distance = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -74,6 +76,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
 
     private fun parseParcelable() {
         mechanicInfo = intent.getParcelableExtra(EXTRA_MECHANIC_INFO)
+        distance = intent.getStringExtra(EXTRA_DISTANCE.toString())
     }
 
     private fun getMechanicServices() {
@@ -124,6 +127,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
         holder.id_mechanic_more_info_name.text = "${mechanicInfo?.basicInfo?.firstName} ${mechanicInfo?.basicInfo?.lastName}"
         holder.id_mechanic_more_info_rating.rating = mechanicInfo.rating
         holder.id_mechanic_more_info_reviews_count.text = "$count Reviews"
+        holder.id_mechanic_more_info_distance.text = distance
         holder.id_mechanic_more_info_service_items.text = ""
         for(item in serviceItems) {
             if(!holder.id_mechanic_more_info_service_items.text.contains(item.service.serviceType))

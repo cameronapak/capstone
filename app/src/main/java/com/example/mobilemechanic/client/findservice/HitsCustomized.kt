@@ -367,7 +367,6 @@ class HitsCustomized
             holder.selectButton.setOnClickListener {
                 val intent = Intent(context, PostServiceRequestActivity::class.java)
                 intent.putExtra(EXTRA_SERVICE, serviceObj)
-                intent.putExtra(EXTRA_SERVICE, serviceObj)
                 context.startActivity(intent)
             }
 
@@ -387,7 +386,7 @@ class HitsCustomized
             holder.review.setOnClickListener {
                 val intent = Intent(context, MechanicReviewsActivity::class.java)
                 intent.putExtra(EXTRA_MECHANIC_INFO, serviceObj.mechanicInfo)
-                intent.putExtra(EXTRA_DISTANCE, id_distance.text)
+                intent.putExtra(EXTRA_DISTANCE, holder.distance.text)
                 context.startActivity(intent)
             }
 

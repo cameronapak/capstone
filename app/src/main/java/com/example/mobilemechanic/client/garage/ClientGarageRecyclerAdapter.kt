@@ -1,6 +1,9 @@
 package com.example.mobilemechanic.client.garage
 
 import android.app.Activity
+import android.content.Intent
+import android.support.v4.content.ContextCompat.isDeviceProtectedStorage
+import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
@@ -61,6 +65,7 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
 
+
         return ViewHolder(view)
     }
 
@@ -77,6 +82,15 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
         holder.updateButton.setOnClickListener {
             updateVehicleDialog(vehicle)
+        }
+
+        holder.vehicleImage.setOnClickListener {
+
+            var a = Intent(context, ViewVehicleInfoActivity::class.java)
+            var test= "${vehicle.year} ${vehicle.make} ${vehicle.model}".toString()
+            a.putExtra("Data", test)
+            context.startActivity(a)
+
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.mobilemechanic.client.garage
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -8,6 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
@@ -16,6 +18,7 @@ import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -25,6 +28,7 @@ import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.activity_garage.*
+import kotlinx.android.synthetic.main.card_vehicle.*
 import kotlinx.android.synthetic.main.dialog_body_add_vehicle.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import org.json.JSONArray
@@ -63,6 +67,8 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Log.d(CLIENT_TAG, "[GarageActivity] User email: ${mAuth?.currentUser?.email}")
         setContentView(com.example.mobilemechanic.R.layout.activity_garage)
         setUpGarageActivity()
+
+
     }
 
     private fun setUpGarageActivity() {

@@ -27,7 +27,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_edit_account_info.*
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
@@ -182,7 +181,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.id_sign_out->{
-                    mAuth?.signOut()
+                    mAuth.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     true

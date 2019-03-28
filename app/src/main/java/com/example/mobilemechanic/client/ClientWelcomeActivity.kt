@@ -142,7 +142,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.id_sign_out -> {
-                    mAuth?.signOut()
+                    mAuth.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     true

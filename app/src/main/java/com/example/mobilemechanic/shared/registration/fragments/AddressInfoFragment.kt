@@ -11,9 +11,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -37,7 +35,6 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
-import kotlinx.android.synthetic.main.fragment_address_info.*
 
 const val ACCOUNT_DOC_PATH = "Accounts"
 
@@ -74,8 +71,9 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     private fun setUpPager() {
         val pager = activity?.findViewById<ViewPager>(R.id.id_registrationPager)
-
-        btn_registerAccount.setOnClickListener {
+        val registerAccountButton = activity?.findViewById<Button>(R.id.btn_registerAccount)
+        val backToUploadProfilePicture = activity?.findViewById<TextView>(R.id.btn_backToUploadProfilePicture)
+        registerAccountButton?.setOnClickListener {
             if (validateAddress(registrationModel)) {
                 createUserAccount(registrationModel)
             } else {
@@ -83,7 +81,8 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
             }
         }
 
-        btn_backToUploadProfilePicture.setOnClickListener {
+
+        backToUploadProfilePicture?.setOnClickListener {
             pager?.setCurrentItem(2, true)
         }
     }
@@ -101,14 +100,19 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
     }
 
     override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
-        registrationModel.state.value = id_registrationStateSpinner.selectedItem.toString()
+        val registrationStateSpinner = activity?.findViewById<Spinner>(R.id.id_registrationStateSpinner)
+        registrationModel.state.value = registrationStateSpinner?.selectedItem.toString()
     }
 
     private fun validateAddress(registrationModel: RegistrationViewModel): Boolean {
-        val street = id_registrationStreet.text.toString().trim()
-        val city = id_registrationCity.text.toString().trim()
-        val state = id_registrationStateSpinner.selectedItem.toString().trim()
-        val zip = id_registrationZip.text.toString().trim()
+        val registrationStreet = activity?.findViewById<EditText>(R.id.id_registrationStreet)
+        val registrationCity = activity?.findViewById<EditText>(R.id.id_registrationCity)
+        val registrationStateSpinner = activity?.findViewById<Spinner>(R.id.id_registrationStateSpinner)
+        val registrationZip = activity?.findViewById<EditText>(R.id.id_registrationZip)
+        val street = registrationStreet?.text.toString().trim()
+        val city = registrationCity?.text.toString().trim()
+        val state = registrationStateSpinner?.selectedItem.toString().trim()
+        val zip = registrationZip?.text.toString().trim()
 
         if (street.isNullOrEmpty() || street.isNullOrBlank()) {
             Toast.makeText(activity, "Invalid address!", Toast.LENGTH_SHORT).show()
@@ -285,6 +289,7 @@ class AddressInfoFragment : Fragment(), AdapterView.OnItemSelectedListener {
 
     override fun onResume() {
         super.onResume()
-        btn_backToUploadProfilePicture.paintFlags = btn_backToUploadProfilePicture.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        val backToUploadProfilePicture = activity?.findViewById<TextView>(R.id.btn_backToUploadProfilePicture)
+        backToUploadProfilePicture?.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools"
           package="com.example.mobilemechanic">
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -20,8 +20,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
-            android:windowSoftInputMode="stateAlwaysHidden">
-        <activity android:name=".client.payment.Payment">
+            android:windowSoftInputMode="stateAlwaysHidden"
+            tools:replace="android:appComponentFactory"
+            android:appComponentFactory="@string/action_settings">
+        <activity android:name=".client.payment.PaymentActivity">
         </activity>
         <activity android:name=".EditAccountInfoActivity">
         </activity>

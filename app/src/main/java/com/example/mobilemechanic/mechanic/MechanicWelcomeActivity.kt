@@ -17,6 +17,7 @@ import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.mechanic.history.MechanicHistoryActivity
 import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
@@ -166,11 +167,11 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_services -> {
-                    Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] my services")
                     startActivity(Intent(this, MechanicServicesActivity::class.java))
                     true
                 }
                 R.id.nav_history -> {
+                    startActivity(Intent(this, MechanicHistoryActivity::class.java))
                     true
                 }
                 R.id.nav_settings -> {

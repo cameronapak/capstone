@@ -142,10 +142,7 @@ class MechanicServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         basicDialog.show()
-
-
         handleDialogOnClick(basicDialog)
-
     }
 
     private fun handleDialogOnClick(basicDialog: Dialog) {

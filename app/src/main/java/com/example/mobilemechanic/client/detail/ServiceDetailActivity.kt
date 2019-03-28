@@ -1,7 +1,6 @@
 package com.example.mobilemechanic.client.detail
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -39,7 +38,7 @@ import kotlinx.android.synthetic.main.activity_service_detail.*
 import kotlinx.android.synthetic.main.card_vehicle_details_container.*
 import kotlinx.android.synthetic.main.card_vehicle_details_container.view.*
 import kotlinx.android.synthetic.main.dialog_body_contact.*
-import kotlinx.android.synthetic.main.dialog_container_basic.*
+import kotlinx.android.synthetic.main.dialog_container_basic_single.*
 
 class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -165,11 +164,10 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun setUpContactServiceDialog(request: Request) {
 
         val dialogContainer =
-            layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
+            layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic_single, null)
         val dialogBody = layoutInflater.
             inflate(com.example.mobilemechanic.R.layout.dialog_body_contact, null)
 
@@ -177,7 +175,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             title = "Contact"
             positive = "Call"
             negative = "Message"
-        }.build(this, dialogContainer, dialogBody)
+        }.buildSingle(this, dialogContainer, dialogBody)
 
         val basicInfo = request.mechanicInfo!!.basicInfo
         basicDialog.id_phone_number.text = basicInfo.phoneNumber
@@ -190,20 +188,26 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         basicDialog.show()
+        handleDialogOnClick(basicDialog)
+    }
 
-        basicDialog.id_positive.setOnClickListener {
-            startCall(request)
+    private fun handleDialogOnClick(basicDialog: Dialog) {
+        basicDialog.id_cancel.setOnClickListener {
+            basicDialog.dismiss()
         }
 
-        basicDialog.id_negative.setOnClickListener {
+        basicDialog.id_message.setOnClickListener {
             val intent = Intent(this, ChatRoomsActivity::class.java)
             intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
             startActivity(intent)
         }
+
+        basicDialog.id_call.setOnClickListener {
+            startCall(request)
+        }
     }
 
-    @SuppressLint("MissingPermission")
-    fun startCall(request: Request){
+    private fun startCall(request: Request){
         val phoneNum = request.mechanicInfo?.basicInfo?.phoneNumber
             ?.replace("[^0-9\\+]".toRegex(), "")
         val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNum"))
@@ -223,7 +227,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Service Details"
-            subtitle = "Service on ${DateTimeManager.millisToDate(request.completedOn, "MMM d, y")}"
+            subtitle = "Serviced on ${DateTimeManager.millisToDate(request.completedOn, "MMM d, y")}"
             setDisplayHomeAsUpEnabled(true)
         }
     }

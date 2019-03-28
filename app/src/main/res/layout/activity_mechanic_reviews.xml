@@ -35,7 +35,8 @@
                 android:layout_below="@id/id_body_bg"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" android:id="@+id/id_recyclerview_reviews"
+                android:layout_alignParentStart="true" android:layout_marginStart="0dp"/>
     </RelativeLayout>
 
 </FrameLayout>

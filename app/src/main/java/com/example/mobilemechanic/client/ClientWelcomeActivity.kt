@@ -130,7 +130,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
                 R.id.id_messages ->{
                     val intent = Intent(this, ChatRoomsActivity::class.java)
-                    //intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
+                    intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
                     startActivity(intent)
                     true
                 }
@@ -138,6 +138,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     val intent = Intent(this, EditAccountInfoActivity::class.java)
                     intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
                     startActivity(intent)
+                    finish()
                     true
                 }
                 R.id.id_sign_out -> {
@@ -224,6 +225,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     override fun onResume() {
         signInGuard()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        setUpToolBar()
         super.onResume()
     }
 }

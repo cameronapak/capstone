@@ -21,7 +21,7 @@
             android:supportsRtl="true"
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden">
-        <activity android:name=".client.garage.ViewVehicleInfoActivity">
+        <activity android:name=".client.payment.Payment">
         </activity>
         <activity android:name=".EditAccountInfoActivity">
         </activity>

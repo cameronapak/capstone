@@ -169,5 +169,8 @@
     <string name="text_check_faq">Have question? Check our FAQ page.</string>
     <string name="title_activity_mechanic_reviews">MechanicReviewsActivity</string>
     <string name="label_payment">Payment</string>
+    <string name="text_grand_total">Grand total</string>
+    <string name="text_subtotal">Subtotal</string>
+    <string name="text_estimated_tax">Estimated tax</string>
 
 </resources>

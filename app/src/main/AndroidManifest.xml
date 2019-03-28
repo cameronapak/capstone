@@ -24,6 +24,8 @@
             android:theme="@style/AppTheme"
             android:windowSoftInputMode="stateAlwaysHidden"
             tools:replace="android:appComponentFactory">
+        <activity android:name=".mechanic.detail.MechanicServiceDetailActivity">
+        </activity>
         <activity android:name=".mechanic.history.MechanicHistoryActivity">
         </activity>
         <activity android:name=".client.payment.PaymentActivity">

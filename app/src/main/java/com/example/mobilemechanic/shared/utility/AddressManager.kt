@@ -83,4 +83,9 @@ object AddressManager
 
         return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1000) / 1.609
     }
+
+    fun getDistanceMI(clientLocation: Location, mechanicLocation: Location) : Double
+    {
+        return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1000) / 1.609
+    }
 }

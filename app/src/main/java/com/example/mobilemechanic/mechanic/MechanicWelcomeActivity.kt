@@ -181,7 +181,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.id_sign_out->{
+                R.id.nav_mechanic_signout -> {
                     mAuth.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))

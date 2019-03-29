@@ -186,6 +186,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     }
                 }
                 clientRequestRecyclerAdapter.notifyDataSetChanged()
+                ScreenManager.toggleVisibility(id_progress_bar)
             }
     }
 

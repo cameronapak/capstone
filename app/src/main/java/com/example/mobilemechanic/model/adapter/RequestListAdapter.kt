@@ -19,10 +19,12 @@ import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -114,15 +116,6 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             holder.primaryButton.text = context.getString(R.string.label_choice_complete)
             holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
             holder.directionsButton.visibility = View.VISIBLE
-        }
-    }
-
-    private fun displayProfileImage(drawerProfileImage: CircleImageView, photoUrl: String) {
-        val userProfileUri = Uri.parse(photoUrl)
-        if (userProfileUri != null) {
-            Picasso.get().load(userProfileUri).into(drawerProfileImage)
-        } else {
-            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
         }
     }
 

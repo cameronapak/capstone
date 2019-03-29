@@ -7,6 +7,7 @@ import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 
 object ScreenManager {
     fun hideStatusAndBottomNavigationBar(activity: Activity) {

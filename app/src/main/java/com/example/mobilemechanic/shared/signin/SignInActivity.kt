@@ -18,7 +18,6 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.registration.RegistrationActivity
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
-import com.example.mobilemechanic.shared.utility.ScreenManager.toggleVisibility
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -52,7 +51,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun login() {
-        toggleVisibility(id_progress_bar)
+        ScreenManager.toggleVisibility(id_progress_bar)
         val email = id_login_email.text.toString().trim()
         val password = id_login_password.text.toString().trim()
         if (email.isEmpty() or password.isEmpty()) {
@@ -66,7 +65,7 @@ class SignInActivity : AppCompatActivity() {
                     checkUserType()
                 }
             }?.addOnFailureListener {
-                toggleVisibility(id_progress_bar)
+                ScreenManager.toggleVisibility(id_progress_bar)
                 Toast.makeText(this, "Unable to login", Toast.LENGTH_LONG).show()
             }
     }

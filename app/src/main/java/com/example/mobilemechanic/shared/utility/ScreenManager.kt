@@ -57,4 +57,13 @@ object ScreenManager {
         }
         imm.hideSoftInputFromWindow(view.windowToken, 0);
     }
+
+    fun toggleVisibility(view: View)
+    {
+        when(view.visibility)
+        {
+            View.VISIBLE -> { view.visibility = View.GONE }
+            View.GONE -> { view.visibility = View.VISIBLE }
+        }
+    }
 }

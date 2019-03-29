@@ -54,4 +54,7 @@
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"/>
+    <style name="AppProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:color">@color/colorPrimary1</item>
+    </style>
 </resources>

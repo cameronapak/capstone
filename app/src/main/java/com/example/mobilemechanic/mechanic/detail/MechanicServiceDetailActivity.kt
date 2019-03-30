@@ -169,8 +169,7 @@ class MechanicServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         if(ContextCompat.checkSelfPermission(this, Manifest.permission.CALL_PHONE) ==
             PackageManager.PERMISSION_GRANTED) {
             startActivity(intent)
-        }
-        else {
+        } else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
                 REQUEST_PHONE_CALL)
         }

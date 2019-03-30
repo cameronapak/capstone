@@ -39,6 +39,20 @@ class BasicDialog(parentActivity: Activity, container: View, bodyView: View)
                     ScreenManager.setBasicDialogWidth(parentActivity, dialog, 0.9f)
                 return dialog
             }
+
+            fun buildSingle(parentActivity: Activity, container: View, bodyView: View) : BasicDialog{
+                var dialog = BasicDialog(parentActivity, container, bodyView)
+                dialog.setContentView(container)
+
+                val body = container.id_body as LinearLayout
+                container.apply {
+                    id_service_type.text = title
+                }
+                body.addView(bodyView)
+                dialog.window.attributes =
+                    ScreenManager.setBasicDialogWidth(parentActivity, dialog, 0.9f)
+                return dialog
+            }
         }
     }
 }

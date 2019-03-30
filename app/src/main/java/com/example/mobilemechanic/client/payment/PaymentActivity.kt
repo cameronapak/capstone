@@ -1,26 +1,26 @@
 package com.example.mobilemechanic.client.payment
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
-import com.android.volley.Response
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.mobilemechanic.R
-import kotlinx.android.synthetic.main.activity_payment.*
-import com.stripe.android.model.Card
-import kotlinx.android.synthetic.main.payment_container.*
-import kotlinx.android.synthetic.main.payment_container.view.*
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
+import com.stripe.android.model.Card
 import com.stripe.android.model.Token
+import kotlinx.android.synthetic.main.activity_payment.*
+import kotlinx.android.synthetic.main.payment_container.*
+import kotlinx.android.synthetic.main.payment_container.view.*
 
 
 
-class Payment : AppCompatActivity() {
+class PaymentActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -77,18 +77,18 @@ class Payment : AppCompatActivity() {
 
     private fun convertInfoToToken(card: Card){
         val stripe = Stripe(this, "pk_test_wTx4vP8D0gatpbC02tmXXthM00qBhOeNO5")
-            stripe.createToken(card, object : TokenCallback {
-                override fun onSuccess(token: Token) {
-                    Toast.makeText(this@Payment,"Token Created!! ${token!!.getId()}", Toast.LENGTH_LONG).show()
-                    //chargeCard(token!!.getId()) // Pass that token to your Server for further processing
-                }
+        stripe.createToken(card, object : TokenCallback {
+            override fun onSuccess(token: Token) {
+                Toast.makeText(this@PaymentActivity,"Token Created!! ${token!!.getId()}", Toast.LENGTH_LONG).show()
+                //chargeCard(token!!.getId()) // Pass that token to your Server for further processing
+            }
 
-                override fun onError(error: Exception?) {
-                    Toast.makeText(this@Payment,"Token Not Created!!", Toast.LENGTH_LONG).show()
-                    error!!.printStackTrace()
-                }
+            override fun onError(error: Exception?) {
+                Toast.makeText(this@PaymentActivity,"Token Not Created!!", Toast.LENGTH_LONG).show()
+                error!!.printStackTrace()
+            }
 
-            })
+        })
     }
 
     private fun requestQueue(){
@@ -105,7 +105,7 @@ class Payment : AppCompatActivity() {
             },
             Response.ErrorListener {
                 Toast.makeText(this,
-                "cannot request queue!!", Toast.LENGTH_LONG).show()
+                    "cannot request queue!!", Toast.LENGTH_LONG).show()
             })
 
         // Add the request to the RequestQueue.

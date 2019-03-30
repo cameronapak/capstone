@@ -4,19 +4,19 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Paint
 import android.os.Bundle
+import android.support.design.widget.TextInputEditText
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import android.widget.*
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.signin.USER_TAG
-import kotlinx.android.synthetic.main.fragment_credentials.*
 
 class CredentialsFragment : Fragment() {
     private lateinit var registrationModel: RegistrationViewModel
@@ -38,14 +38,16 @@ class CredentialsFragment : Fragment() {
 
     private fun setUpPager() {
         val pager = activity?.findViewById<ViewPager>(R.id.id_registrationPager)
+        val personalInfoButton = activity?.findViewById<Button>(R.id.btn_personalInfo)
+        val backToSignIn = activity?.findViewById<TextView>(R.id.btn_backToSignIn)
 
-        btn_personalInfo.setOnClickListener {
+        personalInfoButton?.setOnClickListener {
             if (validateCredentials(registrationModel)) {
                 pager?.setCurrentItem(1, true)
             }
         }
 
-        btn_backToSignIn.setOnClickListener {
+        backToSignIn?.setOnClickListener {
             startActivity(Intent(activity, SignInActivity::class.java))
             activity?.finish()
         }
@@ -57,9 +59,13 @@ class CredentialsFragment : Fragment() {
     }
 
     private fun validateCredentials(registrationModel: RegistrationViewModel) : Boolean {
-        val userType = getUserType(id_clientType.isChecked)
-        val email = id_registrationEmail.text.toString().trim()
-        val password = id_registration_password.text.toString().trim()
+        val clientType = activity?.findViewById<RadioButton>(R.id.id_clientType)
+        val registrationEmail = activity?.findViewById<EditText>(R.id.id_registrationEmail)
+        val registrationPassword = activity?.findViewById<TextInputEditText>(R.id.id_registration_password)
+
+        val userType = getUserType(clientType?.isChecked!!)
+        val email = registrationEmail?.text.toString().trim()
+        val password = registrationPassword?.text.toString().trim()
 
         if(email.isNullOrEmpty() || email.isNullOrBlank() || !email.contains('@')) {
             Toast.makeText(activity, "Invalid email address!", Toast.LENGTH_SHORT).show()
@@ -81,6 +87,7 @@ class CredentialsFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        btn_backToSignIn.paintFlags = btn_backToSignIn.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        val backToSignIn = activity?.findViewById<TextView>(R.id.btn_backToSignIn)
+        backToSignIn?.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }

@@ -18,6 +18,7 @@ import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.mechanic.history.MechanicHistoryActivity
 import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
@@ -29,7 +30,6 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_edit_account_info.*
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
@@ -164,11 +164,11 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_services -> {
-                    Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] my services")
                     startActivity(Intent(this, MechanicServicesActivity::class.java))
                     true
                 }
                 R.id.nav_history -> {
+                    startActivity(Intent(this, MechanicHistoryActivity::class.java))
                     true
                 }
                 R.id.nav_settings -> {
@@ -178,8 +178,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.id_sign_out->{
-                    mAuth?.signOut()
+                R.id.nav_mechanic_signout -> {
+                    mAuth.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     true

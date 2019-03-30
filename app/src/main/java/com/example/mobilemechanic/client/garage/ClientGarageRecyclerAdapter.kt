@@ -61,6 +61,10 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
 
+        view.setOnClickListener {
+     
+        }
+
         return ViewHolder(view)
     }
 

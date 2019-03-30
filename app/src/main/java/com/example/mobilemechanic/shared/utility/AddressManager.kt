@@ -56,36 +56,8 @@ object AddressManager
         return mechanicLocation.distanceTo(clientLocation).toDouble() / 1000
     }
 
-    fun getDistanceMI(clientLatLng: LatLng, mechanicLatLng: LatLng) : Double
-    {
-        val clientLocation = Location("Client")
-        clientLocation.latitude = clientLatLng.latitude
-        clientLocation.longitude = clientLatLng.longitude
-
-        val mechanicLocation = Location("Mechanic")
-        mechanicLocation.latitude = mechanicLatLng.latitude
-        mechanicLocation.longitude = mechanicLatLng.longitude
-
-        return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1000) / 1.609
-    }
-
-    fun getDistanceMI(clientLatLng: LatLngHolder, mechanicLatLng: LatLngHolder) : Double
-    {
-        val clientLocation = Location("Client").apply {
-            latitude = clientLatLng.lat
-            longitude = clientLatLng.lng
-        }
-
-        val mechanicLocation = Location("Mechanic").apply {
-            latitude = mechanicLatLng.lat
-            longitude = mechanicLatLng.lng
-        }
-
-        return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1000) / 1.609
-    }
-
     fun getDistanceMI(clientLocation: Location, mechanicLocation: Location) : Double
     {
-        return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1000) / 1.609
+        return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1609.34)
     }
 }

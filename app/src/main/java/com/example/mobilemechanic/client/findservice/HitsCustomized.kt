@@ -44,7 +44,6 @@ import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.algolia_hits_item.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject

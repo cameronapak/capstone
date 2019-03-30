@@ -357,7 +357,6 @@ class HitsCustomized
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val serviceJson = hits[position]
-            Log.d(CLIENT_TAG, "[HitsCustomized] $serviceJson")
             val serviceObj = gson.fromJson(serviceJson.toString(), ServiceModel::class.java)
 
             holder.price.text = "$${serviceObj.service.price.toInt()}"

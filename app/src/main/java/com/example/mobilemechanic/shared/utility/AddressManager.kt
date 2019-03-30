@@ -8,6 +8,7 @@ import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.google.android.gms.maps.model.LatLng
 import java.util.*
 
+const val METERS_PER_MILE = 1609.34
 object AddressManager
 {
 
@@ -58,6 +59,6 @@ object AddressManager
 
     fun getDistanceMI(clientLocation: Location, mechanicLocation: Location) : Double
     {
-        return (mechanicLocation.distanceTo(clientLocation).toDouble() / 1609.34)
+        return (mechanicLocation.distanceTo(clientLocation).toDouble() / METERS_PER_MILE)
     }
 }

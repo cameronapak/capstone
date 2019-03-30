@@ -44,6 +44,7 @@ import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.algolia_hits_item.view.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.json.JSONObject
@@ -51,6 +52,7 @@ import java.util.*
 
 const val EXTRA_SERVICE = "extra_service"
 const val EXTRA_MECHANIC_INFO = "extra_mechanic_info"
+const val EXTRA_DISTANCE = "extra_distance"
 
 class HitsCustomized
     (context: Context, attrs: AttributeSet) : RecyclerView(context, attrs), AlgoliaResultsListener,
@@ -384,6 +386,7 @@ class HitsCustomized
             holder.review.setOnClickListener {
                 val intent = Intent(context, MechanicReviewsActivity::class.java)
                 intent.putExtra(EXTRA_MECHANIC_INFO, serviceObj.mechanicInfo)
+                intent.putExtra(EXTRA_DISTANCE, holder.distance.text)
                 context.startActivity(intent)
             }
 

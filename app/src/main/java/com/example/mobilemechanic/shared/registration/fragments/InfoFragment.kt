@@ -8,11 +8,12 @@ import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
-
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.shared.registration.RegistrationViewModel
-import kotlinx.android.synthetic.main.fragment_info.*
 
 class InfoFragment : Fragment() {
     private lateinit var registrationModel: RegistrationViewModel
@@ -34,22 +35,28 @@ class InfoFragment : Fragment() {
 
     private fun setUpPager() {
         val pager = activity?.findViewById<ViewPager>(R.id.id_registrationPager)
+        val profilePictureButton = activity?.findViewById<Button>(R.id.btn_profilePicture)
+        val backToCredentials = activity?.findViewById<TextView>(R.id.btn_backToCredentials)
 
-        btn_profilePicture.setOnClickListener {
+        profilePictureButton?.setOnClickListener {
             if (validateInfo(registrationModel)) {
                 pager?.setCurrentItem(2, true)
             }
         }
 
-        btn_backToCredentials.setOnClickListener {
+        backToCredentials?.setOnClickListener {
             pager?.setCurrentItem(0, true)
         }
     }
 
     private fun validateInfo(registrationModel: RegistrationViewModel) : Boolean {
-        val firstName = id_registrationFirstName.text.toString().trim()
-        val lastName = id_registrationLastName.text.toString().trim()
-        val phoneNumber = id_registrationPhoneNumber.text.toString().trim()
+        val firstNameEditText = activity?.findViewById<EditText>(R.id.id_registrationFirstName)
+        val lastNameEditText = activity?.findViewById<EditText>(R.id.id_registrationLastName)
+        val phoneNumberEditText = activity?.findViewById<EditText>(R.id.id_registrationPhoneNumber)
+
+        val firstName = firstNameEditText?.text.toString().trim()
+        val lastName = lastNameEditText?.text.toString().trim()
+        val phoneNumber = phoneNumberEditText?.text.toString().trim()
 
         if(firstName.isNullOrEmpty() || firstName.isNullOrBlank()) {
             Toast.makeText(activity, "Invalid first otherMemberName!", Toast.LENGTH_SHORT).show()
@@ -75,6 +82,7 @@ class InfoFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        btn_backToCredentials.paintFlags = btn_backToCredentials.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        val backToCredentials = activity?.findViewById<TextView>(R.id.btn_backToCredentials)
+        backToCredentials?.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }

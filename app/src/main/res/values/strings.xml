@@ -172,10 +172,10 @@
     <string name="text_grand_total">Grand total</string>
     <string name="text_subtotal">Subtotal</string>
     <string name="text_estimated_tax">Estimated tax</string>
-    <string name="label_tip">Tips</string>
-    <string name="label_cardnumbers">Card Numbers</string>
-    <string name="label_expire">Expire</string>
+    <string name="label_tip">Tip</string>
+    <string name="label_cardnumber">Card Number</string>
+    <string name="label_expire">Exp. Date</string>
     <string name="label_cvc">CVC</string>
-    <string name="id_submit_payment_btn">Submit</string>
+    <string name="id_submit_payment_btn">Pay</string>
 
 </resources>

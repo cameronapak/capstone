@@ -192,6 +192,7 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         mMap.clear()
         mMap.addMarker(MarkerOptions().position(clientLatLng))
+        ScreenManager.toggleVisibility(id_progress_bar)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)

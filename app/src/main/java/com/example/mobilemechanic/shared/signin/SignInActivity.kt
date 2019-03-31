@@ -51,6 +51,7 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun login() {
+        ScreenManager.toggleVisibility(id_progress_bar)
         val email = id_login_email.text.toString().trim()
         val password = id_login_password.text.toString().trim()
         if (email.isEmpty() or password.isEmpty()) {
@@ -64,6 +65,7 @@ class SignInActivity : AppCompatActivity() {
                     checkUserType()
                 }
             }?.addOnFailureListener {
+                ScreenManager.toggleVisibility(id_progress_bar)
                 Toast.makeText(this, "Unable to login", Toast.LENGTH_LONG).show()
             }
     }

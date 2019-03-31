@@ -11,23 +11,25 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.mechanic.history.MechanicHistoryActivity
 import com.example.mobilemechanic.model.*
 import com.example.mobilemechanic.model.adapter.RequestListAdapter
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
+import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
-import kotlinx.android.synthetic.main.activity_edit_account_info.*
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
 
@@ -48,30 +50,15 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_welcome)
-        mAuth = FirebaseAuth.getInstance()
-        mFirestore = FirebaseFirestore.getInstance()
-        requestRef = mFirestore.collection(getString(R.string.ref_requests))
         setUpMechanicWelcomeActivity()
     }
 
     private fun setUpMechanicWelcomeActivity() {
-        //mockLogin()       // Replace with real login later
+        initFirestore()
         setUpToolBar()
         setUpDrawerMenu()
         setUpNavigationListener()
         setUpRequestRecyclerView()
-    }
-
-    private fun mockLogin() {
-        mAuth?.signInWithEmailAndPassword("statham@gmail.com", "123456")
-            ?.addOnCompleteListener {
-                if (it.isSuccessful) {
-                    val user = mAuth?.currentUser
-                    Log.d(MECHANIC_TAG, "you is logged in ${user?.uid}")
-                }
-            }?.addOnFailureListener {
-                Log.d(MECHANIC_TAG, it.toString())
-            }
     }
 
     private fun setUpRequestRecyclerView() {
@@ -86,6 +73,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun reactiveServiceRecyclerView() {
+
         requestRef.whereEqualTo("mechanicInfo.uid", mAuth?.currentUser?.uid.toString())
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
@@ -106,7 +94,16 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     }
                 }
                 mechanicRequestListAdapter.notifyDataSetChanged()
+                ScreenManager.toggleVisibility(id_progress_bar)
             }
+    }
+
+    private fun initFirestore() {
+        mAuth = FirebaseAuth.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+        requestRef = mFirestore.collection(getString(R.string.ref_requests))
+        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] User uid: ${mAuth.currentUser?.uid}")
+        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] User email: ${mAuth.currentUser?.email}")
     }
 
     private fun setUpToolBar() {
@@ -167,11 +164,11 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_services -> {
-                    Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] my services")
                     startActivity(Intent(this, MechanicServicesActivity::class.java))
                     true
                 }
                 R.id.nav_history -> {
+                    startActivity(Intent(this, MechanicHistoryActivity::class.java))
                     true
                 }
                 R.id.nav_settings -> {
@@ -181,8 +178,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     finish()
                     true
                 }
-                R.id.id_sign_out->{
-                    mAuth?.signOut()
+                R.id.id_sign_out -> {
+                    mAuth.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     true
@@ -205,7 +202,18 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun signInGuard() {
+        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] signInGuard() User uid: ${mAuth?.currentUser?.uid}")
+        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] User email: ${mAuth?.currentUser?.email}")
+        val user = mAuth?.currentUser
+        if (user == null) {
+            startActivity(Intent(this, SignInActivity::class.java))
+            finish()
+        }
+    }
+
     override fun onResume() {
+        signInGuard()
         setUpToolBar()
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)

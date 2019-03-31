@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_service_needed"
             app:layout_constraintTop_toBottomOf="@+id/id_service_needed_title"
-            app:layout_constraintStart_toStartOf="@+id/id_service_needed_title" android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/id_service_needed_title" android:textSize="14sp"
             android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio"/>
     <TextView
             android:text="TextView"
@@ -56,7 +56,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_address"
             app:layout_constraintTop_toBottomOf="@+id/id_address_title"
-            app:layout_constraintStart_toStartOf="@+id/id_address_title" android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/id_address_title" android:textSize="14sp"
             android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio"/>
     <TextView
             android:text="@string/availability"
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_availability"
             app:layout_constraintTop_toBottomOf="@+id/id_availability_title"
-            app:layout_constraintStart_toStartOf="@+id/id_availability_title" android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/id_availability_title" android:textSize="14sp"
             android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio"/>
 
     <Button

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.databinding.ViewDataBinding
 import android.graphics.drawable.Drawable
+import android.location.Location
 import android.os.Build
 import android.support.constraint.ConstraintLayout
 import android.support.v7.widget.LinearLayoutManager
@@ -358,7 +359,6 @@ class HitsCustomized
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
             val serviceJson = hits[position]
-            Log.d(CLIENT_TAG, "[HitsCustomized] $serviceJson")
             val serviceObj = gson.fromJson(serviceJson.toString(), ServiceModel::class.java)
 
             holder.price.text = "$${serviceObj.service.price.toInt()}"
@@ -379,7 +379,19 @@ class HitsCustomized
             if (AddressManager.hasAddress()) {
                 val userAddress = AddressManager.getUserAddress()
                 Log.d(CLIENT_TAG, "[HitsCustomized] $userAddress")
-                val distance = AddressManager.getDistanceMI(userAddress!!._geoloc, serviceObj._geoloc)
+
+                val clientLocation = Location("client").apply {
+                    latitude = userAddress!!._geoloc.lat
+                    longitude = userAddress!!._geoloc.lng
+                }
+
+                val mechanicLocation = Location("mechanic").apply {
+                    latitude = serviceObj._geoloc.lat
+                    longitude = serviceObj._geoloc.lng
+                }
+
+                val distance = AddressManager.getDistanceMI(clientLocation, mechanicLocation)
+                Log.d(CLIENT_TAG, "[HitsCustomized] distance: $distance")
                 holder.distance.text = context.getString(com.example.mobilemechanic.R.string.miles, distance)
             }
 

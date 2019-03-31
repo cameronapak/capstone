@@ -54,7 +54,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
 
         holder.name.text = "$mechanicFirstName $mechanicLastName"
         holder.description.text =
-            "$type for ${vehicle}."
+            "$type for $vehicle."
 
         holder.reviewButton.setOnClickListener {
             val intent = Intent(context, ServiceRatingActivity::class.java)

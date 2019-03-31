@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                             android:layout_height="78dp">
+    <TextView
+            android:text="Name"
+            android:layout_width="128dp"
+            android:layout_height="19dp"
+            android:id="@+id/id_mechanic_name"
+            app:layout_constraintStart_toStartOf="parent"
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/colorGrayTextDark2"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"/>
+    <TextView
+            android:text="Service Status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_service_completed"
+            android:textAlignment="textStart"
+            android:fontFamily="@font/roboto" android:textColor="@color/colorGrayText"
+            app:layout_constraintStart_toStartOf="@+id/id_mechanic_name"
+            android:textStyle="italic" android:textSize="10sp"
+            app:layout_constraintTop_toBottomOf="@+id/id_mechanic_name"/>
+    <TextView
+            android:text="Service Description"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_service_description"
+            android:textAlignment="viewStart"
+            android:fontFamily="@font/roboto" android:textSize="12sp"
+            app:layout_constraintStart_toStartOf="@+id/id_service_completed"
+            android:textColor="@color/colorGrayText"
+            app:layout_constraintTop_toBottomOf="@+id/id_service_completed" android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"/>
+</android.support.constraint.ConstraintLayout>

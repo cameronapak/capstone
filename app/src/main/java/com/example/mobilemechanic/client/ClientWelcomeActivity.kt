@@ -45,6 +45,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     private var requests = ArrayList<Request>()
     private lateinit var mDrawerLayout: DrawerLayout
 
+    private var isFirstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,7 +187,11 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     }
                 }
                 clientRequestRecyclerAdapter.notifyDataSetChanged()
-                ScreenManager.toggleVisibility(id_progress_bar)
+                if(isFirstLoad)
+                {
+                    ScreenManager.toggleVisibility(id_progress_bar)
+                    isFirstLoad = false
+                }
             }
     }
 

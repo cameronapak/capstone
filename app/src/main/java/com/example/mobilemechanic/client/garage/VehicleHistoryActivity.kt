@@ -17,6 +17,7 @@ import com.example.mobilemechanic.model.Vehicle
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_vehicle_history.*
 import kotlinx.android.synthetic.main.card_vehicle_basic_container.*
@@ -93,6 +94,7 @@ class VehicleHistoryActivity : AppCompatActivity() {
     private fun setUpVehicleHistoryRecylerView() {
         requestRef.whereEqualTo("vehicle.objectID", vehicle.objectID)
             .whereEqualTo("status", Status.Completed)
+            .orderBy("completedOn", Query.Direction.DESCENDING)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener

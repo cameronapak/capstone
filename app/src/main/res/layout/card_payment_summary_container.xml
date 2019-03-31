@@ -77,11 +77,11 @@
 
     <TextView
             android:text="@string/text_subtotal"
-            android:layout_width="70dp"
+            android:layout_width="89dp"
             android:layout_height="wrap_content"
             android:id="@+id/id_summary_subtotal"
             app:layout_constraintTop_toBottomOf="@+id/id_summary_title"
-            app:layout_constraintStart_toStartOf="@+id/id_summary_title" android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/id_summary_title" android:textSize="18sp"
             android:textColor="@color/colorGrayText" android:fontFamily="@font/qualio" android:layout_marginTop="8dp"/>
 
     <TextView
@@ -90,7 +90,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_grand_total_text"
             app:layout_constraintStart_toStartOf="@+id/id_summary_subtotal"
-            android:fontFamily="@font/qualio_bold" android:textSize="14sp"
+            android:fontFamily="@font/qualio_bold" android:textSize="18sp"
             app:layout_constraintTop_toBottomOf="@+id/id_summary_estimated_tax"
             app:layout_constraintEnd_toEndOf="@+id/id_summary_estimated_tax"
             app:layout_constraintHorizontal_bias="0.0"/>
@@ -100,12 +100,12 @@
             android:layout_height="wrap_content"
             android:id="@+id/id_grand_total_price"
             app:layout_constraintTop_toTopOf="@+id/id_grand_total_text"
-            android:fontFamily="@font/qualio"
-            android:textColor="@color/colorGrayText" android:textSize="14sp"
-            app:layout_constraintStart_toEndOf="@+id/id_grand_total_text"/>
+            android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/colorGrayTextDark2" android:textSize="14sp"
+            app:layout_constraintStart_toEndOf="@+id/id_grand_total_text" android:textStyle="bold"/>
     <TextView
             android:text="@string/text_estimated_tax"
-            android:layout_width="0dp"
+            android:layout_width="89dp"
             android:layout_height="wrap_content"
             android:id="@+id/id_summary_estimated_tax"
             app:layout_constraintTop_toBottomOf="@+id/id_summary_subtotal"
@@ -113,7 +113,7 @@
             app:layout_constraintEnd_toEndOf="@id/id_summary_subtotal"
             android:fontFamily="@font/qualio"
             android:textColor="@color/colorGrayText" app:layout_constraintHorizontal_bias="0.0"
-            android:layout_marginTop="4dp"/>
+            android:layout_marginTop="4dp" android:textSize="18sp"/>
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
@@ -121,14 +121,15 @@
             android:id="@+id/id_summary_subtotal_price"
             app:layout_constraintTop_toTopOf="@id/id_summary_subtotal"
             app:layout_constraintStart_toEndOf="@id/id_summary_subtotal"
-            android:fontFamily="@font/qualio" android:textColor="@color/colorGrayText"/>
+            android:fontFamily="@font/roboto_bold" android:textColor="@color/colorGrayText" android:textSize="14sp"
+            android:textStyle="bold"/>
     <TextView
             android:text="TextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:layout_constraintTop_toTopOf="@id/id_summary_estimated_tax"
             app:layout_constraintStart_toEndOf="@id/id_summary_estimated_tax"
-            android:id="@+id/id_summary_estimated_tax_price" android:fontFamily="@font/qualio"
-            android:textColor="@color/colorGrayText"/>
+            android:id="@+id/id_summary_estimated_tax_price" android:fontFamily="@font/roboto_bold"
+            android:textColor="@color/colorGrayText" android:textSize="14sp" android:textStyle="bold"/>
 
 </android.support.constraint.ConstraintLayout>

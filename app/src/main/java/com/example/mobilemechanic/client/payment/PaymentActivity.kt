@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.card_payment_summary_container.view.*
 
 
 const val PAYMENT_TAG = "payment"
+const val TAX_RATE = .086
 
 class PaymentActivity : AppCompatActivity()
 {
@@ -60,7 +61,8 @@ class PaymentActivity : AppCompatActivity()
             Picasso.get().load(vehicle?.photoUrl).into(holder.id_car_image)
         }
 
-        holder.id_service_completed.text = request.service?.serviceType
+        val service = request.service
+        holder.id_service_completed.text = service?.serviceType
 
         val mechanicInfo = request.mechanicInfo?.basicInfo
         holder.id_mechanic_name.text = "${mechanicInfo?.firstName} ${mechanicInfo?.lastName}"
@@ -71,16 +73,20 @@ class PaymentActivity : AppCompatActivity()
             Picasso.get().load(Uri.parse(mechanicInfo?.photoUrl)).into(holder.id_profile_image)
         }
 
-        val receipt = request.receipt
-        holder.id_summary_subtotal_price.text = getString(R.string.price, receipt?.subTotal)
-        holder.id_summary_estimated_tax_price.text = getString(R.string.price, receipt?.estimatedTax)
-        holder.id_grand_total_price.text = getString(R.string.price, receipt?.grandTottal)
+        holder.id_summary_subtotal_price.text = getString(R.string.price, service?.price)
+        val tax = service?.price!!* TAX_RATE
+        holder.id_summary_estimated_tax_price.text = getString(R.string.price, tax)
+        val total = service?.price!!+tax
+        holder.id_grand_total_price.text = getString(R.string.price, total)
     }
 
     private fun submitPayment(){
         val holder = id_payment_container
+        val holder2 = id_payment_container.id_summary_container
 
         val tips = holder.id_tip.text.toString()
+        val total: Double = holder2.id_grand_total_price.text.toString().toDouble() + tips.toDouble()
+
         val cardNumber = holder.id_card_number.text.toString()
         val cardExpMonth = holder.id_expire_date.text.substring(0,2).toInt()
         val cardExpYear = holder.id_expire_date.text.substring(2).toInt()

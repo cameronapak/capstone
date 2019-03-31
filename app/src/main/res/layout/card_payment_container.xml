@@ -103,5 +103,5 @@
             android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintVertical_bias="0.0" android:text="@string/id_submit_payment_btn"/>
+            app:layout_constraintVertical_bias="0.04" android:text="@string/id_submit_payment_btn"/>
 </android.support.constraint.ConstraintLayout>

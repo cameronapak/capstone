@@ -18,7 +18,7 @@
 
     <include layout="@layout/card_payment_container"
              android:layout_width="307dp"
-             android:layout_height="519dp"
+             android:layout_height="539dp"
              android:layout_gravity="center"
              android:layout_centerHorizontal="true"
              android:id="@+id/id_payment_container"

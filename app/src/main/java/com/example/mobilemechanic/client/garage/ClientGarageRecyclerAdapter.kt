@@ -86,11 +86,6 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
         holder.vehicleImage.setOnClickListener {
 
-            var a = Intent(context, ViewVehicleInfoActivity::class.java)
-            //var test= "${vehicle.year} ${vehicle.make} ${vehicle.model}"
-
-            //a.putExtra("Data", test)
-            context.startActivity(a)
 
         }
     }

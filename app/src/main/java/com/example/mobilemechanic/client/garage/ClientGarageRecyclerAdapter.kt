@@ -88,8 +88,8 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
             var a = Intent(context, ViewVehicleInfoActivity::class.java)
             //var test= "${vehicle.year} ${vehicle.make} ${vehicle.model}"
-            var test ="aaa"
-            a.putExtra("Data", test)
+
+            //a.putExtra("Data", test)
             context.startActivity(a)
 
         }

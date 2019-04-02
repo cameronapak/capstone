@@ -86,12 +86,13 @@ class PaymentActivity : AppCompatActivity()
 
         val tips = holder.id_tip.text.toString()
         //get error because tips is 0
-        //val total: Double = holder2.id_grand_total_price.text.toString().toDouble() + tips.toDouble()
+        val total: Double = holder2.id_grand_total_price.text.toString().toDouble() + tips.toDouble()
 
         val cardNumber = holder.id_card_number.text.toString()
         val cardExpMonth = holder.id_expire_date.text.substring(0,2).toInt()
         val cardExpYear = holder.id_expire_date.text.substring(2).toInt()
         val cardCVC = holder.id_cvc.text.toString()
+
 
         val card = Card(
             cardNumber,

@@ -61,7 +61,8 @@ class PaymentActivity : AppCompatActivity()
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         paymentsRef = mFirestore.collection(getString(R.string.ref_payments))
-        myPaymentsRef = paymentsRef.document().collection("${mAuth.currentUser?.uid}")
+        myPaymentsRef = paymentsRef.document("${mAuth.currentUser?.uid}")
+            .collection(getString(R.string.ref_charges))
     }
 
     private fun setUpSummaryContainer()

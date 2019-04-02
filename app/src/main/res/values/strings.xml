@@ -150,6 +150,7 @@
     <string name="ref_requests">Requests</string>
     <string name="ref_chatRooms">ChatRooms</string>
     <string name="ref_payments">Payments</string>
+    <string name="ref_charges">Charges</string>
 
     <string name="err_accept_fail">Failed to accept request.</string>
     <string name="err_decline_fail">Failed to decline request.</string>

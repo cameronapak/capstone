@@ -15,7 +15,7 @@
     <EditText
             android:layout_width="88dp"
             android:layout_height="41dp"
-            android:inputType="number"
+            android:inputType="numberDecimal"
             android:text="0.0"
             android:ems="10"
             android:id="@+id/id_tip"

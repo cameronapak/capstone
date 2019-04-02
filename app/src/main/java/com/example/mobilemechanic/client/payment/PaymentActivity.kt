@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.widget.Toast
-//import com.android.volley.Request
-//import com.android.volley.Response
-//import com.android.volley.toolbox.StringRequest
-//import com.android.volley.toolbox.Volley
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.stripe.android.Stripe
@@ -20,6 +17,10 @@ import kotlinx.android.synthetic.main.activity_payment.*
 import kotlinx.android.synthetic.main.card_payment_container.*
 import kotlinx.android.synthetic.main.card_payment_container.view.*
 import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.stripe.Payment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_payment_summary_container.view.*
 
@@ -30,6 +31,11 @@ const val TAX_RATE = .086
 class PaymentActivity : AppCompatActivity()
 {
     private lateinit var request: Request
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFirestore: FirebaseFirestore
+    private lateinit var paymentsRef: CollectionReference
+    private lateinit var myPaymentsRef: CollectionReference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,8 +52,16 @@ class PaymentActivity : AppCompatActivity()
 
     private fun setUpPaymentActivity()
     {
+        initFirestore()
         setUpActionBar()
         setUpSummaryContainer()
+    }
+
+    private fun initFirestore() {
+        mAuth = FirebaseAuth.getInstance()
+        mFirestore = FirebaseFirestore.getInstance()
+        paymentsRef = mFirestore.collection(getString(R.string.ref_payments))
+        myPaymentsRef = paymentsRef.document().collection("${mAuth.currentUser?.uid}")
     }
 
     private fun setUpSummaryContainer()
@@ -80,13 +94,16 @@ class PaymentActivity : AppCompatActivity()
         holder.id_grand_total_price.text = getString(R.string.price, total)
     }
 
-    private fun submitPayment(){
+    private fun submitPayment()
+    {
         val holder = id_payment_container
         val holder2 = id_payment_container.id_summary_container
 
-        val tips = holder.id_tip.text.toString()
-        //get error because tips is 0
-        val total: Double = holder2.id_grand_total_price.text.toString().toDouble() + tips.toDouble()
+        //substring to remove $ sign
+        val tips = holder.id_tip.text.toString().substring(1)
+
+        val total: Double = holder2.id_grand_total_price.text.toString().substring(1).toDouble()
+            + tips.toDouble()
 
         val cardNumber = holder.id_card_number.text.toString()
         val cardExpMonth = holder.id_expire_date.text.substring(0,2).toInt()
@@ -101,7 +118,6 @@ class PaymentActivity : AppCompatActivity()
             cardCVC
         )
 
-        //Toast.makeText(this, cardExpYear.toString(), Toast.LENGTH_LONG).show()
         //test with this card
         //Card("4242-4242-4242-4242", 12, 2020, "123");
 
@@ -116,63 +132,47 @@ class PaymentActivity : AppCompatActivity()
         }
 
         //check card
-        if(!card.validateCard()){
+        if(!card.validateCard())
+        {
             Toast.makeText(this, "Invalid Payment Information.", Toast.LENGTH_SHORT).show()
-        } else{
-            Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show()
-            convertInfoToToken(card)
+        }
+        else
+        {
+            convertInfoToToken(card, total)
         }
     }
 
-    private fun convertInfoToToken(card: Card){
+    private fun convertInfoToToken(card: Card, amount: Double)
+    {
         val stripe = Stripe(this, "pk_test_wTx4vP8D0gatpbC02tmXXthM00qBhOeNO5")
         stripe.createToken(card, object : TokenCallback {
             override fun onSuccess(token: Token) {
-                Toast.makeText(this@PaymentActivity,"Token Created!! ${token!!.getId()}", Toast.LENGTH_LONG).show()
-                //TODO: make stripe payment model with token and other payment info
+                createPayment(token.id, amount)
                 //TODO: make cloud function to listen to payments collection and communicate with stripe to charge card
             }
 
             override fun onError(error: Exception?) {
                 Toast.makeText(this@PaymentActivity,"Token Not Created!!", Toast.LENGTH_LONG).show()
                 error!!.printStackTrace()
+                Log.d(PAYMENT_TAG, error.toString())
             }
 
         })
     }
 
-//    private fun requestQueue(){
-//        // Instantiate the RequestQueue.
-//        val queue = Volley.newRequestQueue(this)
-//        val url = "http://mobilemechanic.us/charge"
-//
-//        val postRequest = StringRequest(Request.Method.POST, url,
-//            Response.Listener<String> {
-//                override fun onResp
-//                Log.d(PAYMENT_TAG, "[Volley]Response: $it")
-//            },
-//            Response.ErrorListener {
-//                Log.d(PAYMENT_TAG, "[Volley]Error.Response: $it")
-//            }
-//        ) {
-//
-//        }
-//
-//        // Request a string response from the provided URL.
-//        val stringRequest = StringRequest(Request.Method.GET, url,
-//            Response.Listener<String> { response ->
-//                // Display the first 500 characters of the response string.
-//                Toast.makeText(this,
-//                    "Response is: ${response.substring(0, 500)}", Toast.LENGTH_LONG).show()
-//            },
-//            Response.ErrorListener {
-//                Toast.makeText(this,
-//                    "cannot request queue!!", Toast.LENGTH_LONG).show()
-//            })
-//
-//        // Add the request to the RequestQueue.
-//        queue.add(stringRequest)
-//    }
+    private fun createPayment(tokenId: String, amount: Double)
+    {
+        val payment = Payment("", amount, tokenId)
+        payment.description += "${request.service?.serviceType}"
+
+        myPaymentsRef.document().set(payment)
+            .addOnSuccessListener {
+                Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show()
+                finish()
+            }.addOnFailureListener {
+                Toast.makeText(this, "Payment failed.", Toast.LENGTH_SHORT).show()
+            }
+    }
 
     private fun setUpActionBar() {
         setSupportActionBar(id_payment_toolbar as Toolbar)

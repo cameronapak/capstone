@@ -47,6 +47,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     private lateinit var mechanicRequestListAdapter: RequestListAdapter
     private var requests = ArrayList<Request>()
 
+    private var isFirstLoad = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_welcome)
@@ -94,7 +96,11 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                     }
                 }
                 mechanicRequestListAdapter.notifyDataSetChanged()
-                ScreenManager.toggleVisibility(id_progress_bar)
+                if(isFirstLoad)
+                {
+                    ScreenManager.toggleVisibility(id_progress_bar)
+                    isFirstLoad = false
+                }
             }
     }
 

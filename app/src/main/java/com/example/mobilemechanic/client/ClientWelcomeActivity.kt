@@ -112,7 +112,36 @@ class ClientWelcomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateProfileImage() {
+        val user = mAuth?.currentUser
+        user?.let {
+            for (profile in it.providerData) {
+                // Id of the provider (ex: google.com)
+                val providerId = profile.providerId
+
+                // UID specific to the provider
+                val uid = profile.uid
+
+                // Name, email address, and profile photo Url
+                val name = profile.displayName
+                val email = profile.email
+                val photoUrl = profile.photoUrl
+                Log.d(CLIENT_TAG, "[ClientWelcomeActivity] photoUrl ${photoUrl}")
+            }
+        }
+    }
+
     private fun setUpNavigationListener() {
+        val clientNavigationView = findViewById<NavigationView>(R.id.id_client_nav_view)
+        val drawerHeader = clientNavigationView.getHeaderView(0)
+        val drawerProfileImage = drawerHeader.findViewById<CircleImageView>(R.id.id_drawer_profile_image)
+
+        drawerProfileImage.setOnClickListener {
+            Toast.makeText(this, "Update Profile Image", Toast.LENGTH_SHORT).show()
+            updateProfileImage()
+            true
+        }
+
         id_client_nav_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.id_find_service -> {

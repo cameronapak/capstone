@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/custom_toast_container"
+              android:orientation="horizontal"
+              android:layout_width="wrap_content"
+              android:layout_height="50dp"
+              android:padding="10dp"
+              android:background="@drawable/toast_warning"
+>
+    <ImageView android:src="@drawable/ic_error_white_24dp"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_marginRight="8dp"
+               android:layout_marginLeft="4dp"
+               android:layout_gravity="center_vertical"/>
+    <TextView android:id="@+id/text"
+              android:layout_gravity="center_vertical"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:textColor="@color/colorPrimary"
+              android:layout_marginRight="8dp"
+              android:textSize="24sp" android:fontFamily="@font/qualio_bold" android:text="Fail"/>
+</LinearLayout>

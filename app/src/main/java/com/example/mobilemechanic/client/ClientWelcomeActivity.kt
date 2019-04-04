@@ -45,6 +45,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     private var requests = ArrayList<Request>()
     private lateinit var mDrawerLayout: DrawerLayout
 
+    private var isFirstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -171,7 +172,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.id_sign_out -> {
-                    mAuth?.signOut()
+                    mAuth.signOut()
                     Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
                     startActivity(Intent(this, MainActivity::class.java))
                     true
@@ -215,6 +216,11 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     }
                 }
                 clientRequestRecyclerAdapter.notifyDataSetChanged()
+                if(isFirstLoad)
+                {
+                    ScreenManager.toggleVisibility(id_progress_bar)
+                    isFirstLoad = false
+                }
             }
     }
 

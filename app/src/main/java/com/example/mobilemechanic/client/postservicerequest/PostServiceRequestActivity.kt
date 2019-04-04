@@ -59,26 +59,29 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
-        mFirestore = FirebaseFirestore.getInstance()
-        requestsRef = mFirestore.collection("Requests")
-        mAuth = FirebaseAuth.getInstance()
-        vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
-        accountRef = mFirestore.collection("Accounts")
-        chatRoomsRef = mFirestore.collection("ChatRooms")
         serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
-
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
     }
 
     private fun setUpPostServiceRequestActivity() {
+        initFireStore()
         setUpActionBar()
         setUpVehicleSpinner()
         setUpAvailabilityDialog()
         setUpServiceParcel()
         setUpOnSubmit()
         setUpOnAddVehicle()
+    }
+
+    private fun initFireStore() {
+        mFirestore = FirebaseFirestore.getInstance()
+        mAuth = FirebaseAuth.getInstance()
+        requestsRef = mFirestore.collection("Requests")
+        vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+        accountRef = mFirestore.collection("Accounts")
+        chatRoomsRef = mFirestore.collection("ChatRooms")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
     }
 
     private fun setUpActionBar() {

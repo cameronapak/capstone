@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
+import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
@@ -127,6 +128,7 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
         mMap.clear()
         mMap.addMarker(MarkerOptions().position(clientLatLng))
+        ScreenManager.toggleVisibility(id_progress_bar)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)

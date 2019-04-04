@@ -7,7 +7,6 @@ import android.os.StrictMode
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import com.algolia.instantsearch.core.helpers.Searcher
@@ -15,7 +14,6 @@ import com.algolia.instantsearch.core.model.NumericRefinement
 import com.algolia.instantsearch.ui.helpers.InstantSearch
 import com.algolia.search.saas.AbstractQuery
 import com.algolia.search.saas.Query
-import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
@@ -66,22 +64,24 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             getString(com.example.mobilemechanic.R.string.algolia_services_index)
         )
 
-
         if (AddressManager.hasAddress()) {
-            val clientAddress = AddressManager.getUserAddress()
-            val abstractQueryLatLng =
-                AbstractQuery.LatLng(clientAddress!!._geoloc.lat, clientAddress!!._geoloc.lng)
-            searcher.query.aroundLatLng = abstractQueryLatLng
-            searcher.query.aroundRadius = Query.RADIUS_ALL
-            searcher.query.getRankingInfo = true
+            enableGeoRanking(searcher)
         }
-
 
         helper = InstantSearch(this, searcher)
         helper.search()
 
         hits = findViewById(com.example.mobilemechanic.R.id.id_hits_customized)
         hits.enableKeyboardAutoHiding()
+    }
+
+    private fun enableGeoRanking(searcher: Searcher) {
+        val clientAddress = AddressManager.getUserAddress()
+        val abstractQueryLatLng =
+            AbstractQuery.LatLng(clientAddress!!._geoloc.lat, clientAddress!!._geoloc.lng)
+        searcher.query.aroundLatLng = abstractQueryLatLng
+        searcher.query.aroundRadius = Query.RADIUS_ALL
+        searcher.query.getRankingInfo = true
     }
 
 
@@ -166,7 +166,5 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         val selectedValue = DataProviderManager.getServicePriceValue()[position]
         priceBelow = selectedValue
         spinnerSelectedPosition = position
-        Log.d(CLIENT_TAG, "[FindServiceActivity] price spinner position: $position")
-        Log.d(CLIENT_TAG, "[FindServiceActivity] selectedValue price: $selectedValue")
     }
 }

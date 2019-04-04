@@ -35,7 +35,7 @@
             app:layout_constraintTop_toBottomOf="@+id/id_body" app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
         <TextView
-                android:id="@+id/id_negative"
+                android:id="@+id/id_cancel"
                 android:background="@drawable/border_top_right"
                 android:layout_width="wrap_content"
                 android:layout_height="60dp"

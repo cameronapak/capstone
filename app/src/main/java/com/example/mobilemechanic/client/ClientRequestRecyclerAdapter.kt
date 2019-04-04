@@ -13,7 +13,8 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.payment.Payment
+import com.example.mobilemechanic.client.payment.PaymentActivity
+import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
@@ -102,8 +103,8 @@ class ClientRequestRecyclerAdapter(val context: Activity, val dataset: ArrayList
         }
 
         if (request.status == Status.Active) {
-            // TODO: Go to payment activity
-            val intent = Intent(context, Payment::class.java)
+            val intent = Intent(context, PaymentActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, request)
             context.startActivity(intent)
         }
 

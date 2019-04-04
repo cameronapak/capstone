@@ -14,6 +14,7 @@
     <string name="text_sign_out">Sign out</string>
     <string name="text_select">Select</string>
     <string name="text_title">Title</string>
+    <string name="text_toast">Toast</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
     <string name="text_rate">Rate</string>

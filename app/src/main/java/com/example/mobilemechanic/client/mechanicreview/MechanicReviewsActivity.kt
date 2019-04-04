@@ -48,6 +48,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
     private lateinit var reviewsAdapter: ReviewListAdapter
 
     val REQUEST_PHONE_CALL = 1
+    val REQUEST_EMAIL = 2
     var count: Int = 0
     var distance = ""
 
@@ -162,6 +163,14 @@ class MechanicReviewsActivity : AppCompatActivity() {
     }
 
     private fun setUpButtons() {
+
+        id_email_button.setOnClickListener {
+        val intent = Intent(Intent.ACTION_SEND)
+            intent.type = "text/html"
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>(mechanicInfo.basicInfo.email))
+            startActivity(intent)
+        }
+
         id_call_button.setOnClickListener {
             if(ContextCompat.checkSelfPermission(this,
                     Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)

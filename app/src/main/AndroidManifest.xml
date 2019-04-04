@@ -37,6 +37,10 @@
         <activity android:name=".client.mechanicreview.MechanicReviewsActivity">
         </activity>
         <activity android:name=".shared.messaging.ChatRoomsActivity">
+            <intent-filter>
+                <action android:name="USER_CHATROOM_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
         <activity android:name=".shared.messaging.MessagesActivity">
         </activity>
@@ -101,7 +105,6 @@
         <activity android:name=".client.ClientWelcomeActivity">
             <intent-filter>
                 <action android:name="CLIENT_WELCOME_ACTIVITY"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

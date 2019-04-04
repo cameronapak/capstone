@@ -238,8 +238,7 @@ class HitsCustomized
     }
 
     override fun onResults(results: SearchResults, isLoadingMore: Boolean) {
-        Log.d(CLIENT_TAG, "[HitsCustomized] result $results")
-        Log.d(CLIENT_TAG, "[HitsCustomized] ${results.content}")
+        Log.d(CLIENT_TAG, "[HitsCustomized] results.content: ${results.content}")
         addHits(results, !isLoadingMore)
     }
 

@@ -9,6 +9,12 @@ import android.util.Log
 import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
+import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.stripe.Payment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
 import com.stripe.android.model.Card
@@ -16,12 +22,6 @@ import com.stripe.android.model.Token
 import kotlinx.android.synthetic.main.activity_payment.*
 import kotlinx.android.synthetic.main.card_payment_container.*
 import kotlinx.android.synthetic.main.card_payment_container.view.*
-import com.example.mobilemechanic.model.Request
-import com.example.mobilemechanic.model.stripe.Payment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.card_payment_summary_container.view.*
 
 
@@ -42,16 +42,13 @@ class PaymentActivity : AppCompatActivity()
         setContentView(R.layout.activity_payment)
 
         request = intent.getParcelableExtra(EXTRA_REQUEST)
-
         setUpPaymentActivity()
-
         id_pay_btn.setOnClickListener {
             submitPayment()
         }
     }
 
-    private fun setUpPaymentActivity()
-    {
+    private fun setUpPaymentActivity() {
         initFirestore()
         setUpActionBar()
         setUpSummaryContainer()
@@ -65,8 +62,7 @@ class PaymentActivity : AppCompatActivity()
             .collection(getString(R.string.ref_charges))
     }
 
-    private fun setUpSummaryContainer()
-    {
+    private fun setUpSummaryContainer() {
         val holder = id_payment_container.id_summary_container
 
         val vehicle = request.vehicle
@@ -95,8 +91,7 @@ class PaymentActivity : AppCompatActivity()
         holder.id_grand_total_price.text = getString(R.string.price, total)
     }
 
-    private fun submitPayment()
-    {
+    private fun submitPayment() {
         val holder = id_payment_container
         val holder2 = id_payment_container.id_summary_container
 
@@ -133,18 +128,15 @@ class PaymentActivity : AppCompatActivity()
         }
 
         //check card
-        if(!card.validateCard())
-        {
+        if(!card.validateCard()) {
             Toast.makeText(this, "Invalid Payment Information.", Toast.LENGTH_SHORT).show()
         }
-        else
-        {
+        else {
             convertInfoToToken(card, total)
         }
     }
 
-    private fun convertInfoToToken(card: Card, amount: Double)
-    {
+    private fun convertInfoToToken(card: Card, amount: Double) {
         val stripe = Stripe(this, "pk_test_wTx4vP8D0gatpbC02tmXXthM00qBhOeNO5")
         stripe.createToken(card, object : TokenCallback {
             override fun onSuccess(token: Token) {
@@ -161,8 +153,7 @@ class PaymentActivity : AppCompatActivity()
         })
     }
 
-    private fun createPayment(tokenId: String, amount: Double)
-    {
+    private fun createPayment(tokenId: String, amount: Double) {
         val payment = Payment("", amount, tokenId)
         payment.description += "${request.service?.serviceType}"
 

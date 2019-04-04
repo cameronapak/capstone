@@ -143,16 +143,20 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     private fun enableMapToggle() {
         id_map_toggle.setOnClickListener {
             val ft = supportFragmentManager.beginTransaction()
+                .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
 
             isMapToggleOn = if (isMapToggleOn) {
                 ft.hide(mapFragment).commit()
+                id_map_toggle.text = "Map"
                 false
             } else {
                 ft.show(mapFragment).commit()
+                id_map_toggle.text = "List"
                 true
             }
         }
     }
+
 
     private fun handleDialogOnClick(basicDialog: Dialog) {
         basicDialog.id_negative.setOnClickListener {

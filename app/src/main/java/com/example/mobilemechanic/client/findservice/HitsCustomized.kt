@@ -41,7 +41,6 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.mechanicreview.MechanicReviewsActivity
 import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
 import com.example.mobilemechanic.model.algolia.ServiceModel
-import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.gson.Gson
@@ -323,7 +322,6 @@ class HitsCustomized
 
         private var hits = ArrayList<JSONObject>()
         private val placeholders = SparseArray<Drawable>()
-        private lateinit var clientAddress: Address
 
         init {
             this.hits = ArrayList()

@@ -179,5 +179,6 @@
     <string name="label_expire">Exp. Date</string>
     <string name="label_cvc">CVC</string>
     <string name="id_submit_payment_btn">Pay</string>
+    <string name="text">Map</string>
 
 </resources>

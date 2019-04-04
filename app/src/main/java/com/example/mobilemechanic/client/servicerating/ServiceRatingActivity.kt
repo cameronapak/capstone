@@ -167,9 +167,6 @@ class ServiceRatingActivity : AppCompatActivity() {
                     populateRatings(avgRating, review.mechanicInfo?.uid!!)
                 }
             }
-
-
-
     }
 
     private fun populateRatings(avgRating: Float, mechanicID: String) {

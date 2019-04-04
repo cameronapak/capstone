@@ -12,7 +12,8 @@
 
     <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
                                                  android:elevation="5dp"
-                                                 android:layout_height="match_parent" android:layout_gravity="top">
+                                                 android:layout_height="match_parent" android:layout_gravity="top"
+                                                 android:id="@+id/id_find_service_body">
 
         <android.support.v7.widget.Toolbar
                 android:theme="@style/ThemeOverlay.AppCompat.Light"

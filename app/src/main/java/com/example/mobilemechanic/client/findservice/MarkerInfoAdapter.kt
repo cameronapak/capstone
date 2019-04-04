@@ -1,17 +1,18 @@
 package com.example.mobilemechanic.client.findservice
 
-import android.content.Context
+import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import java.util.regex.Pattern
 
-class MarkerInfoAdapter(var context: Context): GoogleMap.InfoWindowAdapter{
+class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter{
     private var markerInfoView: View? = null
     private var inflater: LayoutInflater = LayoutInflater.from(context)
     private val pattern = Pattern.compile("(\\w+):(.+)(?:\\s|\$)")
@@ -52,6 +53,7 @@ class MarkerInfoAdapter(var context: Context): GoogleMap.InfoWindowAdapter{
     }
 
     override fun getInfoWindow(marker: Marker): View? {
+        ScreenManager.hideKeyBoard(context)
         return null
     }
 }

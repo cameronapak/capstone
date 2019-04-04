@@ -1,5 +1,6 @@
 package com.algolia.instantsearch.examples.icebnb.widgets
 
+import android.app.Activity
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
@@ -35,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
 
 
-class MapWidget(var context: Context, mapFragment: SupportMapFragment) : OnMapReadyCallback, AlgoliaSearcherListener,
+class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapReadyCallback, AlgoliaSearcherListener,
     AlgoliaResultsListener, GoogleMap.OnMarkerClickListener {
 
     var googleMap: GoogleMap? = null
@@ -63,14 +64,6 @@ class MapWidget(var context: Context, mapFragment: SupportMapFragment) : OnMapRe
         if (googleMap != null) {
             googleMap!!.setOnMapLoadedCallback { updateMap() }
         }
-    }
-
-    private fun show() {
-
-    }
-
-    private fun hide() {
-
     }
 
     private fun addHits(results: SearchResults?, isReplacing: Boolean) {

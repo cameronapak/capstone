@@ -151,7 +151,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
                 ft.show(mapFragment).commit()
                 true
             }
-
         }
     }
 
@@ -173,7 +172,13 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     }
 
     private fun enableHideKeyboard() {
+        id_find_service_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
 
+        id_find_service_toolbar.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
     }
 
     override fun onResume() {

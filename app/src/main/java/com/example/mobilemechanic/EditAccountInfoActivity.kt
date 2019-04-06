@@ -1,5 +1,6 @@
 package com.example.mobilemechanic
 
+import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -24,20 +25,35 @@ import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.squareup.picasso.Picasso
+import com.google.android.gms.tasks.Task
+import de.hdodenhof.circleimageview.CircleImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.UploadTask
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import kotlinx.android.synthetic.main.activity_edit_account_info.*
+import java.security.AccessController.getContext
+import android.app.Activity.RESULT_OK
+import android.provider.MediaStore
+import com.example.mobilemechanic.shared.ProfilePictureHandler
+
 
 class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private var mAuth: FirebaseAuth?= null
     private var mFireStore: FirebaseFirestore? = null
-    private var mStorage: FirebaseStorage? = null
-    private var userInfo: User?= null
+    private lateinit var mStorage: FirebaseStorage
+    private var userInfo: User? = null
     private var oldPassword: String = ""
+    private var selectedImageUri: Uri? = null
+    private lateinit var profileImageStorageRef: StorageReference
+//    private lateinit var userProfile: ProfilePictureHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +75,12 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         if(currentUser != null) {
             setUpCurrentInfo(currentUser)
         }
+
+        id_btn_update_profile.setOnClickListener {
+            id_btn_update_profile.setEnabled(false)
+            id_btn_update_profile.setText("Saving Changes...")
+            saveUserInfo()
+        }
     }
 
     private fun setUpToolBar() {
@@ -71,7 +93,61 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         }
     }
 
+    private fun openGallery() {
+        CropImage.activity()
+            .setGuidelines(CropImageView.Guidelines.ON)
+            .setFixAspectRatio(true)
+            .setAspectRatio(1, 1)
+            .start(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode === Activity.RESULT_OK) {
+                val resultUri = result.uri
+                updateProfilePicture(resultUri)
+            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+                Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun updateProfilePicture(imageUri: Uri) {
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] Update Profile Image!")
+        if (imageUri != null) {
+            val profilePictureCircleImage = id_settings_profile_image
+            if (profilePictureCircleImage != null) {
+                profilePictureCircleImage.setImageDrawable(null)
+                selectedImageUri = imageUri
+                Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
+                val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
+                profilePictureCircleImage.setImageBitmap(bitmap)
+            }
+        }
+    }
+
+    private fun setUpProfilePicture() {
+        val userProfileUri = mAuth?.currentUser?.photoUrl
+        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] photoUrl ${userProfileUri}")
+
+        if (userProfileUri != null) {
+            Picasso.get().load(userProfileUri).into(id_settings_profile_image)
+        } else {
+            Picasso.get().load(R.drawable.ic_circle_profile).into(id_settings_profile_image)
+        }
+
+        id_settings_profile_image.setOnClickListener {
+            openGallery()
+            true
+        }
+    }
+
     private fun setUpCurrentInfo(currentUser: FirebaseUser) {
+        val profileImage = findViewById<CircleImageView>(R.id.id_profile_image)
         val uid = currentUser.uid
         mFireStore?.collection(ACCOUNT_DOC_PATH)?.document(uid)?.get()
             ?.addOnSuccessListener {
@@ -90,9 +166,8 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
 
                 val state = userInfo?.address?.state.toString()
                 setUpSpinner(state)
-            }?.addOnFailureListener {
-
-            }
+                setUpProfilePicture()
+            }?.addOnFailureListener { }
     }
 
     private fun setUpSpinner(state: String) {
@@ -106,9 +181,16 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         spinner.setSelection(index)
     }
 
+    private fun uploadProfilePhoto() {
+        saveImageToFireStorage(userInfo!!)
+    }
+
     private fun saveUserInfo() {
         if(validateInfo()) {
-            getNewInformationFromForm(mAuth?.currentUser!!)
+            if (selectedImageUri != null)
+                uploadProfilePhoto()
+            else
+                getNewInformationFromForm(mAuth?.currentUser!!)
         } else {
             Log.d(USER_TAG, "Invalid information")
         }
@@ -184,8 +266,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         val city = id_editCity.text.toString().trim()
         val state = id_editStateSpinner.selectedItem.toString().trim()
         val zip = id_editZipcode.text.toString().trim()
-        val photoUrl = currentUser?.photoUrl.toString()
-
+        var photoUrl = if (selectedImageUri != null) userInfo!!.basicInfo.photoUrl else currentUser?.photoUrl.toString()
         val address = Address(street, city, state, zip, LatLngHolder())
 
         val userLatLng = AddressManager.convertAddressToLatLng(this, address)
@@ -223,7 +304,6 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         }
     }
 
-
     private fun updateUserProfile(userInfo: User) {
         val user = mAuth?.currentUser
         if (user != null) {
@@ -231,12 +311,43 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                 .setDisplayName("${userInfo.basicInfo.firstName} ${userInfo.basicInfo.lastName}")
                 .setPhotoUri(Uri.parse("${userInfo.basicInfo.photoUrl}"))
                 .build()
+
             user.updateProfile(profileUpdates).addOnSuccessListener {
                 goToHomeActivity()
             }
         }
     }
 
+    private fun saveImageToFireStorage(user: User) {
+        Log.d(CLIENT_TAG, "[ProfilePictureActivity] uploadProfileImage() to firestorage for uid: $user.uid")
+        profileImageStorageRef = mStorage?.reference?.child("Accounts/${user.uid}/profile_image")
+
+        if(selectedImageUri != null) {
+            profileImageStorageRef?.putFile(selectedImageUri as Uri)
+                ?.addOnCompleteListener {
+                    if (it.isSuccessful) {
+                        handleUploadImageSuccess(it, user)
+                    }
+                }
+        }
+    }
+
+    private fun handleUploadImageSuccess(it: Task<UploadTask.TaskSnapshot>, user: User) {
+        if (it.isSuccessful) {
+            profileImageStorageRef.downloadUrl
+                .addOnSuccessListener {
+                    val downloadUrl = it.toString()
+                    user.basicInfo.photoUrl = downloadUrl
+                    userInfo!!.basicInfo.photoUrl = downloadUrl
+                    mFireStore?.collection("Accounts")!!.document(user.uid).update("basicInfo.photoUrl", "$downloadUrl")
+                        .addOnSuccessListener {
+                            Log.d(USER_TAG, "[AddressInfoFragment] user photoUrl saved to firestore successfully")
+                            getNewInformationFromForm(mAuth?.currentUser!!)
+                            true
+                        }
+            }
+        }
+    }
 
     private fun goToHomeActivity() {
         if(userInfo!!.userType.equals(UserType.MECHANIC)) {
@@ -249,8 +360,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        saveUserInfo()
-        Log.d(CLIENT_TAG, "Save user information and go back to previous activity")
+        goToHomeActivity()
         return true
     }
 }

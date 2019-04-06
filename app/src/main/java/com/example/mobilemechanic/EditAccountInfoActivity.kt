@@ -41,8 +41,6 @@ import kotlinx.android.synthetic.main.activity_edit_account_info.*
 import java.security.AccessController.getContext
 import android.app.Activity.RESULT_OK
 import android.provider.MediaStore
-import com.example.mobilemechanic.shared.ProfilePictureHandler
-
 
 class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 

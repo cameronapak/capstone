@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -25,9 +26,7 @@ import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
-import com.squareup.picasso.Picasso
 import com.google.android.gms.tasks.Task
-import de.hdodenhof.circleimageview.CircleImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -35,12 +34,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_edit_account_info.*
-import java.security.AccessController.getContext
-import android.app.Activity.RESULT_OK
-import android.provider.MediaStore
 
 class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -75,7 +73,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         }
 
         id_btn_update_profile.setOnClickListener {
-            id_btn_update_profile.setEnabled(false)
+            id_btn_update_profile.isEnabled = false
             id_btn_update_profile.setText("Saving Changes...")
             saveUserInfo()
         }
@@ -179,10 +177,6 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         spinner.setSelection(index)
     }
 
-    private fun uploadProfilePhoto() {
-        saveImageToFireStorage(userInfo!!)
-    }
-
     private fun saveUserInfo() {
         if(validateInfo()) {
             if (selectedImageUri != null)
@@ -192,6 +186,10 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         } else {
             Log.d(USER_TAG, "Invalid information")
         }
+    }
+
+    private fun uploadProfilePhoto() {
+        saveImageToFireStorage(userInfo!!)
     }
 
     override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -353,7 +351,6 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         } else if (userInfo!!.userType.equals(UserType.CLIENT)){
             startActivity(Intent(this, ClientWelcomeActivity::class.java))
         }
-
         finish()
     }
 

@@ -155,6 +155,7 @@
                         tools:layout_editor_absoluteY="527dp"
                         tools:layout_editor_absoluteX="140dp"/>
                 <Spinner
+                        style="@style/AppSecondarySpinner"
                         android:layout_width="0dp"
                         android:layout_height="40dp"
                         android:layout_weight="1"
@@ -164,10 +165,8 @@
             </LinearLayout>
             <Button
                     style="@style/AppPrimaryButton"
-                    android:textSize="16dp"
                     android:text="Save Changes"
                     app:layout_constraintHorizontal_bias="0.507"
-                    android:layout_height="wrap_content"
                     android:id="@+id/id_btn_update_profile"
                     android:layout_marginTop="32dp"
                     android:layout_marginBottom="32dp"

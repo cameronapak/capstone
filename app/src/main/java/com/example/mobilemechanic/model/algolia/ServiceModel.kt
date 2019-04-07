@@ -10,15 +10,17 @@ data class ServiceModel(
     var objectID: String,
     var mechanicInfo: MechanicInfo,
     var service: Service,
-    var _geoloc: LatLngHolder
+    var _geoloc: LatLngHolder,
+    var reviewCount: Int
 ) : Parcelable {
-    constructor() : this("", MechanicInfo(), Service(), LatLngHolder())
+    constructor() : this("", MechanicInfo(), Service(), LatLngHolder(), 0)
 
     constructor(parcel: Parcel) : this(
         parcel.readString(),
         parcel.readParcelable(MechanicInfo::class.java.classLoader),
         parcel.readParcelable(Service::class.java.classLoader),
-        parcel.readParcelable(LatLngHolder::class.java.classLoader)
+        parcel.readParcelable(LatLngHolder::class.java.classLoader),
+        parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -26,6 +28,7 @@ data class ServiceModel(
         parcel.writeParcelable(mechanicInfo, flags)
         parcel.writeParcelable(service, flags)
         parcel.writeParcelable(_geoloc, flags)
+        parcel.writeInt(reviewCount)
     }
 
     override fun describeContents(): Int {
@@ -46,6 +49,7 @@ data class ServiceModel(
         return "\nobjectID: $objectID\n" +
                 "mechanicInfo: $mechanicInfo" +
                 "service: $service" +
-                "latlng: ${_geoloc.lat} ${_geoloc.lng}"
+                "latlng: ${_geoloc.lat} ${_geoloc.lng}" +
+                "reviewCount: $reviewCount"
     }
 }

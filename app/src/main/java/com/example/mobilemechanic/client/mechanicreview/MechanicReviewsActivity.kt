@@ -158,23 +158,18 @@ class MechanicReviewsActivity : AppCompatActivity() {
     }
 
     private fun setUpButtons() {
-
         id_email_button.setOnClickListener {
         val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/html"
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>(mechanicInfo.basicInfo.email))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(mechanicInfo.basicInfo.email))
             startActivity(intent)
         }
 
         id_call_button.setOnClickListener {
             if(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
-            {
+                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 startCall()
-            }
-            else//request permission
-            {
-                //context, constant for access call, permission request code
+            } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
                     REQUEST_PHONE_CALL)
             }

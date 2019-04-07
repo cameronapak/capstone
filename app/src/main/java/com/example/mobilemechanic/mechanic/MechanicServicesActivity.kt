@@ -34,6 +34,7 @@ class MechanicServicesActivity : AppCompatActivity() {
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var userAccountRef: DocumentReference
     private lateinit var serviceRef: CollectionReference
+    private lateinit var reviewRef: CollectionReference
 
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var mechanicServiceAdapter: ServiceListAdapter
@@ -48,6 +49,7 @@ class MechanicServicesActivity : AppCompatActivity() {
         userAccountRef = mFirestore?.collection("Accounts")
             ?.document(mAuth?.currentUser?.uid.toString())
         serviceRef = mFirestore?.collection("Services")
+        reviewRef = mFirestore.collection("Reviews")
 
         Log.d(MECHANIC_TAG, "[MechanicServicesActivity] User uid: ${mAuth?.currentUser?.uid}")
         Log.d(MECHANIC_TAG, "[MechanicServicesActivity] User email: ${mAuth?.currentUser?.email}")
@@ -159,11 +161,27 @@ class MechanicServicesActivity : AppCompatActivity() {
                     user.rating
                 )
 
-                var service = ServiceModel("", mechanicInfo, service, latlngHolder)
+                var service = ServiceModel("", mechanicInfo, service, latlngHolder, 0)
+                getReviewCount(service)
                 serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
                     Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
                 }
             }
+        }
+    }
+
+    private fun getReviewCount(serviceModel: ServiceModel) {
+        reviewRef.whereEqualTo("mechanicInfo", mAuth?.currentUser?.uid)
+            .get()
+            .addOnSuccessListener {
+                serviceModel.reviewCount = it.size()
+                saveServiceToFirestore(serviceModel)
+            }
+    }
+
+    private fun saveServiceToFirestore(serviceModel: ServiceModel) {
+        serviceRef.document().set(serviceModel)?.addOnSuccessListener { documentRef ->
+            Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
         }
     }
 

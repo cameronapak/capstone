@@ -137,6 +137,7 @@ class ServiceRatingActivity : AppCompatActivity() {
             }.addOnCompleteListener {
                 if(it.isSuccessful) {
                     calcMechanicRating(review)
+                    updateReviewCount(review)
                 }
                 finish()
             }
@@ -149,18 +150,15 @@ class ServiceRatingActivity : AppCompatActivity() {
         reviewRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
             .addOnSuccessListener {
                 var totalRating = 0F
-                var count = 0
-
                 for(document in it) {
                     Log.d(CLIENT_TAG, "[ServiceRatingActivity] Review ID: ${document.id}")
-                    count++
                     val item = document.toObject(Review::class.java)
                     totalRating += item.rating
                     reviewDocs.add(item.requestID)
                 }
 
-                avgRating = totalRating/count
-                Log.d(CLIENT_TAG, "[ServiceRatingActivity] Average Rating: ${avgRating}")
+                avgRating = totalRating/it.size()
+                Log.d(CLIENT_TAG, "[ServiceRatingActivity] Average Rating: $avgRating")
 
             }.addOnCompleteListener {
                 if(it.isSuccessful) {
@@ -221,6 +219,24 @@ class ServiceRatingActivity : AppCompatActivity() {
                     }
                 }
                 batch.commit()
+            }
+    }
+
+    private fun updateReviewCount(review: Review) {
+        reviewRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
+            .addOnSuccessListener {
+                val reviewCount = it.size()
+                val batch = mFirestore.batch()
+                serviceRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
+                    .addOnSuccessListener {serviceModels ->
+                        for (document in serviceModels) {
+                            val path = serviceRef.document(document.id)
+                            batch.update(path,"reviewCount", reviewCount)
+                        }
+                        batch.commit().addOnSuccessListener {
+                            Log.d(CLIENT_TAG, "[ServiceRatingActivity] update reviewCount successfully")
+                        }
+                    }
             }
     }
 

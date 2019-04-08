@@ -14,6 +14,8 @@ import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -132,9 +134,9 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
                 .document(vehicle.objectID)
                 .delete().addOnSuccessListener {
-                    Toast.makeText(context, "Removed successfully", Toast.LENGTH_LONG).show()
+                    Toasty.makeText(context, "Success", ToastyType.SUCCESS)
                 }.addOnFailureListener {
-                    Toast.makeText(context, "Removed failed", Toast.LENGTH_LONG).show()
+                    Toasty.makeText(context, "Fail", ToastyType.FAIL)
                 }
             basicDialog.dismiss()
         }
@@ -167,7 +169,7 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] newVehicle image uri $it")
             saveVehicleToFirestore(newVehicle)
         }.addOnFailureListener {
-            Toast.makeText(context, "No image exist.", Toast.LENGTH_LONG).show()
+            Toasty.makeText(context, "Warning", ToastyType.WARNING)
         }
     }
 
@@ -181,10 +183,10 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
                 "photoUrl", newVehicle.photoUrl)
             .addOnSuccessListener {
                 Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] updated newVehicle successfully")
-                Toast.makeText(context, "Updated successfully", Toast.LENGTH_LONG).show()
+                Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }.addOnFailureListener {
                 Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] updated newVehicle fail")
-                Toast.makeText(context, "Updated fail", Toast.LENGTH_LONG).show()
+                Toasty.makeText(context, "Fail", ToastyType.FAIL)
             }
 
     }

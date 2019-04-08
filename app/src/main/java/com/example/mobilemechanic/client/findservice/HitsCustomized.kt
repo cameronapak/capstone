@@ -371,7 +371,8 @@ class HitsCustomized
             }
 
             holder.mechanicRating.rating = serviceObj.mechanicInfo.rating
-            holder.review.text = "${serviceObj.reviewCount} Reviews"
+//            holder.review.text = "${serviceObj.reviewCount} Reviews"
+            holder.review.text = "Reviews"
 
             if (AddressManager.hasAddress()) {
                 val userAddress = AddressManager.getUserAddress()

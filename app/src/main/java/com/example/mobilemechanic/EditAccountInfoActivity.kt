@@ -41,26 +41,44 @@ import kotlinx.android.synthetic.main.activity_edit_account_info.*
 import java.security.AccessController.getContext
 import android.app.Activity.RESULT_OK
 import android.provider.MediaStore
+import com.google.firebase.firestore.CollectionReference
 
 class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private var mAuth: FirebaseAuth?= null
-    private var mFireStore: FirebaseFirestore? = null
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFireStore: FirebaseFirestore
     private lateinit var mStorage: FirebaseStorage
     private var userInfo: User? = null
     private var oldPassword: String = ""
     private var selectedImageUri: Uri? = null
     private lateinit var profileImageStorageRef: StorageReference
+
+    private lateinit var accountRef: CollectionReference
+    private lateinit var chatRef: CollectionReference
+    private lateinit var requestRef: CollectionReference
+    private lateinit var reviewRef: CollectionReference
+    private lateinit var serviceRef: CollectionReference
+
 //    private lateinit var userProfile: ProfilePictureHandler
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_account_info)
 
+        initFireStore()
+        setUpEditAccountInfoActivity()
+    }
+
+    private fun initFireStore() {
         mAuth = FirebaseAuth.getInstance()
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
-        setUpEditAccountInfoActivity()
+
+        accountRef = mFireStore.collection("Accounts")
+        chatRef = mFireStore.collection("ChatRooms")
+        requestRef = mFireStore.collection("Requests")
+        reviewRef = mFireStore.collection("Reviews")
+        serviceRef = mFireStore.collection("Services")
     }
 
     private fun setUpEditAccountInfoActivity() {
@@ -286,7 +304,8 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             ?.document(uid)
             ?.set(user)
             ?.addOnSuccessListener {
-            Toast.makeText(this, "Account information saved!", Toast.LENGTH_SHORT).show()
+                updateOtherCollectionInfo(user)
+                Toast.makeText(this, "Account information saved!", Toast.LENGTH_SHORT).show()
                 updateUserProfile(user)
         }
 
@@ -298,6 +317,145 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                 }
                 ?.addOnFailureListener {
                     Toast.makeText(this, "Password updated failed!", Toast.LENGTH_SHORT).show()
+                }
+        }
+    }
+
+    private fun updateOtherCollectionInfo(user: User) {
+
+        if(user.userType.equals(UserType.MECHANIC)) {
+
+            //update info in chatrooms collection
+            chatRef.whereEqualTo("mechanicMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = chatRef.document(item.id)
+                            batch.update(path,"mechanicMember.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicMember.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicMember.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+            }
+
+            //update info in requests collection
+            requestRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = requestRef.document(item.id)
+                            batch.update(path,"mechanicInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"mechanicInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"mechanicInfo.address.city", user.address.city)
+                            batch.update(path,"mechanicInfo.address.state", user.address.state)
+                            batch.update(path,"mechanicInfo.address.street", user.address.street)
+                            batch.update(path,"mechanicInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"mechanicInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"mechanicInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+            //update info in reviews collection
+            reviewRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = reviewRef.document(item.id)
+                            batch.update(path,"mechanicInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"mechanicInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"mechanicInfo.address.city", user.address.city)
+                            batch.update(path,"mechanicInfo.address.state", user.address.state)
+                            batch.update(path,"mechanicInfo.address.street", user.address.street)
+                            batch.update(path,"mechanicInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"mechanicInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"mechanicInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+            //update info in reviews collection
+            serviceRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = serviceRef.document(item.id)
+                            batch.update(path,"_geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"_geoloc.lng", user.address._geoloc.lng)
+
+                            batch.update(path,"mechanicInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"mechanicInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"mechanicInfo.address.city", user.address.city)
+                            batch.update(path,"mechanicInfo.address.state", user.address.state)
+                            batch.update(path,"mechanicInfo.address.street", user.address.street)
+                            batch.update(path,"mechanicInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"mechanicInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"mechanicInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+        } else if(user.userType.equals(UserType.CLIENT)){
+
+            //update info in chatrooms collection
+            chatRef.whereEqualTo("clientMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = chatRef.document(item.id)
+                            batch.update(path,"clientMember.firstName", user.basicInfo.firstName)
+                            batch.update(path,"clientMember.lastName", user.basicInfo.lastName)
+                            batch.update(path,"clientMember.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+            //update info in requests collection
+            requestRef.whereEqualTo("clientInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = requestRef.document(item.id)
+                            batch.update(path,"clientInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"clientInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"clientInfo.address.city", user.address.city)
+                            batch.update(path,"clientInfo.address.state", user.address.state)
+                            batch.update(path,"clientInfo.address.street", user.address.street)
+                            batch.update(path,"clientInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"clientInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"clientInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"clientInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"clientInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
                 }
         }
     }

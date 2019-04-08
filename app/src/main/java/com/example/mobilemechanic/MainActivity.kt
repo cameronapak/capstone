@@ -27,9 +27,7 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         id_loginButton.setOnClickListener(this)
         id_clientButton.setOnClickListener(this)
         id_mechanicButton.setOnClickListener(this)
-        id_toast_success.setOnClickListener(this)
-        id_toast_fail.setOnClickListener(this)
-        id_toast_warning.setOnClickListener(this)
+
     }
 
     override fun onClick(view: View) {
@@ -48,15 +46,6 @@ class MainActivity : AppCompatActivity(), OnClickListener {
             }
             R.id.id_mechanicButton -> {
                 startActivity(Intent(this, MechanicWelcomeActivity::class.java))
-            }
-            R.id.id_toast_success -> {
-                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
-            }
-            R.id.id_toast_fail -> {
-                Toasty.makeText(this, "Fail", ToastyType.FAIL)
-            }
-            R.id.id_toast_warning -> {
-                Toasty.makeText(this, "Warning", ToastyType.WARNING)
             }
         }
     }

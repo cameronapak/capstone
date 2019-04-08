@@ -12,6 +12,8 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.history.EXTRA_REQUEST_RATING
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Review
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.NumberManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -133,7 +135,7 @@ class ServiceRatingActivity : AppCompatActivity() {
         reviewRef.document(review.requestID).set(review)
             .addOnSuccessListener {
                 Log.d(CLIENT_TAG, "[ServiceRatingActivity] review added")
-                Toast.makeText(this, "Review submitted", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
             }.addOnCompleteListener {
                 if(it.isSuccessful) {
                     calcMechanicRating(review)

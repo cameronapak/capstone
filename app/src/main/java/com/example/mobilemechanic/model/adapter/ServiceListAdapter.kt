@@ -16,6 +16,8 @@ import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.dialog_body_add_service.*
@@ -88,9 +90,9 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
         basicDialog.id_positive.setOnClickListener {
             Log.d(MECHANIC_TAG, "[ServiceListAdapter] remove ${serviceItem.objectID}")
             serviceRef.document("${serviceItem.objectID}").delete().addOnSuccessListener {
-                Toast.makeText(context, "Service Removed Successfully", Toast.LENGTH_LONG).show()
+                Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }?.addOnFailureListener {
-                Toast.makeText(context, "Failed to remove service", Toast.LENGTH_LONG).show()
+                Toasty.makeText(context, "Fail", ToastyType.FAIL)
                 Log.w(MECHANIC_TAG, "Error deleting services", it)
             }
             basicDialog.dismiss()
@@ -131,9 +133,9 @@ class ServiceListAdapter(var context: Activity, var serviceArray: ArrayList<Serv
                 .update("service.serviceType", serviceType, "service.price",
                     parseDouble(priceUpdate), "service.description", descriptionUpdate)
                 .addOnSuccessListener {
-                Toast.makeText(context, "Service Update Successfully", Toast.LENGTH_LONG).show()
+                    Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }?.addOnFailureListener {
-                Toast.makeText(context, "Failed to Updadate", Toast.LENGTH_LONG).show()
+                    Toasty.makeText(context, "Fail", ToastyType.FAIL)
                 Log.w(MECHANIC_TAG, "Error update services", it)
             }
             basicDialog.dismiss()

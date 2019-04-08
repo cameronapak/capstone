@@ -161,27 +161,11 @@ class MechanicServicesActivity : AppCompatActivity() {
                     user.rating
                 )
 
-                var service = ServiceModel("", mechanicInfo, service, latlngHolder, 0)
-                getReviewCount(service)
+                var service = ServiceModel("", mechanicInfo, service, latlngHolder)
                 serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
                     Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
                 }
             }
-        }
-    }
-
-    private fun getReviewCount(serviceModel: ServiceModel) {
-        reviewRef.whereEqualTo("mechanicInfo", mAuth?.currentUser?.uid)
-            .get()
-            .addOnSuccessListener {
-                serviceModel.reviewCount = it.size()
-                saveServiceToFirestore(serviceModel)
-            }
-    }
-
-    private fun saveServiceToFirestore(serviceModel: ServiceModel) {
-        serviceRef.document().set(serviceModel)?.addOnSuccessListener { documentRef ->
-            Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
         }
     }
 

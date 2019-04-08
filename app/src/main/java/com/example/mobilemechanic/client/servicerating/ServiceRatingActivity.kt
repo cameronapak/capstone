@@ -7,13 +7,12 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.CheckBox
 import android.widget.Toast
-import com.algolia.instantsearch.core.helpers.Searcher
+import com.algolia.search.saas.Index
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.history.EXTRA_REQUEST_RATING
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Review
-import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.NumberManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -21,8 +20,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_service_rating.*
-import org.json.JSONArray
-import org.json.JSONObject
 
 class ServiceRatingActivity : AppCompatActivity() {
 
@@ -33,7 +30,7 @@ class ServiceRatingActivity : AppCompatActivity() {
     private lateinit var serviceRef: CollectionReference
     private lateinit var accountRef: CollectionReference
 
-    private lateinit var searcher: Searcher
+    private lateinit var index: Index
     private lateinit var request: Request
     private var checkBoxesOfWhatWentWrong = ArrayList<CheckBox>()
 
@@ -44,20 +41,11 @@ class ServiceRatingActivity : AppCompatActivity() {
     }
 
     private fun setUpServiceRatingActivity() {
-        setUpAlgolia()
         getRequestParcel()
         setUpToolBar()
         initFireStore()
         setUpReview()
         hideKeyboard()
-    }
-
-    private fun setUpAlgolia() {
-        searcher = Searcher.create(
-            getString(com.example.mobilemechanic.R.string.algolia_app_id),
-            getString(com.example.mobilemechanic.R.string.algolia_api_key),
-            getString(com.example.mobilemechanic.R.string.algolia_services_index)
-        )
     }
 
     private fun getRequestParcel() {
@@ -149,7 +137,7 @@ class ServiceRatingActivity : AppCompatActivity() {
                 Log.d(CLIENT_TAG, "[ServiceRatingActivity] review added")
                 Toast.makeText(this, "Review submitted", Toast.LENGTH_LONG).show()
             }.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     calcMechanicRating(review)
                     updateReviewCount(review)
                 }
@@ -163,18 +151,18 @@ class ServiceRatingActivity : AppCompatActivity() {
         reviewRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
             .addOnSuccessListener {
                 var totalRating = 0F
-                for(document in it) {
+                for (document in it) {
                     Log.d(CLIENT_TAG, "[ServiceRatingActivity] Review ID: ${document.id}")
                     val item = document.toObject(Review::class.java)
                     totalRating += item.rating
                     reviewDocs.add(item.requestID)
                 }
 
-                avgRating = totalRating/it.size()
+                avgRating = totalRating / it.size()
                 Log.d(CLIENT_TAG, "[ServiceRatingActivity] Average Rating: $avgRating")
 
             }.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     populateRatings(avgRating, review.mechanicInfo?.uid!!)
                 }
             }
@@ -186,10 +174,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = reviewRef.document(item.id)
-                        batch.update(path,"mechanicInfo.rating", avgRating)
+                        batch.update(path, "mechanicInfo.rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -199,10 +187,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = requestRef.document(item.id)
-                        batch.update(path,"mechanicInfo.rating", avgRating)
+                        batch.update(path, "mechanicInfo.rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -212,10 +200,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = serviceRef.document(item.id)
-                        batch.update(path,"mechanicInfo.rating", avgRating)
+                        batch.update(path, "mechanicInfo.rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -225,10 +213,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = accountRef.document(item.id)
-                        batch.update(path,"rating", avgRating)
+                        batch.update(path, "rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -241,41 +229,20 @@ class ServiceRatingActivity : AppCompatActivity() {
                 val reviewCount = it.size()
                 val batch = mFirestore.batch()
                 serviceRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
-                    .addOnSuccessListener {serviceModels ->
+                    .addOnSuccessListener { serviceModels ->
                         for (document in serviceModels) {
                             val path = serviceRef.document(document.id)
-                            batch.update(path,"reviewCount", reviewCount)
+                            batch.update(path, "reviewCount", reviewCount)
                         }
-                        batch.commit().addOnSuccessListener {
-                            Log.d(CLIENT_TAG, "[ServiceRatingActivity] update reviewCount successfully")
-                        }.addOnCompleteListener {
-                            // Update the reviewCount on Algolia manually also because batch write doesn't
-                            // work with cloud function triggers
-                            Log.d(CLIENT_TAG, "[ServiceRatingActivity] there is $reviewCount reviews for ${review.mechanicInfo?.uid}")
-                            updateReviewCountOnAlgolia(review, reviewCount)
-                        }
+                        batch.commit()
+                            .addOnSuccessListener {
+                                Log.d(CLIENT_TAG, "[ServiceRatingActivity] update reviewCount successfully")
+                            }.addOnCompleteListener {
+                                finish()
+                            }
                     }
             }
     }
-
-    private fun updateReviewCountOnAlgolia(review: Review, reviewCount: Int) {
-        serviceRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
-            .addOnSuccessListener { serviceModels ->
-                val array = ArrayList<JSONObject>()
-                for (document in serviceModels) {
-                    val serviceModel = document.toObject(ServiceModel::class.java)
-                    Log.d(CLIENT_TAG, "[ServiceRatingActivity] updating to algolia $serviceModel, reviewCount: $reviewCount")
-                    Log.d(CLIENT_TAG, "[ServiceRatingActivity] serviceModel.objectID ${document.id}")
-                    array.add(JSONObject()
-                            .put("reviewCount", reviewCount)
-                            .put("objectID", document.id)
-                    )
-                }
-                searcher.index.partialUpdateObjectsAsync(JSONArray(array)
-                ) { _, _ -> finish() }
-            }
-    }
-
 
     private fun hideKeyboard() {
         id_service_rating_framelayout.setOnClickListener {

@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.CheckBox
 import android.widget.Toast
-import com.algolia.search.saas.Index
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.history.EXTRA_REQUEST_RATING
@@ -30,7 +29,6 @@ class ServiceRatingActivity : AppCompatActivity() {
     private lateinit var serviceRef: CollectionReference
     private lateinit var accountRef: CollectionReference
 
-    private lateinit var index: Index
     private lateinit var request: Request
     private var checkBoxesOfWhatWentWrong = ArrayList<CheckBox>()
 

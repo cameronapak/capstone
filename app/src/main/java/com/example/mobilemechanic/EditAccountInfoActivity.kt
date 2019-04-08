@@ -341,6 +341,30 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                     batch.commit()
             }
 
+            //update info in messages in chatrooms collection
+            chatRef.whereEqualTo("mechanicMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            chatRef.document(item.id).collection("Messages").get()
+                                .addOnCompleteListener {
+                                    if(it.isSuccessful) {
+                                        for(message in it.result!!) {
+                                            val path = chatRef.document(item.id).collection("Messages").document(message.id)
+                                            batch.update(path,"chatUserInfo.firstName", user.basicInfo.firstName)
+                                            batch.update(path,"chatUserInfo.lastName", user.basicInfo.lastName)
+                                            batch.update(path,"chatUserInfo.photoUrl", user.basicInfo.photoUrl)
+                                        }
+                                    }
+                                }
+                        }
+                    }
+
+                    batch.commit()
+                }
+
             //update info in requests collection
             requestRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
                 .addOnCompleteListener {
@@ -431,6 +455,30 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                             batch.update(path,"clientMember.photoUrl", user.basicInfo.photoUrl)
                         }
                     }
+                    batch.commit()
+                }
+
+            //update info in messages in chatrooms collection
+            chatRef.whereEqualTo("clientMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            chatRef.document(item.id).collection("Messages").get()
+                                .addOnCompleteListener {
+                                    if(it.isSuccessful) {
+                                        for(message in it.result!!) {
+                                            val path = chatRef.document(item.id).collection("Messages").document(message.id)
+                                            batch.update(path,"chatUserInfo.firstName", user.basicInfo.firstName)
+                                            batch.update(path,"chatUserInfo.lastName", user.basicInfo.lastName)
+                                            batch.update(path,"chatUserInfo.photoUrl", user.basicInfo.photoUrl)
+                                        }
+                                    }
+                                }
+                        }
+                    }
+
                     batch.commit()
                 }
 

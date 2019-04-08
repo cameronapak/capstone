@@ -7,11 +7,13 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.widget.CheckBox
 import android.widget.Toast
+import com.algolia.instantsearch.core.helpers.Searcher
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.history.EXTRA_REQUEST_RATING
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Review
+import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.NumberManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -19,6 +21,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_service_rating.*
+import org.json.JSONArray
+import org.json.JSONObject
 
 class ServiceRatingActivity : AppCompatActivity() {
 
@@ -29,6 +33,7 @@ class ServiceRatingActivity : AppCompatActivity() {
     private lateinit var serviceRef: CollectionReference
     private lateinit var accountRef: CollectionReference
 
+    private lateinit var searcher: Searcher
     private lateinit var request: Request
     private var checkBoxesOfWhatWentWrong = ArrayList<CheckBox>()
 
@@ -39,11 +44,20 @@ class ServiceRatingActivity : AppCompatActivity() {
     }
 
     private fun setUpServiceRatingActivity() {
+        setUpAlgolia()
         getRequestParcel()
         setUpToolBar()
         initFireStore()
         setUpReview()
         hideKeyboard()
+    }
+
+    private fun setUpAlgolia() {
+        searcher = Searcher.create(
+            getString(com.example.mobilemechanic.R.string.algolia_app_id),
+            getString(com.example.mobilemechanic.R.string.algolia_api_key),
+            getString(com.example.mobilemechanic.R.string.algolia_services_index)
+        )
     }
 
     private fun getRequestParcel() {
@@ -139,7 +153,6 @@ class ServiceRatingActivity : AppCompatActivity() {
                     calcMechanicRating(review)
                     updateReviewCount(review)
                 }
-                finish()
             }
     }
 
@@ -235,8 +248,31 @@ class ServiceRatingActivity : AppCompatActivity() {
                         }
                         batch.commit().addOnSuccessListener {
                             Log.d(CLIENT_TAG, "[ServiceRatingActivity] update reviewCount successfully")
+                        }.addOnCompleteListener {
+                            // Update the reviewCount on Algolia manually also because batch write doesn't
+                            // work with cloud function triggers
+                            Log.d(CLIENT_TAG, "[ServiceRatingActivity] there is $reviewCount reviews for ${review.mechanicInfo?.uid}")
+                            updateReviewCountOnAlgolia(review, reviewCount)
                         }
                     }
+            }
+    }
+
+    private fun updateReviewCountOnAlgolia(review: Review, reviewCount: Int) {
+        serviceRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
+            .addOnSuccessListener { serviceModels ->
+                val array = ArrayList<JSONObject>()
+                for (document in serviceModels) {
+                    val serviceModel = document.toObject(ServiceModel::class.java)
+                    Log.d(CLIENT_TAG, "[ServiceRatingActivity] updating to algolia $serviceModel, reviewCount: $reviewCount")
+                    Log.d(CLIENT_TAG, "[ServiceRatingActivity] serviceModel.objectID ${document.id}")
+                    array.add(JSONObject()
+                            .put("reviewCount", reviewCount)
+                            .put("objectID", document.id)
+                    )
+                }
+                searcher.index.partialUpdateObjectsAsync(JSONArray(array)
+                ) { _, _ -> finish() }
             }
     }
 

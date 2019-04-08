@@ -20,6 +20,8 @@ import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.model.*
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.utility.AddressManager
@@ -144,7 +146,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
                 R.id.id_sign_out -> {
                     mAuth.signOut()
-                    Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
+                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }

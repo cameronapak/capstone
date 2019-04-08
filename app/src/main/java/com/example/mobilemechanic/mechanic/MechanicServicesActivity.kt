@@ -17,6 +17,8 @@ import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -129,7 +131,7 @@ class MechanicServicesActivity : AppCompatActivity() {
             if (isFieldsValidated(service)) {
                 addService(service)
             } else {
-                Toast.makeText(this, "Please enter in all fields", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "Warning", ToastyType.WARNING)
             }
             basicDialog.dismiss()
         }
@@ -161,6 +163,7 @@ class MechanicServicesActivity : AppCompatActivity() {
 
                 var service = ServiceModel("", mechanicInfo, service, latlngHolder)
                 serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
+                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                     Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
                 }
             }

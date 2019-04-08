@@ -19,5 +19,6 @@
     <color name="colorWarning">#EB8356</color>
     <color name="colorFocus">#BC4343</color>
     <color name="colorLink">#56CCF2</color>
+    <color name="colorSuccess">#89CB47</color>
 
 </resources>

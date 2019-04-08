@@ -20,6 +20,8 @@ import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -253,11 +255,11 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         requestRef.document(request.objectID)
             .update("status", Status.Cancelled)
             ?.addOnSuccessListener {
-                Toast.makeText(this, "Canceled job successfully", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, getString(R.string.err_cancel_job_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Fail", ToastyType.FAIL)
             }
     }
 

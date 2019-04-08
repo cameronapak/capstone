@@ -11,6 +11,8 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.stripe.Payment
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -119,17 +121,17 @@ class PaymentActivity : AppCompatActivity()
 
         //check number
         if(!card.validateNumber()){
-            Toast.makeText(this, "Invalid card number.", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
         }
 
         //check CVC
         if(!card.validateCVC()){
-            Toast.makeText(this, "Invalid CVC", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
         }
 
         //check card
         if(!card.validateCard()) {
-            Toast.makeText(this, "Invalid Payment Information.", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
         }
         else {
             convertInfoToToken(card, total)
@@ -145,7 +147,7 @@ class PaymentActivity : AppCompatActivity()
             }
 
             override fun onError(error: Exception?) {
-                Toast.makeText(this@PaymentActivity,"Token Not Created!!", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this@PaymentActivity, "Fail", ToastyType.FAIL)
                 error!!.printStackTrace()
                 Log.d(PAYMENT_TAG, error.toString())
             }
@@ -159,10 +161,10 @@ class PaymentActivity : AppCompatActivity()
 
         myPaymentsRef.document().set(payment)
             .addOnSuccessListener {
-                Toast.makeText(this, "Payment successful!", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this@PaymentActivity, "Success", ToastyType.SUCCESS)
                 finish()
             }.addOnFailureListener {
-                Toast.makeText(this, "Payment failed.", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this@PaymentActivity, "Fail", ToastyType.FAIL)
             }
     }
 

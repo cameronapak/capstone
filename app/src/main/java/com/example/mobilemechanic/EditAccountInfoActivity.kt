@@ -22,6 +22,8 @@ import com.example.mobilemechanic.model.dto.Address
 import com.example.mobilemechanic.model.dto.BasicInfo
 import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
@@ -230,42 +232,42 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         val zip = id_editZipcode.text.toString().trim()
 
         if (password.length < 6) {
-            Toast.makeText(this, "Invalid password!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (firstName.isNullOrEmpty() || firstName.isNullOrBlank()) {
-            Toast.makeText(this, "Invalid first name!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (lastName.isNullOrEmpty() || lastName.isNullOrBlank()) {
-            Toast.makeText(this, "Invalid last name!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (phoneNumber.length != 10) {
-            Toast.makeText(this, "Invalid phone number!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (street.isNullOrEmpty() || street.isNullOrBlank()) {
-            Toast.makeText(this, "Invalid address!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (city.isNullOrEmpty() || city.isNullOrBlank()) {
-            Toast.makeText(this, "Invalid city!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (state.equals("State")) {
-            Toast.makeText(this, "Invalid state!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
         if (zip.length != 5) {
-            Toast.makeText(this, "Invalid zip!", Toast.LENGTH_SHORT).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return false
         }
 
@@ -305,7 +307,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             ?.set(user)
             ?.addOnSuccessListener {
                 updateOtherCollectionInfo(user)
-                Toast.makeText(this, "Account information saved!", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 updateUserProfile(user)
         }
 
@@ -313,10 +315,10 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             val currentUser = mAuth?.currentUser
             currentUser?.updatePassword(user.password)
                 ?.addOnSuccessListener {
-                    Toast.makeText(this, "Password updated successfully!", Toast.LENGTH_SHORT).show()
+                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 }
                 ?.addOnFailureListener {
-                    Toast.makeText(this, "Password updated failed!", Toast.LENGTH_SHORT).show()
+                    Toasty.makeText(this, "Fail", ToastyType.FAIL)
                 }
         }
     }

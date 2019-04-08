@@ -27,6 +27,8 @@ import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.Member
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.ObjectConverter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -142,7 +144,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request).addOnSuccessListener {
-                            Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
+                            Toasty.makeText(this, "Success", ToastyType.SUCCESS)
 
 
                             val clientMember = ObjectConverter.convertToMember(clientInfo)
@@ -151,7 +153,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             setUpChatRoom(clientMember, mechanicMember)
 
                         }.addOnFailureListener {
-                            Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
+                            Toasty.makeText(this, "Fail", ToastyType.FAIL)
                         }
                     }
                 }
@@ -276,9 +278,9 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
             daysOfWeekString = availableDays.joinToString(separator = ", ")
             if (availableDays.isEmpty()) {
-                Toast.makeText(this, "Select available days", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Warning", ToastyType.WARNING)
             } else if (fromTime.isNullOrBlank() || toTime.isNullOrBlank()) {
-                Toast.makeText(this, "Select from and to times", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Warning", ToastyType.WARNING)
             } else {
                 id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
                 basicDialog.dismiss()

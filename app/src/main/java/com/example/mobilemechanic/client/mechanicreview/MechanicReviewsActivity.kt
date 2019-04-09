@@ -49,7 +49,6 @@ class MechanicReviewsActivity : AppCompatActivity() {
 
     val REQUEST_PHONE_CALL = 1
     val REQUEST_EMAIL = 2
-    var count: Int = 0
     var distance = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +76,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
 
     private fun parseParcelable() {
         mechanicInfo = intent.getParcelableExtra(EXTRA_MECHANIC_INFO)
-        distance = intent.getStringExtra(EXTRA_DISTANCE.toString())
+        distance = intent.getStringExtra(EXTRA_DISTANCE)
     }
 
     private fun getMechanicServices() {
@@ -97,8 +96,6 @@ class MechanicReviewsActivity : AppCompatActivity() {
     }
 
     private fun getReviews() {
-
-        count = 0
         reviewRef.get()
             .addOnCompleteListener {
                 if(it.isSuccessful) {
@@ -107,12 +104,10 @@ class MechanicReviewsActivity : AppCompatActivity() {
 
                         if(review.mechanicInfo?.uid == mechanicInfo.uid) {
                             Log.d(CLIENT_TAG, "[MechanicReviewsActivity] ObjectID: ${document.id}")
-                            count++
                             reviewsList.add(review)
                         }
                     }
                     showMechanicInfo()
-
                 }
             }
     }
@@ -127,7 +122,7 @@ class MechanicReviewsActivity : AppCompatActivity() {
 
         holder.id_mechanic_more_info_name.text = "${mechanicInfo?.basicInfo?.firstName} ${mechanicInfo?.basicInfo?.lastName}"
         holder.id_mechanic_more_info_rating.rating = mechanicInfo.rating
-        holder.id_mechanic_more_info_reviews_count.text = "$count Reviews"
+        holder.id_mechanic_more_info_reviews_count.text = "${reviewsList.size} Reviews"
         holder.id_mechanic_more_info_distance.text = distance
         holder.id_mechanic_more_info_service_items.text = ""
         for(item in serviceItems) {
@@ -163,23 +158,18 @@ class MechanicReviewsActivity : AppCompatActivity() {
     }
 
     private fun setUpButtons() {
-
         id_email_button.setOnClickListener {
         val intent = Intent(Intent.ACTION_SEND)
             intent.type = "text/html"
-            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf<String>(mechanicInfo.basicInfo.email))
+            intent.putExtra(Intent.EXTRA_EMAIL, arrayOf(mechanicInfo.basicInfo.email))
             startActivity(intent)
         }
 
         id_call_button.setOnClickListener {
             if(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
-            {
+                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 startCall()
-            }
-            else//request permission
-            {
-                //context, constant for access call, permission request code
+            } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
                     REQUEST_PHONE_CALL)
             }

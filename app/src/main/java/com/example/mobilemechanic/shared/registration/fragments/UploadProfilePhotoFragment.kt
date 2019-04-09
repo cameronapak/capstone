@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,9 +16,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.CLIENT_TAG
-import com.example.mobilemechanic.shared.Toasty
-import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
@@ -101,7 +97,6 @@ class UploadProfilePhotoFragment : Fragment() {
             if (profilePictureCircleImage != null) {
                 profilePictureCircleImage.setImageDrawable(null)
                 selectedImageUri = imageUri
-                Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
                 val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImageUri)
                 profilePictureCircleImage.setImageBitmap(bitmap)
             }

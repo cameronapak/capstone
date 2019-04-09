@@ -1,7 +1,6 @@
 package com.algolia.instantsearch.examples.icebnb.widgets
 
 import android.app.Activity
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -54,8 +53,8 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
     override fun onMapReady(googleMap: GoogleMap) {
         this.googleMap = googleMap
         googleMap.setInfoWindowAdapter(MarkerInfoAdapter(context))
-        googleMap.setOnInfoWindowClickListener {marker ->
-            Log.d(CLIENT_TAG, "[MapWidget] setOnInfoWindowClick $marker")
+        googleMap.setOnInfoWindowClickListener { marker ->
+            Log.d(CLIENT_TAG, "[MapWidget] setOnInfoWindowClick ${marker.snippet}")
         }
     }
 
@@ -98,35 +97,36 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
 
         servicesHits
             .distinctBy { it.mechanicInfo.uid }
-            .forEachIndexed{ index, serviceModel ->
-            Picasso.get().load(Uri.parse(serviceModel.mechanicInfo.basicInfo.photoUrl)).into(object: Target {
-                override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
-                override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
-                override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
+            .forEachIndexed { index, serviceModel ->
+                Picasso.get().load(Uri.parse(serviceModel.mechanicInfo.basicInfo.photoUrl)).into(object : Target {
+                    override fun onPrepareLoad(placeHolderDrawable: Drawable?) {}
+                    override fun onBitmapFailed(e: Exception?, errorDrawable: Drawable?) {}
+                    override fun onBitmapLoaded(bitmap: Bitmap, from: Picasso.LoadedFrom) {
 
-                    val mechanicBasicInfo = serviceModel.mechanicInfo.basicInfo
-                    val address = serviceModel.mechanicInfo.address
-                    val snippetText =
+                        val mechanicBasicInfo = serviceModel.mechanicInfo.basicInfo
+                        val address = serviceModel.mechanicInfo.address
+                        val snippetText =
                             "phoneNumber:${mechanicBasicInfo.phoneNumber}\n" +
-                            "serviceType:${serviceModel.service.serviceType}\n" +
-                            "addressStreet:${address.street}\n" +
-                            "addressCityStateZipcode:${address.city}, ${address.state} ${address.zipCode}\n" +
-                            "Rating:${serviceModel.mechanicInfo.rating}"
+                                    "serviceType:${serviceModel.service.serviceType}\n" +
+                                    "addressStreet:${address.street}\n" +
+                                    "addressCityStateZipcode:${address.city}, ${address.state} ${address.zipCode}\n" +
+                                    "rating:${serviceModel.mechanicInfo.rating}\n" +
+                                    "serviceObjectID:${serviceModel.objectID}"
 
-                    googleMap!!.addMarker(
-                        MarkerOptions()
-                            .position(LatLng(serviceModel._geoloc.lat, serviceModel._geoloc.lng))
-                            .title("${mechanicBasicInfo.firstName} ${mechanicBasicInfo.lastName}")
-                            .snippet(snippetText)
-                            .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(bitmap)))
-                    )
+                        googleMap!!.addMarker(
+                            MarkerOptions()
+                                .position(LatLng(serviceModel._geoloc.lat, serviceModel._geoloc.lng))
+                                .title("${mechanicBasicInfo.firstName} ${mechanicBasicInfo.lastName}")
+                                .snippet(snippetText)
+                                .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(bitmap)))
+                        )
+                    }
+                })
+
+                if (index == 0) {
+                    cameraZoomToMostRelevantService(serviceModel)
                 }
-            })
-
-            if (index == 0) {
-                cameraZoomToMostRelevantService(serviceModel)
             }
-        }
     }
 
     private fun cameraZoomToMostRelevantService(serviceModel: ServiceModel) {
@@ -140,12 +140,13 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
         val markerProfileImage = customerMarkerView.findViewById<CircleImageView>(R.id.id_marker_profile_image)
         markerProfileImage.setImageBitmap(bitmap)
         customerMarkerView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED)
-        customerMarkerView.layout(0,0, customerMarkerView.measuredWidth, customerMarkerView.measuredHeight)
+        customerMarkerView.layout(0, 0, customerMarkerView.measuredWidth, customerMarkerView.measuredHeight)
         customerMarkerView.buildDrawingCache()
         val returnedBitmap = Bitmap.createBitmap(
             customerMarkerView.measuredWidth,
             customerMarkerView.measuredHeight,
-            Bitmap.Config.ARGB_8888)
+            Bitmap.Config.ARGB_8888
+        )
 
         val canvas = Canvas(returnedBitmap)
         canvas.drawColor(Color.WHITE, PorterDuff.Mode.SRC_IN)

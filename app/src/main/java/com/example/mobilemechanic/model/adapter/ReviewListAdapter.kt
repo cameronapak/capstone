@@ -57,8 +57,6 @@ class ReviewListAdapter(var context: Activity, var items: ArrayList<Review>) :
                     }
                 }
             }
-
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {

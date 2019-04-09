@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
-import android.widget.Toast
 import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
@@ -120,7 +119,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.id_find_service -> {
                     startActivity(Intent(this, FindServiceActivity::class.java))
-//                    startActivity(Intent(this, FindServiceActivityTest::class.java))
                     true
                 }
                 R.id.id_history -> {
@@ -146,7 +144,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
                 R.id.id_sign_out -> {
                     mAuth.signOut()
-                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                    Toasty.makeText(this, "Logged out", ToastyType.SUCCESS)
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }

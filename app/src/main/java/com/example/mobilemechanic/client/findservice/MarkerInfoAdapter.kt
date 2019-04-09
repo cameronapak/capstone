@@ -4,6 +4,7 @@ import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.RatingBar
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
@@ -30,6 +31,7 @@ class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter{
         val snippetPhoneNumber = markerInfoView?.findViewById<TextView>(R.id.id_snippet_phoneNumber)
         val snippetServiceType = markerInfoView?.findViewById<TextView>(R.id.id_snippet_serviceType)
         val snippetAddress = markerInfoView?.findViewById<TextView>(R.id.id_snippet_address)
+        val snippetRating = markerInfoView?.findViewById<RatingBar>(R.id.id_marker_rating)
 
         val match = pattern.matcher(marker.snippet)
         while (match.find()) {
@@ -45,15 +47,23 @@ class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter{
                     fullAddress = "$fullAddress${match.group(2)}\n"
                 match.group(1) == "addressCityStateZipcode" ->
                     fullAddress = "$fullAddress${match.group(2)}"
+                match.group(1) == "rating" ->
+                    snippetRating?.rating = match.group(2).toFloat()
             }
         }
+
 
         snippetAddress?.text = fullAddress
         return markerInfoView
     }
 
+
+
     override fun getInfoWindow(marker: Marker): View? {
         ScreenManager.hideKeyBoard(context)
+
+
+        Log.d(CLIENT_TAG, "[MarkerInfoAdapter] getInfoWindow click marker: ${marker.snippet}")
         return null
     }
 }

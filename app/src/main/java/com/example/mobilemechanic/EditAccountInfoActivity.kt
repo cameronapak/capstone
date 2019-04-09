@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -27,25 +28,22 @@ import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
-import com.squareup.picasso.Picasso
 import com.google.android.gms.tasks.Task
-import de.hdodenhof.circleimageview.CircleImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_edit_account_info.*
-import java.security.AccessController.getContext
-import android.app.Activity.RESULT_OK
-import android.provider.MediaStore
-import com.google.firebase.firestore.CollectionReference
 
-class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFireStore: FirebaseFirestore
@@ -60,9 +58,6 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
     private lateinit var requestRef: CollectionReference
     private lateinit var reviewRef: CollectionReference
     private lateinit var serviceRef: CollectionReference
-
-//    private lateinit var userProfile: ProfilePictureHandler
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_account_info)
@@ -95,8 +90,8 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         }
 
         id_btn_update_profile.setOnClickListener {
-            id_btn_update_profile.setEnabled(false)
-            id_btn_update_profile.setText("Saving Changes...")
+            id_btn_update_profile.isEnabled = false
+            id_btn_update_profile.text = "Saving Changes..."
             saveUserInfo()
         }
     }
@@ -135,13 +130,13 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
     }
 
     private fun updateProfilePicture(imageUri: Uri) {
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] Update Profile Image!")
+        Log.d(CLIENT_TAG, "[EditAccountInfoActivity] Update Profile Image!")
         if (imageUri != null) {
             val profilePictureCircleImage = id_settings_profile_image
             if (profilePictureCircleImage != null) {
                 profilePictureCircleImage.setImageDrawable(null)
                 selectedImageUri = imageUri
-                Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
+                Log.d(CLIENT_TAG, "[EditAccountInfoActivity] convert Uri to bitmap for compression")
                 val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
                 profilePictureCircleImage.setImageBitmap(bitmap)
             }
@@ -150,7 +145,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
 
     private fun setUpProfilePicture() {
         val userProfileUri = mAuth?.currentUser?.photoUrl
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] photoUrl ${userProfileUri}")
+        Log.d(CLIENT_TAG, "[EditAccountInfoActivity] photoUrl ${userProfileUri}")
 
         if (userProfileUri != null) {
             Picasso.get().load(userProfileUri).into(id_settings_profile_image)
@@ -307,7 +302,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             ?.set(user)
             ?.addOnSuccessListener {
                 updateOtherCollectionInfo(user)
-                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                Toasty.makeText(this, "Account updated", ToastyType.SUCCESS)
                 updateUserProfile(user)
         }
 
@@ -315,10 +310,10 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             val currentUser = mAuth?.currentUser
             currentUser?.updatePassword(user.password)
                 ?.addOnSuccessListener {
-                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                    Toasty.makeText(this, "Password updated", ToastyType.SUCCESS)
                 }
                 ?.addOnFailureListener {
-                    Toasty.makeText(this, "Fail", ToastyType.FAIL)
+                    Toasty.makeText(this, "Password change failed. Try again.", ToastyType.FAIL)
                 }
         }
     }

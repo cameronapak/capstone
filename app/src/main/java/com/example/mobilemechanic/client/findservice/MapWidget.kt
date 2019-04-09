@@ -1,6 +1,7 @@
 package com.algolia.instantsearch.examples.icebnb.widgets
 
 import android.app.Activity
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -17,7 +18,9 @@ import com.algolia.instantsearch.core.model.SearchResults
 import com.algolia.search.saas.Query
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.client.findservice.EXTRA_SERVICE
 import com.example.mobilemechanic.client.findservice.MarkerInfoAdapter
+import com.example.mobilemechanic.client.postservicerequest.PostServiceRequestActivity
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -27,12 +30,14 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.squareup.picasso.Picasso
 import com.squareup.picasso.Target
 import de.hdodenhof.circleimageview.CircleImageView
 import org.json.JSONObject
+import java.util.regex.Pattern
 
 
 class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapReadyCallback, AlgoliaSearcherListener,
@@ -43,6 +48,7 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
     private var servicesHits: ArrayList<ServiceModel> = ArrayList()
     private var gson: Gson
     private var customerMarkerView: View
+    private val mFirestore: FirebaseFirestore = FirebaseFirestore.getInstance()
 
     init {
         mapFragment.getMapAsync(this)
@@ -54,7 +60,29 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
         this.googleMap = googleMap
         googleMap.setInfoWindowAdapter(MarkerInfoAdapter(context))
         googleMap.setOnInfoWindowClickListener { marker ->
+            val pattern = Pattern.compile("(\\w+):(.+)(?:\\s|\$)")
+            val match = pattern.matcher(marker.snippet)
             Log.d(CLIENT_TAG, "[MapWidget] setOnInfoWindowClick ${marker.snippet}")
+            var serviceId = ""
+            while (match.find()) {
+                Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(1) ${match.group(1)}")
+                Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(2) ${match.group(2)}")
+
+                when {
+                    match.group(1) == "serviceObjectID" ->
+                        serviceId = match.group(2).toString()
+                }
+            }
+
+            if (!serviceId.isNullOrEmpty()) {
+                mFirestore.collection("Services").document(serviceId).get()
+                    .addOnSuccessListener {
+                        val serviceObj = it.toObject(ServiceModel::class.java)
+                        val intent = Intent(context, PostServiceRequestActivity::class.java)
+                        intent.putExtra(EXTRA_SERVICE, serviceObj)
+                        context.startActivity(intent)
+                    }
+            }
         }
     }
 

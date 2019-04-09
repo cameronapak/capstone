@@ -3,6 +3,7 @@ package com.example.mobilemechanic.client.postservicerequest
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +11,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -35,6 +35,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.view.*
@@ -61,7 +62,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
-        serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
         setUpPostServiceRequestActivity()
     }
 
@@ -107,12 +107,20 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
+            serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
+
             id_mechanic_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
             id_price.text = "$${serviceModel.service.price.toInt()}"
             id_mechanic_rating.rating = serviceModel.mechanicInfo.rating
+
+            if (serviceModel.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()) {
+                Picasso.get().load(R.drawable.ic_circle_profile).into(id_mechanic_profile_image)
+            } else {
+                Picasso.get().load(Uri.parse(serviceModel.mechanicInfo.basicInfo.photoUrl)).into(id_mechanic_profile_image)
+            }
         }
     }
 

@@ -46,4 +46,13 @@
             app:layout_constraintStart_toStartOf="@+id/id_snippet_phoneNumber"
             android:textSize="10sp" android:fontFamily="@font/roboto" android:textColor="@color/colorPrimary1"
             android:layout_marginTop="4dp"/>
+    <Button
+            style="@style/AppPrimaryRecyclerItemButton"
+            android:text="@string/text_select"
+            android:layout_width="0dp"
+            android:layout_height="28dp"
+            android:id="@+id/id_marker_select" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/id_snippet_address"
+            app:layout_constraintStart_toStartOf="@+id/id_snippet_address"
+            app:layout_constraintEnd_toEndOf="parent" android:textSize="10sp"/>
 </android.support.constraint.ConstraintLayout>

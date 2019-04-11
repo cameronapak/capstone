@@ -12,7 +12,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
-import android.widget.Toast
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
@@ -124,7 +123,7 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
                 updateProfilePicture(resultUri)
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
-                Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "${error.message}", ToastyType.FAIL)
             }
         }
     }
@@ -212,9 +211,7 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        //editModel.state.value = id_editStateSpinner.selectedItem.toString()
-    }
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {}
 
     private fun validateInfo(): Boolean {
         val password = id_editPassword.text.toString().trim()
@@ -552,7 +549,6 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
         } else if (userInfo!!.userType.equals(UserType.CLIENT)){
             startActivity(Intent(this, ClientWelcomeActivity::class.java))
         }
-
         finish()
     }
 

@@ -8,6 +8,7 @@ data class Payment(
     var objectID: String,
     var amount: Double,
     var tokenId: String,
+    var requestId: String,
     var description: String = "[Mobile Mechanics]: "
 ) : Parcelable {
     constructor() : this("", 0.0,"", "[Mobile Mechanics]: ")
@@ -16,6 +17,7 @@ data class Payment(
         parcel.readString(),
         parcel.readDouble(),
         parcel.readString(),
+        parcel.readString(),
         parcel.readString()
     )
 
@@ -23,6 +25,7 @@ data class Payment(
         parcel.writeString(objectID)
         parcel.writeDouble(amount)
         parcel.writeString(tokenId)
+        parcel.writeString(requestId)
         parcel.writeString(description)
     }
 

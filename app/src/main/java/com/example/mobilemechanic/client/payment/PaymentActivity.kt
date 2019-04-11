@@ -98,10 +98,12 @@ class PaymentActivity : AppCompatActivity()
         val holder2 = id_payment_container.id_summary_container
 
         //substring to remove $ sign
-        val tips = holder.id_tip.text.toString().substring(1)
+        val tips = holder.id_tip.text.toString()
+        //Log.d(PAYMENT_TAG, "Tips: $tips")
 
-        val total: Double = holder2.id_grand_total_price.text.toString().substring(1).toDouble()
-            + tips.toDouble()
+        val total: Double = (holder2.id_grand_total_price.text.toString().substring(1).toDouble() + tips.toDouble())
+
+        //Log.d(PAYMENT_TAG, "Total: $total")
 
         val cardNumber = holder.id_card_number.text.toString()
         val cardExpMonth = holder.id_expire_date.text.substring(0,2).toInt()
@@ -156,7 +158,7 @@ class PaymentActivity : AppCompatActivity()
     }
 
     private fun createPayment(tokenId: String, amount: Double) {
-        val payment = Payment("", amount, tokenId)
+        val payment = Payment("", amount, tokenId, request.objectID)
         payment.description += "${request.service?.serviceType}"
 
         myPaymentsRef.document().set(payment)

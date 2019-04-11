@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RatingBar
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
@@ -32,6 +33,7 @@ class ReviewListAdapter(var context: Activity, var items: ArrayList<Review>) :
         val name = view.findViewById<TextView>(R.id.id_recyclerview_mechanic_reviews_name)
         val description = view.findViewById<TextView>(R.id.id_recyclerview_mechanic_reviews_description)
         val postedOn = view.findViewById<TextView>(R.id.id_recyclerview_mechanic_reviews_postedOn)
+        val rating = view.findViewById<RatingBar>(R.id.id_recyclerview_mechanic_reviews_ratingbar)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -51,6 +53,7 @@ class ReviewListAdapter(var context: Activity, var items: ArrayList<Review>) :
                                 holder.name.text = request?.clientInfo?.basicInfo?.firstName
                                 holder.description.text = review?.comment
                                 holder.postedOn.text = "Posted on ${DateTimeManager.millisToDate(review.postedOn, "MMM d, y")}"
+                                holder.rating.rating = review?.rating
                                 Log.d(CLIENT_TAG, "[RequestListAdapter] ReviewID: ${review.requestID}")
 
                         }

@@ -158,7 +158,10 @@ class PaymentActivity : AppCompatActivity()
     }
 
     private fun createPayment(tokenId: String, amount: Double) {
-        val payment = Payment("", amount, tokenId, request.objectID)
+        val email =
+            if(!request.clientInfo?.basicInfo?.email.isNullOrEmpty()) request.clientInfo?.basicInfo!!.email
+            else ""
+        val payment = Payment("", amount, tokenId, email)
         payment.description += "${request.service?.serviceType}"
 
         myPaymentsRef.document().set(payment)

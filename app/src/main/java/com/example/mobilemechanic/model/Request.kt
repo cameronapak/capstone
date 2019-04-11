@@ -4,6 +4,7 @@ import android.os.Parcel
 import android.os.Parcelable
 import com.example.mobilemechanic.model.dto.ClientInfo
 import com.example.mobilemechanic.model.dto.MechanicInfo
+import com.example.mobilemechanic.model.dto.Receipt
 
 enum class Status {
     Pending, Request, Active, Accepted, Completed, Cancelled, Declined
@@ -20,7 +21,7 @@ data class Request(
     var postedOn: Long?,
     var acceptedOn: Long?,
     var completedOn: Long?,
-    var receipt: String?
+    var receipt: Receipt?
 ) : Parcelable {
     constructor() : this(
         "",
@@ -33,7 +34,7 @@ data class Request(
         Long.MIN_VALUE,
         Long.MIN_VALUE,
         Long.MIN_VALUE,
-        ""
+        Receipt()
     )
 
     constructor(parcel: Parcel) : this(
@@ -47,7 +48,7 @@ data class Request(
         parcel.readLong(),
         parcel.readLong(),
         parcel.readLong(),
-        parcel.readString()
+        parcel.readParcelable(Receipt::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -61,7 +62,7 @@ data class Request(
         postedOn?.let { parcel.writeLong(it) }
         acceptedOn?.let { parcel.writeLong(it) }
         completedOn?.let { parcel.writeLong(it) }
-        parcel.writeString(receipt)
+        parcel.writeParcelable(receipt, flags)
     }
 
     override fun describeContents(): Int {
@@ -89,7 +90,7 @@ data class Request(
         var postedOn: Long? = Long.MIN_VALUE,
         var acceptedOn: Long? = Long.MIN_VALUE,
         var completedOn: Long? = Long.MIN_VALUE,
-        var receipt: String? = null
+        var receipt: Receipt? = null
     ) {
         fun clientInfo(info: ClientInfo) = apply { this.clientInfo = info }
         fun mechanicInfo(info: MechanicInfo) = apply { this.mechanicInfo = info }
@@ -100,7 +101,7 @@ data class Request(
         fun postedOn(posted: Long) = apply { this.postedOn = posted }
         fun acceptedOn(accepted: Long) = apply { this.acceptedOn = accepted }
         fun completedOn(completed: Long) = apply { this.completedOn = completed }
-        fun receipt(receipt: String) = apply { this.receipt = receipt }
+        fun receipt(receipt: Receipt) = apply { this.receipt = receipt }
         fun build() =
             Request(
                 "",

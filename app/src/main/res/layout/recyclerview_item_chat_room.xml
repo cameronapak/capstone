@@ -24,19 +24,13 @@
             app:layout_constraintTop_toTopOf="@+id/id_profile_image"/>
 
     <TextView
-            android:layout_width="0dp"
-            android:layout_height="68dp"
-            android:id="@+id/id_latest_msg"
-            android:fontFamily="@font/roboto" android:textSize="12sp"
-            app:layout_constraintTop_toBottomOf="@+id/id_client_name" android:layout_marginStart="108dp"
-            app:layout_constraintStart_toStartOf="parent"/>
-    <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/id_latest_message"
             app:layout_constraintTop_toBottomOf="@+id/id_other_member_name"
-            app:layout_constraintStart_toStartOf="@+id/id_other_member_name" android:textColor="@color/colorGrayText"
-            android:textSize="10sp"/>
+            app:layout_constraintStart_toStartOf="@+id/id_other_member_name"
+            app:layout_constraintEnd_toStartOf="@id/id_latest_message_time_stamp"
+            android:textColor="@color/colorGrayText"
+            android:textSize="10sp" android:layout_width="0dp"/>
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

@@ -7,7 +7,6 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.widget.Toast
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
@@ -17,6 +16,8 @@ import com.example.mobilemechanic.model.dto.LatLngHolder
 import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -34,6 +35,7 @@ class MechanicServicesActivity : AppCompatActivity() {
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var userAccountRef: DocumentReference
     private lateinit var serviceRef: CollectionReference
+    private lateinit var reviewRef: CollectionReference
 
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var mechanicServiceAdapter: ServiceListAdapter
@@ -48,6 +50,7 @@ class MechanicServicesActivity : AppCompatActivity() {
         userAccountRef = mFirestore?.collection("Accounts")
             ?.document(mAuth?.currentUser?.uid.toString())
         serviceRef = mFirestore?.collection("Services")
+        reviewRef = mFirestore.collection("Reviews")
 
         Log.d(MECHANIC_TAG, "[MechanicServicesActivity] User uid: ${mAuth?.currentUser?.uid}")
         Log.d(MECHANIC_TAG, "[MechanicServicesActivity] User email: ${mAuth?.currentUser?.email}")
@@ -129,7 +132,7 @@ class MechanicServicesActivity : AppCompatActivity() {
             if (isFieldsValidated(service)) {
                 addService(service)
             } else {
-                Toast.makeText(this, "Please enter in all fields", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "Fill out all fields", ToastyType.WARNING)
             }
             basicDialog.dismiss()
         }
@@ -161,6 +164,7 @@ class MechanicServicesActivity : AppCompatActivity() {
 
                 var service = ServiceModel("", mechanicInfo, service, latlngHolder)
                 serviceRef.document().set(service)?.addOnSuccessListener { documentRef ->
+                    Toasty.makeText(this, "Service added", ToastyType.SUCCESS)
                     Log.d(MECHANIC_TAG, "[MechanicServicesActivity] addServiceToAlgolia $documentRef")
                 }
             }

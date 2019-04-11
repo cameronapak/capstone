@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             xmlns:tools="http://schemas.android.com/tools"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:background="@drawable/round_corner"
+>
+    <include android:layout_width="322dp" android:layout_height="276dp"
+             layout="@layout/card_payment_summary_container"
+             app:layout_constraintTop_toTopOf="parent" app:layout_constraintEnd_toEndOf="parent"
+             app:layout_constraintStart_toStartOf="parent"
+             android:id="@+id/id_summary_container"
+             app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.0"/>
+    <EditText
+            android:layout_width="88dp"
+            android:layout_height="41dp"
+            android:inputType="numberDecimal"
+            android:text="0.0"
+            android:ems="10"
+            android:id="@+id/id_tip"
+            app:layout_constraintTop_toBottomOf="@+id/label_tip"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/label_tip" app:layout_constraintHorizontal_bias="0.0"/>
+    <EditText
+            android:layout_width="153dp"
+            android:layout_height="wrap_content"
+            android:text="4242424242424242"
+            android:ems="10"
+            android:id="@+id/id_card_number"
+            app:layout_constraintTop_toBottomOf="@+id/label_cardnumber" android:inputType="number"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/label_cardnumber"/>
+    <EditText
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:text="123"
+            android:ems="10"
+            android:id="@+id/id_cvc"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginBottom="140dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_cvc" app:layout_constraintVertical_bias="0.032"
+            android:inputType="number" android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/label_cvc" app:layout_constraintHorizontal_bias="0.0"/>
+    <EditText
+            android:layout_width="74dp"
+            android:layout_height="45dp"
+            android:inputType="date"
+            android:text="122020"
+            android:ems="10"
+            android:id="@+id/id_expire_date"
+            android:layout_marginEnd="8dp" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/label_expire"
+            android:textSize="14sp" app:layout_constraintStart_toStartOf="@+id/label_expire"
+            app:layout_constraintHorizontal_bias="0.014"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_tip" android:text="@string/label_tip" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.12"
+            android:textAllCaps="false" android:textColor="@color/colorPrimary1"
+            app:layout_constraintTop_toBottomOf="@+id/id_summary_container"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_cardnumber" android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/id_tip"
+            app:layout_constraintStart_toStartOf="@+id/label_tip"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            app:layout_constraintHorizontal_bias="0.0"
+            android:text="@string/label_cardnumber"
+            android:textAllCaps="false" android:textColor="@color/colorPrimary1"/>
+    <TextView
+            android:text="@string/label_expire"
+            android:layout_width="wrap_content"
+            android:layout_height="16dp"
+            android:id="@+id/label_expire"
+            app:layout_constraintEnd_toEndOf="parent" android:layout_marginEnd="8dp"
+            android:textAllCaps="false" android:textColor="@color/colorPrimary1" android:layout_marginTop="3dp"
+            app:layout_constraintTop_toBottomOf="@+id/id_tip"
+            app:layout_constraintStart_toEndOf="@+id/id_card_number" android:layout_marginStart="8dp"
+            app:layout_constraintHorizontal_bias="0.252"/>
+    <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/label_cvc"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.119"
+            android:text="@string/label_cvc"
+            android:textAllCaps="false" android:textColor="@color/colorPrimary1" android:layout_marginTop="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/id_card_number"/>
+    <Button
+            style="@style/AppPrimaryRecyclerItemButton"
+            android:layout_width="171dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/id_pay_btn" android:layout_marginTop="3dp"
+            app:layout_constraintTop_toBottomOf="@+id/id_cvc" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintVertical_bias="0.04" android:text="@string/id_submit_payment_btn"/>
+</android.support.constraint.ConstraintLayout>

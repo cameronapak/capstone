@@ -1,7 +1,6 @@
 package com.example.mobilemechanic.client.detail
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Dialog
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -22,7 +21,6 @@ import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
-import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -30,26 +28,28 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_service_detail.*
-import kotlinx.android.synthetic.main.client_card_vehicle_container.view.*
+import kotlinx.android.synthetic.main.card_vehicle_details_container.*
+import kotlinx.android.synthetic.main.card_vehicle_details_container.view.*
 import kotlinx.android.synthetic.main.dialog_body_contact.*
-import kotlinx.android.synthetic.main.dialog_container_basic.*
+import kotlinx.android.synthetic.main.dialog_container_basic_single.*
 
 class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var extraRequest: Request
+    private lateinit var request: Request
     private lateinit var mMap: GoogleMap
     private lateinit var basicDialog: Dialog
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var requestRef: CollectionReference
-
     val REQUEST_PHONE_CALL = 1
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_service_detail)
@@ -65,7 +65,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getRequestParcel() {
-        extraRequest = intent.getParcelableExtra(EXTRA_REQUEST)
+        request = intent.getParcelableExtra(EXTRA_REQUEST)
     }
 
     private fun initFireStore() {
@@ -75,14 +75,14 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getRequest() {
-        requestRef.document(extraRequest.objectID).get()
+        requestRef.document(request.objectID).get()
             .addOnSuccessListener {
                 val request = it.toObject(Request::class.java)!!
 
                 request.objectID = it.id
                 Log.d(CLIENT_TAG, "[ServiceDetailActivity] Request ID: ${request.objectID}")
 
-                setUpVehicleContainer(request)
+                setUpVehicleContainer()
                 setUpToolBar(request)
             }
             .addOnFailureListener {
@@ -90,7 +90,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             }
     }
 
-    private fun setUpVehicleContainer(request: Request)
+    private fun setUpVehicleContainer()
     {
         val holder = id_client_more_info_card
         Picasso.get().load(request?.vehicle?.photoUrl).into(holder.id_client_car_image)
@@ -98,30 +98,21 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         holder.id_service_completed.text = request.service?.serviceType
         val address = request.clientInfo!!.address
         holder.id_client_address.text = "${address.street}\n${address.city}, ${address.state} ${address.zipCode}"
-        holder.id_summary.text = getSummary(request)
         holder.id_mechanic.text = "${request.mechanicInfo!!.basicInfo.firstName} ${request.mechanicInfo!!.basicInfo.lastName}"
 
         holder.id_contact.setOnClickListener {
             setUpContactServiceDialog(request)
         }
+        getReceiptSummary()
     }
 
-    private fun getSummary(request: Request): String {
-//        var sub = request.receipt?.subTotal
-//        var tax = request.receipt?.estimatedTax
-//        var total = request.receipt?.grandTottal
-        //mock summary
+    private fun getReceiptSummary() {
         var sub = 0.00F
         var tax = 0.00F
         var total = 0.00F
-
-        var subTotal = java.lang.String.format("%s %18s %.2f", "Subtotal", "$", sub)
-        var estimatedTax = java.lang.String.format("%s %6s %.2f", "Estimated tax", "$", tax)
-        var grandTotal = java.lang.String.format("%s %13s %.2f", "Grand total", "$", total)
-
-        var summary = "${subTotal}\n${estimatedTax}\n\n${grandTotal}"
-
-        return  summary
+        id_summary_subtotal_price.text = String.format("%s %.2f", "$", sub)
+        id_summary_estimated_tax_price.text = String.format("%s %.2f", "$", tax)
+        id_grand_total_price.text = String.format("%s %.2f", "$", total)
     }
 
     private fun setUpMap() {
@@ -132,30 +123,11 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-
-        //add zoom button
         mMap.uiSettings.isZoomControlsEnabled = true
 
-        //requires permission to use GPS
-        if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
-            mMap.isMyLocationEnabled = true
-        }
-        else//request permission
-        {
-            //context, constant for access fine location value, permission request code
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                MY_PERMISSION_REQ_GPS
-            )
-        }
+        val clientAddress = request.clientInfo!!.address
+        val clientLatLng = LatLng(clientAddress._geoloc?.lat, clientAddress._geoloc?.lng)
 
-        //convert the address string into latitude, longitude pair for google maps
-        val clientAddress = extraRequest.clientInfo!!.address
-        val clientLatLng = AddressManager.convertAddressToLatLng(this, clientAddress)
-
-        //zoom into client's location on the map
         val cameraPosition = CameraPosition.Builder()
             .target(clientLatLng).zoom(16f).build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
@@ -183,7 +155,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
             REQUEST_PHONE_CALL->{
                 if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                    startCall(extraRequest)
+                    startCall(request)
                 else//request permission
                     //context, constant for access call, permission request code
                     ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
@@ -192,11 +164,10 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    @SuppressLint("MissingPermission")
     private fun setUpContactServiceDialog(request: Request) {
 
         val dialogContainer =
-            layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic, null)
+            layoutInflater.inflate(com.example.mobilemechanic.R.layout.dialog_container_basic_single, null)
         val dialogBody = layoutInflater.
             inflate(com.example.mobilemechanic.R.layout.dialog_body_contact, null)
 
@@ -204,7 +175,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             title = "Contact"
             positive = "Call"
             negative = "Message"
-        }.build(this, dialogContainer, dialogBody)
+        }.buildSingle(this, dialogContainer, dialogBody)
 
         val basicInfo = request.mechanicInfo!!.basicInfo
         basicDialog.id_phone_number.text = basicInfo.phoneNumber
@@ -217,36 +188,38 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         }
 
         basicDialog.show()
+        handleDialogOnClick(basicDialog)
+    }
 
-        basicDialog.id_positive.setOnClickListener {
-            if(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
-            {
-                startCall(request)
-            }
-            else//request permission
-            {
-                //context, constant for access call, permission request code
-                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
-                    REQUEST_PHONE_CALL)
-            }
+    private fun handleDialogOnClick(basicDialog: Dialog) {
+        basicDialog.id_cancel.setOnClickListener {
+            basicDialog.dismiss()
         }
-        basicDialog.id_negative.setOnClickListener {
-            //navigates to MessagesActivity
+
+        basicDialog.id_message.setOnClickListener {
             val intent = Intent(this, ChatRoomsActivity::class.java)
             intent.putExtra(EXTRA_USER_TYPE, UserType.CLIENT.name)
             startActivity(intent)
-            true
+        }
+
+        basicDialog.id_call.setOnClickListener {
+            startCall(request)
         }
     }
 
-    @SuppressLint("MissingPermission")
-    fun startCall(request: Request){
+    private fun startCall(request: Request){
         val phoneNum = request.mechanicInfo?.basicInfo?.phoneNumber
             ?.replace("[^0-9\\+]".toRegex(), "")
-
         val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$phoneNum"))
-        startActivity(intent)
+
+        if(ContextCompat.checkSelfPermission(this,
+                Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
+        {
+            startActivity(intent)
+        } else {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
+                REQUEST_PHONE_CALL)
+        }
     }
 
     private fun setUpToolBar(request: Request) {
@@ -254,7 +227,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.apply {
             title = "Service Details"
-            subtitle = "Service on ${DateTimeManager.millisToDate(request.completedOn, "MMM d, y")}"
+            subtitle = "Serviced on ${DateTimeManager.millisToDate(request.completedOn, "MMM d, y")}"
             setDisplayHomeAsUpEnabled(true)
         }
     }

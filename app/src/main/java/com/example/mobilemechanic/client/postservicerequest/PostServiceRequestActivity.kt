@@ -3,6 +3,7 @@ package com.example.mobilemechanic.client.postservicerequest
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
@@ -10,7 +11,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
@@ -27,12 +27,15 @@ import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.model.messaging.Member
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.ObjectConverter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_post_service_request.*
 import kotlinx.android.synthetic.main.dialog_body_availability.view.*
 import kotlinx.android.synthetic.main.dialog_container_basic.view.*
@@ -59,26 +62,28 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
-        mFirestore = FirebaseFirestore.getInstance()
-        requestsRef = mFirestore.collection("Requests")
-        mAuth = FirebaseAuth.getInstance()
-        vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
-        accountRef = mFirestore.collection("Accounts")
-        chatRoomsRef = mFirestore.collection("ChatRooms")
-        serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
-
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
     }
 
     private fun setUpPostServiceRequestActivity() {
+        initFireStore()
         setUpActionBar()
         setUpVehicleSpinner()
         setUpAvailabilityDialog()
         setUpServiceParcel()
         setUpOnSubmit()
         setUpOnAddVehicle()
+    }
+
+    private fun initFireStore() {
+        mFirestore = FirebaseFirestore.getInstance()
+        mAuth = FirebaseAuth.getInstance()
+        requestsRef = mFirestore.collection("Requests")
+        vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
+        accountRef = mFirestore.collection("Accounts")
+        chatRoomsRef = mFirestore.collection("ChatRooms")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
     }
 
     private fun setUpActionBar() {
@@ -102,12 +107,20 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
     private fun setUpServiceParcel() {
         if (intent.hasExtra(EXTRA_SERVICE)) {
+            serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
+
             id_mechanic_name.text =
                 "${serviceModel.mechanicInfo.basicInfo.firstName} ${serviceModel.mechanicInfo.basicInfo.lastName}"
             id_service_type.text = serviceModel.service.serviceType
             id_service_description.text = serviceModel.service.description
             id_price.text = "$${serviceModel.service.price.toInt()}"
             id_mechanic_rating.rating = serviceModel.mechanicInfo.rating
+
+            if (serviceModel.mechanicInfo.basicInfo.photoUrl.isNullOrEmpty()) {
+                Picasso.get().load(R.drawable.ic_circle_profile).into(id_mechanic_profile_image)
+            } else {
+                Picasso.get().load(Uri.parse(serviceModel.mechanicInfo.basicInfo.photoUrl)).into(id_mechanic_profile_image)
+            }
         }
     }
 
@@ -139,7 +152,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
                         Log.d(CLIENT_TAG, "$request)")
                         requestsRef.document().set(request).addOnSuccessListener {
-                            Toast.makeText(this, "Request sent successfully", Toast.LENGTH_LONG).show()
+                            Toasty.makeText(this, "Success", ToastyType.SUCCESS)
 
 
                             val clientMember = ObjectConverter.convertToMember(clientInfo)
@@ -148,7 +161,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             setUpChatRoom(clientMember, mechanicMember)
 
                         }.addOnFailureListener {
-                            Toast.makeText(this, "Request failed", Toast.LENGTH_LONG).show()
+                            Toasty.makeText(this, "Fail", ToastyType.FAIL)
                         }
                     }
                 }
@@ -273,9 +286,9 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
 
             daysOfWeekString = availableDays.joinToString(separator = ", ")
             if (availableDays.isEmpty()) {
-                Toast.makeText(this, "Select available days", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Warning", ToastyType.WARNING)
             } else if (fromTime.isNullOrBlank() || toTime.isNullOrBlank()) {
-                Toast.makeText(this, "Select from and to times", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Warning", ToastyType.WARNING)
             } else {
                 id_availability_result.text = "$daysOfWeekString $fromTime to $toTime"
                 basicDialog.dismiss()

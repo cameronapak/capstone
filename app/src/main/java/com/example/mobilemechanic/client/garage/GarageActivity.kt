@@ -16,6 +16,8 @@ import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -187,7 +189,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             retrieveVehicleImageUrl(vehicle)
             basicDialog.dismiss()
         } else {
-            Toast.makeText(this, "Please fill all information", Toast.LENGTH_LONG).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
         }
 
     }
@@ -199,7 +201,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             Log.d(CLIENT_TAG, "[GarageActivity] vehicle image uri $it")
             saveVehicleToFirestore(vehicle)
         }.addOnFailureListener {
-            Toast.makeText(this, "No image exist.", Toast.LENGTH_LONG).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
         }
     }
 
@@ -209,9 +211,9 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
             Log.d(CLIENT_TAG, "[GarageActivity] vehicle docId ${vehicle.objectID}")
             vehicleDoc.set(vehicle)
                 ?.addOnSuccessListener {
-                    Toast.makeText(this, "Vehicle added successfuly", Toast.LENGTH_LONG).show()
+                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 }?.addOnFailureListener {
-                    Toast.makeText(this, "Unable to add vehicle", Toast.LENGTH_LONG).show()
+                    Toasty.makeText(this, "Fail", ToastyType.FAIL)
                 }
     }
 

@@ -37,5 +37,19 @@
                  android:layout_below="@+id/id_more_toolbar"
                  android:id="@+id/id_mechanic_more_info_card"></include>
     </RelativeLayout>
+    <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        <ProgressBar
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_progress_bar" app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
+                android:layout_marginStart="8dp" android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginTop="8dp"
+                app:layout_constraintTop_toTopOf="parent" android:visibility="visible" tools:visibility="visible"/>
+    </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

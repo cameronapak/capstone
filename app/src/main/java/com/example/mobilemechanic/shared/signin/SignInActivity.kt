@@ -15,10 +15,11 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.User
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.registration.RegistrationActivity
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
-import com.example.mobilemechanic.shared.utility.ScreenManager.toggleVisibility
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
@@ -52,11 +53,11 @@ class SignInActivity : AppCompatActivity() {
     }
 
     private fun login() {
-        toggleVisibility(id_progress_bar)
+        ScreenManager.toggleVisibility(id_progress_bar)
         val email = id_login_email.text.toString().trim()
         val password = id_login_password.text.toString().trim()
         if (email.isEmpty() or password.isEmpty()) {
-            Toast.makeText(this, "Please enter in email and password.", Toast.LENGTH_LONG).show()
+            Toasty.makeText(this, "Warning", ToastyType.WARNING)
             return
         }
 
@@ -66,8 +67,8 @@ class SignInActivity : AppCompatActivity() {
                     checkUserType()
                 }
             }?.addOnFailureListener {
-                toggleVisibility(id_progress_bar)
-                Toast.makeText(this, "Unable to login", Toast.LENGTH_LONG).show()
+                ScreenManager.toggleVisibility(id_progress_bar)
+                Toasty.makeText(this, "Fail", ToastyType.FAIL)
             }
     }
 
@@ -163,7 +164,7 @@ class SignInActivity : AppCompatActivity() {
             Log.d(CLIENT_TAG, "[SignInActivity]: email to reset password: $email")
 
             if (email.isEmpty() || email.isBlank()) {
-                Toast.makeText(this, "Please enter in a valid email.", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "Warning", ToastyType.WARNING)
                 return@setOnClickListener
             }
 
@@ -175,10 +176,10 @@ class SignInActivity : AppCompatActivity() {
     private fun sendResetEmail(email: String) {
         mAuth.sendPasswordResetEmail(email).addOnCompleteListener(this) {
             if (it.isSuccessful) {
-                Toast.makeText(this, "Reset password email sent success", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 startActivity(Intent(this, SignInActivity::class.java))
             } else {
-                Toast.makeText(this, "Incorrectly email address", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Fail", ToastyType.FAIL)
             }
         }
     }

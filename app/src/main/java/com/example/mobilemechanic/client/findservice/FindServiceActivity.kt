@@ -3,29 +3,33 @@ package com.example.mobilemechanic.client.findservice
 import android.app.Dialog
 import android.graphics.PorterDuff
 import android.os.Bundle
-import android.os.StrictMode
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import com.algolia.instantsearch.core.helpers.Searcher
 import com.algolia.instantsearch.core.model.NumericRefinement
+import com.algolia.instantsearch.examples.icebnb.widgets.MapWidget
 import com.algolia.instantsearch.ui.helpers.InstantSearch
 import com.algolia.search.saas.AbstractQuery
 import com.algolia.search.saas.Query
-import com.example.mobilemechanic.client.CLIENT_TAG
+import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_find_service.*
 import kotlinx.android.synthetic.main.dialog_body_algolia_filter.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
+
+
+
+
 
 class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
@@ -35,8 +39,11 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     private lateinit var searcher: Searcher
     private lateinit var helper: InstantSearch
     private lateinit var priceRefinement: NumericRefinement
-    private lateinit var distanceRefinement: NumericRefinement
     private lateinit var hits: HitsCustomized
+    private lateinit var mapWidget: MapWidget
+    private lateinit var mapFragment: SupportMapFragment
+    private var isMapToggleOn = false
+
     private var operatorLessThanOrEqual = NumericRefinement.OPERATOR_LE
     private var priceBelow = Double.MAX_VALUE
     private var spinnerSelectedPosition = 0
@@ -44,12 +51,8 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_find_service)
-
-        StrictMode.enableDefaults()
-
         mFireStore = FirebaseFirestore.getInstance()
         mAth = FirebaseAuth.getInstance()
-
         setUpFindServiceActivity()
     }
 
@@ -57,6 +60,7 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         setUpAlgolia()
         setUpToolBar()
         setUpFilterDialog()
+        enableMapToggle()
     }
 
     private fun setUpAlgolia() {
@@ -66,7 +70,23 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             getString(com.example.mobilemechanic.R.string.algolia_services_index)
         )
 
+        enableGeoRanking(searcher)
 
+        val fragmentTransaction = supportFragmentManager.beginTransaction()
+        mapFragment = supportFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        fragmentTransaction.hide(mapFragment)
+        fragmentTransaction.commit()
+
+        mapWidget = MapWidget(this, mapFragment)
+        searcher.registerResultListener(mapWidget)
+
+        helper = InstantSearch(this, searcher)
+        helper.search()
+        hits = findViewById(com.example.mobilemechanic.R.id.id_hits_customized)
+        hits.enableKeyboardAutoHiding()
+    }
+
+    private fun enableGeoRanking(searcher: Searcher) {
         if (AddressManager.hasAddress()) {
             val clientAddress = AddressManager.getUserAddress()
             val abstractQueryLatLng =
@@ -75,13 +95,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
             searcher.query.aroundRadius = Query.RADIUS_ALL
             searcher.query.getRankingInfo = true
         }
-
-
-        helper = InstantSearch(this, searcher)
-        helper.search()
-
-        hits = findViewById(com.example.mobilemechanic.R.id.id_hits_customized)
-        hits.enableKeyboardAutoHiding()
     }
 
 
@@ -112,7 +125,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
 
             setUpDialogSpinner(basicDialog)
             handleDialogOnClick(basicDialog)
-
         }
     }
 
@@ -127,6 +139,22 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         basicDialog.id_algolia_filter_price_spinner.onItemSelectedListener = this
         basicDialog.id_algolia_filter_price_spinner.setSelection(spinnerSelectedPosition)
     }
+
+    private fun enableMapToggle() {
+        id_map_toggle.setOnClickListener {
+            val ft = supportFragmentManager.beginTransaction()
+            isMapToggleOn = if (isMapToggleOn) {
+                ft.hide(mapFragment).commit()
+                id_map_toggle.text = "Map"
+                false
+            } else {
+                ft.show(mapFragment).commit()
+                id_map_toggle.text = "List"
+                true
+            }
+        }
+    }
+
 
     private fun handleDialogOnClick(basicDialog: Dialog) {
         basicDialog.id_negative.setOnClickListener {
@@ -145,8 +173,19 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         searcher.search()
     }
 
+    private fun enableHideKeyboard() {
+        id_find_service_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
+
+        id_find_service_toolbar.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
+    }
+
     override fun onResume() {
         ScreenManager.hideStatusAndBottomNavigationBar(this)
+        enableHideKeyboard()
         super.onResume()
     }
 
@@ -166,7 +205,5 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         val selectedValue = DataProviderManager.getServicePriceValue()[position]
         priceBelow = selectedValue
         spinnerSelectedPosition = position
-        Log.d(CLIENT_TAG, "[FindServiceActivity] price spinner position: $position")
-        Log.d(CLIENT_TAG, "[FindServiceActivity] selectedValue price: $selectedValue")
     }
 }

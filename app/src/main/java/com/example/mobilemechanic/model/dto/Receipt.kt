@@ -7,7 +7,7 @@ class Receipt(
     var tips: Double,
     var subTotal: Double,
     var estimatedTax: Double,
-    var grandTottal: Double
+    var grandTotal: Double
 ) : Parcelable {
 
     constructor() : this(0.0, 0.0, 0.0, 0.0)
@@ -22,7 +22,7 @@ class Receipt(
         parcel.writeDouble(subTotal)
         parcel.writeDouble(tips)
         parcel.writeDouble(estimatedTax)
-        parcel.writeDouble(grandTottal)
+        parcel.writeDouble(grandTotal)
     }
 
     override fun describeContents(): Int {

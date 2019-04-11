@@ -12,7 +12,6 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
 import android.widget.TextView
-import android.widget.Toast
 import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
@@ -20,6 +19,8 @@ import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
 import com.example.mobilemechanic.client.history.ClientHistoryActivity
 import com.example.mobilemechanic.model.*
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.utility.AddressManager
@@ -45,6 +46,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     private var requests = ArrayList<Request>()
     private lateinit var mDrawerLayout: DrawerLayout
 
+    private var isFirstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,7 +119,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
             when (item.itemId) {
                 R.id.id_find_service -> {
                     startActivity(Intent(this, FindServiceActivity::class.java))
-//                    startActivity(Intent(this, FindServiceActivityTest::class.java))
                     true
                 }
                 R.id.id_history -> {
@@ -142,8 +143,8 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     true
                 }
                 R.id.id_sign_out -> {
-                    mAuth?.signOut()
-                    Toast.makeText(this, "Logged Out", Toast.LENGTH_SHORT).show()
+                    mAuth.signOut()
+                    Toasty.makeText(this, "Logged out", ToastyType.SUCCESS)
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }
@@ -186,6 +187,11 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     }
                 }
                 clientRequestRecyclerAdapter.notifyDataSetChanged()
+                if(isFirstLoad)
+                {
+                    ScreenManager.toggleVisibility(id_progress_bar)
+                    isFirstLoad = false
+                }
             }
     }
 

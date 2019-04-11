@@ -2,6 +2,7 @@ package com.example.mobilemechanic.model.adapter
 
 import android.app.Activity
 import android.content.Intent
+import android.location.Location
 import android.net.Uri
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -18,11 +19,15 @@ import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
 import de.hdodenhof.circleimageview.CircleImageView
+import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import java.text.SimpleDateFormat
 import java.util.*
@@ -63,9 +68,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     override fun onBindViewHolder(holder: RequestListAdapter.ViewHolder, position: Int) {
         val request = requests[position]
         handleRequestViewType(request, holder)
-//
-//        val photoUrl = request.clientInfo!!.basicInfo!!.photoUrl
-//        displayProfileImage(holder.profilePhoto ,photoUrl)
+
         holder.name.text =
             "${request.clientInfo?.basicInfo?.firstName} ${request.clientInfo?.basicInfo?.lastName}"
         holder.status.text = request.status.toString()
@@ -117,15 +120,6 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         }
     }
 
-    private fun displayProfileImage(drawerProfileImage: CircleImageView, photoUrl: String) {
-        val userProfileUri = Uri.parse(photoUrl)
-        if (userProfileUri != null) {
-            Picasso.get().load(userProfileUri).into(drawerProfileImage)
-        } else {
-            Picasso.get().load(R.drawable.ic_circle_profile).into(drawerProfileImage)
-        }
-    }
-
     private fun handlePrimaryOnClick(request: Request) {
         if (request.status == Status.Request) {
             createAcceptDialog(request)
@@ -151,15 +145,15 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
     }
 
     private fun handleDirectionsOnClick(request: Request) {
-        val address = request.clientInfo?.address.toString()
-        val latLong = AddressManager.convertAddressToLatLng(context, request.clientInfo?.address)
+//        val address = request.clientInfo?.address.toString()
+//        val latLong = AddressManager.convertAddressToLatLng(context, request.clientInfo?.address)
 
         val uri = String.format(
             Locale.ENGLISH,
             "http://maps.google.com/maps?daddr=%f,%f (%s)",
-            latLong.latitude,
-            latLong.longitude,
-            address
+            request.clientInfo?.address?._geoloc?.lat,
+            request.clientInfo?.address?._geoloc?.lng,
+            request.clientInfo?.address.toString()
         )
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri))
         intent.setPackage("com.google.android.apps.maps")
@@ -216,10 +210,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
                 "acceptedOn", acceptedOn
             )
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Accepted successfully", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }
             .addOnFailureListener {
-                Toast.makeText(context, context.getString(R.string.err_accept_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Fail", ToastyType.FAIL)
             }
     }
 
@@ -228,16 +222,24 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         requestRef.document(request.objectID)
             .update("status", Status.Completed, "completedOn", completedOn)
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Service Completed!", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }
             .addOnFailureListener {
-                Toast.makeText(context, context.getString(R.string.err_complete_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Fail", ToastyType.FAIL)
             }
     }
 
     private fun getDistanceFromClient(request: Request): Double {
-        val clientLatLng = AddressManager.convertAddressToLatLng(context, request.clientInfo?.address)
-        val mechanicLatLng = AddressManager.convertAddressToLatLng(context, request.mechanicInfo?.address)
-        return AddressManager.getDistanceMI(clientLatLng, mechanicLatLng)
+            val clientLocation = Location("client").apply {
+                latitude = request.clientInfo?.address?._geoloc!!.lat
+                longitude = request.clientInfo?.address?._geoloc!!.lng
+            }
+
+            val mechanicLocation = Location("mechanic").apply {
+                latitude = request.mechanicInfo?.address?._geoloc!!.lat
+                longitude = request.mechanicInfo?.address?._geoloc!!.lng
+            }
+
+        return AddressManager.getDistanceMI(clientLocation, mechanicLocation)
     }
 }

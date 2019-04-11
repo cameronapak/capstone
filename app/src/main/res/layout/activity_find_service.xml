@@ -12,7 +12,8 @@
 
     <android.support.constraint.ConstraintLayout android:layout_width="match_parent"
                                                  android:elevation="5dp"
-                                                 android:layout_height="match_parent" android:layout_gravity="top">
+                                                 android:layout_height="match_parent" android:layout_gravity="top"
+                                                 android:id="@+id/id_find_service_body">
 
         <android.support.v7.widget.Toolbar
                 android:theme="@style/ThemeOverlay.AppCompat.Light"
@@ -65,6 +66,22 @@
                 android:text="@string/text_filter" android:fontFamily="@font/qualio" android:textSize="32sp"
                 android:textColor="@color/colorPrimary"
                 android:layout_marginTop="20dp" app:layout_constraintTop_toTopOf="parent"/>
+        <fragment
+                android:layout_width="match_parent"
+                app:layout_constraintTop_toBottomOf="@id/id_find_service_toolbar"
+                android:id="@+id/map"
+                android:name="com.google.android.gms.maps.SupportMapFragment" android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+        />
+        <TextView
+                android:text="@string/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_map_toggle"
+                app:layout_constraintTop_toTopOf="@+id/id_filter" app:layout_constraintEnd_toStartOf="@+id/id_filter"
+                android:layout_marginEnd="24dp" android:fontFamily="@font/qualio"
+                android:textColor="@color/colorPrimary" android:textSize="32sp"/>
     </android.support.constraint.ConstraintLayout>
 
 </FrameLayout>

@@ -9,18 +9,17 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.support.v4.view.ViewPager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
-
 import com.example.mobilemechanic.R
-import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.shared.registration.RegistrationViewModel
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
-import kotlinx.android.synthetic.main.fragment_upload_profile_photo.*
+import de.hdodenhof.circleimageview.CircleImageView
 
 class UploadProfilePhotoFragment : Fragment() {
     private lateinit var registrationModel: RegistrationViewModel
@@ -43,16 +42,20 @@ class UploadProfilePhotoFragment : Fragment() {
 
     private fun setUpPager() {
         val pager = activity?.findViewById<ViewPager>(R.id.id_registrationPager)
+        val profilePictureCircleImage = activity?.findViewById<CircleImageView>(R.id.img_registrationProfilePicture)
+        val skipButton = activity?.findViewById<TextView>(R.id.btn_skipProfilePicture)
+        val addressInfoButton = activity?.findViewById<Button>(R.id.btn_addressInfo)
+        val backButton = activity?.findViewById<TextView>(R.id.btn_backToInfo)
 
-        img_registrationProfilePicture.setOnClickListener {
+        profilePictureCircleImage?.setOnClickListener {
             openGallery(it)
         }
 
-        btn_skipProfilePicture.setOnClickListener {
+        skipButton?.setOnClickListener {
             pager?.setCurrentItem(3, true)
         }
 
-        btn_addressInfo.setOnClickListener {
+        addressInfoButton?.setOnClickListener {
             if(isImageUriExist(registrationModel)) {
                 pager?.setCurrentItem(3, true)
             } else {
@@ -60,7 +63,7 @@ class UploadProfilePhotoFragment : Fragment() {
             }
         }
 
-        btn_backToInfo.setOnClickListener {
+        backButton?.setOnClickListener {
             pager?.setCurrentItem(1, true)
         }
     }
@@ -90,11 +93,13 @@ class UploadProfilePhotoFragment : Fragment() {
 
     private fun showSelectedProfileImage(imageUri: Uri) {
         if (imageUri != null) {
-            img_registrationProfilePicture.setImageDrawable(null)
-            selectedImageUri = imageUri
-            Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
-            val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImageUri)
-            img_registrationProfilePicture.setImageBitmap(bitmap)
+            val profilePictureCircleImage = activity?.findViewById<CircleImageView>(R.id.img_registrationProfilePicture)
+            if (profilePictureCircleImage != null) {
+                profilePictureCircleImage.setImageDrawable(null)
+                selectedImageUri = imageUri
+                val bitmap = MediaStore.Images.Media.getBitmap(activity?.contentResolver, selectedImageUri)
+                profilePictureCircleImage.setImageBitmap(bitmap)
+            }
         }
     }
 
@@ -110,6 +115,7 @@ class UploadProfilePhotoFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        btn_backToInfo.paintFlags = btn_backToInfo.paintFlags or Paint.UNDERLINE_TEXT_FLAG
+        val backButton = activity?.findViewById<TextView>(R.id.btn_backToInfo)
+        backButton?.paintFlags = Paint.UNDERLINE_TEXT_FLAG
     }
 }

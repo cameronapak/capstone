@@ -163,6 +163,7 @@ class PaymentActivity : AppCompatActivity()
 
         myPaymentsRef.document().set(payment)
             .addOnSuccessListener {
+
                 Toasty.makeText(this@PaymentActivity, "Success", ToastyType.SUCCESS)
                 finish()
             }.addOnFailureListener {

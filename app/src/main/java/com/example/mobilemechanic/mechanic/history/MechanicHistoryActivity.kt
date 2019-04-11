@@ -5,6 +5,8 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
+import android.view.View
+import android.widget.LinearLayout
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.history.MechanicHistoryRecyclerAdapter
 import com.example.mobilemechanic.model.Request
@@ -23,11 +25,12 @@ class MechanicHistoryActivity : AppCompatActivity() {
 
     private var requestReceipt: ArrayList<Request> = ArrayList()
     private lateinit var historyAdapter: MechanicHistoryRecyclerAdapter
+    private lateinit var emptyView: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_history)
-
+        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
         setUpMechanicHistoryActivity()
     }
 
@@ -78,6 +81,14 @@ class MechanicHistoryActivity : AppCompatActivity() {
                     request.objectID = doc.id
                     requestReceipt.add(request)
                 }
+
+                // toggle empty state view
+                if (requestReceipt.isNullOrEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE)
+                } else {
+                    emptyView.setVisibility(View.GONE)
+                }
+
                 historyAdapter.notifyDataSetChanged()
             }
     }

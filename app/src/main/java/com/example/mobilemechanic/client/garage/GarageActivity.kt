@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
+import android.widget.LinearLayout
 import android.widget.Spinner
 import android.widget.Toast
 import com.example.mobilemechanic.R
@@ -49,6 +50,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var garageRecyclerAdapter: ClientGarageRecyclerAdapter
     private var ownedVehicles = ArrayList<Vehicle>()
+    private lateinit var emptyView: LinearLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +64,7 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Log.d(CLIENT_TAG, "[GarageActivity] User uid: ${mAuth?.currentUser?.uid}")
         Log.d(CLIENT_TAG, "[GarageActivity] User email: ${mAuth?.currentUser?.email}")
         setContentView(com.example.mobilemechanic.R.layout.activity_garage)
+        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
         setUpGarageActivity()
     }
 
@@ -116,6 +119,14 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
                     Log.d(CLIENT_TAG, "[GarageActivity] owned vehicle $vehicle")
                     ownedVehicles.add(vehicle)
                 }
+
+                // toggle empty state view
+                if (ownedVehicles.isNullOrEmpty()) {
+                    emptyView.setVisibility(View.VISIBLE)
+                } else {
+                    emptyView.setVisibility(View.GONE)
+                }
+
                 garageRecyclerAdapter.notifyDataSetChanged()
             }
     }

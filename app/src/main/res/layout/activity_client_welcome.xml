@@ -17,9 +17,62 @@
                  android:layout_height="match_parent"
                  android:layout_marginTop="68dp"
         ></include>
+
         <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
+
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/id_empty_state_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                        android:src="@drawable/ic_directions_car"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content" android:id="@+id/imageView2"/>
+
+                <TextView
+                        style="@style/AppActionBarTitle"
+                        android:text="Your Requests Go Here!"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="#A0A5AE"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:id="@+id/id_text_empty_title"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                        style="@style/AppActionBarSubtitle"
+                        android:text="Search among our talented mechanics to find the right car service at the right price."
+                        android:layout_width="200dp"
+                        android:textColor="#A0A5AE"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="32dp"
+                        android:id="@+id/id_text_empty_subtitle"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <Button
+                        style="@style/AppPrimaryButton"
+                        android:textSize="16dp"
+                        android:text="Start Searching"
+                        app:layout_constraintHorizontal_bias="0.507"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/id_btn_start_searching"
+                        android:layout_gravity="center" />
+
+            </LinearLayout>
 
             <ProgressBar
                     style="?android:attr/progressBarStyle"

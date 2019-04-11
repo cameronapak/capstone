@@ -9,6 +9,49 @@
         android:fitsSystemWindows="true"
         android:id="@+id/id_frame_layout">
 
+    <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/id_empty_state_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+                android:src="@drawable/ic_directions_car"
+                android:layout_width="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_height="wrap_content" android:id="@+id/imageView2"/>
+
+        <TextView
+                style="@style/AppActionBarTitle"
+                android:text="Your Cars Go Here!"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:textColor="#A0A5AE"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:id="@+id/id_text_empty_title"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+        <TextView
+                style="@style/AppActionBarSubtitle"
+                android:text="Tap the plus button on the top right to add your car to the garage."
+                android:layout_width="200dp"
+                android:textColor="#A0A5AE"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:id="@+id/id_text_empty_subtitle"
+                app:layout_constraintBottom_toBottomOf="parent"/>
+
+    </LinearLayout>
+
         <android.support.v7.widget.Toolbar
                 style="@style/AppActionBar"
                 app:titleTextAppearance="@style/AppActionBarTitle"

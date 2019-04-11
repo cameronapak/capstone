@@ -13,6 +13,7 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.model.adapter.ChatRoomListAdapter
 import com.example.mobilemechanic.model.messaging.ChatRoom
 import com.example.mobilemechanic.shared.signin.USER_TAG
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -93,5 +94,10 @@ class ChatRoomsActivity : AppCompatActivity()
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+        super.onResume()
     }
 }

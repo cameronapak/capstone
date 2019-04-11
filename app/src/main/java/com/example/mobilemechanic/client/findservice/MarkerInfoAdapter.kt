@@ -4,6 +4,8 @@ import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.RatingBar
 import android.widget.TextView
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
@@ -12,7 +14,8 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.Marker
 import java.util.regex.Pattern
 
-class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter{
+class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter {
+
     private var markerInfoView: View? = null
     private var inflater: LayoutInflater = LayoutInflater.from(context)
     private val pattern = Pattern.compile("(\\w+):(.+)(?:\\s|\$)")
@@ -30,8 +33,11 @@ class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter{
         val snippetPhoneNumber = markerInfoView?.findViewById<TextView>(R.id.id_snippet_phoneNumber)
         val snippetServiceType = markerInfoView?.findViewById<TextView>(R.id.id_snippet_serviceType)
         val snippetAddress = markerInfoView?.findViewById<TextView>(R.id.id_snippet_address)
+        val snippetRating = markerInfoView?.findViewById<RatingBar>(R.id.id_marker_rating)
+        val selectService = markerInfoView?.findViewById<Button>(R.id.id_marker_select)
 
         val match = pattern.matcher(marker.snippet)
+        var serviceId = ""
         while (match.find()) {
             Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(1) ${match.group(1)}")
             Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(2) ${match.group(2)}")
@@ -45,15 +51,27 @@ class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter{
                     fullAddress = "$fullAddress${match.group(2)}\n"
                 match.group(1) == "addressCityStateZipcode" ->
                     fullAddress = "$fullAddress${match.group(2)}"
+                match.group(1) == "rating" ->
+                    snippetRating?.rating = match.group(2).toFloat()
+                match.group(1) == "serviceObjectID" ->
+                    serviceId = match.group(2).toString()
             }
+        }
+
+
+        selectService?.setOnClickListener {
+            Log.d(CLIENT_TAG, "[MarkerInfoAdapter] service selected $serviceId")
         }
 
         snippetAddress?.text = fullAddress
         return markerInfoView
     }
 
+
+
     override fun getInfoWindow(marker: Marker): View? {
         ScreenManager.hideKeyBoard(context)
         return null
     }
+
 }

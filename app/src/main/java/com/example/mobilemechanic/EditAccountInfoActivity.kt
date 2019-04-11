@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
@@ -11,7 +12,6 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.Spinner
-import android.widget.Toast
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.ClientWelcomeActivity
 import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
@@ -27,42 +27,55 @@ import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
-import com.squareup.picasso.Picasso
+import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
-import de.hdodenhof.circleimageview.CircleImageView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.google.firebase.storage.UploadTask
+import com.squareup.picasso.Picasso
 import com.theartofdev.edmodo.cropper.CropImage
 import com.theartofdev.edmodo.cropper.CropImageView
+import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_edit_account_info.*
-import java.security.AccessController.getContext
-import android.app.Activity.RESULT_OK
-import android.provider.MediaStore
 
-class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelectedListener {
+class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
-    private var mAuth: FirebaseAuth?= null
-    private var mFireStore: FirebaseFirestore? = null
+    private lateinit var mAuth: FirebaseAuth
+    private lateinit var mFireStore: FirebaseFirestore
     private lateinit var mStorage: FirebaseStorage
     private var userInfo: User? = null
     private var oldPassword: String = ""
     private var selectedImageUri: Uri? = null
     private lateinit var profileImageStorageRef: StorageReference
-//    private lateinit var userProfile: ProfilePictureHandler
 
+    private lateinit var accountRef: CollectionReference
+    private lateinit var chatRef: CollectionReference
+    private lateinit var requestRef: CollectionReference
+    private lateinit var reviewRef: CollectionReference
+    private lateinit var serviceRef: CollectionReference
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_account_info)
 
+        initFireStore()
+        setUpEditAccountInfoActivity()
+    }
+
+    private fun initFireStore() {
         mAuth = FirebaseAuth.getInstance()
         mFireStore = FirebaseFirestore.getInstance()
         mStorage = FirebaseStorage.getInstance()
-        setUpEditAccountInfoActivity()
+
+        accountRef = mFireStore.collection("Accounts")
+        chatRef = mFireStore.collection("ChatRooms")
+        requestRef = mFireStore.collection("Requests")
+        reviewRef = mFireStore.collection("Reviews")
+        serviceRef = mFireStore.collection("Services")
     }
 
     private fun setUpEditAccountInfoActivity() {
@@ -77,8 +90,8 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         }
 
         id_btn_update_profile.setOnClickListener {
-            id_btn_update_profile.setEnabled(false)
-            id_btn_update_profile.setText("Saving Changes...")
+            id_btn_update_profile.isEnabled = false
+            id_btn_update_profile.text = "Saving Changes..."
             saveUserInfo()
         }
     }
@@ -111,19 +124,19 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
                 updateProfilePicture(resultUri)
             } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 val error = result.error
-                Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "${error.message}", ToastyType.FAIL)
             }
         }
     }
 
     private fun updateProfilePicture(imageUri: Uri) {
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] Update Profile Image!")
+        Log.d(CLIENT_TAG, "[EditAccountInfoActivity] Update Profile Image!")
         if (imageUri != null) {
             val profilePictureCircleImage = id_settings_profile_image
             if (profilePictureCircleImage != null) {
                 profilePictureCircleImage.setImageDrawable(null)
                 selectedImageUri = imageUri
-                Log.d(CLIENT_TAG, "[ProfilePictureActivity] convert Uri to bitmap for compression")
+                Log.d(CLIENT_TAG, "[EditAccountInfoActivity] convert Uri to bitmap for compression")
                 val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, selectedImageUri)
                 profilePictureCircleImage.setImageBitmap(bitmap)
             }
@@ -132,7 +145,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
 
     private fun setUpProfilePicture() {
         val userProfileUri = mAuth?.currentUser?.photoUrl
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] photoUrl ${userProfileUri}")
+        Log.d(CLIENT_TAG, "[EditAccountInfoActivity] photoUrl ${userProfileUri}")
 
         if (userProfileUri != null) {
             Picasso.get().load(userProfileUri).into(id_settings_profile_image)
@@ -199,9 +212,7 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
     override fun onNothingSelected(parent: AdapterView<*>?) {
     }
 
-    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-        //editModel.state.value = id_editStateSpinner.selectedItem.toString()
-    }
+    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {}
 
     private fun validateInfo(): Boolean {
         val password = id_editPassword.text.toString().trim()
@@ -288,7 +299,8 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             ?.document(uid)
             ?.set(user)
             ?.addOnSuccessListener {
-                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                updateOtherCollectionInfo(user)
+                Toasty.makeText(this, "Account updated", ToastyType.SUCCESS)
                 updateUserProfile(user)
         }
 
@@ -296,10 +308,193 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
             val currentUser = mAuth?.currentUser
             currentUser?.updatePassword(user.password)
                 ?.addOnSuccessListener {
-                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                    Toasty.makeText(this, "Password updated", ToastyType.SUCCESS)
                 }
                 ?.addOnFailureListener {
-                    Toasty.makeText(this, "Fail", ToastyType.FAIL)
+                    Toasty.makeText(this, "Password change failed. Try again.", ToastyType.FAIL)
+                }
+        }
+    }
+
+    private fun updateOtherCollectionInfo(user: User) {
+
+        if(user.userType.equals(UserType.MECHANIC)) {
+
+            //update info in chatrooms collection
+            chatRef.whereEqualTo("mechanicMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = chatRef.document(item.id)
+                            batch.update(path,"mechanicMember.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicMember.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicMember.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+            }
+
+            //update info in messages in chatrooms collection
+            chatRef.whereEqualTo("mechanicMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            chatRef.document(item.id).collection("Messages").whereEqualTo("chatUserInfo.uid", user.uid).get()
+                                .addOnCompleteListener {
+                                    val batch = mFireStore.batch()
+                                    if(it.isSuccessful) {
+                                        for(message in it.result!!) {
+                                            val path = chatRef.document(item.id).collection("Messages").document(message.id)
+                                            batch.update(path,"chatUserInfo.firstName", user.basicInfo.firstName)
+                                            batch.update(path,"chatUserInfo.lastName", user.basicInfo.lastName)
+                                            batch.update(path,"chatUserInfo.photoUrl", user.basicInfo.photoUrl)
+                                        }
+                                    }
+                                    batch.commit()
+                                }
+                        }
+                    }
+                }
+
+            //update info in requests collection
+            requestRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = requestRef.document(item.id)
+                            batch.update(path,"mechanicInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"mechanicInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"mechanicInfo.address.city", user.address.city)
+                            batch.update(path,"mechanicInfo.address.state", user.address.state)
+                            batch.update(path,"mechanicInfo.address.street", user.address.street)
+                            batch.update(path,"mechanicInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"mechanicInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"mechanicInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+            //update info in reviews collection
+            reviewRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = reviewRef.document(item.id)
+                            batch.update(path,"mechanicInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"mechanicInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"mechanicInfo.address.city", user.address.city)
+                            batch.update(path,"mechanicInfo.address.state", user.address.state)
+                            batch.update(path,"mechanicInfo.address.street", user.address.street)
+                            batch.update(path,"mechanicInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"mechanicInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"mechanicInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+            //update info in reviews collection
+            serviceRef.whereEqualTo("mechanicInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = serviceRef.document(item.id)
+                            batch.update(path,"_geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"_geoloc.lng", user.address._geoloc.lng)
+
+                            batch.update(path,"mechanicInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"mechanicInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"mechanicInfo.address.city", user.address.city)
+                            batch.update(path,"mechanicInfo.address.state", user.address.state)
+                            batch.update(path,"mechanicInfo.address.street", user.address.street)
+                            batch.update(path,"mechanicInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"mechanicInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"mechanicInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"mechanicInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"mechanicInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+        } else if(user.userType.equals(UserType.CLIENT)){
+
+            //update info in chatrooms collection
+            chatRef.whereEqualTo("clientMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = chatRef.document(item.id)
+                            batch.update(path,"clientMember.firstName", user.basicInfo.firstName)
+                            batch.update(path,"clientMember.lastName", user.basicInfo.lastName)
+                            batch.update(path,"clientMember.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
+                }
+
+            //update info in messages in chatrooms collection
+            chatRef.whereEqualTo("clientMember.uid", user.uid).get()
+                .addOnCompleteListener {
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            chatRef.document(item.id).collection("Messages").whereEqualTo("chatUserInfo.uid", user.uid).get()
+                                .addOnCompleteListener {
+                                    val batch = mFireStore.batch()
+                                    if(it.isSuccessful) {
+                                        for(message in it.result!!) {
+                                            val path = chatRef.document(item.id).collection("Messages").document(message.id)
+                                            batch.update(path,"chatUserInfo.firstName", user.basicInfo.firstName)
+                                            batch.update(path,"chatUserInfo.lastName", user.basicInfo.lastName)
+                                            batch.update(path,"chatUserInfo.photoUrl", user.basicInfo.photoUrl)
+                                        }
+                                    }
+                                    batch.commit()
+                                }
+                        }
+                    }
+                }
+
+            //update info in requests collection
+            requestRef.whereEqualTo("clientInfo.uid", user.uid).get()
+                .addOnCompleteListener {
+                    val batch = mFireStore.batch()
+
+                    if(it.isSuccessful) {
+                        for(item in it.result!!) {
+                            val path = requestRef.document(item.id)
+                            batch.update(path,"clientInfo.address._geoloc.lat", user.address._geoloc.lat)
+                            batch.update(path,"clientInfo.address._geoloc.lng", user.address._geoloc.lng)
+                            batch.update(path,"clientInfo.address.city", user.address.city)
+                            batch.update(path,"clientInfo.address.state", user.address.state)
+                            batch.update(path,"clientInfo.address.street", user.address.street)
+                            batch.update(path,"clientInfo.address.zipCode", user.address.zipCode)
+
+                            batch.update(path,"clientInfo.basicInfo.firstName", user.basicInfo.firstName)
+                            batch.update(path,"clientInfo.basicInfo.lastName", user.basicInfo.lastName)
+                            batch.update(path,"clientInfo.basicInfo.phoneNumber", user.basicInfo.phoneNumber)
+                            batch.update(path,"clientInfo.basicInfo.photoUrl", user.basicInfo.photoUrl)
+                        }
+                    }
+                    batch.commit()
                 }
         }
     }
@@ -355,12 +550,16 @@ class EditAccountInfoActivity() : AppCompatActivity(), AdapterView.OnItemSelecte
         } else if (userInfo!!.userType.equals(UserType.CLIENT)){
             startActivity(Intent(this, ClientWelcomeActivity::class.java))
         }
-
         finish()
     }
 
     override fun onSupportNavigateUp(): Boolean {
         goToHomeActivity()
         return true
+    }
+
+    override fun onResume() {
+        ScreenManager.hideStatusAndBottomNavigationBar(this)
+        super.onResume()
     }
 }

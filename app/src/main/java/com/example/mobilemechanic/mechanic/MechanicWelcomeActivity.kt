@@ -1,7 +1,10 @@
 package com.example.mobilemechanic.mechanic
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
 import android.support.v4.widget.DrawerLayout
@@ -11,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
-import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.EditAccountInfoActivity
@@ -31,6 +33,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
+import com.theartofdev.edmodo.cropper.CropImage
+import com.theartofdev.edmodo.cropper.CropImageView
 import de.hdodenhof.circleimageview.CircleImageView
 import kotlinx.android.synthetic.main.activity_mechanic_welcome.*
 import kotlinx.android.synthetic.main.content_mechanic_frame.*
@@ -48,7 +52,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var mechanicRequestListAdapter: RequestListAdapter
     private var requests = ArrayList<Request>()
-
+    private var selectedImageUri: Uri? = null
     private var isFirstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -129,7 +133,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         mDrawerLayout = findViewById(R.id.mechanic_drawer_layout)
         val mechanicNavigationView = findViewById<NavigationView>(R.id.id_mechanic_nav_view)
         val drawerHeader = mechanicNavigationView.getHeaderView(0)
-
         val drawerProfileImage = drawerHeader.findViewById<CircleImageView>(R.id.id_drawer_profile_image)
         var drawerDisplayName = drawerHeader.findViewById<TextView>(R.id.id_drawer_header_name)
         var drawerEmail = drawerHeader.findViewById<TextView>(R.id.id_drawer_header_email)
@@ -138,8 +141,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         drawerEmail.text = mAuth?.currentUser?.email
 
         updateName()
-
         displayProfileImage(drawerProfileImage)
+        editProfileImageOption(drawerProfileImage)
 
         mechanicNavigationView.setNavigationItemSelectedListener { menuItem ->
             menuItem.isChecked = true
@@ -150,7 +153,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
     private fun displayProfileImage(drawerProfileImage: CircleImageView) {
         val userProfileUri = mAuth?.currentUser?.photoUrl
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] photoUrl ${mAuth?.currentUser?.photoUrl}")
+        Log.d(CLIENT_TAG, "[MechanicWelcomeActivity] photoUrl ${mAuth?.currentUser?.photoUrl}")
         if (userProfileUri != null) {
             Picasso.get().load(userProfileUri).into(drawerProfileImage)
         } else {
@@ -158,13 +161,64 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun editProfileImageOption(drawerProfileImage: CircleImageView) {
+        drawerProfileImage.setOnClickListener {
+            openGallery()
+        }
+    }
+
+    private fun openGallery() {
+        CropImage.activity()
+            .setGuidelines(CropImageView.Guidelines.ON)
+            .setFixAspectRatio(true)
+            .setAspectRatio(1, 1)
+            .start(this)
+    }
+
+    private fun updateName() {
+        mFirestore.collection(ACCOUNT_DOC_PATH).document(mAuth.uid.toString()).get()
+            .addOnSuccessListener {
+                val userInfo = it.toObject(User::class.java)
+                val drawerDisplayName = findViewById<TextView>(R.id.id_drawer_header_name)
+                val drawerEmail = findViewById<TextView>(R.id.id_drawer_header_email)
+
+                drawerDisplayName.text = "${userInfo!!.basicInfo.firstName} ${userInfo!!.basicInfo.lastName}"
+                drawerEmail.text = "${userInfo!!.basicInfo.email}"
+            }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode === CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE) {
+            val result = CropImage.getActivityResult(data)
+            if (resultCode === Activity.RESULT_OK) {
+                val resultUri = result.uri
+                showSelectedProfileImage(resultUri)
+            } else if (resultCode === CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
+                val error = result.error
+                Toast.makeText(this, "${error.message}", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun showSelectedProfileImage(imageUri: Uri) {
+        if (imageUri != null) {
+            val mechanicNavigationView = findViewById<NavigationView>(R.id.id_mechanic_nav_view)
+            val drawerHeader = mechanicNavigationView.getHeaderView(0)
+            val drawerProfileImage = drawerHeader.findViewById<CircleImageView>(R.id.id_drawer_profile_image)
+            if (drawerProfileImage != null) {
+                drawerProfileImage.setImageDrawable(null)
+                selectedImageUri = imageUri
+                val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedImageUri)
+                drawerProfileImage.setImageBitmap(bitmap)
+            }
+        }
+    }
+
     private fun setUpNavigationListener() {
         id_mechanic_nav_view.setNavigationItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_notification -> {
-                    // Handle the camera action
-                    true
-                }
                 R.id.nav_messages -> {
                     val intent = Intent(this, ChatRoomsActivity::class.java)
                     intent.putExtra(EXTRA_USER_TYPE, UserType.MECHANIC.name)
@@ -188,7 +242,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                 }
                 R.id.id_sign_out -> {
                     mAuth.signOut()
-                    Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                    Toasty.makeText(this, "Logged out", ToastyType.SUCCESS)
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }
@@ -211,8 +265,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     }
 
     private fun signInGuard() {
-        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] signInGuard() User uid: ${mAuth?.currentUser?.uid}")
-        Log.d(MECHANIC_TAG, "[MechanicWelcomeActivity] User email: ${mAuth?.currentUser?.email}")
         val user = mAuth?.currentUser
         if (user == null) {
             startActivity(Intent(this, SignInActivity::class.java))
@@ -223,22 +275,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     override fun onResume() {
         signInGuard()
         setUpToolBar()
-        super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
-
-    private fun updateName() {
-        val uid = mAuth.uid.toString()
-
-        mFirestore.collection(ACCOUNT_DOC_PATH).document(uid).get()
-            .addOnSuccessListener {
-                val userInfo = it.toObject(User::class.java)
-
-                val drawerDisplayName = findViewById<TextView>(R.id.id_drawer_header_name)
-                val drawerEmail = findViewById<TextView>(R.id.id_drawer_header_email)
-
-                drawerDisplayName.text = "${userInfo!!.basicInfo.firstName} ${userInfo!!.basicInfo.lastName}"
-                drawerEmail.text = "${userInfo!!.basicInfo.email}"
-            }
+        super.onResume()
     }
 }

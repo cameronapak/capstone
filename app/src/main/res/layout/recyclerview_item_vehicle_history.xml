@@ -5,7 +5,7 @@
                                              android:layout_height="78dp">
     <TextView
             android:text="Name"
-            android:layout_width="128dp"
+            android:layout_width="wrap_content"
             android:layout_height="19dp"
             android:id="@+id/id_mechanic_name"
             app:layout_constraintStart_toStartOf="parent"

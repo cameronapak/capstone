@@ -10,6 +10,8 @@ import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
+import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.model.dto.Receipt
 import com.example.mobilemechanic.model.stripe.Payment
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
@@ -37,6 +39,7 @@ class PaymentActivity : AppCompatActivity()
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var paymentsRef: CollectionReference
     private lateinit var myPaymentsRef: CollectionReference
+    private lateinit var myReceiptRef: CollectionReference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,6 +65,7 @@ class PaymentActivity : AppCompatActivity()
         paymentsRef = mFirestore.collection(getString(R.string.ref_payments))
         myPaymentsRef = paymentsRef.document("${mAuth.currentUser?.uid}")
             .collection(getString(R.string.ref_charges))
+        myReceiptRef = mFirestore.collection("Requests")
     }
 
     private fun setUpSummaryContainer() {
@@ -164,13 +168,35 @@ class PaymentActivity : AppCompatActivity()
         val payment = Payment("", amount, tokenId, email)
         payment.description += "${request.service?.serviceType}"
 
+
+        val holder = id_payment_container
+        val service = request.service
+
+        val tips = holder.id_tip.text.toString().toDouble()
+        val subTotal = getString(R.string.price, service?.price).substring(1).toDouble()
+        val estimatedTax = holder.id_summary_estimated_tax_price.text.toString().substring(1).toDouble()
+
+//        Log.d(PAYMENT_TAG, "Tips: $tips")
+//        Log.d(PAYMENT_TAG, "subT: $subTotal")
+//        Log.d(PAYMENT_TAG, "estTax: $estimatedTax")
+//        Log.d(PAYMENT_TAG, "grandT: $amount")
+
+        val receipt = Receipt(tips, subTotal, estimatedTax, amount)
+        //firebase receipt field
+
         myPaymentsRef.document().set(payment)
             .addOnSuccessListener {
-
-                Toasty.makeText(this@PaymentActivity, "Success", ToastyType.SUCCESS)
-                finish()
+                //receipt update
+                myReceiptRef.document("${request.objectID}")
+                    .update("receipt", receipt, "status", Status.Paid.name)
+                    .addOnSuccessListener {
+                    Toasty.makeText(this@PaymentActivity, "Success", ToastyType.SUCCESS)
+                    finish()
+                }.addOnFailureListener {
+                    Toasty.makeText(this@PaymentActivity, "Fail to update FB", ToastyType.FAIL)
+                }
             }.addOnFailureListener {
-                Toasty.makeText(this@PaymentActivity, "Fail", ToastyType.FAIL)
+                Toasty.makeText(this@PaymentActivity, "Fail to create charge", ToastyType.FAIL)
             }
     }
 

@@ -2,8 +2,6 @@ package com.example.mobilemechanic.client.garage
 
 import android.app.Activity
 import android.content.Intent
-import android.support.v4.content.ContextCompat.isDeviceProtectedStorage
-import android.support.v4.content.ContextCompat.startActivity
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,7 +10,6 @@ import android.view.ViewGroup
 import android.widget.*
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
-import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.Vehicle
 import com.example.mobilemechanic.model.dto.VehicleBrand
 import com.example.mobilemechanic.shared.BasicDialog
@@ -29,6 +26,8 @@ import kotlinx.android.synthetic.main.dialog_body_confirmation.*
 import kotlinx.android.synthetic.main.dialog_container_basic.*
 import org.json.JSONArray
 import java.util.*
+
+const val EXTRA_VEHICLE = "extra_vehicle"
 
 class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<Vehicle>) :
     RecyclerView.Adapter<ClientGarageRecyclerAdapter.ViewHolder>(), AdapterView.OnItemSelectedListener {
@@ -64,9 +63,14 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
+        val viewHolder = ViewHolder(view)
 
+        view.setOnClickListener {
+            Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] vehicle ${dataset[viewHolder.layoutPosition]}")
+            redirectToVehicleHistory(dataset[viewHolder.layoutPosition])
+        }
 
-        return ViewHolder(view)
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -83,11 +87,12 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         holder.updateButton.setOnClickListener {
             updateVehicleDialog(vehicle)
         }
+    }
 
-        holder.vehicleImage.setOnClickListener {
-
-
-        }
+    private fun redirectToVehicleHistory(vehicle: Vehicle) {
+        val intent = Intent(context, VehicleHistoryActivity::class.java)
+        intent.putExtra(EXTRA_VEHICLE, vehicle)
+        context.startActivity(intent)
     }
 
     private fun removeVehicleDialog(vehicle: Vehicle){
@@ -247,10 +252,6 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         return vehicleMakes
     }
 
-    override fun getItemCount() = dataset.size
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {}
-
     private fun updateVehicleModelSpinner(brand: String) {
         updateModelByBrandName(brand)
         vehicleModelAdapter.notifyDataSetChanged()
@@ -267,6 +268,10 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             }
         }
     }
+
+    override fun getItemCount() = dataset.size
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
 
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] make spinner ${parent.selectedItem}")

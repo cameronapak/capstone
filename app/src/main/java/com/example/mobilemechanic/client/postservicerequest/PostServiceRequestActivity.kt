@@ -60,8 +60,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_post_service_request)
         serviceModel = intent.getParcelableExtra(EXTRA_SERVICE)
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
-        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
         setUpPostServiceRequestActivity()
     }
 
@@ -82,6 +80,8 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         vehiclesRef = mFirestore.collection("Accounts/${mAuth.currentUser?.uid}/Vehicles")
         accountRef = mFirestore.collection("Accounts")
         chatRoomsRef = mFirestore.collection("ChatRooms")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User uid: ${mAuth.currentUser?.uid}")
+        Log.d(CLIENT_TAG, "[PostServiceRequestActivity] User email: ${mAuth.currentUser?.email}")
     }
 
     private fun setUpActionBar() {

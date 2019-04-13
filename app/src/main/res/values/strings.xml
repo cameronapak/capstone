@@ -14,6 +14,7 @@
     <string name="text_sign_out">Sign out</string>
     <string name="text_select">Select</string>
     <string name="text_title">Title</string>
+    <string name="text_toast">Toast</string>
     <string name="text_cancel">Cancel</string>
     <string name="text_confirm">Confirm</string>
     <string name="text_rate">Rate</string>
@@ -149,6 +150,8 @@
     <string name="ref_services">Services</string>
     <string name="ref_requests">Requests</string>
     <string name="ref_chatRooms">ChatRooms</string>
+    <string name="ref_payments">Payments</string>
+    <string name="ref_charges">Charges</string>
 
     <string name="err_accept_fail">Failed to accept request.</string>
     <string name="err_decline_fail">Failed to decline request.</string>
@@ -177,5 +180,6 @@
     <string name="label_expire">Exp. Date</string>
     <string name="label_cvc">CVC</string>
     <string name="id_submit_payment_btn">Pay</string>
+    <string name="text">Map</string>
 
 </resources>

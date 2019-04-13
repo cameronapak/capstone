@@ -12,6 +12,8 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.client.history.EXTRA_REQUEST_RATING
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Review
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.NumberManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
@@ -133,12 +135,12 @@ class ServiceRatingActivity : AppCompatActivity() {
         reviewRef.document(review.requestID).set(review)
             .addOnSuccessListener {
                 Log.d(CLIENT_TAG, "[ServiceRatingActivity] review added")
-                Toast.makeText(this, "Review submitted", Toast.LENGTH_LONG).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
             }.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     calcMechanicRating(review)
+                    updateReviewCount(review)
                 }
-                finish()
             }
     }
 
@@ -149,27 +151,21 @@ class ServiceRatingActivity : AppCompatActivity() {
         reviewRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
             .addOnSuccessListener {
                 var totalRating = 0F
-                var count = 0
-
-                for(document in it) {
+                for (document in it) {
                     Log.d(CLIENT_TAG, "[ServiceRatingActivity] Review ID: ${document.id}")
-                    count++
                     val item = document.toObject(Review::class.java)
                     totalRating += item.rating
                     reviewDocs.add(item.requestID)
                 }
 
-                avgRating = totalRating/count
-                Log.d(CLIENT_TAG, "[ServiceRatingActivity] Average Rating: ${avgRating}")
+                avgRating = totalRating / it.size()
+                Log.d(CLIENT_TAG, "[ServiceRatingActivity] Average Rating: $avgRating")
 
             }.addOnCompleteListener {
-                if(it.isSuccessful) {
+                if (it.isSuccessful) {
                     populateRatings(avgRating, review.mechanicInfo?.uid!!)
                 }
             }
-
-
-
     }
 
     private fun populateRatings(avgRating: Float, mechanicID: String) {
@@ -178,10 +174,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = reviewRef.document(item.id)
-                        batch.update(path,"mechanicInfo.rating", avgRating)
+                        batch.update(path, "mechanicInfo.rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -191,10 +187,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = requestRef.document(item.id)
-                        batch.update(path,"mechanicInfo.rating", avgRating)
+                        batch.update(path, "mechanicInfo.rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -204,10 +200,10 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = serviceRef.document(item.id)
-                        batch.update(path,"mechanicInfo.rating", avgRating)
+                        batch.update(path, "mechanicInfo.rating", avgRating)
                     }
                 }
                 batch.commit()
@@ -217,16 +213,36 @@ class ServiceRatingActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 val batch = mFirestore.batch()
 
-                if(it.isSuccessful) {
-                    for(item in it.result!!) {
+                if (it.isSuccessful) {
+                    for (item in it.result!!) {
                         val path = accountRef.document(item.id)
-                        batch.update(path,"rating", avgRating)
+                        batch.update(path, "rating", avgRating)
                     }
                 }
                 batch.commit()
             }
     }
 
+    private fun updateReviewCount(review: Review) {
+        reviewRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
+            .addOnSuccessListener {
+                val reviewCount = it.size()
+                val batch = mFirestore.batch()
+                serviceRef.whereEqualTo("mechanicInfo.uid", review.mechanicInfo?.uid).get()
+                    .addOnSuccessListener { serviceModels ->
+                        for (document in serviceModels) {
+                            val path = serviceRef.document(document.id)
+                            batch.update(path, "reviewCount", reviewCount)
+                        }
+                        batch.commit()
+                            .addOnSuccessListener {
+                                Log.d(CLIENT_TAG, "[ServiceRatingActivity] update reviewCount successfully")
+                            }.addOnCompleteListener {
+                                finish()
+                            }
+                    }
+            }
+    }
 
     private fun hideKeyboard() {
         id_service_rating_framelayout.setOnClickListener {

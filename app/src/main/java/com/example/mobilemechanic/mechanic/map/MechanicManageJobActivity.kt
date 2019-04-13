@@ -13,13 +13,14 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.mechanic.MECHANIC_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -51,7 +52,6 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_manage_job)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
@@ -63,8 +63,7 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         setUpMechanicManageJobActivity()
     }
 
-    private fun setUpMechanicManageJobActivity()
-    {
+    private fun setUpMechanicManageJobActivity() {
         setUpToolBar()
         setUpVehicleContainer()
     }
@@ -80,11 +79,9 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpVehicleContainer()
-    {
+    private fun setUpVehicleContainer() {
         val holder = id_mechanic_manage_job_card
         holder.id_car_title.text = "${request.vehicle?.year} ${request.vehicle?.make} ${request.vehicle?.model}"
-        //TODO: holder.id_car_image.setImageURI()
         holder.id_service_needed.text = request.service?.serviceType
         val address = request.clientInfo!!.address
         holder.id_address.text = "${address.street}\n${address.city}, ${address.state} ${address.zipCode}"
@@ -94,11 +91,9 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         availability.days.forEach { day -> availabilityText += "$day " }
         availabilityText += "\n${availability.fromTime} to ${availability.toTime}"
         holder.id_availability.text = availabilityText
-        //Log.d(MECHANIC_TAG, "${availability.days}")
 
         holder.id_positive.text = getString(R.string.text_contact)
         holder.id_positive.setOnClickListener {
-            //TODO: Contact Customer Dialog
             setUpContactServiceDialog()
         }
 
@@ -138,13 +133,10 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
 
         basicDialog.id_positive.setOnClickListener {
             if(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED)
-            {
+                    Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 startCall()
             }
-            else//request permission
-            {
-                //context, constant for access call, permission request code
+            else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
                     REQUEST_PHONE_CALL)
             }
@@ -165,28 +157,20 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        //add zoom button
         mMap.uiSettings.isZoomControlsEnabled = true
 
-        //requires permission to use GPS
         if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
         }
-        else//request permission
-        {
-            //context, constant for access fine location value, permission request code
+        else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 MY_PERMISSION_REQ_GPS)
         }
 
-        //convert the address string into latitude, longitude pair for google maps
         val clientAddress = request.clientInfo?.address
         val clientLatLng = AddressManager.convertAddressToLatLng(this, clientAddress)
 
-        //zoom into client's location on the map
         val cameraPosition = CameraPosition.Builder()
             .target(clientLatLng).zoom(16f).build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
@@ -254,11 +238,11 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         requestRef.document(request.objectID)
             .update("status", Status.Cancelled)
             ?.addOnSuccessListener {
-                Toast.makeText(this, "Canceled job successfully", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Job was canceled", ToastyType.SUCCESS)
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, getString(R.string.err_cancel_job_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Unable to cancel", ToastyType.FAIL)
             }
     }
 

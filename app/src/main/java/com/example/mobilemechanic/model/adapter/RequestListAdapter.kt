@@ -19,6 +19,8 @@ import com.example.mobilemechanic.mechanic.map.MechanicMoreInformationActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.firestore.CollectionReference
@@ -208,10 +210,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
                 "acceptedOn", acceptedOn
             )
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Accepted successfully", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }
             .addOnFailureListener {
-                Toast.makeText(context, context.getString(R.string.err_accept_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Fail", ToastyType.FAIL)
             }
     }
 
@@ -220,10 +222,10 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         requestRef.document(request.objectID)
             .update("status", Status.Completed, "completedOn", completedOn)
             ?.addOnSuccessListener {
-                Toast.makeText(context, "Service Completed!", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Success", ToastyType.SUCCESS)
             }
             .addOnFailureListener {
-                Toast.makeText(context, context.getString(R.string.err_complete_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(context, "Fail", ToastyType.FAIL)
             }
     }
 

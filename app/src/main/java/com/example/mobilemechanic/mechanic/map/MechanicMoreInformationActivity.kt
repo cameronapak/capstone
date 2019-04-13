@@ -16,6 +16,8 @@ import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
+import com.example.mobilemechanic.shared.Toasty
+import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
@@ -189,11 +191,11 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
             .update("status", Status.Active,
                 "acceptedOn", acceptedOn)
             ?.addOnSuccessListener {
-                Toast.makeText(this, "Accepted successfully", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, getString(R.string.err_accept_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Fail", ToastyType.FAIL)
             }
     }
 
@@ -202,11 +204,11 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         requestRef.document(request.objectID)
             .update("status", Status.Cancelled)
             ?.addOnSuccessListener {
-                Toast.makeText(this, "Declined successfully", Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
                 finish()
             }
             .addOnFailureListener {
-                Toast.makeText(this, getString(R.string.err_decline_fail), Toast.LENGTH_SHORT).show()
+                Toasty.makeText(this, "Fail", ToastyType.FAIL)
             }
     }
 }

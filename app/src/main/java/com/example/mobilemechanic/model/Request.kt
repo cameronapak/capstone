@@ -7,7 +7,7 @@ import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.model.dto.Receipt
 
 enum class Status {
-    Pending, Request, Active, Accepted, Completed, Cancelled, Declined
+    Pending, Request, Active, Accepted, Completed, Cancelled, Declined, Paid
 }
 
 data class Request(

@@ -113,7 +113,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             holder.directionsButton.visibility = View.GONE
         }
 
-        if (request.status == Status.Active) {
+        if (request.status == Status.Active || request.status == Status.Paid) {
             holder.primaryButton.text = context.getString(R.string.label_choice_complete)
             holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
             holder.directionsButton.visibility = View.VISIBLE
@@ -125,7 +125,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             createAcceptDialog(request)
         }
 
-        if (request.status == Status.Active) {
+        if (request.status == Status.Active || request.status == Status.Paid) {
             createCompleteDialog(request)
         }
     }
@@ -137,7 +137,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             context.startActivity(intent)
         }
 
-        if (request.status == Status.Active) {
+        if (request.status == Status.Active || request.status == Status.Paid) {
             val intent = Intent(context, MechanicManageJobActivity::class.java)
             intent.putExtra(EXTRA_REQUEST, request)
             context.startActivity(intent)

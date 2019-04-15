@@ -21,6 +21,49 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+            <LinearLayout
+                    android:orientation="vertical"
+                    android:id="@+id/id_empty_state_view"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:visibility="visible"
+                    app:layout_constraintBottom_toBottomOf="parent">
+
+                <ImageView
+                        android:src="@drawable/ic_directions_car"
+                        android:layout_width="match_parent"
+                        android:layout_marginBottom="8dp"
+                        android:layout_height="wrap_content" android:id="@+id/imageView2"/>
+
+                <TextView
+                        style="@style/AppActionBarTitle"
+                        android:text="Your Requests Go Here!"
+                        android:layout_width="wrap_content"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="#A0A5AE"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:id="@+id/id_text_empty_title"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+                <TextView
+                        style="@style/AppActionBarSubtitle"
+                        android:text="Once a client requests your service, you will see it pop up here. Make sure to update your services to increase client interest."
+                        android:layout_width="200dp"
+                        android:textColor="#A0A5AE"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="32dp"
+                        android:id="@+id/id_text_empty_subtitle"
+                        app:layout_constraintBottom_toBottomOf="parent"/>
+
+            </LinearLayout>
+
             <ProgressBar
                     style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
@@ -29,9 +72,9 @@
                     app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintEnd_toEndOf="parent"
                     android:layout_marginEnd="8dp" app:layout_constraintStart_toStartOf="parent"
                     android:layout_marginStart="8dp" android:layout_marginTop="8dp"
-                    app:layout_constraintTop_toTopOf="parent" android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent" android:visibility="visible" tools:visibility="visible"
                     app:layout_constraintHorizontal_bias="0.498"
-                    app:layout_constraintVertical_bias="0.586" tools:visibility="visible"/>
+                    app:layout_constraintVertical_bias="0.586"/>
         </android.support.constraint.ConstraintLayout>
 
         <android.support.v7.widget.Toolbar

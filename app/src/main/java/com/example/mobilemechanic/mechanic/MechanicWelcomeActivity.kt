@@ -14,6 +14,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.EditAccountInfoActivity
@@ -52,12 +54,15 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     private lateinit var viewManager: LinearLayoutManager
     private lateinit var mechanicRequestListAdapter: RequestListAdapter
     private var requests = ArrayList<Request>()
+    
     private var selectedImageUri: Uri? = null
+    private lateinit var emptyView: LinearLayout
     private var isFirstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_welcome)
+        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
         setUpMechanicWelcomeActivity()
     }
 
@@ -101,6 +106,18 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                         requests.add(request)
                     }
                 }
+
+                // toggle empty state view
+                if (requests.isNullOrEmpty()) {
+                    Log.d(
+                        MECHANIC_TAG,
+                        "[MechanicServices] Requests are empty. Showing empty state view."
+                    )
+                    emptyView.setVisibility(View.VISIBLE)
+                } else {
+                    emptyView.setVisibility(View.GONE)
+                }
+
                 mechanicRequestListAdapter.notifyDataSetChanged()
                 if(isFirstLoad)
                 {

@@ -1,22 +1,22 @@
 package com.example.mobilemechanic.client.payment
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.app.ActionBar
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.widget.Toast
-import com.android.volley.Response
 import com.android.volley.Request
+import com.android.volley.Response
 import com.android.volley.toolbox.StringRequest
 import com.android.volley.toolbox.Volley
 import com.example.mobilemechanic.R
-import kotlinx.android.synthetic.main.activity_payment.*
-import com.stripe.android.model.Card
-import kotlinx.android.synthetic.main.payment_container.*
-import kotlinx.android.synthetic.main.payment_container.view.*
 import com.stripe.android.Stripe
 import com.stripe.android.TokenCallback
+import com.stripe.android.model.Card
 import com.stripe.android.model.Token
+import kotlinx.android.synthetic.main.activity_payment.*
+import kotlinx.android.synthetic.main.payment_container.*
+import kotlinx.android.synthetic.main.payment_container.view.*
 
 
 
@@ -33,7 +33,7 @@ class Payment : AppCompatActivity() {
     }
 
     private fun submitPayment(){
-        val holder = id_payment_container_card
+        val holder = id_payment_container
 
         val tips = holder.id_tips.text.toString()
         val cardNumber = holder.id_card_nums.text.toString()

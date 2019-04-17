@@ -7,6 +7,8 @@ import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.EXTRA_USER_TYPE
 import com.example.mobilemechanic.model.UserType
@@ -29,10 +31,12 @@ class ChatRoomsActivity : AppCompatActivity()
     private lateinit var chatRoomListAdapter: ChatRoomListAdapter
     private var chatRooms = ArrayList<ChatRoom>()
     private lateinit var userType: UserType
+    private lateinit var emptyView: LinearLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_rooms)
+        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
 
         mAuth = FirebaseAuth.getInstance()
@@ -77,6 +81,18 @@ class ChatRoomsActivity : AppCompatActivity()
                     chatRoom.objectID = doc.id
                     chatRooms.add(chatRoom)
                 }
+
+                // toggle empty state view
+                if (chatRooms.isNullOrEmpty()) {
+                    Log.d(
+                        USER_TAG,
+                        "[ChatRoomsActivity] Messages are empty! Showing empty state view."
+                    )
+                    emptyView.setVisibility(View.VISIBLE)
+                } else {
+                    emptyView.setVisibility(View.GONE)
+                }
+
                 chatRoomListAdapter.notifyDataSetChanged()
             }
     }

@@ -11,6 +11,8 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.mobilemechanic.EditAccountInfoActivity
 import com.example.mobilemechanic.MainActivity
@@ -45,12 +47,14 @@ class ClientWelcomeActivity : AppCompatActivity() {
     private lateinit var clientRequestRecyclerAdapter: ClientRequestRecyclerAdapter
     private var requests = ArrayList<Request>()
     private lateinit var mDrawerLayout: DrawerLayout
+    private lateinit var emptyView: LinearLayout
 
     private var isFirstLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_welcome)
+        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
         setUpClientWelcomeActivity()
     }
 
@@ -164,6 +168,12 @@ class ClientWelcomeActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = clientRequestRecyclerAdapter
         }
+
+        // set up empty state view button
+        id_btn_start_searching.setOnClickListener {
+            startActivity(Intent(this, FindServiceActivity::class.java))
+        }
+
         reactiveRequestRecyclerView()
     }
 
@@ -186,6 +196,18 @@ class ClientWelcomeActivity : AppCompatActivity() {
                         requests.add(request)
                     }
                 }
+
+                // toggle empty state view
+                if (requests.isNullOrEmpty()) {
+                    Log.d(
+                        CLIENT_TAG,
+                        "[ClientWelcomeActivity] Requests is empty!"
+                    )
+                    emptyView.setVisibility(View.VISIBLE)
+                } else {
+                    emptyView.setVisibility(View.GONE)
+                }
+
                 clientRequestRecyclerAdapter.notifyDataSetChanged()
                 if(isFirstLoad)
                 {

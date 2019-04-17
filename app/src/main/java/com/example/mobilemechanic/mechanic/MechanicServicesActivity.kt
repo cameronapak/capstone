@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.View
+import android.widget.LinearLayout
+import android.widget.Toast
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
@@ -21,6 +24,7 @@ import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
+import com.example.mobilemechanic.R
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -41,10 +45,14 @@ class MechanicServicesActivity : AppCompatActivity() {
     private lateinit var mechanicServiceAdapter: ServiceListAdapter
     private lateinit var basicDialog: Dialog
     private var services = ArrayList<ServiceModel>()
+    private lateinit var emptyView: LinearLayout
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_mechanic_services)
+        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
+
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         userAccountRef = mFirestore?.collection("Accounts")
@@ -98,6 +106,18 @@ class MechanicServicesActivity : AppCompatActivity() {
                     Log.d(MECHANIC_TAG, "[MechanicServices] snapshotListener ServiceModel documentID: ${service.objectID}")
                     services.add(service)
                 }
+
+                // toggle empty state view
+                if (services.isNullOrEmpty()) {
+                    Log.d(
+                        MECHANIC_TAG,
+                        "[MechanicServices] Services are empty! Showing empty state view."
+                    )
+                    emptyView.setVisibility(View.VISIBLE)
+                } else {
+                    emptyView.setVisibility(View.GONE)
+                }
+
                 mechanicServiceAdapter.notifyDataSetChanged()
             }
     }

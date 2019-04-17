@@ -70,7 +70,8 @@
                 android:id="@+id/id_price"
                 algolia:layout_constraintEnd_toEndOf="@+id/id_select"
                 android:layout_marginTop="16dp"
-                algolia:layout_constraintTop_toTopOf="parent" android:textColor="@color/colorGrayTextDark2"/>
+                algolia:layout_constraintTop_toTopOf="parent" android:textColor="@color/colorGrayTextDark2"
+                android:fontFamily="@font/roboto"/>
         <TextView
                 android:text="Reviews"
                 android:layout_width="wrap_content"

@@ -62,7 +62,6 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
         googleMap.setOnInfoWindowClickListener { marker ->
             val pattern = Pattern.compile("(\\w+):(.+)(?:\\s|\$)")
             val match = pattern.matcher(marker.snippet)
-            Log.d(CLIENT_TAG, "[MapWidget] setOnInfoWindowClick ${marker.snippet}")
             var serviceId = ""
             while (match.find()) {
                 Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(1) ${match.group(1)}")
@@ -139,7 +138,8 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
                                     "addressStreet:${address.street}\n" +
                                     "addressCityStateZipcode:${address.city}, ${address.state} ${address.zipCode}\n" +
                                     "rating:${serviceModel.mechanicInfo.rating}\n" +
-                                    "serviceObjectID:${serviceModel.objectID}"
+                                    "serviceObjectID:${serviceModel.objectID}\n" +
+                                    "servicePrice:${serviceModel.service.price}"
 
                         googleMap!!.addMarker(
                             MarkerOptions()
@@ -188,7 +188,6 @@ class MapWidget(var context: Activity, mapFragment: SupportMapFragment) : OnMapR
     }
 
     override fun onMarkerClick(marker: Marker): Boolean {
-        Log.d(CLIENT_TAG, "[MapWidget] marker clicked: $marker")
         return true
     }
 }

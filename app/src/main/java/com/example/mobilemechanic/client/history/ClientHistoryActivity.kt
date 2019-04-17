@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.activity_client_history.*
 
 class ClientHistoryActivity : AppCompatActivity() {
 
-
     private lateinit var mAuth: FirebaseAuth
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var requestRef: CollectionReference
@@ -30,7 +29,7 @@ class ClientHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_history)
-        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
+        emptyView = findViewById(R.id.id_empty_state_view)
         setUpClientHistoryActivity()
     }
 
@@ -65,13 +64,11 @@ class ClientHistoryActivity : AppCompatActivity() {
             layoutManager = viewManager
             adapter = historyAdapter
         }
-
         historyAdapter.notifyDataSetChanged()
     }
 
     private fun setUpHistoryRecyclerView() {
         requestRef.whereEqualTo("clientInfo.uid", mAuth?.currentUser?.uid.toString())
-            .whereEqualTo("status", Status.Completed)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
@@ -79,15 +76,17 @@ class ClientHistoryActivity : AppCompatActivity() {
                 requestReceipt.clear()
                 for (doc in querySnapshot!!) {
                     val request = doc.toObject(Request::class.java)
+
+                    if (request.status == Status.Completed || request.status == Status.Paid)
                     request.objectID = doc.id
                     requestReceipt.add(request)
                 }
 
                 // toggle empty state view
                 if (requestReceipt.isNullOrEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE)
+                    emptyView.visibility = View.VISIBLE
                 } else {
-                    emptyView.setVisibility(View.GONE)
+                    emptyView.visibility = View.GONE
                 }
 
                 historyAdapter.notifyDataSetChanged()

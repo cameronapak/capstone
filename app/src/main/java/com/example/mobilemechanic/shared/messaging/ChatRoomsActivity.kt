@@ -36,14 +36,13 @@ class ChatRoomsActivity : AppCompatActivity()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_rooms)
-        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
+        emptyView = findViewById(R.id.id_empty_state_view)
         userType = UserType.valueOf(intent.getStringExtra(EXTRA_USER_TYPE))
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
         chatRoomsRef = mFirestore.collection(getString(R.string.ref_chatRooms))
         Log.d(USER_TAG, "[ChatRoomsActivity] userType: $userType")
-
         setUpChatRoomRecyclerView()
         setUpActionBar()
     }

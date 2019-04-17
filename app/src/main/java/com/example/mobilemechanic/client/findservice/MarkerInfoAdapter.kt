@@ -4,7 +4,6 @@ import android.app.Activity
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
-import android.widget.Button
 import android.widget.RatingBar
 import android.widget.TextView
 import com.example.mobilemechanic.R
@@ -34,10 +33,9 @@ class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter {
         val snippetServiceType = markerInfoView?.findViewById<TextView>(R.id.id_snippet_serviceType)
         val snippetAddress = markerInfoView?.findViewById<TextView>(R.id.id_snippet_address)
         val snippetRating = markerInfoView?.findViewById<RatingBar>(R.id.id_marker_rating)
-        val selectService = markerInfoView?.findViewById<Button>(R.id.id_marker_select)
+        val servicePrice = markerInfoView?.findViewById<TextView>(R.id.id_price)
 
         val match = pattern.matcher(marker.snippet)
-        var serviceId = ""
         while (match.find()) {
             Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(1) ${match.group(1)}")
             Log.d(CLIENT_TAG, "[MarkerInfoAdapter] group(2) ${match.group(2)}")
@@ -53,25 +51,17 @@ class MarkerInfoAdapter(var context: Activity): GoogleMap.InfoWindowAdapter {
                     fullAddress = "$fullAddress${match.group(2)}"
                 match.group(1) == "rating" ->
                     snippetRating?.rating = match.group(2).toFloat()
-                match.group(1) == "serviceObjectID" ->
-                    serviceId = match.group(2).toString()
+                match.group(1) == "servicePrice" ->
+                    servicePrice?.text = match.group(2).toString()
             }
-        }
-
-
-        selectService?.setOnClickListener {
-            Log.d(CLIENT_TAG, "[MarkerInfoAdapter] service selected $serviceId")
         }
 
         snippetAddress?.text = fullAddress
         return markerInfoView
     }
 
-
-
     override fun getInfoWindow(marker: Marker): View? {
         ScreenManager.hideKeyBoard(context)
         return null
     }
-
 }

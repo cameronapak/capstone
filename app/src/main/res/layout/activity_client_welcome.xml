@@ -65,10 +65,8 @@
 
                 <Button
                         style="@style/AppPrimaryButton"
-                        android:textSize="16dp"
                         android:text="Start Searching"
                         app:layout_constraintHorizontal_bias="0.507"
-                        android:layout_height="wrap_content"
                         android:id="@+id/id_btn_start_searching"
                         android:layout_gravity="center" />
 

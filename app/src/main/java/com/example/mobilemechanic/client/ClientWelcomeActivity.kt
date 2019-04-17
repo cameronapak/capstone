@@ -199,13 +199,9 @@ class ClientWelcomeActivity : AppCompatActivity() {
 
                 // toggle empty state view
                 if (requests.isNullOrEmpty()) {
-                    Log.d(
-                        CLIENT_TAG,
-                        "[ClientWelcomeActivity] Requests is empty!"
-                    )
-                    emptyView.setVisibility(View.VISIBLE)
+                    emptyView.visibility = View.VISIBLE
                 } else {
-                    emptyView.setVisibility(View.GONE)
+                    emptyView.visibility = View.GONE
                 }
 
                 clientRequestRecyclerAdapter.notifyDataSetChanged()

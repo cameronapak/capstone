@@ -42,6 +42,7 @@ class SignInActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
+        isAlreadyLoggedIn()
         setUpSignInActivity()
     }
 
@@ -110,6 +111,15 @@ class SignInActivity : AppCompatActivity() {
                     }
                     finish()
                 }
+        }
+    }
+
+    private fun isAlreadyLoggedIn() {
+        val user = mAuth?.currentUser
+        if (user == null) {
+            return
+        } else {
+            checkUserType()
         }
     }
 
@@ -193,7 +203,6 @@ class SignInActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         id_forgot_password.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 }
 

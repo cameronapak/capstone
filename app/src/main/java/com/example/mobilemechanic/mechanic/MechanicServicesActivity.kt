@@ -214,9 +214,4 @@ class MechanicServicesActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-    override fun onResume() {
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-        super.onResume()
-    }
 }

@@ -292,7 +292,6 @@ class MechanicWelcomeActivity : AppCompatActivity() {
     override fun onResume() {
         signInGuard()
         setUpToolBar()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
     }
 }

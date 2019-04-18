@@ -566,7 +566,6 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
 
     override fun onResume() {
         enableHideKeyboard()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
     }
 }

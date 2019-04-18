@@ -207,11 +207,6 @@ class MechanicManageJobActivity : AppCompatActivity(), OnMapReadyCallback {
         }
     }
 
-    override fun onResume() {
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-        super.onResume()
-    }
-
     private fun createCancelJobDialog()
     {
         val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)

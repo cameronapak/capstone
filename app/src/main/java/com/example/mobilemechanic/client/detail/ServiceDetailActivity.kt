@@ -236,9 +236,4 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         onBackPressed()
         return true
     }
-
-    override fun onResume() {
-        super.onResume()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
 }

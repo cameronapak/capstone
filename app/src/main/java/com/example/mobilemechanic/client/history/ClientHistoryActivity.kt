@@ -77,12 +77,12 @@ class ClientHistoryActivity : AppCompatActivity() {
                 for (doc in querySnapshot!!) {
                     val request = doc.toObject(Request::class.java)
 
-                    if (request.status == Status.Completed || request.status == Status.Paid)
-                    request.objectID = doc.id
-                    requestReceipt.add(request)
+                    if (request.status == Status.Completed || request.status == Status.Paid) {
+                        request.objectID = doc.id
+                        requestReceipt.add(request)
+                    }
                 }
 
-                // toggle empty state view
                 if (requestReceipt.isNullOrEmpty()) {
                     emptyView.visibility = View.VISIBLE
                 } else {

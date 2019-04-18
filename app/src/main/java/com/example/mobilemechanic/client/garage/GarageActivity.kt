@@ -10,7 +10,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.Spinner
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.Vehicle
@@ -124,9 +123,9 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
 
                 // toggle empty state view
                 if (ownedVehicles.isNullOrEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE)
+                    emptyView.visibility = View.VISIBLE
                 } else {
-                    emptyView.setVisibility(View.GONE)
+                    emptyView.visibility = View.GONE
                 }
 
                 garageRecyclerAdapter.notifyDataSetChanged()
@@ -258,9 +257,6 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         return true
     }
 
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {}
-
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         Log.d(CLIENT_TAG, "[GarageActivity] make spinner ${parent.selectedItem}")
         updateVehicleModelSpinner(parent.selectedItem.toString())
@@ -289,4 +285,6 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         onBackPressed()
         return true
     }
+
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
 }

@@ -48,7 +48,6 @@ class MechanicReviewsActivity : AppCompatActivity() {
     private lateinit var reviewsAdapter: ReviewListAdapter
 
     val REQUEST_PHONE_CALL = 1
-    val REQUEST_EMAIL = 2
     var distance = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -147,12 +146,14 @@ class MechanicReviewsActivity : AppCompatActivity() {
         when(requestCode)
         {
             REQUEST_PHONE_CALL->{
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     startCall()
-                else//request permission
-                //context, constant for access call, permission request code
-                    ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CALL_PHONE),
-                        REQUEST_PHONE_CALL)
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this, arrayOf(Manifest.permission.CALL_PHONE),
+                        REQUEST_PHONE_CALL
+                    )
+                }
             }
         }
     }
@@ -211,5 +212,4 @@ class MechanicReviewsActivity : AppCompatActivity() {
         super.onResume()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
-
 }

@@ -95,7 +95,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
 
                 requests.clear()
                 for (doc in querySnapshot!!) {
-                    if(doc["status"] == Status.Request.name || doc["status"] == Status.Active.name || doc["status"] == Status.Paid.name)
+                    if(doc["status"] == Status.Request.name || doc["status"] == Status.Active.name)
                     {
                         val request = doc.toObject(Request::class.java)
                         request.objectID = doc.id

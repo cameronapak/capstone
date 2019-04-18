@@ -54,7 +54,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_client_welcome)
-        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
+        emptyView = findViewById(R.id.id_empty_state_view)
         setUpClientWelcomeActivity()
     }
 
@@ -169,7 +169,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
             adapter = clientRequestRecyclerAdapter
         }
 
-        // set up empty state view button
         id_btn_start_searching.setOnClickListener {
             startActivity(Intent(this, FindServiceActivity::class.java))
         }
@@ -197,7 +196,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
                     }
                 }
 
-                // toggle empty state view
                 if (requests.isNullOrEmpty()) {
                     emptyView.visibility = View.VISIBLE
                 } else {

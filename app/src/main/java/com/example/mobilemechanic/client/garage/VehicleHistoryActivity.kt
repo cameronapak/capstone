@@ -35,11 +35,10 @@ class VehicleHistoryActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_vehicle_history)
-
-        setUpVehicleHIstoryActivity()
+        setUpVehicleHistoryActivity()
     }
 
-    private fun setUpVehicleHIstoryActivity() {
+    private fun setUpVehicleHistoryActivity() {
         initFirestore()
         getVehicleParcelable()
         setUpToolBar()
@@ -114,5 +113,4 @@ class VehicleHistoryActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
 }

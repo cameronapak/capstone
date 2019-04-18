@@ -70,7 +70,6 @@ class MechanicHistoryActivity : AppCompatActivity() {
 
     private fun setUpHistoryRecyclerView() {
         requestRef.whereEqualTo("mechanicInfo.uid", mAuth?.currentUser?.uid.toString())
-            .whereEqualTo("status", Status.Completed)
             ?.addSnapshotListener { querySnapshot, exception ->
                 if (exception != null) {
                     return@addSnapshotListener
@@ -78,17 +77,18 @@ class MechanicHistoryActivity : AppCompatActivity() {
                 requestReceipt.clear()
                 for (doc in querySnapshot!!) {
                     val request = doc.toObject(Request::class.java)
-                    request.objectID = doc.id
-                    requestReceipt.add(request)
+
+                    if (request.status == Status.Completed || request.status == Status.Paid) {
+                        request.objectID = doc.id
+                        requestReceipt.add(request)
+                    }
                 }
 
-                // toggle empty state view
                 if (requestReceipt.isNullOrEmpty()) {
-                    emptyView.setVisibility(View.VISIBLE)
+                    emptyView.visibility = View.VISIBLE
                 } else {
-                    emptyView.setVisibility(View.GONE)
+                    emptyView.visibility = View.GONE
                 }
-
                 historyAdapter.notifyDataSetChanged()
             }
     }

@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
@@ -40,7 +39,6 @@ class PaymentActivity : AppCompatActivity()
     private lateinit var paymentsRef: CollectionReference
     private lateinit var myPaymentsRef: CollectionReference
     private lateinit var myReceiptRef: CollectionReference
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,13 +99,8 @@ class PaymentActivity : AppCompatActivity()
         val holder = id_payment_container
         val holder2 = id_payment_container.id_summary_container
 
-        //substring to remove $ sign
         val tips = holder.id_tip.text.toString()
-        //Log.d(PAYMENT_TAG, "Tips: $tips")
-
         val total: Double = (holder2.id_grand_total_price.text.toString().substring(1).toDouble() + tips.toDouble())
-
-        //Log.d(PAYMENT_TAG, "Total: $total")
 
         val cardNumber = holder.id_card_number.text.toString()
         val cardExpMonth = holder.id_expire_date.text.substring(0,2).toInt()
@@ -175,18 +168,10 @@ class PaymentActivity : AppCompatActivity()
         val tips = holder.id_tip.text.toString().toDouble()
         val subTotal = getString(R.string.price, service?.price).substring(1).toDouble()
         val estimatedTax = holder.id_summary_estimated_tax_price.text.toString().substring(1).toDouble()
-
-//        Log.d(PAYMENT_TAG, "Tips: $tips")
-//        Log.d(PAYMENT_TAG, "subT: $subTotal")
-//        Log.d(PAYMENT_TAG, "estTax: $estimatedTax")
-//        Log.d(PAYMENT_TAG, "grandT: $amount")
-
         val receipt = Receipt(tips, subTotal, estimatedTax, amount)
-        //firebase receipt field
 
         myPaymentsRef.document().set(payment)
             .addOnSuccessListener {
-                //receipt update
                 myReceiptRef.document("${request.objectID}")
                     .update("receipt", receipt, "status", Status.Paid.name)
                     .addOnSuccessListener {

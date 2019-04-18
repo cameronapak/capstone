@@ -154,9 +154,8 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
             val year = basicDialog.id_vehicle_year.selectedItem.toString()
             val make = basicDialog.id_vehicle_make.selectedItem.toString()
             val model = basicDialog.id_vehicle_model.selectedItem.toString()
-            Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] update dialog $year, $make, $model")
-            val newVehicle = Vehicle(vehicle.objectID, year, make, model, "")
 
+            val newVehicle = Vehicle(vehicle.objectID, year, make, model, "")
             retrieveVehicleImageUrl(newVehicle)
             basicDialog.dismiss()
         }
@@ -271,12 +270,11 @@ class ClientGarageRecyclerAdapter(val context: Activity, val dataset: ArrayList<
         }
     }
 
-    override fun getItemCount() = dataset.size
-
-    override fun onNothingSelected(p0: AdapterView<*>?) {}
-
     override fun onItemSelected(parent: AdapterView<*>, view: View, position: Int, id: Long) {
         Log.d(CLIENT_TAG, "[ClientGarageRecyclerAdapter] make spinner ${parent.selectedItem}")
         updateVehicleModelSpinner(parent.selectedItem.toString())
     }
+
+    override fun getItemCount() = dataset.size
+    override fun onNothingSelected(p0: AdapterView<*>?) {}
 }

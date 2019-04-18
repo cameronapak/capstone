@@ -184,8 +184,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
         return null
     }
 
-    private fun setUpChatRoom(client: Member, mechanic: Member)
-    {
+    private fun setUpChatRoom(client: Member, mechanic: Member) {
         checkIfChatRoomExist(client, mechanic)
     }
 
@@ -239,7 +238,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                 return@addSnapshotListener
             }
             vehicles.clear()
-            vehicles.add(Vehicle("", "", "", "", "")) //Dummy hint
+            vehicles.add(Vehicle("", "", "", "", ""))
 
             for (doc in querySnapshot!!) {
                 val vehicle = doc.toObject(Vehicle::class.java)

@@ -100,7 +100,6 @@
         <activity android:name=".client.ClientWelcomeActivity">
             <intent-filter>
                 <action android:name="CLIENT_WELCOME_ACTIVITY"/>
-
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>

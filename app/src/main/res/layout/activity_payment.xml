@@ -17,7 +17,7 @@
             app:layout_constraintTop_toTopOf="parent"/>
 
     <include layout="@layout/card_payment_container"
-             android:layout_width="307dp"
+             android:layout_width="350dp"
              android:layout_height="539dp"
              android:layout_gravity="center"
              android:layout_centerHorizontal="true"

@@ -18,7 +18,7 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
-import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -279,6 +279,11 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 
     override fun onNothingSelected(p0: AdapterView<*>?) {}

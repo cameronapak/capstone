@@ -29,6 +29,7 @@ import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintVehicleSpinnerAdapter
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ObjectConverter
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
@@ -354,6 +355,7 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     }
 
     override fun onResume() {
+        AuthenticationManager.signInGuard(this)
         super.onResume()
         hideWarningIconAndMessage()
         enableHideKeyboard()

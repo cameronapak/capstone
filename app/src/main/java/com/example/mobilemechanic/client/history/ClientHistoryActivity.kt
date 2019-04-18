@@ -10,6 +10,7 @@ import android.widget.LinearLayout
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -96,5 +97,10 @@ class ClientHistoryActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

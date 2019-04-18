@@ -11,7 +11,7 @@ import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.history.MechanicHistoryRecyclerAdapter
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
-import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -96,5 +96,10 @@ class MechanicHistoryActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

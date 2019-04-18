@@ -21,6 +21,7 @@ import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -241,5 +242,10 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

@@ -9,7 +9,7 @@ import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.ActionBar
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.Toolbar
 import android.util.Log
@@ -24,12 +24,11 @@ import com.example.mobilemechanic.model.adapter.ReviewListAdapter
 import com.example.mobilemechanic.model.algolia.ServiceModel
 import com.example.mobilemechanic.model.dto.MechanicInfo
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
-import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.squareup.picasso.Picasso
-
 import kotlinx.android.synthetic.main.activity_mechanic_reviews.*
 import kotlinx.android.synthetic.main.content_mechanic_reviews.*
 import kotlinx.android.synthetic.main.content_mechanic_reviews.view.*
@@ -206,5 +205,10 @@ class MechanicReviewsActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

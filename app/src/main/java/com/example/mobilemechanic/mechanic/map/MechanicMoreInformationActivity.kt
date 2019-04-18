@@ -9,16 +9,15 @@ import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
-import android.widget.Toast
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
-import com.example.mobilemechanic.mechanic.MechanicWelcomeActivity
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,8 +34,7 @@ import kotlinx.android.synthetic.main.dialog_container_basic.*
 const val MY_PERMISSION_REQ_GPS = 1
 const val TAG = "moreInfo"
 
-class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
-{
+class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var mFirestore: FirebaseFirestore
     private lateinit var requestRef: CollectionReference
@@ -46,20 +44,17 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mechanic_more_information)
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         mFirestore = FirebaseFirestore.getInstance()
         requestRef = mFirestore.collection(getString(R.string.ref_requests))
-        //get request from MechanicWelcomeActivity
         request = intent.getParcelableExtra(EXTRA_REQUEST)
 
         setUpMechanicMoreInformationActivity()
     }
 
-    private fun setUpMechanicMoreInformationActivity()
-    {
+    private fun setUpMechanicMoreInformationActivity() {
         setUpToolBar()
         setUpVehicleContainer()
     }
@@ -75,11 +70,9 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         }
     }
 
-    private fun setUpVehicleContainer()
-    {
+    private fun setUpVehicleContainer() {
         val holder = id_mechanic_more_info_card
         holder.id_car_title.text = "${request.vehicle?.year} ${request.vehicle?.make} ${request.vehicle?.model}"
-        //TODO: holder.id_car_image.setImageURI()
         holder.id_service_needed.text = request.service?.serviceType
         val address = request.clientInfo!!.address
         holder.id_address.text = "${address.street}\n${address.city}, ${address.state} ${address.zipCode}"
@@ -89,8 +82,6 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         availability.days.forEach { day -> availabilityText += "$day " }
         availabilityText += "\n${availability.fromTime} to ${availability.toTime}"
         holder.id_availability.text = availabilityText
-        //Log.d(MECHANIC_TAG, "${availability.days}")
-
         holder.id_positive.setOnClickListener {
             acceptRequest()
         }
@@ -102,29 +93,19 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-
-        //add zoom button
         mMap.uiSettings.isZoomControlsEnabled = true
 
-        //requires permission to use GPS
         if(ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED)
-        {
+                Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             mMap.isMyLocationEnabled = true
         }
-        else//request permission
-        {
-            //context, constant for access fine location value, permission request code
+        else {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
                 MY_PERMISSION_REQ_GPS)
         }
 
-        //convert the address string into latitude, longitude pair for google maps
         val clientAddress = request.clientInfo?.address
         val clientLatLng = AddressManager.convertAddressToLatLng(this, clientAddress)
-
-        //zoom into client's location on the map
         val cameraPosition = CameraPosition.Builder()
             .target(clientLatLng).zoom(16f).build()
         mMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
@@ -133,19 +114,14 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         ScreenManager.toggleVisibility(id_progress_bar)
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray)
-    {
-        when(requestCode)
-        {
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when(requestCode) {
             MY_PERMISSION_REQ_GPS -> {
-                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)
-                {
-                    try
-                    {
+                if(grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    try {
                         mMap.isMyLocationEnabled = true
                     }
-                    catch(ex: SecurityException)
-                    {
+                    catch(ex: SecurityException) {
                         Log.d(TAG, ex.toString())
                     }
                 }
@@ -158,8 +134,7 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         return true
     }
 
-    private fun createDeclineDialog()
-    {
+    private fun createDeclineDialog() {
         val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)
         val dialogBody = layoutInflater.inflate(R.layout.dialog_body_choice, null)
         val declineDialog = BasicDialog.Builder.apply{
@@ -179,31 +154,32 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         }
     }
 
-    private fun acceptRequest()
-    {
+    private fun acceptRequest() {
         val acceptedOn = System.currentTimeMillis()
         requestRef.document(request.objectID)
             .update("status", Status.Active,
                 "acceptedOn", acceptedOn)
             ?.addOnSuccessListener {
-                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                Toasty.makeText(this, "Request accepted", ToastyType.SUCCESS)
                 finish()
-            }
-            .addOnFailureListener {
-                Toasty.makeText(this, "Fail", ToastyType.FAIL)
+            }.addOnFailureListener {
+                Toasty.makeText(this, "Unable to accept request", ToastyType.FAIL)
             }
     }
 
-    private fun declineRequest()
-    {
+    private fun declineRequest() {
         requestRef.document(request.objectID)
             .update("status", Status.Cancelled)
             ?.addOnSuccessListener {
-                Toasty.makeText(this, "Success", ToastyType.SUCCESS)
+                Toasty.makeText(this, "Request canceled", ToastyType.SUCCESS)
                 finish()
+            }.addOnFailureListener {
+                Toasty.makeText(this, "Unable to cancel request", ToastyType.FAIL)
             }
-            .addOnFailureListener {
-                Toasty.makeText(this, "Fail", ToastyType.FAIL)
-            }
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

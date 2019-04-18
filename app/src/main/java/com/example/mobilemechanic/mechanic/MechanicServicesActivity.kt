@@ -9,7 +9,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.LinearLayout
-import android.widget.Toast
+import com.example.mobilemechanic.R
 import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.model.Service
 import com.example.mobilemechanic.model.User
@@ -22,9 +22,8 @@ import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.utility.AddressManager
-import com.example.mobilemechanic.shared.utility.ScreenManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.google.firebase.auth.FirebaseAuth
-import com.example.mobilemechanic.R
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -51,7 +50,7 @@ class MechanicServicesActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(com.example.mobilemechanic.R.layout.activity_mechanic_services)
-        emptyView = findViewById<LinearLayout>(R.id.id_empty_state_view)
+        emptyView = findViewById(R.id.id_empty_state_view)
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
@@ -213,5 +212,10 @@ class MechanicServicesActivity : AppCompatActivity() {
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

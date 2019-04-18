@@ -14,6 +14,7 @@ import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
 import com.example.mobilemechanic.model.Vehicle
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -108,9 +109,13 @@ class VehicleHistoryActivity : AppCompatActivity() {
             }
     }
 
-
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

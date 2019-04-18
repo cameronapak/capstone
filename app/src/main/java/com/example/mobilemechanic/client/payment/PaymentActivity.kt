@@ -17,6 +17,7 @@ import com.example.mobilemechanic.model.dto.Receipt
 import com.example.mobilemechanic.model.stripe.Payment
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.NumberManager
 import com.google.firebase.auth.FirebaseAuth
@@ -228,5 +229,10 @@ class PaymentActivity : AppCompatActivity()
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        super.onResume()
     }
 }

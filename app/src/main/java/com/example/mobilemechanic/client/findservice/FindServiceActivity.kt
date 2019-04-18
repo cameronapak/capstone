@@ -19,6 +19,7 @@ import com.example.mobilemechanic.model.DataProviderManager
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.HintSpinnerAdapter
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.firebase.auth.FirebaseAuth
@@ -97,7 +98,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         }
     }
 
-
     private fun setUpToolBar() {
         val arrow = resources.getDrawable(com.example.mobilemechanic.R.drawable.abc_ic_ab_back_material, null)
         arrow.setColorFilter(
@@ -155,7 +155,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         }
     }
 
-
     private fun handleDialogOnClick(basicDialog: Dialog) {
         basicDialog.id_negative.setOnClickListener {
             basicDialog.dismiss()
@@ -183,11 +182,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         }
     }
 
-    override fun onResume() {
-        enableHideKeyboard()
-        super.onResume()
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true
@@ -204,5 +198,11 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
         val selectedValue = DataProviderManager.getServicePriceValue()[position]
         priceBelow = selectedValue
         spinnerSelectedPosition = position
+    }
+
+    override fun onResume() {
+        AuthenticationManager.signInGuard(this)
+        enableHideKeyboard()
+        super.onResume()
     }
 }

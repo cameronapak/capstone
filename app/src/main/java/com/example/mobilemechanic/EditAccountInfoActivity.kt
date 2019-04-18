@@ -27,6 +27,7 @@ import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.USER_TAG
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
@@ -565,6 +566,7 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
     }
 
     override fun onResume() {
+        AuthenticationManager.signInGuard(this)
         enableHideKeyboard()
         super.onResume()
     }

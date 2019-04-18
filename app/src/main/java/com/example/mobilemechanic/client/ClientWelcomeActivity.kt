@@ -25,6 +25,7 @@ import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.signin.SignInActivity
 import com.example.mobilemechanic.shared.utility.AddressManager
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -222,16 +223,16 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 }
         }
     }
-
-    private fun signInGuard() {
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] signInGuard() User uid: ${mAuth?.currentUser?.uid}")
-        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User email: ${mAuth?.currentUser?.email}")
-        val user = mAuth?.currentUser
-        if (user == null) {
-            startActivity(Intent(this, SignInActivity::class.java))
-            finish()
-        }
-    }
+//
+//    private fun signInGuard() {
+//        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] signInGuard() User uid: ${mAuth?.currentUser?.uid}")
+//        Log.d(CLIENT_TAG, "[ClientWelcomeActivity] User email: ${mAuth?.currentUser?.email}")
+//        val user = mAuth?.currentUser
+//        if (user == null) {
+//            startActivity(Intent(this, SignInActivity::class.java))
+//            finish()
+//        }
+//    }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
@@ -244,7 +245,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
     }
 
     override fun onResume() {
-        signInGuard()
+        AuthenticationManager.signInGuard(this)
         setUpToolBar()
         super.onResume()
     }

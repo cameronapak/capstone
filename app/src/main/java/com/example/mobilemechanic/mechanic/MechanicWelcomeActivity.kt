@@ -29,6 +29,7 @@ import com.example.mobilemechanic.shared.ToastyType
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.registration.fragments.ACCOUNT_DOC_PATH
 import com.example.mobilemechanic.shared.signin.SignInActivity
+import com.example.mobilemechanic.shared.utility.AuthenticationManager
 import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -198,8 +199,10 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                 val drawerDisplayName = findViewById<TextView>(R.id.id_drawer_header_name)
                 val drawerEmail = findViewById<TextView>(R.id.id_drawer_header_email)
 
-                drawerDisplayName.text = "${userInfo!!.basicInfo.firstName} ${userInfo!!.basicInfo.lastName}"
-                drawerEmail.text = "${userInfo!!.basicInfo.email}"
+                if (drawerDisplayName != null) {
+                    drawerDisplayName.text = "${userInfo!!.basicInfo.firstName} ${userInfo!!.basicInfo.lastName}"
+                    drawerEmail.text = "${userInfo!!.basicInfo.email}"
+                }
             }
     }
 
@@ -280,16 +283,8 @@ class MechanicWelcomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun signInGuard() {
-        val user = mAuth?.currentUser
-        if (user == null) {
-            startActivity(Intent(this, SignInActivity::class.java))
-            finish()
-        }
-    }
-
     override fun onResume() {
-        signInGuard()
+        AuthenticationManager.signInGuard(this)
         setUpToolBar()
         super.onResume()
     }

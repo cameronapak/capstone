@@ -4,7 +4,7 @@
     <string name="algolia_services_index">services</string>
 
 
-    <string name="app_name">Mobile Mechanics</string>
+    <string name="app_name"></string>
     <string name="text_notification">Notification</string>
     <string name="text_find_service">Find Service</string>
     <string name="text_garage">Garage</string>

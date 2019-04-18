@@ -42,6 +42,7 @@ class SignInActivity : AppCompatActivity() {
 
         mAuth = FirebaseAuth.getInstance()
         mFirestore = FirebaseFirestore.getInstance()
+        isAlreadyLoggedIn()
         setUpSignInActivity()
     }
 
@@ -110,6 +111,15 @@ class SignInActivity : AppCompatActivity() {
                     }
                     finish()
                 }
+        }
+    }
+
+    private fun isAlreadyLoggedIn() {
+        val user = mAuth?.currentUser
+        if (user == null) {
+            return
+        } else {
+            checkUserType()
         }
     }
 

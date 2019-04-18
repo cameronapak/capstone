@@ -151,7 +151,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             .build()
 
                         Log.d(CLIENT_TAG, "$request)")
-                        request.objectID = requestsRef.document().id
                         requestsRef.document().set(request).addOnSuccessListener {
                             Toasty.makeText(this, "Request sent", ToastyType.SUCCESS)
                             val clientMember = ObjectConverter.convertToMember(clientInfo)

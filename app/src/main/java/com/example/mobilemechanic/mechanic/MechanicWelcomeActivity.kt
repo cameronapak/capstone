@@ -19,7 +19,6 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import com.example.mobilemechanic.EditAccountInfoActivity
-import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.mechanic.history.MechanicHistoryActivity
@@ -113,9 +112,9 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                         MECHANIC_TAG,
                         "[MechanicServices] Requests are empty. Showing empty state view."
                     )
-                    emptyView.setVisibility(View.VISIBLE)
+                    emptyView.visibility = View.VISIBLE
                 } else {
-                    emptyView.setVisibility(View.GONE)
+                    emptyView.visibility = View.GONE
                 }
 
                 mechanicRequestListAdapter.notifyDataSetChanged()
@@ -260,7 +259,7 @@ class MechanicWelcomeActivity : AppCompatActivity() {
                 R.id.id_sign_out -> {
                     mAuth.signOut()
                     Toasty.makeText(this, "Logged out", ToastyType.SUCCESS)
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, SignInActivity::class.java))
                     true
                 }
                 else -> {

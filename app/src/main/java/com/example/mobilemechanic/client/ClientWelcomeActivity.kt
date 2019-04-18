@@ -15,7 +15,6 @@ import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.example.mobilemechanic.EditAccountInfoActivity
-import com.example.mobilemechanic.MainActivity
 import com.example.mobilemechanic.R
 import com.example.mobilemechanic.client.findservice.FindServiceActivity
 import com.example.mobilemechanic.client.garage.GarageActivity
@@ -149,7 +148,7 @@ class ClientWelcomeActivity : AppCompatActivity() {
                 R.id.id_sign_out -> {
                     mAuth.signOut()
                     Toasty.makeText(this, "Logged out", ToastyType.SUCCESS)
-                    startActivity(Intent(this, MainActivity::class.java))
+                    startActivity(Intent(this, SignInActivity::class.java))
                     true
                 }
                 else -> {

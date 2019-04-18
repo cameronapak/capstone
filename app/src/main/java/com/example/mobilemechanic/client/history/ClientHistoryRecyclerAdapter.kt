@@ -47,7 +47,7 @@ class ClientHistoryRecyclerAdapter(val context: Context, val dataset: ArrayList<
         val mechanicLastName = request.mechanicInfo?.basicInfo?.lastName
         val vehicle = request.vehicle
 
-        if (request.status == Status.Completed) {
+        if (request.status == Status.Completed || request.status == Status.Paid) {
             holder.serviceCompletedOn.text =
                 "Completed on ${DateTimeManager.millisToDate(request.completedOn, "MMM d, y")}"
         }

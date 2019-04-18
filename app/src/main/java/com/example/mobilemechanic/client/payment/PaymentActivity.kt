@@ -17,6 +17,7 @@ import com.example.mobilemechanic.model.dto.Receipt
 import com.example.mobilemechanic.model.stripe.Payment
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
+import com.example.mobilemechanic.shared.utility.DateTimeManager
 import com.example.mobilemechanic.shared.utility.NumberManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -201,7 +202,8 @@ class PaymentActivity : AppCompatActivity()
         myPaymentsRef.document().set(payment)
             .addOnSuccessListener {
                 myReceiptRef.document("${request.objectID}")
-                    .update("receipt", receipt, "status", Status.Paid.name)
+                    .update("receipt", receipt, "status", Status.Paid.name,
+                        "completedOn", DateTimeManager.currentTimeMillis())
                     .addOnSuccessListener {
                     Toasty.makeText(this@PaymentActivity, "Payment completed", ToastyType.SUCCESS)
                     finish()

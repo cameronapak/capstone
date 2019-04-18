@@ -8,4 +8,15 @@ object NumberManager {
         bigDecimal.setScale(decimalPlace, BigDecimal.ROUND_HALF_UP)
         return bigDecimal.toFloat()
     }
+
+    fun isNumeric(num: String): Boolean {
+        try {
+            val d = java.lang.Double.parseDouble(num)
+        } catch (nfe: NumberFormatException) {
+            return false
+        } catch (nfe: NullPointerException) {
+            return false
+        }
+        return true
+    }
 }

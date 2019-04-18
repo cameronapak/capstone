@@ -5,8 +5,11 @@ import android.os.Bundle
 import android.support.v7.app.ActionBar
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import com.example.mobilemechanic.R
+import com.example.mobilemechanic.client.CLIENT_TAG
 import com.example.mobilemechanic.mechanic.EXTRA_REQUEST
 import com.example.mobilemechanic.model.Request
 import com.example.mobilemechanic.model.Status
@@ -14,6 +17,7 @@ import com.example.mobilemechanic.model.dto.Receipt
 import com.example.mobilemechanic.model.stripe.Payment
 import com.example.mobilemechanic.shared.Toasty
 import com.example.mobilemechanic.shared.ToastyType
+import com.example.mobilemechanic.shared.utility.NumberManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,6 +43,7 @@ class PaymentActivity : AppCompatActivity()
     private lateinit var paymentsRef: CollectionReference
     private lateinit var myPaymentsRef: CollectionReference
     private lateinit var myReceiptRef: CollectionReference
+    private var grandTotal: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -91,8 +96,29 @@ class PaymentActivity : AppCompatActivity()
         holder.id_summary_subtotal_price.text = getString(R.string.price, service?.price)
         val tax = service?.price!!* TAX_RATE
         holder.id_summary_estimated_tax_price.text = getString(R.string.price, tax)
-        val total = service?.price!!+tax
-        holder.id_grand_total_price.text = getString(R.string.price, total)
+        grandTotal = service?.price!!+tax
+        holder.id_grand_total_price.text = getString(R.string.price, grandTotal)
+
+        id_tip.addTextChangedListener(object: TextWatcher {
+            override fun afterTextChanged(p0: Editable?) {}
+
+            override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
+
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                updateTotal(s.toString())
+            }
+        })
+    }
+
+    private fun updateTotal(s: String) {
+        val holder = id_payment_container
+        val tips = holder.id_tip.text.toString()
+
+        if (NumberManager.isNumeric(tips)) {
+            Log.d(CLIENT_TAG, "[PaymentActivity] $tips")
+            val grandTotalAfterTip = grandTotal + tips.toDouble()
+            holder.id_grand_total_price.text = getString(R.string.price, grandTotalAfterTip)
+        }
     }
 
     private fun submitPayment() {
@@ -120,19 +146,18 @@ class PaymentActivity : AppCompatActivity()
 
         //check number
         if(!card.validateNumber()){
-            Toasty.makeText(this, "Warning", ToastyType.WARNING)
+            Toasty.makeText(this, "Invalid card number", ToastyType.WARNING)
         }
 
         //check CVC
         if(!card.validateCVC()){
-            Toasty.makeText(this, "Warning", ToastyType.WARNING)
+            Toasty.makeText(this, "Invalid CVC", ToastyType.WARNING)
         }
 
         //check card
         if(!card.validateCard()) {
-            Toasty.makeText(this, "Warning", ToastyType.WARNING)
-        }
-        else {
+            Toasty.makeText(this, "Invalid card", ToastyType.WARNING)
+        } else {
             convertInfoToToken(card, total)
         }
     }

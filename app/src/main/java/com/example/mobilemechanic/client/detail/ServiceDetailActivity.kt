@@ -66,6 +66,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
     private fun getRequestParcel() {
         request = intent.getParcelableExtra(EXTRA_REQUEST)
+        Log.d(CLIENT_TAG, "[ServiceDetailActivity] Receipt: ${request?.receipt?.subTotal}")
     }
 
     private fun initFireStore() {
@@ -84,6 +85,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
 
                 setUpVehicleContainer()
                 setUpToolBar(request)
+                getReceiptSummary(request)
             }
             .addOnFailureListener {
                 finish()
@@ -103,10 +105,9 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
         holder.id_contact.setOnClickListener {
             setUpContactServiceDialog(request)
         }
-        getReceiptSummary()
     }
 
-    private fun getReceiptSummary() {
+    private fun getReceiptSummary(request: Request) {
         var sub = 0.00
         var tax = 0.00
         var total = 0.00
@@ -116,7 +117,7 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
             tax = request.receipt?.estimatedTax!!
             total = request.receipt?.grandTotal!!
         }
-
+        Log.d(CLIENT_TAG, "[ServiceDetailActivity] Sub: ${sub}")
         id_summary_subtotal_price.text = String.format("%s %.2f", "$", sub)
         id_summary_estimated_tax_price.text = String.format("%s %.2f", "$", tax)
         id_grand_total_price.text = String.format("%s %.2f", "$", total)

@@ -553,12 +553,19 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
         finish()
     }
 
+    private fun enableHideKeyboard() {
+        id_edit_account_layout.setOnClickListener {
+            ScreenManager.hideKeyBoard(this)
+        }
+    }
+
     override fun onSupportNavigateUp(): Boolean {
         goToHomeActivity()
         return true
     }
 
     override fun onResume() {
+        enableHideKeyboard()
         ScreenManager.hideStatusAndBottomNavigationBar(this)
         super.onResume()
     }

@@ -151,17 +151,14 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
                             .build()
 
                         Log.d(CLIENT_TAG, "$request)")
+                        request.objectID = requestsRef.document().id
                         requestsRef.document().set(request).addOnSuccessListener {
-                            Toasty.makeText(this, "Success", ToastyType.SUCCESS)
-
-
+                            Toasty.makeText(this, "Request sent", ToastyType.SUCCESS)
                             val clientMember = ObjectConverter.convertToMember(clientInfo)
                             val mechanicMember = ObjectConverter.convertToMember(mechanicInfo)
-
                             setUpChatRoom(clientMember, mechanicMember)
-
                         }.addOnFailureListener {
-                            Toasty.makeText(this, "Fail", ToastyType.FAIL)
+                            Toasty.makeText(this, "Unable to process request. Try again.", ToastyType.FAIL)
                         }
                     }
                 }

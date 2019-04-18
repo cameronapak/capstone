@@ -22,7 +22,6 @@ import com.example.mobilemechanic.model.UserType
 import com.example.mobilemechanic.shared.BasicDialog
 import com.example.mobilemechanic.shared.messaging.ChatRoomsActivity
 import com.example.mobilemechanic.shared.utility.DateTimeManager
-import com.example.mobilemechanic.shared.utility.ScreenManager
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -107,9 +106,16 @@ class ServiceDetailActivity : AppCompatActivity(), OnMapReadyCallback {
     }
 
     private fun getReceiptSummary() {
-        var sub = 0.00F
-        var tax = 0.00F
-        var total = 0.00F
+        var sub = 0.00
+        var tax = 0.00
+        var total = 0.00
+
+        if (request.receipt != null) {
+            sub = request.receipt?.subTotal!!
+            tax = request.receipt?.estimatedTax!!
+            total = request.receipt?.grandTotal!!
+        }
+
         id_summary_subtotal_price.text = String.format("%s %.2f", "$", sub)
         id_summary_estimated_tax_price.text = String.format("%s %.2f", "$", tax)
         id_grand_total_price.text = String.format("%s %.2f", "$", total)

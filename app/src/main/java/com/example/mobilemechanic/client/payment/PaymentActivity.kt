@@ -51,15 +51,13 @@ class PaymentActivity : AppCompatActivity()
 
         request = intent.getParcelableExtra(EXTRA_REQUEST)
         setUpPaymentActivity()
-        id_pay_btn.setOnClickListener {
-            submitPayment()
-        }
     }
 
     private fun setUpPaymentActivity() {
         initFirestore()
         setUpActionBar()
         setUpSummaryContainer()
+        setUpOnSubmitPayment()
     }
 
     private fun initFirestore() {
@@ -101,13 +99,17 @@ class PaymentActivity : AppCompatActivity()
 
         id_tip.addTextChangedListener(object: TextWatcher {
             override fun afterTextChanged(p0: Editable?) {}
-
             override fun beforeTextChanged(p0: CharSequence, p1: Int, p2: Int, p3: Int) {}
-
             override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
                 updateTotal(s.toString())
             }
         })
+    }
+
+    private fun setUpOnSubmitPayment() {
+        id_pay_btn.setOnClickListener {
+            submitPayment()
+        }
     }
 
     private fun updateTotal(s: String) {
@@ -124,15 +126,12 @@ class PaymentActivity : AppCompatActivity()
     private fun submitPayment() {
         val holder = id_payment_container
         val holder2 = id_payment_container.id_summary_container
-
-        val tips = holder.id_tip.text.toString()
-        val total: Double = (holder2.id_grand_total_price.text.toString().substring(1).toDouble() + tips.toDouble())
+        val total: Double = (holder2.id_grand_total_price.text.toString().substring(1).toDouble())
 
         val cardNumber = holder.id_card_number.text.toString()
         val cardExpMonth = holder.id_expire_date.text.substring(0,2).toInt()
         val cardExpYear = holder.id_expire_date.text.substring(2).toInt()
         val cardCVC = holder.id_cvc.text.toString()
-
 
         val card = Card(
             cardNumber,
@@ -167,7 +166,6 @@ class PaymentActivity : AppCompatActivity()
         stripe.createToken(card, object : TokenCallback {
             override fun onSuccess(token: Token) {
                 createPayment(token.id, amount)
-                //TODO: make cloud function to listen to payments collection and communicate with stripe to charge card
             }
 
             override fun onError(error: Exception?) {
@@ -175,7 +173,6 @@ class PaymentActivity : AppCompatActivity()
                 error!!.printStackTrace()
                 Log.d(PAYMENT_TAG, error.toString())
             }
-
         })
     }
 
@@ -184,13 +181,19 @@ class PaymentActivity : AppCompatActivity()
             if(!request.clientInfo?.basicInfo?.email.isNullOrEmpty()) request.clientInfo?.basicInfo!!.email
             else ""
         val payment = Payment("", amount, tokenId, email)
-        payment.description += "${request.service?.serviceType}"
+        payment.description += "Payment charge for ${request.service?.serviceType} service on ${request.vehicle}."
 
 
         val holder = id_payment_container
         val service = request.service
 
-        val tips = holder.id_tip.text.toString().toDouble()
+        var tips = 0.0
+        if (NumberManager.isNumeric(holder.id_tip.text.toString())) {
+            tips = holder.id_tip.text.toString().toDouble()
+        } else {
+            Toasty.makeText(this@PaymentActivity, "Invalid tips amount", ToastyType.FAIL)
+        }
+
         val subTotal = getString(R.string.price, service?.price).substring(1).toDouble()
         val estimatedTax = holder.id_summary_estimated_tax_price.text.toString().substring(1).toDouble()
         val receipt = Receipt(tips, subTotal, estimatedTax, amount)
@@ -200,13 +203,13 @@ class PaymentActivity : AppCompatActivity()
                 myReceiptRef.document("${request.objectID}")
                     .update("receipt", receipt, "status", Status.Paid.name)
                     .addOnSuccessListener {
-                    Toasty.makeText(this@PaymentActivity, "Success", ToastyType.SUCCESS)
+                    Toasty.makeText(this@PaymentActivity, "Payment completed", ToastyType.SUCCESS)
                     finish()
                 }.addOnFailureListener {
-                    Toasty.makeText(this@PaymentActivity, "Fail to update FB", ToastyType.FAIL)
+                    Toasty.makeText(this@PaymentActivity, "Fail to create receipt", ToastyType.FAIL)
                 }
             }.addOnFailureListener {
-                Toasty.makeText(this@PaymentActivity, "Fail to create charge", ToastyType.FAIL)
+                Toasty.makeText(this@PaymentActivity, "Fail to create payment", ToastyType.FAIL)
             }
     }
 

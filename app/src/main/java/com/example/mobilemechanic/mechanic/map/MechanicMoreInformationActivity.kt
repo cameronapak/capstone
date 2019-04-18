@@ -158,11 +158,6 @@ class MechanicMoreInformationActivity : AppCompatActivity(), OnMapReadyCallback
         return true
     }
 
-    override fun onResume() {
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-        super.onResume()
-    }
-
     private fun createDeclineDialog()
     {
         val container = layoutInflater.inflate(R.layout.dialog_container_basic, null)

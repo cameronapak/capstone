@@ -557,9 +557,4 @@ class EditAccountInfoActivity : AppCompatActivity(), AdapterView.OnItemSelectedL
         goToHomeActivity()
         return true
     }
-
-    override fun onResume() {
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-        super.onResume()
-    }
 }

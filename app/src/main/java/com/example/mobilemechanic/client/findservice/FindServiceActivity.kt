@@ -184,7 +184,6 @@ class FindServiceActivity : AppCompatActivity(), AdapterView.OnItemSelectedListe
     }
 
     override fun onResume() {
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
         enableHideKeyboard()
         super.onResume()
     }

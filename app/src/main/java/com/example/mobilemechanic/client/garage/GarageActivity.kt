@@ -276,11 +276,6 @@ class GarageActivity : AppCompatActivity(), AdapterView.OnItemSelectedListener {
         Log.d(CLIENT_TAG, "[GarageActivity] models $allVehicleModel")
     }
 
-    override fun onResume() {
-        super.onResume()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
-
     override fun onSupportNavigateUp(): Boolean {
         onBackPressed()
         return true

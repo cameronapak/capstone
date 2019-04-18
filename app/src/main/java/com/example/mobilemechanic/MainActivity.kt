@@ -50,9 +50,4 @@ class MainActivity : AppCompatActivity(), OnClickListener {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
-
 }

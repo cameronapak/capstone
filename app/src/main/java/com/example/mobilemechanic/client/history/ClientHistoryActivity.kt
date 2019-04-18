@@ -97,9 +97,4 @@ class ClientHistoryActivity : AppCompatActivity() {
         onBackPressed()
         return true
     }
-
-    override fun onResume() {
-        super.onResume()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
-    }
 }

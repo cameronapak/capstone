@@ -193,7 +193,6 @@ class SignInActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         id_forgot_password.paintFlags = Paint.UNDERLINE_TEXT_FLAG
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
     }
 }
 

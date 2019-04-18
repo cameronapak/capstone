@@ -360,7 +360,6 @@ class PostServiceRequestActivity : AppCompatActivity(), AdapterView.OnItemSelect
     override fun onResume() {
         super.onResume()
         hideWarningIconAndMessage()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
         enableHideKeyboard()
     }
 

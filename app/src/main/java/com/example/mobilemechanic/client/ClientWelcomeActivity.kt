@@ -246,7 +246,6 @@ class ClientWelcomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         signInGuard()
-        ScreenManager.hideStatusAndBottomNavigationBar(this)
         setUpToolBar()
         super.onResume()
     }

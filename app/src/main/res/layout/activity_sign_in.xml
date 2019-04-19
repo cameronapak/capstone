@@ -56,6 +56,20 @@
                 app:layout_constraintStart_toStartOf="@+id/id_login_button"
                 android:layout_marginStart="8dp" app:layout_constraintHorizontal_bias="0.454"
                 android:textAlignment="center" android:textColor="@color/colorGrayText" android:textSize="12sp"/>
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/id_get_started"
+                android:layout_gravity="center|bottom"
+                android:gravity="center"
+                android:textColor="@color/colorGrayText"
+                android:textAlignment="center"
+                android:fontFamily="@font/roboto_light"
+                android:text="@string/text_not_a_member"
+                app:layout_constraintTop_toBottomOf="@+id/id_forgot_password"
+                app:layout_constraintBottom_toBottomOf="parent" android:layout_marginBottom="8dp"
+                app:layout_constraintEnd_toEndOf="@+id/id_forgot_password"
+                app:layout_constraintStart_toStartOf="@+id/id_forgot_password"/>
         <android.support.v7.widget.Toolbar
                 style="@style/AppActionBar"
                 android:id="@+id/toolbar"
@@ -90,15 +104,4 @@
             app:srcCompat="@drawable/bottom_bg3"
             android:layout_gravity="bottom"
             android:id="@+id/id_signin_bottom_bg"/>
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/id_get_started"
-            android:layout_gravity="center|bottom"
-            android:gravity="center"
-            android:textColor="@color/colorPrimary"
-            android:textAlignment="center"
-            android:fontFamily="@font/roboto_light"
-            android:layout_marginBottom="66dp"
-            android:text="@string/text_not_a_member"/>
 </FrameLayout>

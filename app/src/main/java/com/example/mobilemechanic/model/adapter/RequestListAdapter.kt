@@ -112,8 +112,13 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             holder.secondaryButton.text = context.getString(R.string.label_button_info_more)
             holder.directionsButton.visibility = View.GONE
         }
-
-        if (request.status == Status.Active || request.status == Status.Paid) {
+        else if(request.status == Status.Active)
+        {
+            holder.secondaryButton.visibility = View.GONE
+            holder.primaryButton.text = context.getString(R.string.label_button_info_manage)
+            holder.directionsButton.visibility = View.VISIBLE
+        }
+        else if (request.status == Status.Paid) {
             holder.primaryButton.text = context.getString(R.string.label_choice_complete)
             holder.secondaryButton.text = context.getString(R.string.label_button_info_manage)
             holder.directionsButton.visibility = View.VISIBLE
@@ -124,9 +129,13 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
         if (request.status == Status.Request) {
             createAcceptDialog(request)
         }
-
-        if (request.status == Status.Active || request.status == Status.Paid) {
+        else if (request.status == Status.Paid) {
             createCompleteDialog(request)
+        }
+        else if (request.status == Status.Active) {
+            val intent = Intent(context, MechanicManageJobActivity::class.java)
+            intent.putExtra(EXTRA_REQUEST, request)
+            context.startActivity(intent)
         }
     }
 
@@ -136,8 +145,7 @@ class RequestListAdapter(var context: Activity, var requests: ArrayList<Request>
             intent.putExtra(EXTRA_REQUEST, request)
             context.startActivity(intent)
         }
-
-        if (request.status == Status.Active || request.status == Status.Paid) {
+        else if (request.status == Status.Paid) {
             val intent = Intent(context, MechanicManageJobActivity::class.java)
             intent.putExtra(EXTRA_REQUEST, request)
             context.startActivity(intent)

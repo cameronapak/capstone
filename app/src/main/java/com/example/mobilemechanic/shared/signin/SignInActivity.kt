@@ -59,6 +59,7 @@ class SignInActivity : AppCompatActivity() {
         val password = id_login_password.text.toString().trim()
         if (email.isEmpty() or password.isEmpty()) {
             Toasty.makeText(this, "Warning", ToastyType.WARNING)
+            ScreenManager.toggleVisibility(id_progress_bar)
             return
         }
 
